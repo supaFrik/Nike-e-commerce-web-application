@@ -1,0 +1,168 @@
+/* ==================================================
+   SOCIAL SECTION & RECOMMENDATIONS STYLES
+   ================================================== */
+
+/* Social Section */
+.social-section {
+  background-color: var(--color-bg-secondary);
+  padding: var(--size-spacing-xxl) 0;
+  margin-top: var(--size-spacing-xxl);
+}
+
+.social-section h2 {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--size-spacing-m);
+  text-align: left;
+}
+
+.social-section p {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--size-spacing-l);
+}
+
+.upload-btn {
+  padding: var(--size-spacing-m) var(--size-spacing-l);
+  border: var(--size-border-width-s) solid var(--color-black);
+  background: transparent;
+  color: var(--color-black);
+  border-radius: var(--button-border-radius);
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-duration-fast) ease;
+}
+
+.upload-btn:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* Recommendations Section */
+.recommendations-section {
+  padding: var(--size-spacing-xxxl) 0;
+  background-color: var(--color-bg-primary);
+}
+
+.recommendations-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.recommendations-wrapper {
+  flex: 1;
+  overflow: hidden;
+  margin: 0 60px;
+}
+
+.recommendations-track {
+  display: flex;
+  gap: 20px;
+  transition: transform 0.3s ease;
+}
+
+.recommendation-card {
+  flex: 0 0 300px;
+  border-radius: var(--size-border-radius-m);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.recommendation-card .product-info {
+  padding: var(--size-spacing-m);
+}
+
+.recommendation-card .product-title {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--size-spacing-xs);
+  line-height: 1.4;
+}
+
+.recommendation-card .product-type {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--size-spacing-xs);
+  font-weight: var(--font-weight-normal);
+}
+
+.recommendation-card .product-price {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transition: all var(--transition-duration-fast) var(--transition-timing-function-ease);
+  box-shadow: var(--shadow-base);
+}
+
+.carousel-btn:hover {
+  background: var(--color-bg-tertiary);
+  box-shadow: var(--shadow-elevated);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--color-bg-secondary);
+}
+
+.carousel-btn.prev {
+  left: 0;
+}
+
+.carousel-btn.next {
+  right: 0;
+}
+
+.carousel-btn i {
+  font-size: var(--font-size-s);
+  color: var(--color-text-primary);
+}
+
+/* ==================================================
+   RESPONSIVE STYLES FOR SOCIAL & RECOMMENDATIONS
+   ================================================== */
+
+@media (max-width: 768px) {
+  .recommendations-wrapper {
+    margin: 0 40px;
+  }
+  
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recommendation-card {
+    flex: 0 0 220px;
+  }
+  
+  .recommendations-wrapper {
+    margin: 0 30px;
+  }
+  
+  .carousel-btn {
+    width: 36px;
+    height: 36px;
+  }
+}

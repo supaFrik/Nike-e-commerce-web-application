@@ -1,0 +1,112 @@
+/* ==================================================
+   REVIEWS & RATINGS STYLES
+   ================================================== */
+
+/* Reviews Section */
+.reviews-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--size-spacing-l);
+  padding-bottom: var(--size-spacing-m);
+  border-bottom: 1px solid var(--color-border-tertiary);
+}
+
+.overall-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--size-spacing-s);
+}
+
+.rating-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.rating-stars i {
+  color: var(--color-yellow-500);
+  font-size: 16px;
+}
+
+.rating-stars-inline {
+  display: flex;
+  gap: 2px;
+  margin-right: var(--size-spacing-m);
+}
+
+.rating-stars-inline i {
+  color: var(--color-yellow-500);
+  font-size: 14px;
+}
+
+.rating-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.write-review-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.write-review-btn:hover {
+  color: var(--color-text-secondary);
+}
+
+.review-item {
+  margin-bottom: var(--size-spacing-l);
+  padding-bottom: var(--size-spacing-m);
+}
+
+.review-item:last-of-type {
+  margin-bottom: var(--size-spacing-m);
+}
+
+.review-title {
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--size-spacing-xs) 0;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: var(--size-spacing-s);
+  margin-bottom: var(--size-spacing-s);
+}
+
+.review-author {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.review-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.more-reviews-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  margin-top: var(--size-spacing-s);
+}
+
+.more-reviews-btn:hover {
+  color: var(--color-text-secondary);
+}

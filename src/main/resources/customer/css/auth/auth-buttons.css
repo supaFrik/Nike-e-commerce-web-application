@@ -1,0 +1,147 @@
+/* ==================================================
+   AUTH BUTTONS & ACTIONS STYLES
+   ================================================== */
+
+/* Primary button */
+.btn-primary {
+  width: 100%;
+  height: var(--button-height-l);
+  background-color: var(--button-color-bg-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--button-border-radius);
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-bottom: var(--size-spacing-l);
+}
+
+.btn-primary:hover {
+  background-color: var(--button-color-bg-primary-hover);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Loading state */
+.btn-primary.loading {
+  position: relative;
+  color: transparent;
+}
+
+.btn-primary.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--size-spacing-m);
+  height: var(--size-spacing-m);
+  border: var(--size-border-width-l) solid var(--color-white);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Divider */
+.auth-divider {
+  text-align: center;
+  margin: var(--size-spacing-l) 0;
+  position: relative;
+}
+
+.auth-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: var(--size-border-width-s);
+  background-color: var(--color-grey-200);
+  z-index: 1;
+}
+
+.auth-divider-text {
+  background-color: var(--color-bg-primary);
+  padding: 0 var(--size-spacing-m);
+  font-size: var(--font-size-xs);
+  color: var(--color-grey-500);
+  position: relative;
+  z-index: 2;
+}
+
+/* Social login buttons */
+.social-login {
+  display: flex;
+  gap: var(--size-spacing-m);
+  margin-bottom: var(--size-spacing-l);
+}
+
+.social-btn {
+  flex: 1;
+  height: var(--button-height-m);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--size-border-width-s) solid var(--color-grey-200);
+  border-radius: var(--size-border-radius-s);
+  background-color: var(--color-bg-primary);
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--color-black);
+}
+
+.social-btn img {
+  width: var(--size-icon-m);
+  height: var(--size-icon-m);
+}
+
+/* Footer link */
+.auth-footer {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-grey-500);
+}
+
+.auth-footer a {
+  color: var(--color-text-link);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ==================================================
+   RESPONSIVE BUTTONS
+   ================================================== */
+
+@media (max-width: 768px) {
+  .social-login {
+    flex-direction: column;
+  }
+  
+  .social-btn {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-primary {
+    height: 48px;
+  }
+  
+  .social-btn {
+    height: 44px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .btn-primary {
+    border: var(--size-border-width-l) solid var(--color-black);
+  }
+}

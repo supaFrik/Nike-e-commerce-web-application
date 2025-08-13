@@ -1,0 +1,47 @@
+/* ==================================================
+   AUTH HEADER & BRANDING STYLES
+   ================================================== */
+
+/* Header section */
+.auth-header {
+  margin-bottom: var(--size-spacing-xl);
+}
+
+.auth-logo {
+  margin-bottom: var(--size-spacing-l);
+}
+
+.auth-logo img {
+  width: 60px;
+  height: auto;
+}
+
+.auth-title {
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  margin-bottom: var(--size-spacing-s);
+  line-height: 1.2;
+}
+
+.auth-subtitle {
+  font-size: var(--font-size-s);
+  color: var(--color-grey-500);
+  margin-bottom: var(--size-spacing-xl);
+}
+
+/* ==================================================
+   RESPONSIVE HEADER
+   ================================================== */
+
+@media (max-width: 768px) {
+  .auth-title {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-title {
+    font-size: var(--font-size-l);
+  }
+}

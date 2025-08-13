@@ -1,0 +1,136 @@
+/* ==================================================
+   AUTH FORM ELEMENTS & INPUT STYLES
+   ================================================== */
+
+/* Form styles */
+.auth-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: var(--size-spacing-l);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  margin-bottom: var(--size-spacing-s);
+}
+
+.form-input {
+  width: 100%;
+  height: var(--size-form-input-field-height);
+  padding: var(--size-spacing-s) var(--size-spacing-m);
+  border: var(--size-border-width-s) solid var(--color-grey-200);
+  border-radius: var(--size-border-radius-s);
+  font-size: var(--font-size-s);
+  background-color: var(--color-bg-primary);
+  transition: all var(--transition-duration-normal) var(--transition-timing-function-ease);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-black);
+  box-shadow: var(--form-shadow-focus);
+}
+
+.form-input::placeholder {
+  color: var(--color-grey-400);
+}
+
+/* Password input container */
+.password-container {
+  position: relative;
+}
+
+.password-toggle {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: var(--size-spacing-m);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-grey-500);
+  font-size: var(--font-size-s);
+  padding: var(--size-spacing-xs);
+}
+
+.password-toggle:hover {
+  color: var(--color-black);
+}
+
+/* Forgot password link */
+.forgot-password {
+  text-align: right;
+  margin-bottom: var(--size-spacing-l);
+}
+
+.forgot-password a {
+  color: var(--color-text-link);
+  text-decoration: none;
+  font-size: var(--font-size-xs);
+  transition: color var(--transition-duration-normal) var(--transition-timing-function-ease);
+}
+
+.forgot-password a:hover {
+  color: var(--color-black);
+  text-decoration: underline;
+}
+
+/* Form toggle */
+.form-toggle {
+  display: none;
+}
+
+.form-toggle.active {
+  display: block;
+}
+
+/* Error messages */
+.error-message {
+  color: var(--color-text-critical);
+  font-size: var(--font-size-xs);
+  margin-top: var(--size-spacing-xs);
+  display: none;
+}
+
+.form-input.error + .error-message {
+  display: block;
+}
+
+/* Success messages */
+.success-message {
+  background-color: var(--color-green-50);
+  color: var(--color-text-success);
+  padding: var(--size-spacing-m);
+  border-radius: var(--size-border-radius-s);
+  margin-bottom: var(--size-spacing-l);
+  font-size: var(--font-size-xs);
+  display: none;
+}
+
+.success-message.show {
+  display: block;
+}
+
+/* ==================================================
+   RESPONSIVE FORM ELEMENTS
+   ================================================== */
+
+@media (max-width: 480px) {
+  .form-input {
+    height: 48px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .form-input {
+    border-width: var(--size-border-width-l);
+  }
+}

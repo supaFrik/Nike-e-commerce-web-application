@@ -1,0 +1,487 @@
+
+/* ==================================================
+   SHARED STYLES - Được sử dụng chung cho tất cả pages
+   ================================================== */
+
+/* ==================================================
+   1. RESET & BASE STYLES
+   ================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+}
+
+.container {
+  margin: 0 var(--size-spacing-xxl);
+  padding: var(--size-spacing-s) 0;
+}
+
+/* ==================================================
+   2. TYPOGRAPHY
+   ================================================== */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+h1 { font-size: var(--font-size-xxxxl); }
+h2 { font-size: var(--font-size-xxl); }
+h3 { font-size: var(--font-size-l); }
+h4 { font-size: var(--font-size-m); }
+h5 { font-size: var(--font-size-s); }
+h6 { font-size: var(--font-size-s); }
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all var(--transition-duration-normal) ease;
+}
+
+/* ==================================================
+   3. BUTTONS & FORM ELEMENTS
+   ================================================== */
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--button-padding-top-m) var(--button-padding-sides-m);
+  border: none;
+  border-radius: var(--button-border-radius);
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-duration-normal) ease;
+  min-height: var(--button-height-m);
+  gap: var(--size-spacing-s);
+}
+
+.btn-primary {
+  background-color: var(--button-color-bg-primary);
+  color: var(--color-white);
+}
+.btn-primary:hover {
+  background-color: var(--button-color-bg-primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--color-brand-orange);
+  color: var(--color-white);
+}
+.btn-secondary:hover {
+  background-color: var(--color-orange-500);
+}
+
+.btn-outline {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border: var(--size-border-width-s) solid var(--color-grey-300);
+}
+.btn-outline:hover {
+  background-color: var(--button-color-bg-primary-hover);
+  color: var(--color-white);
+  border-color: var(--button-color-bg-primary-hover);
+}
+
+.btn-social {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: var(--size-border-width-s) solid var(--color-grey-200);
+  justify-content: flex-start;
+  padding: var(--button-padding-top-m) var(--size-spacing-m);
+}
+.btn-social:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all var(--transition-duration-normal) ease;
+  position: relative;
+}
+.icon-btn:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+/* Form Elements */
+.form-group {
+  margin-bottom: var(--size-spacing-l);
+}
+
+.form-group input {
+  width: 100%;
+  padding: var(--size-spacing-m);
+  border: var(--size-border-width-s) solid var(--color-grey-200);
+  border-radius: var(--size-border-radius-s);
+  font-size: var(--font-size-s);
+  transition: border-color var(--transition-duration-normal) ease;
+}
+.form-group input:focus {
+  outline: none;
+  border-color: var(--color-border-active);
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--size-spacing-s);
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+}
+
+.checkbox input {
+  display: none;
+}
+
+.checkmark {
+  width: 16px;
+  height: 16px;
+  border: var(--size-border-width-s) solid var(--color-grey-200);
+  border-radius: var(--size-border-radius-s);
+  position: relative;
+  transition: all var(--transition-duration-normal) ease;
+}
+
+.checkbox input:checked + .checkmark {
+  background-color: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+}
+
+.checkbox input:checked + .checkmark::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-white);
+  font-size: var(--font-size-xxs);
+}
+
+/* ==================================================
+   4. BUTTONS & FORM ELEMENTS
+   ================================================== */
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--color-brand-orange);
+  color: var(--color-white);
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: var(--font-size-xxs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-medium);
+}
+
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100vh;
+  background-color: var(--color-white);
+  z-index: 2000;
+  transition: right var(--transition-duration-normal) ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-30);
+}
+.cart-sidebar.active {
+  right: 0;
+}
+
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--size-spacing-l);
+  border-bottom: var(--size-border-width-s) solid var(--color-grey-100);
+}
+.cart-header h3 {
+  margin: 0;
+  font-size: var(--font-size-m);
+}
+
+.cart-close {
+  background: none;
+  border: none;
+  font-size: var(--font-size-m);
+  cursor: pointer;
+  padding: var(--size-spacing-xs);
+  border-radius: 50%;
+  transition: background-color var(--transition-duration-normal) ease;
+}
+.cart-close:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.cart-content {
+  flex: 1;
+  padding: var(--size-spacing-l);
+  overflow-y: auto;
+}
+
+.cart-empty {
+  text-align: center;
+  padding: 40px var(--size-spacing-l);
+}
+.cart-empty i {
+  font-size: 48px;
+  color: var(--color-grey-300);
+  margin-bottom: var(--size-spacing-m);
+}
+.cart-empty p {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--size-spacing-l);
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-spacing-m);
+}
+
+.cart-item {
+  display: flex;
+  gap: var(--size-spacing-m);
+  padding: var(--size-spacing-m) 0;
+  border-bottom: var(--size-border-width-s) solid var(--color-grey-100);
+}
+
+.cart-item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--size-border-radius-m);
+  overflow: hidden;
+}
+.cart-item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.cart-item-name {
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--size-spacing-xs);
+}
+
+.cart-item-info {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--size-spacing-s);
+}
+
+.cart-item-price {
+  font-weight: var(--font-weight-medium);
+}
+
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--size-spacing-s);
+  margin-top: var(--size-spacing-s);
+}
+
+.quantity-btn {
+  width: 24px;
+  height: 24px;
+  border: var(--size-border-width-s) solid var(--color-grey-200);
+  background: var(--color-white);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xxs);
+}
+.quantity-btn:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.quantity {
+  font-weight: var(--font-weight-medium);
+  min-width: 20px;
+  text-align: center;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: var(--font-size-xxs);
+  margin-left: auto;
+}
+.remove-btn:hover {
+  color: var(--color-brand-orange);
+}
+
+.cart-footer {
+  padding: var(--size-spacing-l);
+  border-top: var(--size-border-width-s) solid var(--color-grey-100);
+}
+
+.cart-total {
+  margin-bottom: var(--size-spacing-l);
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--size-spacing-s);
+  font-size: var(--font-size-xs);
+}
+
+.total-final {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-s);
+  padding-top: var(--size-spacing-s);
+  border-top: var(--size-border-width-s) solid var(--color-grey-100);
+}
+
+/* ==================================================
+   6. ANIMATIONS
+   ================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.slide-in-right {
+  animation: slideInRight var(--transition-duration-normal) ease-out;
+}
+
+.slide-in-left {
+  animation: slideInLeft var(--transition-duration-normal) ease-out;
+}
+
+/* ==================================================
+   7. UTILITY CLASSES
+   ================================================== */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.d-none { display: none; }
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.align-center { align-items: center; }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+/* ==================================================
+   8. RESPONSIVE DESIGN
+   ================================================== */
+/* Mobile */
+@media (max-width: 768px) {
+  .cart-sidebar {
+    width: 100%;
+    right: -100%;
+  }
+
+  .modal {
+    width: 95%;
+    margin: var(--size-spacing-l);
+  }
+}/* Small Mobile */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--size-spacing-s);
+  }
+
+  .btn {
+    padding: var(--button-padding-top-s) var(--button-padding-sides-s);
+    font-size: var(--font-size-xs);
+  }
+
+  h1 {
+    font-size: var(--font-size-xxxl);
+  }
+
+  h2 {
+    font-size: var(--font-size-xl);
+  }
+  
+  h3 {
+    font-size: var(--font-size-m);
+  }
+}
+
+

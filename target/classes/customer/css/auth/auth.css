@@ -1,0 +1,40 @@
+/* ==================================================
+   AUTH CSS IMPORTS - ORGANIZED STRUCTURE
+   ================================================== */
+
+/* 
+   This file imports all authentication CSS files in the correct order.
+   
+   Usage in HTML:
+   <link rel="stylesheet" href="styles/auth/index.css">
+   
+   Or import individual files as needed:
+   - auth-layout.css (container & image section)
+   - auth-header.css (title & branding)
+   - auth-forms.css (form inputs & validation)
+   - auth-buttons.css (buttons & actions)
+   - auth-animations.css (animations & accessibility)
+*/
+
+
+/* Component styles */
+@import url('./auth-layout.css');
+@import url('./auth-header.css');
+@import url('./auth-forms.css');
+@import url('./auth-buttons.css');
+
+/* Utilities & animations */
+@import url('./auth-animations.css');
+
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}

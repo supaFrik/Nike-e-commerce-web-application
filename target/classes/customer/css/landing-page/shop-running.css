@@ -1,0 +1,62 @@
+/* Shop Running section styles moved from homepage.css */
+.shop-running-section {
+  padding: var(--size-spacing-xxxl) 0;
+}
+.shop-running-section .section-title {
+  text-align: left;
+  margin-bottom: 40px;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+}
+.shop-running-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.shop-running-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+.shop-running-track {
+  display: flex;
+  gap: 15px;
+  overflow: hidden;
+  width: 100%;
+  transition: transform 0.3s ease;
+}
+.running-card {
+  flex: 0 0 600px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.product-image {
+  width: 100%;
+  overflow: hidden;
+}
+.product-image img {
+  width: 100%;
+  object-fit: contain;
+}
+.product-info {
+  padding: var(--size-spacing-m);
+}
+.product-title {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin-bottom: var(--size-spacing-xs);
+  line-height: 1.4;
+}
+.product-type {
+  font-size: var(--font-size-s);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--size-spacing-xs);
+  font-weight: var(--font-weight-normal);
+}
+.product-price {
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin: 0;
+}

@@ -1,0 +1,48 @@
+/* ==================================================
+   PRODUCT DETAIL MAIN LAYOUT & STRUCTURE
+   ================================================== */
+
+/* Product Detail Page Layout */
+.product-detail {
+  padding-top: var(--size-spacing-xl) 0;
+}
+
+.product-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--size-spacing-xxl);
+  margin-bottom: var(--size-spacing-xxxl);
+}
+
+/* ==================================================
+   RESPONSIVE DESIGN FOR MAIN LAYOUT
+   ================================================== */
+
+@media (max-width: 1200px) {
+  .product-layout {
+    gap: var(--size-spacing-xl);
+  }
+}
+
+@media (max-width: 1024px) {
+  .product-layout {
+    grid-template-columns: 1fr;
+    gap: var(--size-spacing-xl);
+  }
+
+  .product-images {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .product-detail {
+    padding: var(--size-spacing-l) 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-detail {
+    padding: var(--size-spacing-m) 0;
+  }
+}

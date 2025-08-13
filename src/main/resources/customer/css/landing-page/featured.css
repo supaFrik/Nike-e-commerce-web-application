@@ -1,0 +1,48 @@
+/* Featured section styles moved from homepage.css */
+
+.featured-container {
+  margin: var(--size-spacing-xxxl) auto;
+}
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  aspect-ratio: 4/3;
+}
+.featured-item {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.featured-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.featured-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  padding: var(--size-spacing-xl);
+  color: var(--color-white);
+}
+.featured-category {
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--size-spacing-xs);
+  opacity: 0.9;
+}
+.featured-title {
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--size-spacing-m);
+  color: var(--color-white);
+}
+.featured-item--hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

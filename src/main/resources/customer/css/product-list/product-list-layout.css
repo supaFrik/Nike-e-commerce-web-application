@@ -1,0 +1,82 @@
+/* =============================================================================
+   PRODUCT LIST LAYOUT STYLES
+   Layout fundamentals, grid systems, and main containers
+   ============================================================================= */
+
+/* Global Link Styles */
+a {
+    color: var(--color-black);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-duration-fast) ease;
+}
+
+a:hover {
+    color: var(--color-grey-600);
+}
+
+.main {
+    min-height: 100vh;
+    background: var(--color-white);
+}
+
+/* Product listing layout */
+.product-listing {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    margin-left: 60px;
+}
+
+/* Product Layout */
+.product-layout {
+    display: flex;
+    margin: 0 auto;
+}
+
+/* Categories */
+.products-showcase {
+    display: block;
+    direction: inherit;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* Fallback for older browsers that don't support CSS Grid */
+.product-grid__items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 84px 12px;
+    padding: 0;
+    margin: 0;
+}
+
+/* Flexbox fallback for very old browsers */
+@supports not (display: grid) {
+    .product-grid__items {
+        display: flex;
+        flex-wrap: wrap;
+        margin: -6px;
+    }
+    
+    .product-card {
+        flex: 0 1 calc(33.333% - 12px);
+        margin: 6px;
+    }
+    
+    @media (max-width: 768px) {
+        .product-card {
+            flex: 0 1 calc(50% - 12px);
+        }
+    }
+    
+    @media (max-width: 360px) {
+        .product-card {
+            flex: 0 1 100%;
+        }
+    }
+}
+
+.disable_content {
+    display: none;
+}
