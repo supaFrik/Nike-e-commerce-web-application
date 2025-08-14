@@ -6,5 +6,6 @@
 <script src="${env}/customer/scripts//ultilities/mobile-nav.js"></script>
 
 <!-- Landing Page -->
-
+<<script src="${env}/customer/scripts/ultilities/mobile-nav.js">
+</script>
 <!-- Authentication -->
