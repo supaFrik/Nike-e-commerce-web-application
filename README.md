@@ -1,7 +1,7 @@
 # 🏃‍♂️ Nike E-Commerce Web Application
 
 <div align="center">
-  <img src="src/main/resources/customer/img/air-jordan-logo.png" alt="Nike Logo" width="100" style="filter: brightness(0) invert(1);"/>
+  <img src="src/main/resources/customer/img/air-jordan-logo.png" alt="Nike Logo" width="150" style="filter: brightness(0) invert(1);"/>
   
   [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.1.4-brightgreen.svg)](https://spring.io/projects/spring-boot)
   [![Java](https://img.shields.io/badge/Java-11-orange.svg)](https://www.oracle.com/java/)
