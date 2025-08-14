@@ -17,10 +17,11 @@
     <!-- Hero Section -->
     <section class="hero" aria-label="Hero banner section">
         <div class="video-container">
-            <video autoplay loop muted playsinline class="video-placeholder" poster="${env}/customer/img/air-jordan-logo.png" 
+            <video autoplay loop muted playscdinline class="video-placeholder" poster="${env}/customer/img/air-jordan-logo.png" 
                    aria-label="Nike promotional video about Mars Yard sneakers"
                    aria-describedby="hero-description"> 
-                <source src="${env}/customer/vid/A%20Brief%20History%20of%20the%20Mars%20Yard%20%EF%BD%9C%20Nike%20%5BOYAtKHrt6YA%5D.webm" type="video/webm">
+                   <!--                 <source src="${env}/customer/vid/A%20Brief%20History%20of%20the%20Mars%20Yard%20%EF%BD%9C%20Nike%20%5BOYAtKHrt6YA%5D.webm" type="video/webm">
+                    -->
                 Your browser does not support the video tag.
             </video>
         </div>
