@@ -3,9 +3,9 @@
 <!-- Base JavaScript Files -->
 
 <!-- Header -->
-<script src="${env}/customer/scripts//ultilities/mobile-nav.js"></script>
+<script src="${env}/customer/scripts/ultilities/mobile-nav.js"></script>
 
 <!-- Landing Page -->
-<<script src="${env}/customer/scripts/ultilities/mobile-nav.js">
-</script>
+<script src="${env}/customer/scripts/ultilities/carousel.js"></script>
+
 <!-- Authentication -->
