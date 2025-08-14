@@ -1,7 +1,7 @@
 # 🏃‍♂️ Nike E-Commerce Web Application
 
 <div align="center">
-  <img src="src/main/resources/customer/img/air-jordan-logo.png" alt="Nike Logo" width="100"/>
+  <img src="src/main/resources/customer/img/air-jordan-logo.png" alt="Nike Logo" width="100" style="filter: brightness(0) invert(1);"/>
   
   [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.1.4-brightgreen.svg)](https://spring.io/projects/spring-boot)
   [![Java](https://img.shields.io/badge/Java-11-orange.svg)](https://www.oracle.com/java/)
@@ -82,7 +82,7 @@ Make sure you have these installed:
 
 4. **Open Your Browser**
    ```
-   🌐 http://localhost:8080
+   🌐 http://localhost:9090
    ```
 
 ---
@@ -165,7 +165,7 @@ We believe in the power of collaboration! Here's how you can contribute:
 
 Got questions? We're here to help!
 
-- 📧 **Email**: support@nike-ecommerce.dev
+- 📧 **Email**: tqv2005business@gmail.com
 - 🐛 **Issues**: [GitHub Issues](https://github.com/supaFrik/Nike-e-commerce-web-application/issues)
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/supaFrik/Nike-e-commerce-web-application/discussions)
 
@@ -196,5 +196,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by the Nike E-Commerce Team</sub>
+  <sub>Built with ❤️ by 37VietTrinh - Forever</sub>
 </div>
