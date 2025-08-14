@@ -74,14 +74,14 @@
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
                         </button>
-                        <button class="icon-btn cart-btn" onclick="toggleCart()" aria-label="Bag">
+                        <a href="${env}/cart" class="icon-btn cart-btn" aria-label="Bag">
                             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                 <line x1="3" y1="6" x2="21" y2="6"></line>
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
                             <span class="cart-count" id="cartCount">0</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
                 
@@ -99,14 +99,14 @@
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                     </button>
-                    <button class="icon-btn mobile-cart-btn" onclick="toggleCart()" aria-label="Bag">
+                    <a href="${env}/cart" class="icon-btn mobile-cart-btn" aria-label="Bag">
                         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <path d="M16 10a4 4 0 0 1-8 0"></path>
                         </svg>
                         <span class="cart-count" id="mobileCartCount">0</span>
-                    </button>
+                    </a>
                     <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                         <span></span>
                         <span></span>
@@ -172,7 +172,7 @@
                             </svg>
                             Help
                         </a>
-                        <a href="#" class="mobile-menu-link" onclick="toggleCart()">
+                        <a href="${env}/checkout" class="mobile-menu-link">
                             <svg viewBox="0 0 24 24" fill="none">
                                 <path d="M19 7h-3V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 5h4v2h-4V5zm8 15a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v11z"/>
                             </svg>

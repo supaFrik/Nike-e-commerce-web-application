@@ -33,4 +33,24 @@ public class CustomerHomeController extends BaseController {
 	public String productDetail() {
 		return "customer/product-detail";
 	}
+	
+	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
+	public String customerCheckout() {
+		return "customer/checkout";
+	}
+	
+	@RequestMapping(value="/cart", method = RequestMethod.GET)
+	public String customerCart() {
+		return "customer/cart";
+	}
+	
+	@RequestMapping(value="/order", method = RequestMethod.GET)
+	public String customerOrder() {
+		return "customer/order";
+	}
+	
+	@RequestMapping(value="/terms", method = RequestMethod.GET)
+	public String customerTerms() {
+		return "customer/terms";
+	}
 }
