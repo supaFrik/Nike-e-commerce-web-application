@@ -1,10 +1,11 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Nike - Just Do It</title>
-     <link rel="icon" href="${env}/customer/img/e0891c394d4f7b7c09e783e29df07505.png">
+    <link rel="icon" href="${env}/customer/img/e0891c394d4f7b7c09e783e29df07505.png">
      
     <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/customer/imported/landing-page.jsp" />
@@ -17,11 +18,11 @@
     <!-- Hero Section -->
     <section class="hero" aria-label="Hero banner section">
         <div class="video-container">
-            <video autoplay loop muted playscdinline class="video-placeholder" poster="${env}/customer/img/air-jordan-logo.png" 
+            <video autoplay loop muted playscdinline class="video-placeholder"  
                    aria-label="Nike promotional video about Mars Yard sneakers"
                    aria-describedby="hero-description"> 
-                   <!--                 <source src="${env}/customer/vid/A%20Brief%20History%20of%20the%20Mars%20Yard%20%EF%BD%9C%20Nike%20%5BOYAtKHrt6YA%5D.webm" type="video/webm">
-                    -->
+                   <source src="https://www.youtube.com/watch?v=TpVEoYjmZps" type="video/webm">
+                    
                 Your browser does not support the video tag.
             </video>
         </div>

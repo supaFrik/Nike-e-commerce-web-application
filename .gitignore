@@ -1,1 +1,14 @@
 target/
+# Maven build directory
+target/
+
+# Large media files
+*.webm
+*.mp4
+*.avi
+*.mov
+
+# IDE files
+.classpath
+.project
+.settings/

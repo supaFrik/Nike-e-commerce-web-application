@@ -2,6 +2,9 @@
 
 <!-- Base JavaScript Files -->
 
+<!-- Header -->
+<script src="${env}/customer/scripts//ultilities/mobile-nav.js"></script>
+
 <!-- Landing Page -->
 
 <!-- Authentication -->
