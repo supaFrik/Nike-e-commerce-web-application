@@ -147,7 +147,7 @@
                 <!-- Jordan Brand Section -->
                 <div class="mobile-jordan-section">
                     <a href="${env}/" class="mobile-jordan-brand">
-                        <img src="${env}/img/icons/air-jordan-logo.png" alt="Jordan" class="mobile-jordan-logo">
+                        <img src="${env}/customer/img/icons/air-jordan-logo.png" alt="Jordan" class="mobile-jordan-logo">
                         Jordan
                     </a>
                 </div>
