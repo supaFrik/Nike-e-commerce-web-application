@@ -5,11 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Men's Shoes. Nike VN</title>
     <link rel="icon" href="${env}/customer/img/e0891c394d4f7b7c09e783e29df07505.png">
-    
-    <!-- Include common variables -->
-    <%@ include file="/WEB-INF/views/common/variables.jsp" %>
-    
-    <!-- CSS Files -->
+        
     <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/customer/imported/product-list.jsp" />
     
