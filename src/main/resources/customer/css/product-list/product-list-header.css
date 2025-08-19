@@ -1,0 +1,130 @@
+/* =============================================================================
+   PRODUCT LIST HEADER STYLES
+   Page headers, titles, controls, and wall header sections
+   ============================================================================= */
+
+/* Nike-style header section */
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin:24px 0;
+    padding: 0;
+}
+
+.product-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.product-count {
+    font-size: 16px;
+    color: var(--color-grey-600);
+    margin: 8px 0 0 0;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.hide-filters-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    padding: 0;
+}
+
+.sort-by-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Wall Header */
+.wall-header-container {
+    margin: 30px 0;
+}
+
+.wall-header-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--size-spacing-m);
+}
+
+.wall-header_nav {
+    display: flex;
+    gap: var(--size-spacing-m);
+    align-items: center;
+}
+
+.wall-header_nav button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-spacing-xs);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--size-spacing-s);
+    transition: all var(--transition-duration-fast) ease;
+}
+
+.wall-header_nav button:hover {
+    background: var(--color-grey-100);
+    border-radius: var(--size-border-radius-s);
+}
+
+.wall-header_nav button img {
+    width: var(--size-icon-m);
+    height: var(--size-icon-m);
+}
+
+.filter__btn, .sort__btn {
+    padding: var(--size-spacing-s) var(--size-spacing-m);
+    gap: var(--size-spacing-xs);
+    font-size: var(--font-size-s);
+    font-weight: var(--font-weight-medium);
+}
+
+.filters__btn, .dropdown__btn-text-wrapper {
+    font-size: var(--font-size-s);
+    color: var(--color-text-primary);
+}
+
+.wall-header__title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+    line-height: 1.2;
+}
+
+.wall-header__item_count {
+    font-weight: var(--font-weight-normal);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-m);
+}
+
+#dropdown-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--font-size-s);
+    transition: all var(--transition-duration-fast) ease;
+}

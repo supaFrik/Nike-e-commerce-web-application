@@ -1,0 +1,335 @@
+/* ==================================================
+   PRODUCT IMAGES & IMAGE GALLERY STYLES
+   ================================================== */
+
+/* Product Images */
+.product-images {
+  top: var(--size-spacing-xxxxl);
+  height: fit-content;
+}
+
+.main-image {
+  position: relative;
+  aspect-ratio: 1;
+  margin-bottom: var(--size-spacing-m);
+  border-radius: var(--size-border-radius-l);
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+}
+
+.main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-duration-normal) var(--transition-timing-function-ease);
+}
+
+.zoom-btn {
+  position: absolute;
+  top: var(--size-spacing-s);
+  right: var(--size-spacing-s);
+  width: var(--size-spacing-xl);
+  height: var(--size-spacing-xl);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all var(--transition-duration-normal) var(--transition-timing-function-ease);
+  backdrop-filter: blur(10px);
+}
+
+.main-image:hover .zoom-btn {
+  opacity: 1;
+}
+
+.zoom-btn:hover {
+  background: var(--color-white);
+  transform: scale(1.1);
+}
+
+/* Image Preview Slider */
+.image-preview {
+  display: flex;
+  gap: 1.3vw;
+  width: 100%;
+  max-width: 100%;
+}
+
+.thumbnail-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7vh;
+  width: 8vw;
+  min-width: 40px;
+  max-width: 80px;
+}
+
+.thumbnail-item {
+  width: 8vw;
+  height: 8vw;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 80px;
+  max-height: 80px;
+  border-radius: var(--size-border-radius-s);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.thumbnail-item:hover {
+  border-color: var(--color-grey-400);
+}
+
+.thumbnail-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.main-image-container {
+  position: relative;
+  flex: 1;
+  border-radius: var(--size-border-radius-l);
+  overflow: hidden;
+  width: 100%;
+  max-width: 40vw;
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--podium-cds-color-white);
+  border: none;
+  border-radius: 50%;
+  width: var(--podium-cds-size-icon-l);
+  height: var(--podium-cds-size-icon-l);
+  cursor: pointer;
+  font-family: "Nike Futura ND", "Helvetica Now Text Medium", Helvetica, Arial, sans-serif;
+  font-weight: var(--podium-cds-font-weight-medium);
+  color: var(--podium-cds-color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  z-index: 2;
+  box-shadow: var(--podium-cds-shadow-100);
+}
+
+.nav-prev {
+  left: 16px;
+}
+
+.nav-next {
+  right: 16px;
+}
+
+/* Product Image Slider */
+.product-image-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-image-track {
+  position: relative;
+  width: 100%;
+  height: 300px;
+}
+
+.product-slide {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--size-border-radius-s);
+  transition: opacity 0.5s ease-in-out;
+}
+
+.product-slide.active {
+  display: block;
+  opacity: 1;
+}
+
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--size-spacing-xs);
+  margin-top: var(--size-spacing-s);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-grey-300);
+  cursor: pointer;
+  transition: background-color var(--transition-duration-fast) ease;
+}
+
+.dot.active {
+  background-color: var(--color-black);
+}
+
+/* ==================================================
+   RESPONSIVE STYLES FOR IMAGES
+   ================================================== */
+
+@media (max-width: 1024px) {
+  /* Scale image preview for tablet */
+  .thumbnail-nav {
+    width: 10vw;
+    min-width: 53px;
+    max-width: 93px;
+  }
+  
+  .thumbnail-item {
+    width: 10vw;
+    height: 10vw;
+    min-width: 53px;
+    min-height: 53px;
+    max-width: 93px;
+    max-height: 93px;
+  }
+  
+  .main-image-container {
+    max-width: 47vw;
+  }
+  
+  .nav-arrow {
+    width: 4vw;
+    height: 4vw;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 56px;
+    max-height: 56px;
+    font-size: calc(1vw + 14px);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-image-track {
+    height: 250px;
+  }
+  
+  /* Mobile scaling for image preview */
+  .image-preview {
+    gap: 2vw;
+  }
+  
+  .thumbnail-nav {
+    width: 12vw;
+    min-width: 47px;
+    max-width: 67px;
+    gap: 1vh;
+  }
+  
+  .thumbnail-item {
+    width: 12vw;
+    height: 12vw;
+    min-width: 47px;
+    min-height: 47px;
+    max-width: 67px;
+    max-height: 67px;
+  }
+  
+  .main-image-container {
+    max-width: 50vw;
+  }
+  
+  .nav-arrow {
+    width: 5vw;
+    height: 5vw;
+    min-width: 36px;
+    min-height: 36px;
+    max-width: 44px;
+    max-height: 44px;
+    font-size: calc(1.2vw + 12px);
+  }
+  
+  .nav-prev {
+    left: 20px;
+  }
+  
+  .nav-next {
+    right: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-image-track {
+    height: 220px;
+  }
+  
+  /* Small mobile scaling for image preview */
+  .image-preview {
+    gap: 2.7vw;
+    flex-direction: column;
+  }
+  
+  .thumbnail-nav {
+    width: 200px;
+    flex-direction: row;
+    gap: 1.3vw;
+    overflow-x: auto;
+    padding-bottom: 0.7vh;
+  }
+  
+  .thumbnail-item {
+    width: 13vw;
+    height: 13vw;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 53px;
+    max-height: 53px;
+    flex-shrink: 0;
+  }
+  
+  .main-image-container {
+    max-width: 60vw;
+    order: -1;
+  }
+  
+  .nav-arrow {
+    width: 6vw;
+    height: 6vw;
+    min-width: 32px;
+    min-height: 32px;
+    max-width: 40px;
+    max-height: 40px;
+    font-size: calc(1.5vw + 10px);
+  }
+  
+  .nav-prev {
+    left: 24px;
+  }
+  
+  .nav-next {
+    right: 24px;
+  }
+  
+  .dot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .thumbnail-item:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+  .main-image img,
+  .thumbnail-item img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}

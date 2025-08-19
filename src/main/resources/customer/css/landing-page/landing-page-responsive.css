@@ -1,0 +1,416 @@
+/* =============================================================================
+   LANDING PAGE RESPONSIVE STYLES
+   All responsive breakpoints and mobile optimizations for landing page
+   ============================================================================= */
+
+/* Hero Section Responsive */
+@media (max-width: 1200px) {
+    .hero-title h1 {
+        font-size: 150px;
+    }
+    
+    .hero-logo img {
+        left: 200px;
+        width: 80px;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero {
+        height: 70vh;
+    }
+    
+    .video-placeholder {
+        height: 70vh;
+    }
+    
+    .hero-title h1 {
+        font-size: 120px;
+    }
+    
+    .hero-logo img {
+        left: 150px;
+        width: 70px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: 60vh;
+    }
+    
+    .video-placeholder {
+        height: 60vh;
+    }
+    
+    .hero-banner-container {
+        margin: 30px 0;
+    }
+    
+    .hero-title h1 {
+        font-size: 80px;
+    }
+    
+    .hero-logo img {
+        left: 100px;
+        width: 50px;
+    }
+    
+    .hero-subtiles {
+        font-size: var(--font-size-s);
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        height: 50vh;
+    }
+    
+    .video-placeholder {
+        height: 50vh;
+    }
+    
+    .hero-banner-container {
+        margin: 20px 0;
+        padding: 0 16px;
+    }
+    
+    .hero-title h1 {
+        font-size: 60px;
+        line-height: 1;
+    }
+    
+    .hero-logo img {
+        left: 80px;
+        width: 40px;
+    }
+    
+    .hero-subtiles {
+        font-size: var(--font-size-xs);
+        margin-bottom: 10px;
+    }
+    
+    .hero-button {
+        padding: var(--button-padding-top-s) var(--button-padding-sides-s);
+        font-size: var(--font-size-xs);
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-title h1 {
+        font-size: 45px;
+    }
+    
+    .hero-logo img {
+        left: 60px;
+        width: 30px;
+    }
+}
+
+/* Featured Section Responsive */
+@media (max-width: 1024px) {
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .featured-section {
+        padding: 40px 16px;
+    }
+    
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-item {
+        min-height: 300px;
+    }
+    
+    .featured-title {
+        font-size: var(--font-size-l);
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .featured-section {
+        padding: 30px 12px;
+    }
+    
+    .featured-item {
+        min-height: 250px;
+    }
+    
+    .featured-title {
+        font-size: var(--font-size-m);
+        margin-bottom: 15px;
+    }
+    
+    .featured-content {
+        padding: 16px;
+    }
+}
+
+/* Shop by Sport Responsive */
+@media (max-width: 1024px) {
+    .sport-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shop-by-sport {
+        padding: 40px 16px;
+    }
+    
+    .sport-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .sport-section-title {
+        font-size: var(--font-size-l);
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shop-by-sport {
+        padding: 30px 12px;
+    }
+    
+    .sport-section-title {
+        font-size: var(--font-size-m);
+        margin-bottom: 15px;
+    }
+    
+    .sport-item {
+        min-height: 200px;
+    }
+}
+
+/* Shop Running Responsive */
+@media (max-width: 1024px) {
+    .running-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shop-running {
+        padding: 40px 16px;
+    }
+    
+    .running-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .running-section-title {
+        font-size: var(--font-size-l);
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shop-running {
+        padding: 30px 12px;
+    }
+    
+    .running-section-title {
+        font-size: var(--font-size-m);
+        margin-bottom: 15px;
+    }
+}
+
+/* Shop Icons Responsive */
+@media (max-width: 1024px) {
+    .icons-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shop-icons {
+        padding: 40px 16px;
+    }
+    
+    .icons-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .icons-section-title {
+        font-size: var(--font-size-l);
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shop-icons {
+        padding: 30px 12px;
+    }
+    
+    .icons-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .icons-section-title {
+        font-size: var(--font-size-m);
+        margin-bottom: 15px;
+    }
+    
+    .icon-item {
+        min-height: 150px;
+    }
+}
+
+/* Cart Sidebar Responsive */
+@media (max-width: 768px) {
+    .cart-sidebar {
+        width: 100%;
+        right: -100%;
+    }
+    
+    .cart-sidebar.open {
+        right: 0;
+    }
+    
+    .cart-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .cart-content {
+        padding: 20px;
+    }
+    
+    .cart-footer {
+        padding: 20px;
+        border-top: 1px solid #eee;
+    }
+    
+    .cart-item {
+        padding: 15px 0;
+    }
+    
+    .cart-item-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .cart-item-details h4 {
+        font-size: var(--font-size-s);
+    }
+    
+    .cart-item-price {
+        font-size: var(--font-size-s);
+    }
+}
+
+@media (max-width: 480px) {
+    .cart-sidebar {
+        width: 100vw;
+    }
+    
+    .cart-header {
+        padding: 16px;
+    }
+    
+    .cart-content {
+        padding: 16px;
+    }
+    
+    .cart-footer {
+        padding: 16px;
+    }
+    
+    .cart-item-image {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .cart-total {
+        font-size: var(--font-size-s);
+    }
+    
+    .checkout-btn {
+        padding: 12px 16px;
+        font-size: var(--font-size-s);
+    }
+}
+
+/* General Landing Page Mobile Optimizations */
+@media (max-width: 768px) {
+    /* Touch-friendly interactions */
+    .hero-button,
+    .featured-button,
+    .sport-button,
+    .running-button,
+    .icon-button {
+        min-height: 44px;
+        padding: 12px 24px;
+        font-size: 14px;
+        border-radius: 6px;
+        touch-action: manipulation;
+    }
+    
+    /* Improved spacing */
+    .section {
+        margin-bottom: 40px;
+    }
+    
+    .container {
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Smaller touch targets for very small screens */
+    .hero-button,
+    .featured-button,
+    .sport-button,
+    .running-button,
+    .icon-button {
+        min-height: 40px;
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+    
+    /* Tighter spacing */
+    .section {
+        margin-bottom: 30px;
+    }
+    
+    .container {
+        padding: 0 12px;
+    }
+}
+
+/* Accessibility and Performance */
+@media (prefers-reduced-motion: reduce) {
+    .hero-button,
+    .featured-item,
+    .sport-item,
+    .running-item,
+    .icon-item {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .hero-button,
+    .featured-item,
+    .sport-item,
+    .running-item,
+    .icon-item {
+        border: 2px solid;
+    }
+}

@@ -1,0 +1,78 @@
+/* =============================================================================
+   PRODUCT LIST BANNER STYLES
+   Banner slider, controls, and promotional content
+   ============================================================================= */
+
+/* Banner Container */
+.banner-container {
+    width: 100%;
+    margin-bottom: var(--size-spacing-l);
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-bg-secondary);
+    height: 80px;
+    border-bottom: 1px solid var(--button-color-border-secondary);
+    position: relative;
+}
+
+.banner-slider {
+    padding: 0;
+    margin: 0 30px;
+    width: 300px;
+    max-width: 100%;
+}
+
+.slider-btn {
+    border: none;
+    border-radius: 50%;
+    padding: 8px 10px;
+    cursor: pointer;
+    background: var(--color-white);
+    color: var(--color-text-primary);
+    transition: all var(--transition-duration-fast) ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.slider-btn:hover {
+    background: var(--color-grey-100);
+    transform: scale(1.05);
+}
+
+.banner-node {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.banner-title {
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+    text-align: center;
+    max-width: 320px;
+    color: var(--color-grey-700);
+    font-size: var(--font-size-xs);
+    margin: 0;
+}
+
+.banner-subtitle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-width: 320px;
+    text-decoration: underline;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-xs);
+    margin: 0;
+}

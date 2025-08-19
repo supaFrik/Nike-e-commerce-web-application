@@ -1,0 +1,118 @@
+/* =============================================================================
+   PRODUCT LIST STORIES CAROUSEL STYLES
+   Related stories section, carousel, and navigation
+   ============================================================================= */
+
+.related-stories-section {
+    padding: var(--size-spacing-xxxl) 0;
+    background: var(--color-white);
+    margin-top: var(--size-spacing-xl);
+}
+
+.related-stories-header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.related-stories-header .section-title {
+    color: var(--color-black);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    margin: 0;
+}
+
+.carousel-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.story-nav-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: var(--color-black);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: var(--color-grey-100);
+    transition: all var(--transition-duration-fast) ease;
+    position: relative;
+    z-index: 10;
+}
+
+.story-nav-btn:hover {
+    background: var(--color-grey-200);
+}
+
+.story-nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.story-slider-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.story-slider-track {
+    display: flex;
+    gap: var(--size-spacing-m);
+    transition: transform 0.3s ease;
+}
+
+.story-slide {
+    flex: 0 0 600px;
+    height: 400px;
+    position: relative;
+    cursor: pointer;
+    border-radius: var(--size-border-radius-m);
+    overflow: hidden;
+}
+
+.story-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.story-button {
+    position: absolute;
+    bottom: var(--size-spacing-l);
+    left: var(--size-spacing-l);
+    right: var(--size-spacing-l);
+}
+
+.story-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-spacing-xs);
+}
+
+.story-category {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-primary-inverse);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: var(--font-weight-medium);
+}
+
+.story-title {
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary-inverse);
+    line-height: 1.4;
+    margin: 0;
+}
+
+.stories-carousel-track {
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}

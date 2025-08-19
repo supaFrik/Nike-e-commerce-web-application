@@ -1,0 +1,120 @@
+/* ==================================================
+   AUTH LAYOUT & CONTAINER STYLES
+   ================================================== */
+
+/* Main container */
+.auth-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Left side - Form section */
+.auth-form-section {
+  flex: 1;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--size-spacing-xxl) var(--size-spacing-xl);
+  background-color: var(--color-bg-primary);
+  position: relative;
+  z-index: 2;
+  animation: fadeIn 0.6s var(--transition-timing-function-ease);
+}
+
+/* Right side - Image section */
+.auth-image-section {
+  flex: 1;
+  background: linear-gradient(135deg, 
+    var(--color-blue-200) 0%, 
+    var(--color-purple-200) 30%, 
+    var(--color-pink-200) 60%, 
+    var(--color-blue-300) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-image-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('../assets/img/the-best-nike-sneakers-to-wear-in-the-winter.jpg') center/cover;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+.auth-image-section::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, 
+    rgba(17, 17, 17, 0.3) 0%, 
+    rgba(255, 80, 0, 0.2) 50%, 
+    rgba(17, 17, 17, 0.3) 100%);
+  z-index: 2;
+}
+
+/* Nike logo on image */
+.auth-image-logo {
+  position: absolute;
+  bottom: var(--size-spacing-xl);
+  right: var(--size-spacing-xl);
+  z-index: 3;
+}
+
+.auth-image-logo img {
+  width: 80px;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+/* ==================================================
+   RESPONSIVE LAYOUT
+   ================================================== */
+
+@media (max-width: 1024px) {
+  .auth-container {
+    flex-direction: column-reverse;
+  }
+  
+  .auth-image-section {
+    min-height: 40vh;
+  }
+  
+  .auth-form-section {
+    max-width: none;
+    padding: var(--size-spacing-xl) var(--size-spacing-l);
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-form-section {
+    padding: var(--size-spacing-l) var(--size-spacing-m);
+  }
+  
+  .auth-image-section {
+    min-height: 30vh;
+  }
+  
+  .auth-image-logo {
+    bottom: var(--size-spacing-m);
+    right: var(--size-spacing-m);
+  }
+  
+  .auth-image-logo img {
+    width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-form-section {
+    padding: var(--size-spacing-m);
+  }
+}
