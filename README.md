@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../Nike Ecommerce Web Application/src/main/resources/customer/img/air-jordan-logo.png" alt="Nike Logo" width="180"/>
+  <img src="src/main/resources/customer/img/air-jordan-logo.png" alt="Nike Logo" width="180"/>
 </p>
 
 # 🏃‍♂️ Nike E-Commerce Web Application
