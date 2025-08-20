@@ -220,7 +220,7 @@ For technical support or business inquiries:
 - 📚 **Documentation**: [Wiki](../../wiki)
 
 ---
-<div align="center"
+<div align="center">
   <img src="https://media.giphy.com/media/3oriNOV42vZdh31e48/giphy.gif" alt="Goodnight Animation" style="max-width:100%; height:auto;">
 </div>
 
