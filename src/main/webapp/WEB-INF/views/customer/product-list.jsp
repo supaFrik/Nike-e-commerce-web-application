@@ -240,17 +240,20 @@
                         <button class="hide-filters-btn" aria-label="Toggle filter visibility" 
                                 aria-describedby="hide-filters-desc">
                             Hide Filters
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M7 10l5 5 5-5z" stroke="currentColor" stroke-width="1.5"/>
-                            </svg>
+                            <svg aria-hidden="true" class="icon-filter-ds" focusable="false" viewBox="0 0 24 24" role="img" width="24px" height="24px" fill="none">
+    <path stroke="currentColor" stroke-width="1.5" d="M21 8.25H10m-5.25 0H3"></path>
+    <path stroke="currentColor" stroke-width="1.5" d="M7.5 6v0a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" clip-rule="evenodd"></path>
+    <path stroke="currentColor" stroke-width="1.5" d="M3 15.75h10.75m5 0H21"></path>
+    <path stroke="currentColor" stroke-width="1.5" d="M16.5 13.5v0a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" clip-rule="evenodd"></path>
+  </svg>
                         </button>
                         <span id="hide-filters-desc" class="sr-only">Hide or show the product filters panel</span>
                         <button class="sort-by-btn" aria-label="Sort products" aria-describedby="sort-desc" 
                                 aria-haspopup="menu">
                             Sort By
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                <path d="M7 10l5 5 5-5z" stroke="currentColor" stroke-width="1.5"/>
-                            </svg>
+                                <svg id="sort-arrow" width="20" height="20" class="sort-arrow-icon" viewBox="0 0 20 20">
+                                <path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
                         </button>
                         <span id="sort-desc" class="sr-only">Change the order products are displayed</span>
                     </div>
