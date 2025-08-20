@@ -248,13 +248,18 @@
   </svg>
                         </button>
                         <span id="hide-filters-desc" class="sr-only">Hide or show the product filters panel</span>
-                        <button class="sort-by-btn" aria-label="Sort products" aria-describedby="sort-desc" 
-                                aria-haspopup="menu">
-                            Sort By
-                                <svg id="sort-arrow" width="20" height="20" class="sort-arrow-icon" viewBox="0 0 20 20">
-                                <path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/>
-                                </svg>
-                        </button>
+                        <div class="sort-by-btn">
+                            <button id="sort-toggle" class="sort-btn sort-by-btn">
+                                Sort By
+                                <svg id="sort-arrow" width="20" height="20" class="sort-arrow-icon" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                            </button>
+                            <ul id="sort-options" class="sort-options">
+                                <li class="sort-option">Featured</li>
+                                <li class="sort-option">Newest</li>
+                                <li class="sort-option">Price: High-Low</li>
+                                <li class="sort-option">Price: Low-High</li>
+                            </ul>
+                        </div>
                         <span id="sort-desc" class="sr-only">Change the order products are displayed</span>
                     </div>
                 </div>

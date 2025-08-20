@@ -9,3 +9,6 @@
 <script src="${env}/customer/scripts/ultilities/carousel.js"></script>
 
 <!-- Authentication -->
+
+<!-- Product List -->
+<script src="${env}/customer/scripts/ultilities/sort-btn.js"></script>
