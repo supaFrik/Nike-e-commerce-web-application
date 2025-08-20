@@ -28,7 +28,7 @@ Welcome to the **Nike E-Commerce Web Application** - where championship performa
 ## ✨ Features That Champion Excellence
 
 ### 🏆 **Core E-Commerce Features**
-- **🛍️ Product Management**: Complete product catalog with categories and detailed information
+- **🛍️ Product Management**: Deploy product catalog with categories and detailed information
 - **🔍 Advanced Search**: Lightning-fast product search and filtering capabilities
 - **⭐ Customer Reviews**: Authentic feedback system with comprehensive rating system
 - **📦 Order Management**: Full order lifecycle from cart to delivery tracking
