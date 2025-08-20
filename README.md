@@ -7,12 +7,14 @@
 
 <div align="center">
 
-  [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.1.4-brightgreen.svg)](https://spring.io/projects/spring-boot)
+  [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-2.7.18-brightgreen.svg)](https://spring.io/projects/spring-boot)
   [![Java](https://img.shields.io/badge/Java-11-orange.svg)](https://www.oracle.com/java/)
   [![Maven](https://img.shields.io/badge/Maven-3.6+-blue.svg)](https://maven.apache.org/)
+  [![MySQL](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
+  [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://docker.com)
   [![JPA](https://img.shields.io/badge/JPA-Hibernate-red.svg)](https://hibernate.org/)
   [![Architecture](https://img.shields.io/badge/Architecture-MVC-purple.svg)](https://spring.io/guides/gs/serving-web-content/)
-  [![Security](https://img.shields.io/badge/Security-Enhanced-success.svg)](#security-features)
+  [![Flyway](https://img.shields.io/badge/Database-Flyway-orange.svg)](https://flywaydb.org/)
 </div>
 
 ## 🚀 Performance Meets Innovation
@@ -23,33 +25,29 @@ Welcome to the **Nike E-Commerce Web Application** - where championship performa
 
 ---
 
-<!-- Shopping GIF in Features Section -->
-<p align="center">
-  <img src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif" alt="Shopping Experience" width="250"/>
-</p>
-
 ## ✨ Features That Champion Excellence
 
-### 🏆 **Enhanced Entity Management System**
-- **🔐 Unified BaseModel**: Comprehensive auditing with created/updated timestamps
-- **🗑️ Soft Delete**: Data integrity with logical deletion instead of hard deletes
-- **📧 JPA Auditing**: Automatic timestamp management with `@CreatedDate` and `@LastModifiedDate`
-- **🏠 Flexible Architecture**: Support for both unified BaseModel and specialized base classes
-- **👤 Entity Relationships**: Proper JPA mappings with cascade controls and fetch strategies
-
-### 🛍️ **Premium Shopping Experience**
-- **⚡ Lightning-Fast Performance**: Optimized database queries with strategic indexing
-- **🔍 Advanced Search & Filtering**: Find your perfect Nike gear in milliseconds
-- **📱 Responsive Design**: Seamless experience across all devices
-- **🏪 Product Categories**: Comprehensive Nike collections with proper entity relationships
-- **⭐ Customer Reviews**: Authentic feedback system with rating capabilities
+### 🏆 **Core E-Commerce Features**
+- **🛍️ Product Management**: Complete product catalog with categories and detailed information
+- **🔍 Advanced Search**: Lightning-fast product search and filtering capabilities
+- **⭐ Customer Reviews**: Authentic feedback system with comprehensive rating system
+- **📦 Order Management**: Full order lifecycle from cart to delivery tracking
+- **👤 Customer Profiles**: Personalized user accounts with order history
+- **📧 Contact System**: Direct customer communication channels
 
 ### 🎯 **Enterprise Architecture Features**
-- **🏗️ Clean Architecture**: Layered design with separation of concerns
-- **✅ Bean Validation**: Comprehensive data validation at all layers
-- **🔄 Relationship Management**: Bidirectional entity relationships with cascade controls
-- **📊 Performance Optimized**: Strategic indexing and lazy loading
-- **🎨 DTO Pattern**: Secure data transfer with dedicated DTOs
+- **🏗️ Clean MVC Architecture**: Layered design with clear separation of concerns
+- **📊 Database Migration**: Flyway-powered version control for database schemas
+- **🔄 JPA Entity Relationships**: Sophisticated data modeling with proper associations
+- **✅ Data Validation**: Comprehensive validation at all application layers
+- **🐳 Docker Integration**: Containerized MySQL database for easy deployment
+- **🎨 Responsive UI**: Mobile-first design with modern CSS and JavaScript
+
+### 🛠️ **Technical Excellence**
+- **⚡ Optimized Performance**: Strategic database indexing and query optimization
+- **🔐 Security Implementation**: Enterprise-grade security configurations
+- **📱 Multi-Device Support**: Seamless experience across desktop and mobile
+- **🌐 Internationalization Ready**: Built for global Nike market expansion
 
 ---
 
@@ -59,85 +57,74 @@ Welcome to the **Nike E-Commerce Web Application** - where championship performa
 
 | Category | Technology | Version | Purpose |
 |----------|------------|---------|---------|
-| **Backend Framework** | Spring Boot | 2.1.4 | Core application framework |
+| **Backend Framework** | Spring Boot | 2.7.18 | Core application framework |
 | **Language** | Java | 11 | Programming language |
 | **Build Tool** | Maven | 3.6+ | Dependency management & build |
-| **Database** | MySQL | 8.0+ | Primary data storage |
-| **ORM** | Hibernate/JPA | 2.1.4 | Object-relational mapping |
-| **View Engine** | JSP/JSTL | 1.2 | Server-side rendering |
+| **Database** | MySQL | 8.0 | Primary data storage |
+| **ORM** | Hibernate/JPA | Latest | Object-relational mapping |
+| **Migration** | Flyway | Latest | Database version control |
+| **View Engine** | JSP/JSTL | 1.2.5 | Server-side rendering |
 | **Frontend** | HTML5, CSS3, JS | Latest | User interface |
-| **Validation** | Bean Validation | 2.0 | Data validation |
+| **Containerization** | Docker Compose | Latest | Database orchestration |
+| **Server** | Embedded Tomcat | Latest | Application server |
 
 </div>
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Project Architecture
 
-### **Unified BaseModel Design**
-Our refactored architecture introduces a comprehensive `BaseModel` class that provides:
-
-```java
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
-public abstract class BaseModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @CreatedDate
-    @Column(name = "created_at", updatable = false, nullable = false)
-    private Instant createdAt;
-    
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private Instant updatedAt;
-    
-    @Column(name = "deleted_at")
-    private Instant deletedAt;
-    
-    // Soft delete functionality
-    public boolean isDeleted() { return deletedAt != null; }
-    public void softDelete() { this.deletedAt = Instant.now(); }
-    public void restore() { this.deletedAt = null; }
-}
+### **Directory Structure**
+```
+nike-ecommerce-web-application/
+├── 📁 src/main/java/vn/devpro/javaweb32/
+│   ├── 🎯 controller/           # MVC Controllers
+│   │   ├── administrator/       # Admin panel controllers
+│   │   ├── auth/               # Authentication controllers
+│   │   └── customer/           # Customer-facing controllers
+│   ├── 📊 model/               # JPA Entities
+│   │   ├── base/               # Base model classes
+│   │   ├── category/           # Product categories
+│   │   ├── customer/           # Customer entities
+│   │   ├── order/              # Order management
+│   │   ├── product/            # Product entities
+│   │   └── review/             # Review system
+│   ├── 🗃️ repository/          # Data access layer
+│   ├── ⚙️ service/             # Business logic layer
+│   ├── 🔧 config/              # Configuration classes
+│   ├── 🛡️ security/            # Security configurations
+│   └── 📋 dto/                 # Data Transfer Objects
+├── 📁 src/main/resources/
+│   ├── 🎨 customer/            # Frontend assets
+│   │   ├── css/                # Stylesheets
+│   │   ├── img/                # Images & logos
+│   │   ├── scripts/            # JavaScript files
+│   │   └── font/               # Custom fonts
+│   ├── 👨‍💼 administrator/       # Admin panel assets
+│   └── 🗄️ db/migration/         # Flyway database migrations
+└── 📁 src/main/webapp/WEB-INF/views/ # JSP templates
 ```
 
-### **Key Architectural Improvements**
+### **Core Components**
 
-#### ✅ **Fixed Issues:**
-- **Unified Entity Base**: Replaced fragmented base classes with comprehensive `BaseModel`
-- **Proper JPA Annotations**: Added missing `@Entity`, `@Table`, and column mappings
-- **Consistent ID Types**: Standardized all entities to use `Long` for primary keys
-- **Audit Field Configuration**: Fixed `updatedAt` field to be properly updatable
-- **Soft Delete Implementation**: Added proper column annotations and utility methods
+#### 🎯 **Controller Layer**
+- **HomeController**: Landing page and navigation
+- **CustomerHomeController**: Customer dashboard and product browsing
+- **CustomerContactController**: Customer support and communication
+- **BaseController**: Shared controller functionality
 
-#### 🎯 **Benefits:**
-- **Consistency**: All entities follow the same base structure
-- **Maintainability**: Single source of truth for common entity fields
-- **Auditability**: Automatic tracking of creation and modification times
-- **Data Integrity**: Soft delete prevents accidental data loss
-- **Performance**: Proper indexing and lazy loading strategies
+#### 📊 **Data Models**
+- **Product Management**: Complete product catalog with images and pricing
+- **Category System**: Hierarchical product categorization
+- **Order Processing**: Full order lifecycle management  
+- **Customer Profiles**: User accounts and preferences
+- **Review System**: Product ratings and feedback
 
-### **Entity Relationship Mapping**
-
-```
-BaseModel (Abstract)
-├── Product
-│   ├── @ManyToOne → Category
-│   └── @ElementCollection → sizes
-├── Category
-│   └── @OneToMany → Product
-├── Customer
-│   ├── @OneToMany → Order
-│   └── @OneToMany → Review
-├── Order
-│   ├── @ManyToOne → Customer
-│   └── @OneToMany → OrderItem
-└── Review
-    ├── @ManyToOne → Customer
-    └── @ManyToOne → Product
-```
+#### 🗄️ **Database Architecture**
+- **Flyway Migrations**: Version-controlled schema evolution
+- **MySQL 8.0**: High-performance relational database
+- **JPA/Hibernate**: Object-relational mapping with optimizations
+- **Connection Pooling**: Efficient database connection management
 
 ---
 
@@ -145,217 +132,99 @@ BaseModel (Abstract)
 
 ### **Prerequisites**
 - ☕ Java 11 or higher
-- 🔧 Maven 3.6+
-- 🗄️ MySQL 8.0+
-- 🌐 Any modern web browser
+- 📦 Maven 3.6+
+- 🐳 Docker & Docker Compose
+- 🌐 Modern web browser
 
-### **Installation Steps**
+### **Installation & Setup**
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-repo/nike-ecommerce.git
-   cd nike-ecommerce/Javaweb32/Javaweb32
+   git clone <repository-url>
+   cd Nike\ Ecommerce\ Web\ Application
    ```
 
-2. **Database Configuration**
+2. **Start Database Services**
    ```bash
-   # Create MySQL database
-   mysql -u root -p
-   CREATE DATABASE nike_ecommerce;
+   docker-compose up -d
    ```
 
-3. **Configure Application Properties**
-   ```properties
-   # src/main/resources/application.properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/nike_ecommerce
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
-
-   spring.jpa.hibernate.ddl-auto=update
-   spring.jpa.show-sql=true
-   spring.jpa.properties.hibernate.format_sql=true
-   ```
-
-4. **Build and Run**
+3. **Build & Run Application**
    ```bash
    mvn clean install
    mvn spring-boot:run
    ```
 
-5. **Access the Application**
-   - 🏠 **Customer Portal**: http://localhost:8080
-   - 🔧 **Admin Portal**: http://localhost:8080/admin
+4. **Access the Application**
+   - 🌐 **Main Application**: http://localhost:9090
+   - 🗄️ **Database**: localhost:3307 (MySQL)
+   - 📊 **Database Name**: nike_store
+
+### **Default Configuration**
+- **Server Port**: 9090
+- **Database**: MySQL 8.0 on port 3307
+- **Context Path**: Root (/)
+- **JSP View Resolver**: /WEB-INF/views/*.jsp
 
 ---
 
-## 📚 API Documentation
+## 📊 Features Deep Dive
 
-### **Core Entities**
+### 🛍️ **Customer Experience**
+- **Product Catalog**: Browse Nike's complete collection with high-quality images
+- **Smart Search**: Advanced filtering by category, price, and specifications  
+- **User Accounts**: Personalized shopping experience with order history
+- **Reviews & Ratings**: Community-driven product feedback system
+- **Responsive Design**: Optimized for all devices and screen sizes
 
-#### **Product Entity**
-```java
-@Entity
-@Table(name = "products")
-public class Product extends BaseModel {
-    @Column(name = "name", nullable = false)
-    private String name;
+### 👨‍💼 **Administrative Features**
+- **Product Management**: CRUD operations for product catalog
+- **Order Tracking**: Monitor and manage customer orders
+- **Customer Support**: Direct communication with customers
+- **Analytics Dashboard**: Business intelligence and reporting tools
+- **Content Management**: Update site content and promotions
 
-    @Column(name = "price", nullable = false)
-    private Double price;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    // Automatic auditing fields from BaseModel
-    // + soft delete functionality
-}
-```
-
-#### **Soft Delete Operations**
-```java
-// Soft delete a product
-product.softDelete();
-productRepository.save(product);
-
-// Restore a deleted product
-product.restore();
-productRepository.save(product);
-
-// Check if product is deleted
-if (product.isDeleted()) {
-    // Handle deleted product logic
-}
-```
-
----
-
-## 🎯 Project Structure
-
-```
-src/main/java/vn/devpro/javaweb32/
-├── 📁 config/                    # Configuration classes
-│   └── JpaAuditingConfig.java   # JPA auditing configuration
-├── 📁 model/                     # Entity models
-│   ├── 📁 base/                 # Base entity classes
-│   │   ├── BaseModel.java       # ✨ New unified base model
-│   │   ├── AuditableEntity.java # Legacy auditing entity
-│   │   └── SoftDeletableEntity.java # Legacy soft delete entity
-│   ├── 📁 product/              # Product-related entities
-│   │   ├── Product.java         # ✅ Refactored with BaseModel
-│   │   ├── Category.java        # ✅ Refactored with BaseModel
-│   │   └── Brand.java
-│   ├── 📁 customer/             # Customer-related entities
-│   ├── 📁 order/               # Order-related entities
-│   └── 📁 review/              # Review-related entities
-├── 📁 controller/               # MVC controllers
-├── 📁 service/                  # Business logic layer
-└── 📁 repository/              # Data access layer
-```
-
----
-
-## 🛡️ Security Features
-
-- **🔒 Input Validation**: Bean validation on all entity fields
-- **🛡️ SQL Injection Protection**: JPA prevents SQL injection attacks
-- **🔐 Session Management**: Secure session handling
-- **📝 Audit Trail**: Complete tracking of data changes
-- **🗑️ Data Recovery**: Soft delete allows data recovery
-
----
-
-## 🎨 Best Practices Implemented
-
-### **Entity Design**
-- ✅ Consistent base model inheritance
-- ✅ Proper JPA annotations and mappings
-- ✅ Strategic use of fetch types (LAZY/EAGER)
-- ✅ Cascade operations for related entities
-- ✅ Soft delete for data integrity
-
-### **Performance Optimization**
-- ✅ Database indexing on frequently queried fields
-- ✅ Lazy loading for related entities
-- ✅ Proper column definitions and constraints
-- ✅ Optimized relationship mappings
-
-### **Code Quality**
-- ✅ Clean, readable, and maintainable code
-- ✅ Proper separation of concerns
-- ✅ Comprehensive error handling
-- ✅ Consistent naming conventions
-
----
-
-## 🔄 Migration Guide
-
-If you're migrating from the old fragmented base classes to the new `BaseModel`:
-
-### **Before (Old Structure)**
-```java
-public class Product extends BaseEntity {
-    // Only had id field, no auditing
-}
-```
-
-### **After (New Structure)**
-```java
-@Entity
-@Table(name = "products")
-public class Product extends BaseModel {
-    // Now includes id, createdAt, updatedAt, deletedAt
-    // Plus automatic auditing and soft delete
-}
-```
-
-### **Database Migration**
-```sql
--- Add audit columns to existing tables
-ALTER TABLE products
-ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-ADD COLUMN deleted_at TIMESTAMP NULL;
-
--- Add indexes for performance
-CREATE INDEX idx_products_deleted_at ON products(deleted_at);
-CREATE INDEX idx_products_created_at ON products(created_at);
-```
+### 🔧 **Technical Features**
+- **Database Migrations**: Automated schema updates with Flyway
+- **Soft Delete**: Data integrity with logical deletion patterns
+- **Audit Trails**: Comprehensive logging and change tracking
+- **Performance Optimization**: Strategic caching and query optimization
+- **Security**: Input validation and SQL injection protection
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please follow these steps:
+We welcome contributions that help us build the ultimate Nike shopping experience! Please follow these guidelines:
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
-3. **Commit** your changes: `git commit -m 'Add amazing feature'`
-4. **Push** to the branch: `git push origin feature/amazing-feature`
-5. **Open** a Pull Request
+1. 🔀 Fork the repository
+2. 🌿 Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. ✅ Commit your changes (`git commit -m 'Add amazing feature'`)
+4. 📤 Push to the branch (`git push origin feature/amazing-feature`)
+5. 🔃 Open a Pull Request
 
 ---
 
-## 📧 Contact & Support
+## 📝 License
 
-- **Developer**: VieTrinh AKA supaFrik
-- **Email**: tqv2005business@gmail.com
-- **Documentation**: [Wiki Pages](../../wiki)
-- **Issues**: [GitHub Issues](../../issues)
+This project is developed for educational and demonstration purposes, showcasing enterprise-grade Spring Boot architecture and modern web development practices.
+
+---
+
+## 📞 Support & Contact
+
+For technical support or business inquiries:
+
+- 📧 **Email**: tqv2005business@gmail.com
+- 🐛 **Issues**: [GitHub Issues](../../issues)
+- 📚 **Documentation**: [Wiki](../../wiki)
 
 ---
 
 <div align="center">
 
-### *"Your potential is endless. Your code should be too."*
+### *Built with ❤️ and Java ☕*
 
-**Built with ❤️ by the Only Mighty SpaFrikky**
-
-[⬆ Back to Top](#nike-e-commerce-web-application)
+**Just Do It** - *With Code That Performs*
 
 </div>
-
-<!-- Motivational GIF at the End -->
-<p align="center">
-  <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif" alt="Just Do It Motivation" width="220"/>
-</p>
