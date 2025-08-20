@@ -5,3 +5,5 @@ CREATE TABLE products (
     image_url VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+

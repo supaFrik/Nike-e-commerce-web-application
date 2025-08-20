@@ -25,12 +25,6 @@ public class CustomerHomeController extends BaseController {
 		return "customer/cart";
 	}
 
-	// Products page
-	@RequestMapping(value = {"/products", "/customer/product-list"}, method = RequestMethod.GET)
-	public String products() {
-		return "customer/product-list";
-	}
-
 	// Product detail page
 	@RequestMapping(value = "/product-detail", method = RequestMethod.GET)
 	public String productDetail() {
