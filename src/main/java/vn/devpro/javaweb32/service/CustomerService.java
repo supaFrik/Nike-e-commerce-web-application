@@ -7,16 +7,6 @@ import vn.devpro.javaweb32.repository.CustomerRepository;
 
 import java.util.List;
 
-@Service
 public class CustomerService {
-    @Autowired
-    private CustomerRepository customerRepository;
 
-    public List<Customer> getAllCustomers() {
-        return customerRepository.findAll();
-    }
-
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
-    }
 }

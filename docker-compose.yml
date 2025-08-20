@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: nike-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: trinhquocviet2005
+      MYSQL_DATABASE: nike_store
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
