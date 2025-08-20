@@ -222,9 +222,8 @@ For technical support or business inquiries:
 ---
 
 <div align="center">
-
+<img src="https://media.giphy.com/media/3oriNOV42vZdh31e48/giphy.gif" alt="Goodnight Animation" style="max-width:100%; height:auto;">
 ### *Built with ❤️ and Java ☕*
 
 **Just Do It** - *With Code That Performs*
-
 </div>
