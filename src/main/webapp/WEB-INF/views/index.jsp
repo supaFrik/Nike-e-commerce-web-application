@@ -19,23 +19,18 @@
 <body>
     <jsp:include page="/WEB-INF/views/customer/layout/header.jsp" />
 
-    <!-- Hero Section -->
-    <section class="hero" aria-label="Hero banner section">
-        <div class="video-container">
-            <!-- Replace YouTube URL with a proper video file or image placeholder -->
-            <div class="video-placeholder" style="background: linear-gradient(45deg, #000, #333); height: 400px; display: flex; align-items: center; justify-content: center;">
-                <img src="${env}/customer/img/air-jordan-logo.png" alt="Nike Hero Banner" style="max-width: 200px; opacity: 0.8;">
-            </div>
-            <!-- If you have a local video file, uncomment and use this instead:
-            <video autoplay loop muted playsinline class="video-placeholder"
-                   aria-label="Nike promotional video about Mars Yard sneakers"
-                   aria-describedby="hero-description">
-                <source src="${env}/customer/video/nike-promo.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            -->
-        </div>
-    </section>
+<!-- Hero Section -->
+<section class="hero" aria-label="Hero banner section">
+    <div class="video-container">
+        <video autoplay loop muted playsinline class="video-placeholder"
+               poster="${env}/customer/video/stairs-nike-poster.jpg"
+               aria-label="Nike promotional video about Mars Yard sneakers"
+               aria-describedby="hero-description">
+            <source src="${env}/customer/vid/Stairs%20Nike%20-%20Nike%20(1080p,%20h264).mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+</section>
 
     <div class="hero-banner-container" role="banner" aria-labelledby="hero-main-title" aria-describedby="hero-description">
         <div class="hero-title">
