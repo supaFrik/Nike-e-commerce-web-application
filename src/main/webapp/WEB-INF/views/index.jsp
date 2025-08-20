@@ -22,13 +22,18 @@
     <!-- Hero Section -->
     <section class="hero" aria-label="Hero banner section">
         <div class="video-container">
-            <video autoplay loop muted playscdinline class="video-placeholder"
+            <!-- Replace YouTube URL with a proper video file or image placeholder -->
+            <div class="video-placeholder" style="background: linear-gradient(45deg, #000, #333); height: 400px; display: flex; align-items: center; justify-content: center;">
+                <img src="${env}/customer/img/air-jordan-logo.png" alt="Nike Hero Banner" style="max-width: 200px; opacity: 0.8;">
+            </div>
+            <!-- If you have a local video file, uncomment and use this instead:
+            <video autoplay loop muted playsinline class="video-placeholder"
                    aria-label="Nike promotional video about Mars Yard sneakers"
                    aria-describedby="hero-description">
-                   <source src="https://www.youtube.com/watch?v=TpVEoYjmZps" type="video/webm">
-
+                <source src="${env}/customer/video/nike-promo.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+            -->
         </div>
     </section>
 
@@ -393,4 +398,3 @@
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>
 </html>
-

@@ -4,7 +4,7 @@ import vn.devpro.javaweb32.common.base.BaseEntity;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "CustomerAddress")
 @Table(name = "addresses")
 public class Address extends BaseEntity {
 

@@ -8,7 +8,7 @@
             <div class="header-top-content">
                 <div class="header-top-left">
                     <a href="${env}/" class="header-brand">
-                        <img src="${env}/customer/img/icons/air-jordan-logo.png" alt="Jordan" width="24" height="24">
+                        <img src="${env}/customer/img/air-jordan-logo.png" alt="Jordan" width="24" height="24">
                     </a>
                 </div>
                 <div class="header-top-right">
