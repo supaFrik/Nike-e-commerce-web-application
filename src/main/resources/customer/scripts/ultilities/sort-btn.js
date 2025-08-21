@@ -1,11 +1,11 @@
 // Sort By dropdown animation
-// Refactored: Add event delegation for sort options, highlight selected, and keep structure minimal
 const sortToggle = document.getElementById('sort-toggle');
 const sortOptions = document.getElementById('sort-options');
 const sortArrow = document.getElementById('sort-arrow');
-const sortByBtn = sortToggle?.closest('.sort-by-btn');
+const sortByBtn = document.getElementById('sortByBtn');
+const sortForm = document.getElementById('sort-form');
+const sortInput = document.getElementById('sort-input');
 let sortOpen = false;
-let selectedSort = null;
 
 // Ensure sortArrow has transition for transform
 if (sortArrow) {
@@ -38,9 +38,10 @@ sortOptions?.addEventListener('click', function(e) {
         // Remove active from all
         sortOptions.querySelectorAll('.sort-option').forEach(opt => opt.classList.remove('active'));
         li.classList.add('active');
-        selectedSort = li.textContent.trim();
+        // Set hidden input and submit form
+        if (sortInput) sortInput.value = li.getAttribute('data-value');
+        if (sortForm) sortForm.submit();
         setSortDropdown(false);
-        // Optionally, trigger sorting logic here
     }
 });
 
@@ -64,3 +65,34 @@ filterToggle?.addEventListener('click', function() {
         categories.style.display = categories.style.display === 'none' ? '' : 'none';
     }
 });
+
+////Hiding buggy sortBtn
+//const sortToggle = document.getElementById('sort-toggle');
+//const sortOptions = document.getElementById('sort-options');
+//const sortByBtn = document.getElementById('sortByBtn');
+//
+//function setSortDropdown(open) {
+//    if (open) {
+//        sortOptions.classList.add('show');
+//        sortToggle.setAttribute('aria-expanded', 'true');
+//    } else {
+//        sortOptions.classList.remove('show');
+//        sortToggle.setAttribute('aria-expanded', 'false');
+//    }
+//}
+//
+//let sortOpen = false;
+//
+//sortToggle.addEventListener('click', function(e) {
+//    e.stopPropagation();
+//    sortOpen = !sortOpen;
+//    setSortDropdown(sortOpen);
+//    if (sortOpen) sortOptions.querySelector('select').focus();
+//});
+//
+//window.addEventListener('click', function(e) {
+//    if (!sortByBtn.contains(e.target)) {
+//        sortOpen = false;
+//        setSortDropdown(false);
+//    }
+//});

@@ -4,6 +4,7 @@ import vn.devpro.javaweb32.entity.base.BaseModel;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "products")
@@ -31,10 +32,16 @@ public class Product {
     @Column(name = "color_count")
     private int colorCount = 1;
 
+    @Column(name = "featured", nullable = false)
+    private boolean featured;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
     public Product() {
     }
 
-    public Product(Long id, String name, BigDecimal price, String category, String description, String imageUrl, String status, int colorCount) {
+    public Product(Long id, String name, BigDecimal price, String category, String description, String imageUrl, String status, int colorCount, boolean featured, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -43,6 +50,8 @@ public class Product {
         this.imageUrl = imageUrl;
         this.status = status;
         this.colorCount = colorCount;
+        this.featured = featured;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -108,4 +117,21 @@ public class Product {
     public void setColorCount(int colorCount) {
         this.colorCount = colorCount;
     }
+
+    public boolean isFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(boolean featured) {
+        this.featured = featured;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
 }

@@ -121,7 +121,7 @@
     font-size: var(--font-size-m);
 }
 
-.sort-by-btn {
+.sort-btn, .sort-by-btn {
     position: relative;
     display: flex;
     align-items: center;
@@ -143,8 +143,8 @@
     display: none;
     position: absolute;
     top: 100%;
-    left: -60px;
-    min-width: 140px;
+    left: -50px;
+    min-width: 150px;
     max-width: 200px;
     max-height: 320px;
     overflow-y: auto;
@@ -168,7 +168,7 @@
     display: block;
     pointer-events: auto;
     text-decoration: none;
-    padding: 5px 5px;
+    padding: 5px 25px 5px 5px;
     font-size: 15px;
     color: var(--color-text-primary);
     background: none;

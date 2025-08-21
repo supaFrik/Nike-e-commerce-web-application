@@ -248,17 +248,23 @@
   </svg>
                         </button>
                         <span id="hide-filters-desc" class="sr-only">Hide or show the product filters panel</span>
-                        <div class="sort-by-btn">
-                            <button id="sort-toggle" class="sort-btn sort-by-btn">
+                        <div class="sort-by-btn" id="sortByBtn">
+                            <button id="sort-toggle" class="sort-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="sort-options">
                                 Sort By
                                 <svg id="sort-arrow" width="20" height="20" class="sort-arrow-icon" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
                             </button>
-                            <ul id="sort-options" class="sort-options">
-                                <li class="sort-option">Featured</li>
-                                <li class="sort-option">Newest</li>
-                                <li class="sort-option">Price: High-Low</li>
-                                <li class="sort-option">Price: Low-High</li>
-                            </ul>
+                            <form id="sort-form" method="GET">
+                                <ul id="sort-options" class="sort-options" role="listbox" tabindex="-1">
+                                    <li class="sort-option${param.sort == 'featured' || empty param.sort ? ' active' : ''}" data-value="featured" role="option" aria-selected="${param.sort == 'featured' || empty param.sort ? 'true' : 'false'}">Featured</li>
+                                    <li class="sort-option${param.sort == 'newest' ? ' active' : ''}" data-value="newest" role="option" aria-selected="${param.sort == 'newest' ? 'true' : 'false'}">Newest</li>
+                                    <li class="sort-option${param.sort == 'price_desc' ? ' active' : ''}" data-value="price_desc" role="option" aria-selected="${param.sort == 'price_desc' ? 'true' : 'false'}">Price: High-Low</li>
+                                    <li class="sort-option${param.sort == 'price_asc' ? ' active' : ''}" data-value="price_asc" role="option" aria-selected="${param.sort == 'price_asc' ? 'true' : 'false'}">Price: Low-High</li>
+                                </ul>
+                                <input type="hidden" name="sort" id="sort-input" value="${param.sort != null ? param.sort : 'featured'}" />
+                                <c:if test="${not empty selectedCategory}">
+                                    <input type="hidden" name="category" value="${selectedCategory}" />
+                                </c:if>
+                            </form>
                         </div>
                         <span id="sort-desc" class="sr-only">Change the order products are displayed</span>
                     </div>
