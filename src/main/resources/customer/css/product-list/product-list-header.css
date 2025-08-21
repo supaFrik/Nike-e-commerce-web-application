@@ -139,10 +139,11 @@
 }
 
 #sort-options {
+    margin-top: 8px;
     display: none;
     position: absolute;
     top: 100%;
-    left: 0;
+    left: -60px;
     min-width: 140px;
     max-width: 200px;
     max-height: 320px;
