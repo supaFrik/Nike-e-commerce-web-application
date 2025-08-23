@@ -20,6 +20,8 @@ public class ProductController {
     @Autowired
     private ProductSort productSort;
 
+    private ProductService productService;
+
     @GetMapping("/products")
     public String productList(
             @RequestParam(required = false) String category,
