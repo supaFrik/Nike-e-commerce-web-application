@@ -50,9 +50,11 @@ public class Product {
         this.price = price;
         this.description = description;
         this.status = status;
+        this.stock = stock;
         this.featured = featured;
         this.createdAt = createdAt;
         this.variants = variants;
+        this.images = images;
         this.category = category;
     }
 
