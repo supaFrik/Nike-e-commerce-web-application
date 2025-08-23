@@ -78,4 +78,5 @@ public class ProductVariant {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
 }
