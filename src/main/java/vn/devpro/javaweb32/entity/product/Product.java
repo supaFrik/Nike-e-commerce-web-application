@@ -25,6 +25,9 @@ public class Product {
 
     private String status;
 
+    @Column(name = "stock", nullable = false)
+    private Integer stock;
+
     @Column(name = "featured", nullable = false)
     private boolean featured;
 
