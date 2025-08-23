@@ -41,10 +41,7 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Product() {
-    }
-
-    public Product(Long id, String name, BigDecimal price, String description, String status, boolean featured, LocalDateTime createdAt, List<ProductVariant> variants, Category category) {
+    public Product(Long id, String name, BigDecimal price, String description, String status, Integer stock, boolean featured, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
