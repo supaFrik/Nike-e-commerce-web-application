@@ -13,5 +13,4 @@ public class Javaweb32Starter {
 
 		start.run(args);
 	}
-
 }
