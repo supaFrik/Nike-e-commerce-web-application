@@ -122,6 +122,14 @@ public class Product {
         this.variants = variants;
     }
 
+    public List<ProductImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ProductImage> images) {
+        this.images = images;
+    }
+
     public Category getCategory() {
         return category;
     }
