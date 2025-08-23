@@ -5,6 +5,8 @@ import vn.devpro.javaweb32.entity.base.BaseModel;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -19,18 +21,9 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
-    private String category;
-
     private String description;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     private String status;
-
-    @Column(name = "color_count")
-    private int colorCount = 1;
 
     @Column(name = "featured", nullable = false)
     private boolean featured;
@@ -38,20 +31,26 @@ public class Product {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductVariant> variants = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     public Product() {
     }
 
-    public Product(Long id, String name, BigDecimal price, String category, String description, String imageUrl, String status, int colorCount, boolean featured, LocalDateTime createdAt) {
+    public Product(Long id, String name, BigDecimal price, String description, String status, boolean featured, LocalDateTime createdAt, List<ProductVariant> variants, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.category = category;
         this.description = description;
-        this.imageUrl = imageUrl;
         this.status = status;
-        this.colorCount = colorCount;
         this.featured = featured;
         this.createdAt = createdAt;
+        this.variants = variants;
+        this.category = category;
     }
 
     public Long getId() {
@@ -78,14 +77,6 @@ public class Product {
         this.price = price;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -94,28 +85,12 @@ public class Product {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public int getColorCount() {
-        return colorCount;
-    }
-
-    public void setColorCount(int colorCount) {
-        this.colorCount = colorCount;
     }
 
     public boolean isFeatured() {
@@ -134,4 +109,19 @@ public class Product {
         this.createdAt = createdAt;
     }
 
+    public List<ProductVariant> getVariants() {
+        return variants;
+    }
+
+    public void setVariants(List<ProductVariant> variants) {
+        this.variants = variants;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
