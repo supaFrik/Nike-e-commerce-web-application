@@ -1,6 +1,9 @@
 package vn.devpro.javaweb32.controller.customer;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import vn.devpro.javaweb32.dto.customer.ProductDetailDto;
 import vn.devpro.javaweb32.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
