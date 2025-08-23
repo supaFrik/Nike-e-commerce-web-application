@@ -98,6 +98,14 @@ public class Product {
         this.status = status;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
     public boolean isFeatured() {
         return featured;
     }
