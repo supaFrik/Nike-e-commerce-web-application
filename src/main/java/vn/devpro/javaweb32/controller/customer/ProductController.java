@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.devpro.javaweb32.repository.ProductRepository;
+import vn.devpro.javaweb32.service.ProductService;
 import vn.devpro.javaweb32.service.ProductSort;
 
 import java.util.List;
