@@ -46,4 +46,11 @@ public class ProductController {
 
         return "customer/product-list";
     }
+
+    @GetMapping("/products/{id}")
+    public String productDetail(@PathVariable Long id, Model model) {
+        ProductDetailDto product = productService.getDetail(id);
+        model.addAttribute("product", product);
+        return "customer/product-detail";
+    }
 }
