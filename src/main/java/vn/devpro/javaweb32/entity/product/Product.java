@@ -21,6 +21,7 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(length = 500, nullable = false)
     private String description;
 
     private String status;
@@ -45,7 +46,7 @@ public class Product {
         if (images != null && !images.isEmpty() && images.get(0) != null) {
             return images.get(0).getUrl();
         }
-        return null; // or return a default image path if you prefer
+        return null;
     }
 
     public Product() {

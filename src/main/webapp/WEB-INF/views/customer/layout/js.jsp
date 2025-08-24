@@ -12,3 +12,6 @@
 
 <!-- Product List -->
 <script src="${env}/customer/scripts/ultilities/sort-btn.js"></script>
+
+<!-- Product Detail -->
+<script src="${env}/customer/scripts/ultilities/thumbnail-scope.js"></script>

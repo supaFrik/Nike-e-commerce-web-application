@@ -24,8 +24,8 @@
                     <div class="image-preview">
                         <div class="thumbnail-nav" role="list" aria-label="Product image thumbnails">
                             <c:forEach var="img" items="${product.images}" varStatus="status">
-                                <div class="thumbnail-item${status.index == 0 ? ' active' : ''}" data-index="${status.index}" role="listitem" tabindex="0">
-                                    <img src="${env}/customer/img/products/${img.url}" alt="Product image ${status.index + 1}">
+                                <div class="thumbnail-item${status.index == 0 ? ' active' : ''}" data-index="${status.index}" role="listitem" tabindex="${status.index + 1}">
+                                    <img src="${env}/customer/img/products/${product.name}/${img.url}" alt="Product image ${status.index + 1}">
                                 </div>
                             </c:forEach>
                         </div>
@@ -56,7 +56,7 @@
                         <div class="size-options" role="radiogroup" aria-labelledby="size-selection-title" aria-describedby="size-help">
                             <span id="size-help" class="sr-only">Select your shoe size. Unavailable sizes are marked as such.</span>
                             <c:forEach var="variant" items="${product.variants}">
-                                <div class="size-option${variant.stock == 0 ? ' unavailable' : ''}" data-size="${variant.size}" onclick="selectSize(this)" role="radio" aria-checked="false" aria-disabled="${variant.stock == 0}" aria-label="US Size ${variant.size}${variant.stock == 0 ? ' - Unavailable' : ' - Available'}" tabindex="${variant.stock == 0 ? '-1' : '0'}">US ${variant.size}</div>
+                                <div class="size-option${variant.stock == 0 ? ' unavailable' : ''}" data-size="${variant.size}" onclick="selectSize(this)" role="radio" aria-checked="false" aria-disabled="${variant.stock == 0}" aria-label="VN Size ${variant.size}${variant.stock == 0 ? ' - Unavailable' : ' - Available'}" tabindex="${variant.stock == 0 ? '-1' : '0'}">US ${variant.size}</div>
                             </c:forEach>
                         </div>
                     </div>
@@ -294,9 +294,7 @@
     <jsp:include page="/WEB-INF/views/customer/layout/footer.jsp" />
 
     <!-- JavaScript Files -->
-    <script src="${env}/customer/slick/jquery-3.7.1.js"></script>
-    <script src="${env}/customer/slick/slick.min.js"></script>
-    <script src="${env}/customer/scripts/product-detail.js"></script>
+    <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 
 </body>
 </html>

@@ -1,5 +1,23 @@
+.product-sections {
+  order: 2;
+}
 /* ==================================================
-   PRODUCT IMAGES & IMAGE GALLERY STYLES
+@media (max-width: 1024px) {
+  /* Ensure product-header is always on top in responsive layouts */
+  .product-detail {
+    display: flex;
+    flex-direction: column;
+  }
+  .product-header {
+    order: 0;
+  }
+  .product-info {
+    order: 1;
+  }
+  .product-sections {
+    order: 2;
+  }
+   /* PRODUCT IMAGES & IMAGE GALLERY STYLES
    ================================================== */
 
 /* Product Images */
@@ -81,7 +99,7 @@
 }
 
 .thumbnail-item:hover {
-  border-color: var(--color-grey-400);
+  filter: brightness(0.9);
 }
 
 .thumbnail-item img {
