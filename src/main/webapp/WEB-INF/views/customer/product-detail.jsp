@@ -32,7 +32,7 @@
                         <div class="main-image-container" role="region" aria-labelledby="main-image-title" aria-live="polite">
                             <h3 id="main-image-title" class="sr-only">Main Product Image</h3>
                             <div class="main-image">
-                                <img id="currentImage" src="${env}/customer/img/products/${product.images[0].url}" alt="${product.name}">
+                                <img id="currentImage" src="${env}/customer/img/products/${product.name}/${product.images[0].url}" alt="${product.name}">
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                         <div class="size-options" role="radiogroup" aria-labelledby="size-selection-title" aria-describedby="size-help">
                             <span id="size-help" class="sr-only">Select your shoe size. Unavailable sizes are marked as such.</span>
                             <c:forEach var="variant" items="${product.variants}">
-                                <div class="size-option${variant.stock == 0 ? ' unavailable' : ''}" data-size="${variant.size}" onclick="selectSize(this)" role="radio" aria-checked="false" aria-disabled="${variant.stock == 0}" aria-label="VN Size ${variant.size}${variant.stock == 0 ? ' - Unavailable' : ' - Available'}" tabindex="${variant.stock == 0 ? '-1' : '0'}">US ${variant.size}</div>
+                                <div class="size-option${variant.stock == 0 ? ' unavailable' : ''}" data-size="${variant.size}" onclick="selectSize(this)" role="radio" aria-checked="false" aria-disabled="${variant.stock == 0}" aria-label="VN Size ${variant.size}${variant.stock == 0 ? ' - Unavailable' : ' - Available'}" tabindex="${variant.stock == 0 ? '-1' : '0'}">VN ${variant.size}</div>
                             </c:forEach>
                         </div>
                     </div>

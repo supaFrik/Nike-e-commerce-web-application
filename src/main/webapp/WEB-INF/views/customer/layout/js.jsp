@@ -15,3 +15,4 @@
 
 <!-- Product Detail -->
 <script src="${env}/customer/scripts/ultilities/thumbnail-scope.js"></script>
+<script src="${env}/customer/scripts/ultilities/size-options.js"></script>
