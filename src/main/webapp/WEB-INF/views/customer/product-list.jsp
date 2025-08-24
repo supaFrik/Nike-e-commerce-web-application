@@ -269,11 +269,11 @@
                         <span id="sort-desc" class="sr-only">Change the order products are displayed</span>
                     </div>
                 </div>
-                
+
                 <section aria-labelledby="products-section-title">
                     <h2 id="products-section-title" class="sr-only">Product List</h2>
                     <!-- Product Grid -->
-                    <div class="product-grid__items" id="skip-to-content" role="region" 
+                    <div class="product-grid__items" id="skip-to-content" role="region"
                          aria-labelledby="products-section-title" aria-live="polite">
                         <c:choose>
                             <c:when test="${empty products}">
@@ -338,31 +338,31 @@
                 </section>
             </div>
         </div>
-        
+
         <!-- Related Stories Section -->
         <section class="related-stories-section" aria-labelledby="related-stories-title">
             <div class="container">
                 <div class="related-stories-header">
                     <h2 class="section-title" id="related-stories-title">Related Stories</h2>
                     <div class="carousel-controls" role="group" aria-label="Story carousel navigation">
-                        <button class="story-nav-btn prev" id="storyPrev" 
+                        <button class="story-nav-btn prev" id="storyPrev"
                                 aria-label="Previous stories" aria-controls="storySliderTrack">
                             <i class="fas fa-chevron-left" aria-hidden="true"></i>
                         </button>
-                        <button class="story-nav-btn next" id="storyNext" 
+                        <button class="story-nav-btn next" id="storyNext"
                                 aria-label="Next stories" aria-controls="storySliderTrack">
                             <i class="fas fa-chevron-right" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="story-slider-container" role="region" aria-labelledby="related-stories-title"
                      aria-describedby="stories-desc">
                     <span id="stories-desc" class="sr-only">Carousel of Nike-related articles and buying guides</span>
                     <div class="story-slider-track" id="storySliderTrack" role="list" aria-live="polite">
-                        <div class="story-slide" data-story="winter-sneakers" role="listitem" 
+                        <div class="story-slide" data-story="winter-sneakers" role="listitem"
                              aria-labelledby="story-1-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-nike-sneakers-to-wear-in-the-winter.jpg" 
+                            <img src="${env}/customer/img/the-best-nike-sneakers-to-wear-in-the-winter.jpg"
                                  alt="The Best Nike Sneakers to Wear in Winter" aria-describedby="story-1-desc">
                             <div class="story-button" role="button" aria-describedby="story-1-desc">
                                 <div class="story-content">
@@ -372,10 +372,10 @@
                             </div>
                             <span id="story-1-desc" class="sr-only">Read our guide to the best Nike sneakers for winter weather</span>
                         </div>
-                        
-                        <div class="story-slide" data-story="cycling-gifts" role="listitem" 
+
+                        <div class="story-slide" data-story="cycling-gifts" role="listitem"
                              aria-labelledby="story-2-title" tabindex="0">
-                            <img src="${env}/customer/img/the-11-best-nike-gifts-for-cyclists.jpg" 
+                            <img src="${env}/customer/img/the-11-best-nike-gifts-for-cyclists.jpg"
                                  alt="The 11 Best Nike Gifts for Cyclists" aria-describedby="story-2-desc">
                             <div class="story-button" role="button" aria-describedby="story-2-desc">
                                 <div class="story-content">
@@ -385,10 +385,10 @@
                             </div>
                             <span id="story-2-desc" class="sr-only">Discover the best Nike gear and gifts for cycling enthusiasts</span>
                         </div>
-                        
-                        <div class="story-slide" data-story="winter-running" role="listitem" 
+
+                        <div class="story-slide" data-story="winter-running" role="listitem"
                              aria-labelledby="story-3-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-nike-running-shoes-for-winter.jpg" 
+                            <img src="${env}/customer/img/the-best-nike-running-shoes-for-winter.jpg"
                                  alt="The Best Nike Running Shoes for Winter" aria-describedby="story-3-desc">
                             <div class="story-button" role="button" aria-describedby="story-3-desc">
                                 <div class="story-content">
@@ -398,10 +398,10 @@
                             </div>
                             <span id="story-3-desc" class="sr-only">Find the perfect Nike running shoes for cold weather training</span>
                         </div>
-                        
-                        <div class="story-slide" data-story="standing-shoes" role="listitem" 
+
+                        <div class="story-slide" data-story="standing-shoes" role="listitem"
                              aria-labelledby="story-4-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-shoes-for-standing-all-day.jpg" 
+                            <img src="${env}/customer/img/the-best-shoes-for-standing-all-day.jpg"
                                  alt="The Best Shoes for Standing All Day" aria-describedby="story-4-desc">
                             <div class="story-button" role="button" aria-describedby="story-4-desc">
                                 <div class="story-content">
@@ -411,10 +411,10 @@
                             </div>
                             <span id="story-4-desc" class="sr-only">Learn about the most comfortable Nike shoes for long periods of standing</span>
                         </div>
-                        
-                        <div class="story-slide" data-story="jeans-shoes" role="listitem" 
+
+                        <div class="story-slide" data-story="jeans-shoes" role="listitem"
                              aria-labelledby="story-5-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-shoes-to-wear-with-jeans.jpg" 
+                            <img src="${env}/customer/img/the-best-shoes-to-wear-with-jeans.jpg"
                                  alt="The Best Shoes to Wear with Jeans" aria-describedby="story-5-desc">
                             <div class="story-button" role="button" aria-describedby="story-5-desc">
                                 <div class="story-content">
@@ -424,10 +424,10 @@
                             </div>
                             <span id="story-5-desc" class="sr-only">Style guide for pairing Nike shoes with jeans</span>
                         </div>
-                        
-                        <div class="story-slide" data-story="air-max-history" role="listitem" 
+
+                        <div class="story-slide" data-story="air-max-history" role="listitem"
                              aria-labelledby="story-6-title" tabindex="0">
-                            <img src="${env}/customer/img/the-history-of-the-air-max-97.jpg" 
+                            <img src="${env}/customer/img/the-history-of-the-air-max-97.jpg"
                                  alt="The History of the Air Max 97" aria-describedby="story-6-desc">
                             <div class="story-button" role="button" aria-describedby="story-6-desc">
                                 <div class="story-content">
@@ -437,10 +437,10 @@
                             </div>
                             <span id="story-6-desc" class="sr-only">Explore the fascinating history and design of the iconic Air Max 97</span>
                         </div>
-                        
-                        <div class="story-slide" data-story="winter-gear" role="listitem" 
+
+                        <div class="story-slide" data-story="winter-gear" role="listitem"
                              aria-labelledby="story-7-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-winter-running-gear-by-nike-to-shop-now.jpg" 
+                            <img src="${env}/customer/img/the-best-winter-running-gear-by-nike-to-shop-now.jpg"
                                  alt="The Best Winter Running Gear by Nike" aria-describedby="story-7-desc">
                             <div class="story-button" role="button" aria-describedby="story-7-desc">
                                 <div class="story-content">
@@ -450,10 +450,10 @@
                             </div>
                             <span id="story-7-desc" class="sr-only">Complete guide to Nike winter running gear and apparel</span>
                         </div>
-                        
-                        <div class="story-slide" data-story="tennis-gifts" role="listitem" 
+
+                        <div class="story-slide" data-story="tennis-gifts" role="listitem"
                              aria-labelledby="story-8-title" tabindex="0">
-                            <img src="${env}/customer/img/13-nike-tennis-gifts-for-players-of-all-levels.jpg" 
+                            <img src="${env}/customer/img/13-nike-tennis-gifts-for-players-of-all-levels.jpg"
                                  alt="13 Nike Tennis Gifts for Players" aria-describedby="story-8-desc">
                             <div class="story-button" role="button" aria-describedby="story-8-desc">
                                 <div class="story-content">
@@ -472,7 +472,7 @@
     <jsp:include page="/WEB-INF/views/customer/layout/footer.jsp" />
 
     <!-- Cart Sidebar -->
-    <div class="cart-sidebar" id="cartSidebar" role="dialog" aria-labelledby="cart-title" 
+    <div class="cart-sidebar" id="cartSidebar" role="dialog" aria-labelledby="cart-title"
          aria-describedby="cart-description">
         <div class="cart-header">
             <h3 id="cart-title">Bag</h3>
@@ -480,19 +480,19 @@
                 <i class="fas fa-times" aria-hidden="true"></i>
             </button>
         </div>
-        
+
         <div class="cart-content" id="cart-description" aria-live="polite">
             <div class="cart-empty" id="cartEmpty" aria-label="Empty cart state">
                 <i class="fas fa-shopping-bag" aria-hidden="true"></i>
                 <p>Your bag is empty</p>
-                <a href="${env}/customer/product-list" class="btn btn-primary" role="button" 
+                <a href="${env}/customer/product-list" class="btn btn-primary" role="button"
                    aria-label="Start shopping to add items to your bag">Shop Now</a>
             </div>
-            
+
             <div class="cart-items" id="cartItems" aria-label="Items in your shopping bag">
             </div>
         </div>
-        
+
         <div class="cart-footer" id="cartFooter" style="display: none;" role="region" aria-labelledby="cart-total-title">
             <div class="cart-total">
                 <h4 id="cart-total-title" class="sr-only">Order Summary</h4>
@@ -524,4 +524,5 @@
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>
 </html>
+
 

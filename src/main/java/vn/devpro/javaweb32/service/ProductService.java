@@ -1,14 +1,18 @@
 package vn.devpro.javaweb32.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import vn.devpro.javaweb32.dto.customer.ProductDetailDto;
 import vn.devpro.javaweb32.dto.customer.ProductImageDto;
 import vn.devpro.javaweb32.dto.customer.ProductVariantDto;
 import vn.devpro.javaweb32.entity.product.Product;
 import vn.devpro.javaweb32.repository.ProductRepository;
 
+@Service
 public class ProductService {
     private final ProductRepository productRepository;
 
+    @Autowired
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
@@ -27,6 +31,6 @@ public class ProductService {
         var images = product.getImages().stream()
                 .map(i -> new ProductImageDto(i.getId(), i.getUrl(), i.getProduct()))
                 .toList();
-        return new ProductDetailDto(product.getId(), product.getName(), product.getPrice(), product.getDescription(), product.getStatus(), product.getStock(), product.isFeatured(), product.getCreatedAt(), product.getVariants(), product.getImages(), product.getCategory());
+        return new ProductDetailDto(product.getId(), product.getName(), product.getPrice(), product.getDescription(), product.getStatus(), product.isFeatured(), product.getCreatedAt(), product.getVariants(), product.getImages(), product.getCategory());
     }
 }

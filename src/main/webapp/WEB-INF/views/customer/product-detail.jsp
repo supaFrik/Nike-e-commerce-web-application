@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,55 +23,16 @@
                     <h2 id="product-images-title" class="sr-only">Product Images</h2>
                     <div class="image-preview">
                         <div class="thumbnail-nav" role="list" aria-label="Product image thumbnails">
-                            <div class="thumbnail-item active" data-index="0" role="listitem" 
-                                 aria-label="Main view thumbnail" tabindex="0" 
-                                 aria-describedby="main-view-desc">
-                                <img src="${env}/customer/img/product-detail/NIKE GATO MAIN.avif" alt="Nike shoe main view" aria-describedby="main-view-desc">
-                                <span id="main-view-desc" class="sr-only">Click to view main product image</span>
-                            </div>
-                            <div class="thumbnail-item" data-index="1" role="listitem" 
-                                 aria-label="Side view thumbnail" tabindex="0"
-                                 aria-describedby="side-view-1-desc">
-                                <img src="${env}/customer/img/product-detail/NIKE GATO SIDE !.avif" alt="Nike shoe side view" aria-describedby="side-view-1-desc">
-                                <span id="side-view-1-desc" class="sr-only">Click to view side product image</span>
-                            </div>
-                            <div class="thumbnail-item" data-index="2" role="listitem" 
-                                 aria-label="Side view 2 thumbnail" tabindex="0"
-                                 aria-describedby="side-view-2-desc">
-                                <img src="${env}/customer/img/product-detail/NIKE GATO SIDE 2.avif" alt="Nike shoe side view 2" aria-describedby="side-view-2-desc">
-                                <span id="side-view-2-desc" class="sr-only">Click to view alternative side product image</span>
-                            </div>
-                            <div class="thumbnail-item" data-index="3" role="listitem" 
-                                 aria-label="Top view thumbnail" tabindex="0"
-                                 aria-describedby="top-view-desc">
-                                <img src="${env}/customer/img/product-detail/NIKE GATO UP.avif" alt="Nike shoe top view" aria-describedby="top-view-desc">
-                                <span id="top-view-desc" class="sr-only">Click to view top product image</span>
-                            </div>
-                            <div class="thumbnail-item" data-index="4" role="listitem" 
-                                 aria-label="Bottom view thumbnail" tabindex="0"
-                                 aria-describedby="bottom-view-desc">
-                                <img src="${env}/customer/img/product-detail/NIKE GATO DOWN.avif" alt="Nike shoe bottom view" aria-describedby="bottom-view-desc">
-                                <span id="bottom-view-desc" class="sr-only">Click to view bottom product image</span>
-                            </div>
-                            <div class="thumbnail-item" data-index="5" role="listitem" 
-                                 aria-label="Side view 3 thumbnail" tabindex="0"
-                                 aria-describedby="side-view-3-desc">
-                                <img src="${env}/customer/img/product-detail/NIKE GATO SIDE 3.avif" alt="Nike shoe side view 3" aria-describedby="side-view-3-desc">
-                                <span id="side-view-3-desc" class="sr-only">Click to view third side product image</span>
-                            </div>
-                            <div class="thumbnail-item" data-index="6" role="listitem" 
-                                 aria-label="Detail view thumbnail" tabindex="0"
-                                 aria-describedby="detail-view-desc">
-                                <img src="${env}/customer/img/product-detail/NIKE+GATO+LV8.avif" alt="Nike shoe detail view" aria-describedby="detail-view-desc">
-                                <span id="detail-view-desc" class="sr-only">Click to view detailed product image</span>
-                            </div>
+                            <c:forEach var="img" items="${product.images}" varStatus="status">
+                                <div class="thumbnail-item${status.index == 0 ? ' active' : ''}" data-index="${status.index}" role="listitem" tabindex="0">
+                                    <img src="${env}/customer/img/products/${img.url}" alt="Product image ${status.index + 1}">
+                                </div>
+                            </c:forEach>
                         </div>
                         <div class="main-image-container" role="region" aria-labelledby="main-image-title" aria-live="polite">
                             <h3 id="main-image-title" class="sr-only">Main Product Image</h3>
                             <div class="main-image">
-                                <img id="currentImage" src="${env}/customer/img/product-detail/NIKE GATO MAIN.avif" 
-                                     alt="Nike Air Max 90" aria-describedby="current-image-desc">
-                                <span id="current-image-desc" class="sr-only">Currently viewing main product image</span>
+                                <img id="currentImage" src="${env}/customer/img/products/${product.images[0].url}" alt="${product.name}">
                             </div>
                         </div>
                     </div>
@@ -77,9 +40,9 @@
                 
                 <div class="product-info" role="region" aria-labelledby="product-title">
                     <div class="product-header">
-                        <h1 class="product-title" id="product-title">JA 3 'Light Show' EP</h1>
-                        <p class="product-subtitle" id="product-subtitle">Basketball Shoes</p>
-                        <div class="product-price" aria-label="Price: 3,449,000 Vietnamese Dong">3,449,000đ</div>
+                        <h1 class="product-title" id="product-title">${product.name}</h1>
+                        <p class="product-subtitle" id="product-subtitle">${product.category != null ? product.category.name : ''}</p>
+                        <div class="product-price">${product.price}đ</div>
                     </div>
                     
                     <div class="size-selection" role="group" aria-labelledby="size-selection-title">
@@ -92,62 +55,18 @@
                         </div>
                         <div class="size-options" role="radiogroup" aria-labelledby="size-selection-title" aria-describedby="size-help">
                             <span id="size-help" class="sr-only">Select your shoe size. Unavailable sizes are marked as such.</span>
-                            <div class="size-option unavailable" data-size="6" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 6 - Unavailable" tabindex="-1">US 6</div>
-                            <div class="size-option unavailable" data-size="6.5" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 6.5 - Unavailable" tabindex="-1">US 6.5</div>
-                            <div class="size-option unavailable" data-size="7" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 7 - Unavailable" tabindex="-1">US 7</div>
-                            <div class="size-option unavailable" data-size="7.5" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 7.5 - Unavailable" tabindex="-1">US 7.5</div>
-                            <div class="size-option" data-size="8" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="false" 
-                                 aria-label="US Men's Size 8 / Women's Size 9.5 - Available" tabindex="0">US M 8 / W 9.5</div>
-                            <div class="size-option unavailable" data-size="8.5" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 8.5 - Unavailable" tabindex="-1">US 8.5</div>
-                            <div class="size-option unavailable" data-size="9" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 9 - Unavailable" tabindex="-1">US 9</div>
-                            <div class="size-option unavailable" data-size="9.5" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 9.5 - Unavailable" tabindex="-1">US 9.5</div>
-                            <div class="size-option unavailable" data-size="10" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 10 - Unavailable" tabindex="-1">US 10</div>
-                            <div class="size-option unavailable" data-size="10.5" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 10.5 - Unavailable" tabindex="-1">US 10.5</div>
-                            <div class="size-option unavailable" data-size="11" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 11 - Unavailable" tabindex="-1">US 11</div>
-                            <div class="size-option unavailable" data-size="11.5" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 11.5 - Unavailable" tabindex="-1">US 11.5</div>
-                            <div class="size-option unavailable" data-size="12" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 12 - Unavailable" tabindex="-1">US 12</div>
-                            <div class="size-option unavailable" data-size="12.5" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 12.5 - Unavailable" tabindex="-1">US 12.5</div>
-                            <div class="size-option unavailable" data-size="13" onclick="selectSize(this)" 
-                                 role="radio" aria-checked="false" aria-disabled="true" 
-                                 aria-label="US Size 13 - Unavailable" tabindex="-1">US 13</div>
+                            <c:forEach var="variant" items="${product.variants}">
+                                <div class="size-option${variant.stock == 0 ? ' unavailable' : ''}" data-size="${variant.size}" onclick="selectSize(this)" role="radio" aria-checked="false" aria-disabled="${variant.stock == 0}" aria-label="US Size ${variant.size}${variant.stock == 0 ? ' - Unavailable' : ' - Available'}" tabindex="${variant.stock == 0 ? '-1' : '0'}">US ${variant.size}</div>
+                            </c:forEach>
                         </div>
                     </div>
                     
                     <div class="product-actions" role="group" aria-label="Product actions">
-                        <button class="btn btn-primary btn-full add-to-cart" onclick="addToCart()" 
-                                aria-describedby="add-to-cart-desc">
+                        <button class="btn btn-primary btn-full add-to-cart" onclick="addToCart()" aria-describedby="add-to-cart-desc">
                             Add to Bag
                         </button>
                         <span id="add-to-cart-desc" class="sr-only">Add this product to your shopping bag</span>
-                        <button class="btn btn-outline btn-full wishlist-btn" onclick="addToWishlist()" 
-                                aria-describedby="wishlist-desc">
+                        <button class="btn btn-outline btn-full wishlist-btn" onclick="addToWishlist()" aria-describedby="wishlist-desc">
                             <i class="far fa-heart" aria-hidden="true"></i>
                             Favourite
                         </button>
@@ -160,17 +79,7 @@
                     
                     <div class="product-description" role="region" aria-labelledby="product-description-title">
                         <h3 id="product-description-title" class="sr-only">Product Description</h3>
-                        <p>Every time Ja steps on the court, it's showtime. To help him elevate his game, we worked with him to make the theoretical JA signature shoe so far. Light, low-to-the-ground and super responsive, it's built around his rise time and his distance, for the full-length Zoom X foam. "Zoom is so responsive," he says, "I just feel it that in!" We call it bad news for his defenders. With its ultra-durable rubber outsole, this version gives you traction for outdoor courts.</p>
-                        
-                        <ul class="product-features" aria-label="Product features and details">
-                            <li><strong>Colour Shown:</strong> White/Dusty Cactus/Hyper Pink/Star Blue</li>
-                            <li><strong>Style:</strong> HF2714-100</li>
-                            <li><strong>Country/Region of Origin:</strong> China</li>
-                        </ul>
-                        
-                        <div class="product-details-link">
-                            <a href="#" class="details-link" aria-label="View complete product details">View Product Details</a>
-                        </div>
+                        <p>${product.description}</p>
                     </div>
                 </div>
                 

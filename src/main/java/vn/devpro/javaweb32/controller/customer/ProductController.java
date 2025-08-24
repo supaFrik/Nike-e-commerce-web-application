@@ -24,6 +24,7 @@ public class ProductController {
     @Autowired
     private ProductSort productSort;
 
+    @Autowired
     private ProductService productService;
 
     @GetMapping("/products")
@@ -35,7 +36,7 @@ public class ProductController {
         List<Product> products;
         Sort sortOrder = productSort.sortedProducts(sort);
         if(category != null && !category.isEmpty()) {
-            products = productRepository.findByCategory(category, sortOrder);
+            products = productRepository.findByCategory_NameIgnoreCase(category, sortOrder);
         } else {
             products = productRepository.findAll(sortOrder);
         }
@@ -49,6 +50,13 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public String productDetail(@PathVariable Long id, Model model) {
+        ProductDetailDto product = productService.getDetail(id);
+        model.addAttribute("product", product);
+        return "customer/product-detail";
+    }
+
+    @GetMapping("/product-detail")
+    public String productDetailById(@RequestParam("id") Long id, Model model) {
         ProductDetailDto product = productService.getDetail(id);
         model.addAttribute("product", product);
         return "customer/product-detail";

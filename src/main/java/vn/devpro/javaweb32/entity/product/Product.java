@@ -25,9 +25,6 @@ public class Product {
 
     private String status;
 
-    @Column(name = "stock", nullable = false)
-    private Integer stock;
-
     @Column(name = "featured", nullable = false)
     private boolean featured;
 
@@ -44,13 +41,22 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Product(Long id, String name, BigDecimal price, String description, String status, Integer stock, boolean featured, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
+    public String getImageUrl() {
+        if (images != null && !images.isEmpty() && images.get(0) != null) {
+            return images.get(0).getUrl();
+        }
+        return null; // or return a default image path if you prefer
+    }
+
+    public Product() {
+    }
+
+    public Product(Long id, String name, BigDecimal price, String description, String status, boolean featured, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.status = status;
-        this.stock = stock;
         this.featured = featured;
         this.createdAt = createdAt;
         this.variants = variants;
@@ -98,14 +104,6 @@ public class Product {
         this.status = status;
     }
 
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
     public boolean isFeatured() {
         return featured;
     }
@@ -144,5 +142,19 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public int getColorCount() {
+        if (variants == null || variants.isEmpty()) {
+            return 0;
+        }
+        // Use a set to count unique colors
+        java.util.Set<String> colors = new java.util.HashSet<>();
+        for (ProductVariant variant : variants) {
+            if (variant.getColor() != null) {
+                colors.add(variant.getColor());
+            }
+        }
+        return colors.size();
     }
 }

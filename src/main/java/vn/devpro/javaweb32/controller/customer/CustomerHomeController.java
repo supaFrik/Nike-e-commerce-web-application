@@ -26,10 +26,10 @@ public class CustomerHomeController extends BaseController {
 	}
 
 	// Product detail page
-	@RequestMapping(value = "/product-detail", method = RequestMethod.GET)
-	public String productDetail() {
-		return "customer/product-detail";
-	}
+	// @RequestMapping(value = "/product-detail", method = RequestMethod.GET)
+	// public String productDetail() {
+	// 	return "customer/product-detail";
+	// }
 
 	// Authentication page
 	@RequestMapping(value = "/auth", method = RequestMethod.GET)
