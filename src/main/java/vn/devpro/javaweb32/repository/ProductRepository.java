@@ -11,10 +11,13 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    List<Product> findByCategory_Name(String name, Sort sort);
+
+    @EntityGraph(attributePaths = {"images", "category"})
     List<Product> findByCategory_NameIgnoreCase(String name, Sort sort);
+
+    @EntityGraph(attributePaths = {"images", "category"})
     List<Product> findByNameContainingIgnoreCase(String name, Sort sort);
 
-    @EntityGraph(attributePaths = {"variants", "category"})
+    @EntityGraph(attributePaths = {"images", "category"})
     Optional<Product> findById(Long id);
 }

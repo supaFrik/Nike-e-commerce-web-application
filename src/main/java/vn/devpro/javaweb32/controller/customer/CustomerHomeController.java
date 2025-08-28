@@ -9,16 +9,6 @@ import vn.devpro.javaweb32.controller.BaseController;
 @Controller
 public class CustomerHomeController extends BaseController {
 
-	@RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
-	public String home() {
-		return "index";
-	}
-
-	@RequestMapping(value = "/customer/index", method = RequestMethod.GET)
-	public String customerHome() {
-		return "index";
-	}
-
 	// Cart page
 	@RequestMapping(value = "/cart", method = RequestMethod.GET)
 	public String cart() {

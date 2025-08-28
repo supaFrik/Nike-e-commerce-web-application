@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +24,9 @@ public class Product {
 
     @Column(length = 500, nullable = false)
     private String description;
+
+    @Column(length = 20, nullable = false)
+    private String type;
 
     private String status;
 
@@ -52,11 +56,12 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, BigDecimal price, String description, String status, boolean featured, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
+    public Product(Long id, String name, BigDecimal price, String description, String type, String status, boolean featured, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
+        this.type = type;
         this.status = status;
         this.featured = featured;
         this.createdAt = createdAt;
@@ -95,6 +100,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getStatus() {

@@ -305,7 +305,7 @@
                                                                 ${product.name}
                                                             </div>
                                                             <div class="product-card__subtitle" id="product-${status.index + 1}-desc">
-                                                                ${product.description}
+                                                                ${product.type}
                                                             </div>
                                                         </div>
                                                     </div>

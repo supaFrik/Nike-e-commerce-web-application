@@ -1,5 +1,7 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 
+<link rel="icon" href="${env}/customer/img/nike-favicon.ico">
+
 <!-- CSS Files -->
 <link rel="stylesheet" href="${env}/customer/css/base.css">
 <link rel="stylesheet" href="${env}/customer/css/main.css">

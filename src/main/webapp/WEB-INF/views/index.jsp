@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!-- import common variables -->
 <jsp:include page="/WEB-INF/views/common/variables.jsp"></jsp:include>
@@ -9,7 +10,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Nike - Just Do It</title>
-    <link rel="icon" href="${env}/customer/img/e0891c394d4f7b7c09e783e29df07505.png">
 
     <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/customer/imported/landing-page.jsp" />
@@ -154,128 +154,48 @@
         </div>
     </section>
 
-    <!-- Shop Golf Section -->
-    <section class="shop-running-section" aria-labelledby="shop-golf-title">
+    <!-- Shop Running Section -->
+    <section class="shop-running-section" aria-labelledby="shop-running-title">
         <div class="container">
-            <h2 class="section-title" id="shop-golf-title">Shop Golf</h2>
-            <div class="shop-running-carousel" role="region" aria-labelledby="shop-golf-title" aria-describedby="shop-golf-desc">
-                <span id="shop-golf-desc" class="sr-only">Carousel of Nike golf shoes and equipment</span>
+            <h2 class="section-title" id="shop-running-title">Shop Running</h2>
+            <div class="shop-running-carousel" role="region" aria-labelledby="shop-running-title" aria-describedby="shop-running-desc">
+                <span id="shop-running-desc" class="sr-only">Carousel of Nike running shoes and equipment</span>
                 <button class="carousel-btn prev" id="shopRunningPrevBtn" aria-label="Previous running items" aria-controls="shopRunningTrack">
                     <i class="fas fa-chevron-left" aria-hidden="true"></i>
                 </button>
 
                 <div class="shop-running-wrapper">
                     <div class="shop-running-track" id="shopRunningTrack" role="list" aria-live="polite">
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-1-title" aria-describedby="golf-1-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+FORCE+1+'07 (1).avif" alt="Nike Victory Pro 4" aria-describedby="golf-1-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-1-title">Nike Victory Pro 4</h3>
-                                <p class="product-type" id="golf-1-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 4,409,000 Vietnamese Dong">4,409,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-2-title" aria-describedby="golf-2-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+FORCE+1+'07.avif" alt="Nike Victory Tour 4" aria-describedby="golf-2-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-2-title">Nike Victory Tour 4</h3>
-                                <p class="product-type" id="golf-2-desc">Golf Shoes (Wide)</p>
-                                <p class="product-price" aria-label="Price: 5,589,000 Vietnamese Dong">5,589,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-3-title" aria-describedby="golf-3-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+JORDAN+1+LOW.avif" alt="Nike Air Max 90 G" aria-describedby="golf-3-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-3-title">Nike Air Max 90 G</h3>
-                                <p class="product-type" id="golf-3-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 4,409,000 Vietnamese Dong">4,409,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-4-title" aria-describedby="golf-4-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+MAX+90+G.avif" alt="Nike Victory G Lite" aria-describedby="golf-4-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-4-title">Nike Victory G Lite</h3>
-                                <p class="product-type" id="golf-4-desc">Men's Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 1,919,000 Vietnamese Dong">1,919,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-5-title" aria-describedby="golf-5-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+MAX+DN8 (1).avif" alt="Nike Air Max 270 G" aria-describedby="golf-5-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-5-title">Nike Air Max 270 G</h3>
-                                <p class="product-type" id="golf-5-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 3,829,000 Vietnamese Dong">3,829,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-6-title" aria-describedby="golf-6-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+MAX+DN8 (2).avif" alt="Nike Air Jordan 1 Low G" aria-describedby="golf-6-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-6-title">Nike Air Jordan 1 Low G</h3>
-                                <p class="product-type" id="golf-6-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 4,409,000 Vietnamese Dong">4,409,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-7-title" aria-describedby="golf-7-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+MAX+DN8 (3).avif" alt="Nike Infinity Tour" aria-describedby="golf-7-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-7-title">Nike Infinity Tour</h3>
-                                <p class="product-type" id="golf-7-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 5,589,000 Vietnamese Dong">5,589,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-8-title" aria-describedby="golf-8-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+MAX+DN8+AMD.avif" alt="Nike React Infinity Pro" aria-describedby="golf-8-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-8-title">Nike React Infinity Pro</h3>
-                                <p class="product-type" id="golf-8-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 4,969,000 Vietnamese Dong">4,969,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-9-title" aria-describedby="golf-9-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/AIR+MAX+DN8.avif" alt="Nike Air Zoom Victory" aria-describedby="golf-9-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-9-title">Nike Air Zoom Victory</h3>
-                                <p class="product-type" id="golf-9-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 3,269,000 Vietnamese Dong">3,269,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-10-title" aria-describedby="golf-10-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/BLAZER+MID+'77+VNTG.avif" alt="Nike Blazer Mid '77 Golf" aria-describedby="golf-10-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-10-title">Nike Blazer Mid '77 Golf</h3>
-                                <p class="product-type" id="golf-10-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 2,929,000 Vietnamese Dong">2,929,000₫</p>
-                            </div>
-                        </div>
-                        <div class="running-card" data-category="golf-shoes" role="listitem" aria-labelledby="golf-11-title" aria-describedby="golf-11-desc">
-                            <div class="product-image">
-                                <img src="${env}/customer/img/products/BLAZER+MID+'77+VNTG.avif" alt="Nike Cortez Golf" aria-describedby="golf-11-desc">
-                            </div>
-                            <div class="product-info">
-                                <h3 class="product-title" id="golf-11-title">Nike Cortez Golf</h3>
-                                <p class="product-type" id="golf-11-desc">Golf Shoes</p>
-                                <p class="product-price" aria-label="Price: 2,479,000 Vietnamese Dong">2,479,000₫</p>
-                            </div>
-                        </div>
+                        <c:choose>
+                            <c:when test="${not empty activeProducts}">
+                                <c:forEach var="product" items="${activeProducts}" varStatus="status">
+                                    <div class="running-card" data-category="running-shoes" role="listitem" aria-labelledby="running-${status.index + 1}-title" aria-describedby="running-${status.index + 1}-desc">
+                                        <div class="product-image">
+                                            <c:choose>
+                                                <c:when test="${not empty product.imageUrl}">
+                                                    <img src="${env}/customer/img/products/${product.images[0].url}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <img src="${env}/customer/img/products/default-product.avif" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                        <div class="product-info">
+                                            <h3 class="product-title" id="running-${status.index + 1}-title">${product.name}</h3>
+                                            <p class="product-type" id="running-${status.index + 1}-desc">${product.description}</p>
+                                            <p class="product-price" aria-label="Price: <fmt:formatNumber value='${product.price}' type='number' maxFractionDigits='0'/> Vietnamese Dong">
+                                                <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>₫
+                                            </p>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div style="padding:2rem; text-align:center; color:red; font-weight:bold;">
+                                    No running products found.
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
 
@@ -388,7 +308,6 @@
             </div>
         </div>
     </div>
-
     <!--  JS-->
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>

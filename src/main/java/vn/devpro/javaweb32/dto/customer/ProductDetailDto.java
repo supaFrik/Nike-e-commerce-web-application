@@ -14,7 +14,6 @@ public class ProductDetailDto {
     private BigDecimal price;
     private String description;
     private String status;
-    private Integer stock;
     private boolean featured;
     private LocalDateTime createdAt;
     private List<ProductVariant> variants;
@@ -27,7 +26,6 @@ public class ProductDetailDto {
         this.price = price;
         this.description = description;
         this.status = status;
-        this.stock = stock;
         this.featured = featured;
         this.createdAt = createdAt;
         this.variants = variants;
@@ -40,7 +38,6 @@ public class ProductDetailDto {
     public BigDecimal getPrice() { return price; }
     public String getDescription() { return description; }
     public String getStatus() { return status; }
-    public Integer getStock() { return stock; }
     public boolean isFeatured() { return featured; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public List<ProductVariant> getVariants() { return variants; }
