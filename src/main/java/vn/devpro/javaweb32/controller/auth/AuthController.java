@@ -16,19 +16,18 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return "customer/auth/login";
     }
 
     @PostMapping("/signup")
-    public String signupPage(
-            @RequestParam String email,
+    public String signup(
             @RequestParam String name,
+            @RequestParam String email,
             @RequestParam String password,
-            RedirectAttributes redirectAttributes
-    ) {
+            RedirectAttributes redirectAttributes) {
         try {
-            authService.register(username, email, rawPassword);
-            redirectAttributes.addFlashAttribute("success", "Registration Successful");
+            authService.register(name, email, password);
+            redirectAttributes.addFlashAttribute("success", "Account created! Please sign in.");
             return "redirect:/login";
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());

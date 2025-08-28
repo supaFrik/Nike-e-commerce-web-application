@@ -29,13 +29,13 @@
             <div class="success-message" id="successMessage" role="status" aria-live="polite" aria-atomic="true"></div>
 
             <!-- Sign In Form -->
-            <form class="auth-form form-toggle active" id="signInForm" role="form" aria-labelledby="signin-form-title" aria-describedby="signin-form-desc">
+            <form class="auth-form form-toggle active" id="signInForm" role="form" aria-labelledby="signin-form-title" aria-describedby="signin-form-desc" method ="post" action="${env}/login">
                 <h2 id="signin-form-title" class="sr-only">Sign In Form</h2>
                 <span id="signin-form-desc" class="sr-only">Enter your email and password to sign in to your Nike account</span>
                 
                 <div class="form-group">
                     <label class="form-label" for="signInEmail">Email address</label>
-                    <input type="email" class="form-input" id="signInEmail" placeholder="Email address" 
+                    <input type="email" name = "username" class="form-input" id="signInEmail" placeholder="Email address"
                            required aria-required="true" aria-describedby="signInEmailError"
                            aria-invalid="false" autocomplete="email">
                     <div class="error-message" id="signInEmailError" role="alert" aria-live="polite"></div>
@@ -44,7 +44,7 @@
                 <div class="form-group">
                     <label class="form-label" for="signInPassword">Password</label>
                     <div class="password-container">
-                        <input type="password" class="form-input" id="signInPassword" placeholder="Password" 
+                        <input type="password" name = "password" class="form-input" id="signInPassword" placeholder="Password"
                                required aria-required="true" aria-describedby="signInPasswordError password-toggle-desc"
                                aria-invalid="false" autocomplete="current-password">
                         <button type="button" class="password-toggle" onclick="togglePassword('signInPassword')"
@@ -104,13 +104,13 @@
             </form>
 
             <!-- Sign Up Form -->
-            <form class="auth-form form-toggle" id="signUpForm" role="form" aria-labelledby="signup-form-title" aria-describedby="signup-form-desc">
+            <form class="auth-form form-toggle" id="signUpForm" role="form" aria-labelledby="signup-form-title" aria-describedby="signup-form-desc" method = "post" action="${env}/signup">
                 <h2 id="signup-form-title" class="sr-only">Sign Up Form</h2>
                 <span id="signup-form-desc" class="sr-only">Create a new Nike account by providing your name, email, and password</span>
                 
                 <div class="form-group">
                     <label class="form-label" for="signUpName">Your name</label>
-                    <input type="text" class="form-input" id="signUpName" placeholder="Your name" 
+                    <input type="text" name = "name" class="form-input" id="signUpName" placeholder="Your name"
                            required aria-required="true" aria-describedby="signUpNameError"
                            aria-invalid="false" autocomplete="name">
                     <div class="error-message" id="signUpNameError" role="alert" aria-live="polite"></div>
@@ -118,7 +118,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="signUpEmail">Email address</label>
-                    <input type="email" class="form-input" id="signUpEmail" placeholder="Email address" 
+                    <input type="email" name = "email" class="form-input" id="signUpEmail" placeholder="Email address"
                            required aria-required="true" aria-describedby="signUpEmailError"
                            aria-invalid="false" autocomplete="email">
                     <div class="error-message" id="signUpEmailError" role="alert" aria-live="polite"></div>
@@ -127,7 +127,7 @@
                 <div class="form-group">
                     <label class="form-label" for="signUpPassword">Password</label>
                     <div class="password-container">
-                        <input type="password" class="form-input" id="signUpPassword" placeholder="Password" 
+                        <input type="password" name = "password" class="form-input" id="signUpPassword" placeholder="Password"
                                required aria-required="true" aria-describedby="signUpPasswordError password-toggle-signup-desc"
                                aria-invalid="false" autocomplete="new-password">
                         <button type="button" class="password-toggle" onclick="togglePassword('signUpPassword')"
