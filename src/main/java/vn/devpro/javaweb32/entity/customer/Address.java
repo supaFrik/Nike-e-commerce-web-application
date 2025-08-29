@@ -1,7 +1,5 @@
 package vn.devpro.javaweb32.entity.customer;
 
-import org.apache.catalina.User;
-
 import javax.persistence.*;
 
 @Entity
@@ -12,8 +10,8 @@ public class Address {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     private String recipientName;
     private String line1;
@@ -28,9 +26,9 @@ public class Address {
     public Address() {
     }
 
-    public Address(Long id, User user, String recipientName, String line1, String line2, String city, String province, String country, String postalCode, String phone, boolean primaryAddress) {
+    public Address(Long id, Customer customer, String recipientName, String line1, String line2, String city, String province, String country, String postalCode, String phone, boolean primaryAddress) {
         this.id = id;
-        this.user = user;
+        this.customer = customer;
         this.recipientName = recipientName;
         this.line1 = line1;
         this.line2 = line2;
@@ -50,12 +48,12 @@ public class Address {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public String getRecipientName() {

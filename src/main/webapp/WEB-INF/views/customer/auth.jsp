@@ -7,8 +7,6 @@
     
     <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/customer/imported/auth.jsp" />
-    
-    <link rel="icon" href="${env}/customer/img/e0891c394d4f7b7c09e783e29df07505.png">
 </head>
 <body>
     <div class="auth-container" role="main" aria-labelledby="auth-main-title">
@@ -110,7 +108,7 @@
                 
                 <div class="form-group">
                     <label class="form-label" for="signUpName">Your name</label>
-                    <input type="text" name = "name" class="form-input" id="signUpName" placeholder="Your name"
+                    <input type="text" name = "username" class="form-input" id="signUpName" placeholder="Your name"
                            required aria-required="true" aria-describedby="signUpNameError"
                            aria-invalid="false" autocomplete="name">
                     <div class="error-message" id="signUpNameError" role="alert" aria-live="polite"></div>
@@ -201,6 +199,6 @@
         </div>
     </div>
 
-    <script src="${env}/customer/scripts/auth.js"></script>
+    <script src="${env}/customer/scripts/ultilities/auth.js"></script>
 </body>
 </html>

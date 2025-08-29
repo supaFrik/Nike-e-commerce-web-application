@@ -13,7 +13,7 @@ public class Credential {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "customer_id", nullable = false, unique = true)
     private Customer customer;
 
     @Column(nullable = false, unique = true)
@@ -95,4 +95,3 @@ public class Credential {
         this.provider = provider;
     }
 }
-
