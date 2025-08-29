@@ -1,6 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,14 +30,14 @@
                         <div class="thumbnail-nav" role="list" aria-label="Product image thumbnails">
                             <c:forEach var="img" items="${product.images}" varStatus="status">
                                 <div class="thumbnail-item${status.index == 0 ? ' active' : ''}" data-index="${status.index}" role="listitem" tabindex="${status.index + 1}">
-                                    <img src="${env}/customer/img/products/${product.name}/${img.url}" alt="Product image ${status.index + 1}">
+                                    <img src="${env}/images/products/${product.name}/${img.url}" alt="Product image ${status.index + 1}">
                                 </div>
                             </c:forEach>
                         </div>
                         <div class="main-image-container" role="region" aria-labelledby="main-image-title" aria-live="polite">
                             <h3 id="main-image-title" class="sr-only">Main Product Image</h3>
                             <div class="main-image">
-                                <img id="currentImage" src="${env}/customer/img/products/${product.name}/${product.images[0].url}" alt="${product.name}">
+                                <img id="currentImage" src="${env}/images/products/${product.name}/${product.images[0].url}" alt="${product.name}">
                             </div>
                         </div>
                     </div>
@@ -42,7 +47,7 @@
                     <div class="product-header">
                         <h1 class="product-title" id="product-title">${product.name}</h1>
                         <p class="product-subtitle" id="product-subtitle">${product.category != null ? product.category.name : ''}</p>
-                        <div class="product-price">${product.price}đ</div>
+                        <div class="product-price">${product.price}₫</div>
                     </div>
                     
                     <div class="size-selection" role="group" aria-labelledby="size-selection-title">
@@ -190,9 +195,9 @@
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-1-title" aria-describedby="rec-1-desc">
                                 <div class="product-image-slider" role="region" aria-label="Product image gallery">
                                     <div class="product-image-track" id="productSlider0">
-                                        <img src="${env}/customer/img/products/AIR+FORCE+1+'07.avif" alt="Nike Air Force 1 '07" class="product-slide active">
-                                        <img src="${env}/customer/img/products/AIR+FORCE+1+'07 (1).avif" alt="Nike Air Force 1 '07 Side" class="product-slide">
-                                        <img src="${env}/customer/img/products/AIR+MAX+90+G.avif" alt="Nike Air Force 1 '07 Detail" class="product-slide">
+                                        <img src="${env}/images/products/AIR+FORCE+1+'07.avif" alt="Nike Air Force 1 '07" class="product-slide active">
+                                        <img src="${env}/images/products/AIR+FORCE+1+'07 (1).avif" alt="Nike Air Force 1 '07 Side" class="product-slide">
+                                        <img src="${env}/images/products/AIR+MAX+90+G.avif" alt="Nike Air Force 1 '07 Detail" class="product-slide">
                                     </div>
                                     <div class="slider-dots" role="tablist" aria-label="Product image navigation">
                                         <span class="dot active" onclick="currentSlide(1, 0)" role="tab" 
@@ -212,9 +217,9 @@
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-2-title" aria-describedby="rec-2-desc">
                                 <div class="product-image-slider" role="region" aria-label="Product image gallery">
                                     <div class="product-image-track" id="productSlider1">
-                                        <img src="${env}/customer/img/products/AIR+JORDAN+1+LOW.avif" alt="Air Jordan 1 Low" class="product-slide active">
-                                        <img src="${env}/customer/img/products/AIR+MAX+DN8.avif" alt="Air Jordan 1 Low Side" class="product-slide">
-                                        <img src="${env}/customer/img/products/BLAZER+MID+'77+VNTG.avif" alt="Air Jordan 1 Low Detail" class="product-slide">
+                                        <img src="${env}/images/products/AIR+JORDAN+1+LOW.avif" alt="Air Jordan 1 Low" class="product-slide active">
+                                        <img src="${env}/images/products/AIR+MAX+DN8.avif" alt="Air Jordan 1 Low Side" class="product-slide">
+                                        <img src="${env}/images/products/BLAZER+MID+'77+VNTG.avif" alt="Air Jordan 1 Low Detail" class="product-slide">
                                     </div>
                                 </div>
                                 <div class="product-info">
@@ -226,9 +231,9 @@
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-3-title" aria-describedby="rec-3-desc">
                                 <div class="product-image-slider" role="region" aria-label="Product image gallery">
                                     <div class="product-image-track" id="productSlider2">
-                                        <img src="${env}/customer/img/products/AIR+MAX+90+G.avif" alt="Nike Air Max 90" class="product-slide active">
-                                        <img src="${env}/customer/img/products/AIR+MAX+DN8.avif" alt="Nike Air Max 90 Side" class="product-slide">
-                                        <img src="${env}/customer/img/products/AIR+FORCE+1+'07.avif" alt="Nike Air Max 90 Detail" class="product-slide">
+                                        <img src="${env}/images/products/AIR+MAX+90+G.avif" alt="Nike Air Max 90" class="product-slide active">
+                                        <img src="${env}/images/products/AIR+MAX+DN8.avif" alt="Nike Air Max 90 Side" class="product-slide">
+                                        <img src="${env}/images/products/AIR+FORCE+1+'07.avif" alt="Nike Air Max 90 Detail" class="product-slide">
                                     </div>
                                 </div>
                                 <div class="product-info">
@@ -240,9 +245,9 @@
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-4-title" aria-describedby="rec-4-desc">
                                 <div class="product-image-slider" role="region" aria-label="Product image gallery">
                                     <div class="product-image-track" id="productSlider3">
-                                        <img src="${env}/customer/img/products/BLAZER+MID+'77+VNTG.avif" alt="Nike Blazer Mid '77 Vintage" class="product-slide active">
-                                        <img src="${env}/customer/img/products/AIR+JORDAN+1+LOW.avif" alt="Nike Blazer Mid '77 Side" class="product-slide">
-                                        <img src="${env}/customer/img/products/AIR+MAX+DN8.avif" alt="Nike Blazer Mid '77 Detail" class="product-slide">
+                                        <img src="${env}/images/products/BLAZER+MID+'77+VNTG.avif" alt="Nike Blazer Mid '77 Vintage" class="product-slide active">
+                                        <img src="${env}/images/products/AIR+JORDAN+1+LOW.avif" alt="Nike Blazer Mid '77 Side" class="product-slide">
+                                        <img src="${env}/images/products/AIR+MAX+DN8.avif" alt="Nike Blazer Mid '77 Detail" class="product-slide">
                                     </div>
                                 </div>
                                 <div class="product-info">
@@ -254,9 +259,9 @@
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-5-title" aria-describedby="rec-5-desc">
                                 <div class="product-image-slider" role="region" aria-label="Product image gallery">
                                     <div class="product-image-track" id="productSlider4">
-                                        <img src="${env}/customer/img/products/AIR+MAX+DN8.avif" alt="Nike Air Max DN" class="product-slide active">
-                                        <img src="${env}/customer/img/products/AIR+FORCE+1+'07 (1).avif" alt="Nike Air Max DN Side" class="product-slide">
-                                        <img src="${env}/customer/img/products/BLAZER+MID+'77+VNTG.avif" alt="Nike Air Max DN Detail" class="product-slide">
+                                        <img src="${env}/images/products/AIR+MAX+DN8.avif" alt="Nike Air Max DN" class="product-slide active">
+                                        <img src="${env}/images/products/AIR+FORCE+1+'07 (1).avif" alt="Nike Air Max DN Side" class="product-slide">
+                                        <img src="${env}/images/products/BLAZER+MID+'77+VNTG.avif" alt="Nike Air Max DN Detail" class="product-slide">
                                     </div>
                                 </div>
                                 <div class="product-info">
@@ -268,9 +273,9 @@
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-6-title" aria-describedby="rec-6-desc">
                                 <div class="product-image-slider" role="region" aria-label="Product image gallery">
                                     <div class="product-image-track" id="productSlider5">
-                                        <img src="${env}/customer/img/products/AIR+FORCE+1+'07 (1).avif" alt="Nike Air Force 1 '07 LV8" class="product-slide active">
-                                        <img src="${env}/customer/img/products/AIR+JORDAN+1+LOW.avif" alt="Nike Air Force 1 LV8 Side" class="product-slide">
-                                        <img src="${env}/customer/img/products/AIR+MAX+90+G.avif" alt="Nike Air Force 1 LV8 Detail" class="product-slide">
+                                        <img src="${env}/images/products/AIR+FORCE+1+'07 (1).avif" alt="Nike Air Force 1 '07 LV8" class="product-slide active">
+                                        <img src="${env}/images/products/AIR+JORDAN+1+LOW.avif" alt="Nike Air Force 1 LV8 Side" class="product-slide">
+                                        <img src="${env}/images/products/AIR+MAX+90+G.avif" alt="Nike Air Force 1 LV8 Detail" class="product-slide">
                                     </div>
                                 </div>
                                 <div class="product-info">

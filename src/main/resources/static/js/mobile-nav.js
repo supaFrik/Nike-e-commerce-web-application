@@ -100,7 +100,7 @@ function initializeMobileNav() {
     if (mobileProfileBtn) {
         mobileProfileBtn.addEventListener('click', function() {
             // Handle profile action
-            window.location.href = './auth.html';
+            window.location.href = '/auth';
         });
     }
     

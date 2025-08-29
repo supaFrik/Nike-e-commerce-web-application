@@ -1,6 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,16 +10,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Men's Shoes. Nike VN</title>
-    <link rel="icon" href="${env}/customer/img/e0891c394d4f7b7c09e783e29df07505.png">
         
     <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/customer/imported/product-list.jsp" />
-    
+
 </head>
 
 <body>
     <jsp:include page="/WEB-INF/views/customer/layout/header.jsp" />
-    
+
     <!-- Main Content -->
     <main class="main" role="main" aria-labelledby="page-title">
         <div class="product-listing">
@@ -291,7 +292,7 @@
                                                    class="product-card__img-link-overlay" data-testid="prodict-card-img-link-overlay"
                                                    aria-describedby="product-${status.index + 1}-desc">
                                                     <div class="wall-image-loader content-card__image" data-testid="wall-image-loader">
-                                                        <img src="${env}/customer/img/products/${product.imageUrl != null ? product.imageUrl : 'default-product.avif'}"
+                                                        <img src="${env}/images/products/${product.imageUrl != null ? product.imageUrl : 'default-product.avif'}"
                                                              alt="${product.name}" loading="lazy" aria-describedby="product-${status.index + 1}-desc">
                                                     </div>
                                                 </a>
@@ -362,7 +363,7 @@
                     <div class="story-slider-track" id="storySliderTrack" role="list" aria-live="polite">
                         <div class="story-slide" data-story="winter-sneakers" role="listitem"
                              aria-labelledby="story-1-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-nike-sneakers-to-wear-in-the-winter.jpg"
+                            <img src="${env}/images/the-best-nike-sneakers-to-wear-in-the-winter.jpg"
                                  alt="The Best Nike Sneakers to Wear in Winter" aria-describedby="story-1-desc">
                             <div class="story-button" role="button" aria-describedby="story-1-desc">
                                 <div class="story-content">
@@ -375,7 +376,7 @@
 
                         <div class="story-slide" data-story="cycling-gifts" role="listitem"
                              aria-labelledby="story-2-title" tabindex="0">
-                            <img src="${env}/customer/img/the-11-best-nike-gifts-for-cyclists.jpg"
+                            <img src="${env}/images/the-11-best-nike-gifts-for-cyclists.jpg"
                                  alt="The 11 Best Nike Gifts for Cyclists" aria-describedby="story-2-desc">
                             <div class="story-button" role="button" aria-describedby="story-2-desc">
                                 <div class="story-content">
@@ -388,7 +389,7 @@
 
                         <div class="story-slide" data-story="winter-running" role="listitem"
                              aria-labelledby="story-3-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-nike-running-shoes-for-winter.jpg"
+                            <img src="${env}/images/the-best-nike-running-shoes-for-winter.jpg"
                                  alt="The Best Nike Running Shoes for Winter" aria-describedby="story-3-desc">
                             <div class="story-button" role="button" aria-describedby="story-3-desc">
                                 <div class="story-content">
@@ -401,7 +402,7 @@
 
                         <div class="story-slide" data-story="standing-shoes" role="listitem"
                              aria-labelledby="story-4-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-shoes-for-standing-all-day.jpg"
+                            <img src="${env}/images/the-best-shoes-for-standing-all-day.jpg"
                                  alt="The Best Shoes for Standing All Day" aria-describedby="story-4-desc">
                             <div class="story-button" role="button" aria-describedby="story-4-desc">
                                 <div class="story-content">
@@ -414,7 +415,7 @@
 
                         <div class="story-slide" data-story="jeans-shoes" role="listitem"
                              aria-labelledby="story-5-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-shoes-to-wear-with-jeans.jpg"
+                            <img src="${env}/images/the-best-shoes-to-wear-with-jeans.jpg"
                                  alt="The Best Shoes to Wear with Jeans" aria-describedby="story-5-desc">
                             <div class="story-button" role="button" aria-describedby="story-5-desc">
                                 <div class="story-content">
@@ -427,7 +428,7 @@
 
                         <div class="story-slide" data-story="air-max-history" role="listitem"
                              aria-labelledby="story-6-title" tabindex="0">
-                            <img src="${env}/customer/img/the-history-of-the-air-max-97.jpg"
+                            <img src="${env}/images/the-history-of-the-air-max-97.jpg"
                                  alt="The History of the Air Max 97" aria-describedby="story-6-desc">
                             <div class="story-button" role="button" aria-describedby="story-6-desc">
                                 <div class="story-content">
@@ -440,7 +441,7 @@
 
                         <div class="story-slide" data-story="winter-gear" role="listitem"
                              aria-labelledby="story-7-title" tabindex="0">
-                            <img src="${env}/customer/img/the-best-winter-running-gear-by-nike-to-shop-now.jpg"
+                            <img src="${env}/images/the-best-winter-running-gear-by-nike-to-shop-now.jpg"
                                  alt="The Best Winter Running Gear by Nike" aria-describedby="story-7-desc">
                             <div class="story-button" role="button" aria-describedby="story-7-desc">
                                 <div class="story-content">
@@ -453,7 +454,7 @@
 
                         <div class="story-slide" data-story="tennis-gifts" role="listitem"
                              aria-labelledby="story-8-title" tabindex="0">
-                            <img src="${env}/customer/img/13-nike-tennis-gifts-for-players-of-all-levels.jpg"
+                            <img src="${env}/images/13-nike-tennis-gifts-for-players-of-all-levels.jpg"
                                  alt="13 Nike Tennis Gifts for Players" aria-describedby="story-8-desc">
                             <div class="story-button" role="button" aria-describedby="story-8-desc">
                                 <div class="story-content">
@@ -485,7 +486,7 @@
             <div class="cart-empty" id="cartEmpty" aria-label="Empty cart state">
                 <i class="fas fa-shopping-bag" aria-hidden="true"></i>
                 <p>Your bag is empty</p>
-                <a href="${env}/customer/product-list" class="btn btn-primary" role="button"
+                <a href="${env}/product-list" class="btn btn-primary" role="button"
                    aria-label="Start shopping to add items to your bag">Shop Now</a>
             </div>
 
@@ -524,5 +525,4 @@
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>
 </html>
-
 

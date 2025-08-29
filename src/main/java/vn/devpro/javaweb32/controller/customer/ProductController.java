@@ -64,16 +64,4 @@ public class ProductController {
         model.addAttribute("product", product);
         return "customer/product-detail";
     }
-
-    @GetMapping(value = {"/", "/index"})
-    public String index(Model model) {
-        Sort sort = Sort.by(Sort.Order.desc("featured"), Sort.Order.desc("createdAt"));
-
-            List<Product> list = productRepository.findByCategory_NameIgnoreCase("running", sort);
-
-        List<Product> activeProducts = list.stream().limit(8).toList();
-
-        model.addAttribute("activeProducts", activeProducts);
-        return "index";
-    }
 }

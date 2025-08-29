@@ -18,8 +18,11 @@
   margin: 50px 0;
 }
 @font-face {
-  font-family: hildera;
-  src: url(/customer/font/hildera/Hildera.otf);
+    font-family: 'hildera';
+    src: url('/fonts/hildera-webfont.woff2') format('woff2'),
+         url('/fonts/hildera-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 .hero-title {
   font-family: hildera;

@@ -1,3 +1,8 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +20,7 @@
             <div class="auth-header">
                 <div class="auth-logo">
                     <a href="${env}/" aria-label="Go to Nike homepage">
-                        <img src="${env}/customer/img/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike logo">
+                        <img src="${env}/images/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike logo">
                     </a>
                 </div>
                 <h1 class="auth-title" id="authTitle" aria-live="polite">Welcome back</h1>
@@ -182,7 +187,7 @@
             <div class="auth-footer" role="region" aria-labelledby="auth-footer-title">
                 <h3 id="auth-footer-title" class="sr-only">Account Navigation</h3>
                 <p id="authFooterText">
-                    Have an account? <a href="#" onclick="toggleForm()" aria-describedby="toggle-form-desc">Sign In</a>
+                    Dont have an account? <a href="#" onclick="toggleForm()" aria-describedby="toggle-form-desc">Sign Up</a>
                     <span id="toggle-form-desc" class="sr-only">Switch between sign in and sign up forms</span>
                 </p>
             </div>
@@ -192,13 +197,13 @@
         <div class="auth-image-section" role="complementary" aria-labelledby="auth-image-title">
             <h2 id="auth-image-title" class="sr-only">Nike Brand Section</h2>
             <div class="auth-image-logo">
-                <img src="${env}/customer/img/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike logo" 
+                <img src="${env}/images/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike logo" 
                      aria-describedby="auth-image-desc">
                 <span id="auth-image-desc" class="sr-only">Nike swoosh logo displayed on the authentication page</span>
             </div>
         </div>
     </div>
 
-    <script src="${env}/customer/scripts/ultilities/auth.js"></script>
+    <script src="${env}/js/auth.js"></script>
 </body>
 </html>

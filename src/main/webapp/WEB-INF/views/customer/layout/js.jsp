@@ -3,17 +3,17 @@
 <!-- Base JavaScript Files -->
 
 <!-- Header -->
-<script src="${env}/customer/scripts/ultilities/mobile-nav.js"></script>
+<script src="${env}/js/mobile-nav.js"></script>
 
 <!-- Landing Page -->
-<script src="${env}/customer/scripts/ultilities/carousel.js"></script>
+<script src="${env}/js/carousel.js"></script>
 
 <!-- Authentication -->
-<script src="${env}/customer/scripts/ultilities/auth.js"></script>
+<script src="${env}/js/auth.js"></script>
 
 <!-- Product List -->
-<script src="${env}/customer/scripts/ultilities/sort-btn.js"></script>
+<script src="${env}/js/sort-btn.js"></script>
 
 <!-- Product Detail -->
-<script src="${env}/customer/scripts/ultilities/thumbnail-scope.js"></script>
-<script src="${env}/customer/scripts/ultilities/size-options.js"></script>
+<script src="${env}/js/thumbnail-scope.js"></script>
+<script src="${env}/js/size-options.js"></script>

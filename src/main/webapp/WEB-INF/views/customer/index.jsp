@@ -1,8 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
-<!-- import common variables -->
-<jsp:include page="/WEB-INF/views/common/variables.jsp"></jsp:include>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,10 +22,10 @@
 <section class="hero" aria-label="Hero banner section">
     <div class="video-container">
         <video autoplay loop muted playsinline class="video-placeholder"
-               poster="${env}/customer/video/stairs-nike-poster.jpg"
+               poster="${env}/images/stairs-nike-poster.jpg"
                aria-label="Nike promotional video about Mars Yard sneakers"
                aria-describedby="hero-description">
-            <source src="${env}/customer/vid/Stairs%20Nike%20-%20Nike%20(1080p,%20h264).mp4" type="video/mp4">
+            <source src="${env}/videos/stairs-nike-1080p-h264.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
     </div>
@@ -39,7 +38,7 @@
             </h1>
         </div>
         <div class="hero-logo">
-            <img src="${env}/customer/img/air-jordan-logo.png" alt="Air Jordan Logo" aria-describedby="hero-description">
+            <img src="${env}/images/air-jordan-logo.png" alt="Air Jordan Logo" aria-describedby="hero-description">
         </div>
         <div class="hero-subtiles">
             <span id="hero-description" aria-label="Hero subtitle">
@@ -47,7 +46,7 @@
             </span>
         </div>
         <div class="hero-button">
-            <a href="${env}/customer/product-list" aria-label="Shop Nike products" role="button">
+            <a href="${env}/products" aria-label="Shop Nike products" role="button">
                 <span>
                     Shop
                 </span>
@@ -62,7 +61,7 @@
             </div>
             <div class="featured-grid" role="grid" aria-labelledby="featured-title">
                 <div class="featured-item" role="gridcell" aria-labelledby="featured-1-title" aria-describedby="featured-1-desc">
-                    <img src="${env}/customer/img/feature section_landing page/nike-just-do-it.webp" alt="Nike Air Superfly promotional image" aria-describedby="featured-1-desc">
+                    <img src="${env}/images/feature section_landing page/nike-just-do-it.webp" alt="Nike Air Superfly promotional image" aria-describedby="featured-1-desc">
                     <div class="featured-content">
                         <div class="featured-category" id="featured-1-desc">Spikes Off, Style On</div>
                         <h3 class="featured-title" id="featured-1-title">Nike Air Superfly</h3>
@@ -71,7 +70,7 @@
                 </div>
 
                 <div class="featured-item" role="gridcell" aria-labelledby="featured-2-title" aria-describedby="featured-2-desc">
-                    <img src="${env}/customer/img/feature section_landing page/nike-just-do-it2.webp" alt="Nike Football promotional image" aria-describedby="featured-2-desc">
+                    <img src="${env}/images/feature section_landing page/nike-just-do-it2.webp" alt="Nike Football promotional image" aria-describedby="featured-2-desc">
                     <div class="featured-content">
                         <div class="featured-category" id="featured-2-desc">Nike Football</div>
                         <h3 class="featured-title" id="featured-2-title">Introducing Scary Good Pack</h3>
@@ -80,7 +79,7 @@
                 </div>
 
                 <div class="featured-item" role="gridcell" aria-labelledby="featured-3-title" aria-describedby="featured-3-desc">
-                    <img src="${env}/customer/img/feature section_landing page/nike-just-do-it.3webp" alt="Tennis promotional image" aria-describedby="featured-3-desc">
+                    <img src="${env}/images/feature section_landing page/nike-just-do-it.3webp" alt="Tennis promotional image" aria-describedby="featured-3-desc">
                     <div class="featured-content">
                         <div class="featured-category" id="featured-3-desc">Tennis</div>
                         <h3 class="featured-title" id="featured-3-title">Serve Up Style</h3>
@@ -89,7 +88,7 @@
                 </div>
 
                 <div class="featured-item" role="gridcell" aria-labelledby="featured-4-title" aria-describedby="featured-4-desc">
-                    <img src="${env}/customer/img/feature section_landing page/nike-just-do-it4.webp" alt="Jordan Streetwear promotional image" aria-describedby="featured-4-desc">
+                    <img src="${env}/images/feature section_landing page/nike-just-do-it4.webp" alt="Jordan Streetwear promotional image" aria-describedby="featured-4-desc">
                     <div class="featured-content">
                         <div class="featured-category" id="featured-4-desc">Jordan Streetwear</div>
                         <h3 class="featured-title" id="featured-4-title">Real Ones Know</h3>
@@ -113,35 +112,35 @@
                 <div class="shop-icons-wrapper">
                     <div class="shop-icons-track" id="shopIconsTrack" role="list" aria-live="polite">
                         <div class="shop-icon-card" data-id="airforce1" role="listitem" aria-label="Blazer shoe icon">
-                            <img src="${env}/customer/img/icons/blazer.webp" alt="Air Force 1" aria-describedby="blazer-desc">
+                            <img src="${env}/images/icons/blazer.webp" alt="Air Force 1" aria-describedby="blazer-desc">
                             <span id="blazer-desc" class="sr-only">Click to shop Blazer sneakers</span>
                         </div>
                         <div class="shop-icon-card" data-id="airmax" role="listitem" aria-label="Air Max shoe icon">
-                            <img src="${env}/customer/img/icons/airmaxDN.webp" alt="Air Max" aria-describedby="airmax-desc">
+                            <img src="${env}/images/icons/airmaxDN.webp" alt="Air Max" aria-describedby="airmax-desc">
                             <span id="airmax-desc" class="sr-only">Click to shop Air Max sneakers</span>
                         </div>
                         <div class="shop-icon-card" data-id="dunk" role="listitem" aria-label="Cortez shoe icon">
-                            <img src="${env}/customer/img/icons/cortez.webp" alt="Cortez" aria-describedby="cortez-desc">
+                            <img src="${env}/images/icons/cortez.webp" alt="Cortez" aria-describedby="cortez-desc">
                             <span id="cortez-desc" class="sr-only">Click to shop Cortez sneakers</span>
                         </div>
                         <div class="shop-icon-card" data-id="cortez" role="listitem" aria-label="Dunk shoe icon">
-                            <img src="${env}/customer/img/icons/dunk.webp" alt="Dunk" aria-describedby="dunk-desc">
+                            <img src="${env}/images/icons/dunk.webp" alt="Dunk" aria-describedby="dunk-desc">
                             <span id="dunk-desc" class="sr-only">Click to shop Dunk sneakers</span>
                         </div>
                         <div class="shop-icon-card" data-id="blazer" role="listitem" aria-label="Jordan 1 shoe icon">
-                            <img src="${env}/customer/img/icons/jordan1.webp" alt="Blazer" aria-describedby="jordan1-desc">
+                            <img src="${env}/images/icons/jordan1.webp" alt="Blazer" aria-describedby="jordan1-desc">
                             <span id="jordan1-desc" class="sr-only">Click to shop Jordan 1 sneakers</span>
                         </div>
                         <div class="shop-icon-card" data-id="pegasus" role="listitem" aria-label="Metcon shoe icon">
-                            <img src="${env}/customer/img/icons/metcon.webp" alt="Pegasus" aria-describedby="metcon-desc">
+                            <img src="${env}/images/icons/metcon.webp" alt="Pegasus" aria-describedby="metcon-desc">
                             <span id="metcon-desc" class="sr-only">Click to shop Metcon training shoes</span>
                         </div>
                         <div class="shop-icon-card" data-id="jordan1" role="listitem" aria-label="V2K shoe icon">
-                            <img src="${env}/customer/img/icons/v2k.webp" alt="Air Jordan 1" aria-describedby="v2k-desc">
+                            <img src="${env}/images/icons/v2k.webp" alt="Air Jordan 1" aria-describedby="v2k-desc">
                             <span id="v2k-desc" class="sr-only">Click to shop V2K sneakers</span>
                         </div>
                         <div class="shop-icon-card" data-id="jordan4" role="listitem" aria-label="Air Max DN shoe icon">
-                            <img src="${env}/customer/img/icons/airmaxDN.webp" alt="Air Jordan 4" aria-describedby="airmaxdn-desc">
+                            <img src="${env}/images/icons/airmaxDN.webp" alt="Air Jordan 4" aria-describedby="airmaxdn-desc">
                             <span id="airmaxdn-desc" class="sr-only">Click to shop Air Max DN sneakers</span>
                         </div>
                     </div>
@@ -172,11 +171,11 @@
                                     <div class="running-card" data-category="running-shoes" role="listitem" aria-labelledby="running-${status.index + 1}-title" aria-describedby="running-${status.index + 1}-desc">
                                         <div class="product-image">
                                             <c:choose>
-                                                <c:when test="${not empty product.imageUrl}">
-                                                    <img src="${env}/customer/img/products/${product.images[0].url}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                <c:when test="${not empty product.images and not empty product.images[0].url}">
+                                                    <img src="${env}/images/products/${product.images[0].url}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <img src="${env}/customer/img/products/default-product.avif" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                    <img src="${env}/images/products/default-product.avif" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
@@ -225,56 +224,56 @@
                 <span id="sport-desc" class="sr-only">Browse Nike products by different sports categories</span>
                 <div class="sport-slider-track" id="sportSliderTrack" role="list" aria-live="polite">
                     <div class="sport-slide" data-sport="running" role="listitem" aria-label="Running category">
-                        <img src="${env}/customer/img/sports/running.webp" alt="Running" aria-describedby="running-desc">
+                        <img src="${env}/images/sports/running.webp" alt="Running" aria-describedby="running-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="running-desc">
                             <span>Running</span>
                         </div>
                         <span id="running-desc" class="sr-only">Shop Nike running shoes and apparel</span>
                     </div>
                     <div class="sport-slide" data-sport="football" role="listitem" aria-label="Football category">
-                        <img src="${env}/customer/img/sports/football.webp" alt="Football" aria-describedby="football-desc">
+                        <img src="${env}/images/sports/football.webp" alt="Football" aria-describedby="football-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="football-desc">
                             <span>Football</span>
                         </div>
                         <span id="football-desc" class="sr-only">Shop Nike football cleats and gear</span>
                     </div>
                     <div class="sport-slide" data-sport="basketball" role="listitem" aria-label="Basketball category">
-                        <img src="${env}/customer/img/sports/dunk.webp" alt="Basketball" aria-describedby="basketball-desc">
+                        <img src="${env}/images/sports/dunk.webp" alt="Basketball" aria-describedby="basketball-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="basketball-desc">
                             <span>Basketball</span>
                         </div>
                         <span id="basketball-desc" class="sr-only">Shop Nike basketball shoes and apparel</span>
                     </div>
                     <div class="sport-slide" data-sport="gym" role="listitem" aria-label="Gym & Training category">
-                        <img src="${env}/customer/img/sports/gymnastics.webp" alt="Gym & Training" aria-describedby="gym-desc">
+                        <img src="${env}/images/sports/gymnastics.webp" alt="Gym & Training" aria-describedby="gym-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="gym-desc">
                             <span>Gym & Training</span>
                         </div>
                         <span id="gym-desc" class="sr-only">Shop Nike gym and training equipment</span>
                     </div>
                     <div class="sport-slide" data-sport="yoga" role="listitem" aria-label="Yoga category">
-                        <img src="${env}/customer/img/sports/yoga.webp" alt="Yoga" aria-describedby="yoga-desc">
+                        <img src="${env}/images/sports/yoga.webp" alt="Yoga" aria-describedby="yoga-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="yoga-desc">
                             <span>Yoga</span>
                         </div>
                         <span id="yoga-desc" class="sr-only">Shop Nike yoga apparel and accessories</span>
                     </div>
                     <div class="sport-slide" data-sport="skateboarding" role="listitem" aria-label="Skateboarding category">
-                        <img src="${env}/customer/img/sports/skateboarding.webp" alt="Skateboarding" aria-describedby="skateboarding-desc">
+                        <img src="${env}/images/sports/skateboarding.webp" alt="Skateboarding" aria-describedby="skateboarding-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="skateboarding-desc">
                             <span>Skateboarding</span>
                         </div>
                         <span id="skateboarding-desc" class="sr-only">Shop Nike skateboarding shoes and apparel</span>
                     </div>
                     <div class="sport-slide" data-sport="dance" role="listitem" aria-label="Dance category">
-                        <img src="${env}/customer/img/sports/dance.webp" alt="Dance" aria-describedby="dance-desc">
+                        <img src="${env}/images/sports/dance.webp" alt="Dance" aria-describedby="dance-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="dance-desc">
                             <span>Dance</span>
                         </div>
                         <span id="dance-desc" class="sr-only">Shop Nike dance shoes and apparel</span>
                     </div>
                     <div class="sport-slide" data-sport="badminton" role="listitem" aria-label="Badminton category">
-                        <img src="${env}/customer/img/sports/badminton.webp" alt="Badminton" aria-describedby="badminton-desc">
+                        <img src="${env}/images/sports/badminton.webp" alt="Badminton" aria-describedby="badminton-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="badminton-desc">
                             <span>Badminton</span>
                         </div>

@@ -18,8 +18,8 @@
     <title>${title }</title>
     
     <!-- variables -->
-    <jsp:include page="/WEB-INF/views/common/variables.jsp"></jsp:include>
-    
+    <%@ include file="/WEB-INF/views/common/variables.jsp" %>
+
     <!-- Custome css resource file -->
     <jsp:include page="/WEB-INF/views/backend/layout/css.jsp"></jsp:include>
 </head>

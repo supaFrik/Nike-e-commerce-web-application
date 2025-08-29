@@ -35,9 +35,14 @@ public class AuthService {
         cred.setEmail(email);
         cred.setPasswordHash(passwordEncoder.encode(rawPassword));
         cred.setEnabled(true);
+        cred.setLocked(false);
         cred.setCustomer(customer);
 
+        //Liên kết 2 chiều
+        cred.setCustomer(customer);
         customer.setCredential(cred);
+
+        //Lưu customer
         return customerRepository.save(customer);
     }
     public Customer login(String email, String rawPassword) {

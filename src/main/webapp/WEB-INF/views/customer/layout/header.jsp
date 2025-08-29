@@ -1,4 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 
 <!-- Header -->
@@ -8,7 +7,7 @@
             <div class="header-top-content">
                 <div class="header-top-left">
                     <a href="${env}/" class="header-brand">
-                        <img src="${env}/customer/img/air-jordan-logo.png" alt="Jordan" width="24" height="24">
+                        <img src="${env}/images/air-jordan-logo.png" alt="Jordan" width="24" height="24">
                     </a>
                 </div>
                 <div class="header-top-right">
@@ -31,7 +30,7 @@
             <div class="nav-content">
                 <div class="nav-left">
                     <a href="${env}/" class="logo">
-                        <img src="${env}/customer/img/icons/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike" width="60" height="22">
+                        <img src="${env}/images/icons/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike" width="60" height="22">
                     </a>
                 </div>
                 
@@ -63,7 +62,7 @@
                         <div class="search-wrapper">
                             <div class="search-input-wrapper">
                                 <input type="text" placeholder="Search" class="search-input" id="searchInput">
-                                <img src="${env}/customer/img/icons/search-interface-symbol.png" alt="Search" class="search-icon" style="width: 20px;">
+                                <img src="${env}/images/icons/search-interface-symbol.png" alt="Search" class="search-icon" style="width: 20px;">
                             </div>
                         </div>
                     </div>
@@ -147,7 +146,7 @@
                 <!-- Jordan Brand Section -->
                 <div class="mobile-jordan-section">
                     <a href="${env}/" class="mobile-jordan-brand">
-                        <img src="${env}/customer/img/icons/air-jordan-logo.png" alt="Jordan" class="mobile-jordan-logo">
+                        <img src="${env}/images/icons/air-jordan-logo.png" alt="Jordan" class="mobile-jordan-logo">
                         Jordan
                     </a>
                 </div>
