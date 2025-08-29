@@ -172,9 +172,14 @@
                                         <div class="product-image">
                                             <c:choose>
                                                 <c:when test="${not empty product.images and not empty product.images[0].url}">
+                                                 <a aria-label="${product.name}" href="${env}/product-detail?id=${product.id}"
+                                                 class="product-card__img-link-overlay" data-testid="prodict-card-img-link-overlay"
+                                                 aria-describedby="product-${status.index + 1}-desc">
                                                     <img src="${env}/images/products/${product.images[0].url}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                </a>
                                                 </c:when>
                                                 <c:otherwise>
+                                                aria-describedby="product-${status.index + 1}-desc">
                                                     <img src="${env}/images/products/default-product.avif" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                 </c:otherwise>
                                             </c:choose>

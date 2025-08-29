@@ -187,7 +187,7 @@
             <div class="auth-footer" role="region" aria-labelledby="auth-footer-title">
                 <h3 id="auth-footer-title" class="sr-only">Account Navigation</h3>
                 <p id="authFooterText">
-                    Dont have an account? <a href="#" onclick="toggleForm()" aria-describedby="toggle-form-desc">Sign Up</a>
+                    Dont have an account? <a href="#" id="toggleAuthLink" aria-describedby="toggle-form-desc">Sign Up</a>
                     <span id="toggle-form-desc" class="sr-only">Switch between sign in and sign up forms</span>
                 </p>
             </div>
