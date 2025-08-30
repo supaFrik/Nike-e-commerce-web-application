@@ -53,7 +53,6 @@ h6 { font-size: var(--font-size-s); }
 a {
   text-decoration: none;
   color: inherit;
-  transition: all var(--transition-duration-normal) ease;
 }
 
 /* ==================================================

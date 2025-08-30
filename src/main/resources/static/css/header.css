@@ -10,7 +10,12 @@
   background-color: var(--color-bg-primary);
   box-shadow: var(--shadow-10);
 }
-
+  .header-link:hover, .header-link:focus {
+    color: var(--color-brand-red) !important;
+  }
+  .header-link:hover .nav-icon, .header-link:focus .nav-icon {
+    stroke: var(--color-brand-red) !important;
+  }
 .header-top {
   background: var(--color-bg-secondary);
   font-size: var(--font-size-xxs);
@@ -28,7 +33,16 @@
   gap: var(--size-spacing-l);
 }
 
+.profile-icon {
+display: flex;
+align items: center;
+justify-content: center;
+}
+
 .header-link {
+  display: flex;
+    align-items: center;
+    gap: 8px;
   color: var(--color-text-primary);
   font-weight: var(--font-weight-medium);
 }

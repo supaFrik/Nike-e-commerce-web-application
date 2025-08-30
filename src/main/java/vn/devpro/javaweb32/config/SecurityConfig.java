@@ -25,37 +25,47 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(CredentialRepository credentialRepository) {
         return username -> {
-            Credential credential = credentialRepository.findByEmail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
-            return User.withUsername(credential.getEmail())
+            var credential = credentialRepository.findByEmail(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
+
+            // build UserDetails mapping các cờ enabled/locked
+            User.UserBuilder builder = User.withUsername(credential.getEmail())
                     .password(credential.getPasswordHash())
                     .roles("USER")
-                    .disabled(!credential.isEnabled())
-                    .build();
+                    .disabled(!credential.isEnabled());
+
+            // map "locked" -> accountLocked
+            builder.accountLocked(credential.isLocked());
+
+            return builder.build();
         };
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService uds) throws Exception {
         http
-                .csrf().disable()
+                .csrf(csrf -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/", "/auth/**", "/signup", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**" ,"/products", "/products/**", "/images/products/**" , "/product-detail", "/product-detail/**").permitAll()
+                        .antMatchers("/", "/auth/**", "/signup", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/products", "/products/**", "/product-detail", "/product-detail/**").permitAll()
+                        .antMatchers("/cart", "/cart/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth") // Trang chứa Form
-                        .loginProcessingUrl("/login") //Url để spring xử lý Post Login
-                        .usernameParameter("username")  // Form name cho email/username
+                        .loginPage("/auth")
+                        .loginProcessingUrl("/login")
+                        .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/", true)
                         .failureUrl("/auth?error=true")
+                        .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
+                        .logoutUrl("/logout") // default is POST
                         .logoutSuccessUrl("/auth?logout=true")
+                        .permitAll()
                 )
-                .userDetailsService(userDetailsService);
+                .userDetailsService(uds);
+
         return http.build();
     }
 }

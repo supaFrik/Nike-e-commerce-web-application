@@ -1,4 +1,6 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!-- Header -->
 <header class="header" id="header">
@@ -16,9 +18,38 @@
                         <span class="separator">|</span>
                         <a href="#" class="header-link">Help</a>
                         <span class="separator">|</span>
-                        <a href="#" class="header-link">Join Us</a>
-                        <span class="separator">|</span>
-                        <a href="${env}/auth" class="header-link">Sign In</a>
+                        <c:choose>
+                            <c:when test="${not empty currentCustomer}">
+                                <!-- Greeting + link to profile -->
+                                <a href="${env}/profile" class="header-link" aria-label="Profile">
+                                    Hi, <c:out value="${currentCustomer.username}" />
+                                    <!-- use an inline svg (no <button> inside <a>) -->
+                                    <span class="profile-icon" aria-hidden="true">
+                                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                    </span>
+                                </a>
+
+                                <span class="separator">|</span>
+
+                                <!-- Logout form with CSRF -->
+                                <form id="logoutForm" action="${env}/logout" method="post" style="display:inline;">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                    <button type="submit" class="header-link" style="background:none;border:none;padding:0;cursor:pointer;font-size:16px">
+                                        Sign out
+                                    </button>
+                                </form>
+                            </c:when>
+
+                            <c:otherwise>
+                              <a href="${env}/auth" class="header-link">Join Us</a>
+                                                            <span class="separator">|</span>
+                              <a href="${env}/auth" class="header-link">Sign In</a>
+
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </div>

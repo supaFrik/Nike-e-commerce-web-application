@@ -32,16 +32,13 @@
             <div class="success-message" id="successMessage" role="status" aria-live="polite" aria-atomic="true"></div>
 
             <!-- Sign In Form -->
-            <form class="auth-form form-toggle active" id="signInForm" role="form" aria-labelledby="signin-form-title" aria-describedby="signin-form-desc" method ="post" action="${env}/login">
-                <h2 id="signin-form-title" class="sr-only">Sign In Form</h2>
-                <span id="signin-form-desc" class="sr-only">Enter your email and password to sign in to your Nike account</span>
-                
+            <c:set var="_csrf" value="${_csrf}" />
+            <form class="auth-form form-toggle active" id="signInForm" method="post" action="${pageContext.request.contextPath}/login">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 <div class="form-group">
                     <label class="form-label" for="signInEmail">Email address</label>
-                    <input type="email" name = "username" class="form-input" id="signInEmail" placeholder="Email address"
-                           required aria-required="true" aria-describedby="signInEmailError"
-                           aria-invalid="false" autocomplete="email">
-                    <div class="error-message" id="signInEmailError" role="alert" aria-live="polite"></div>
+                    <input type="email" class="form-input" id="signInEmail" name="username" placeholder="Email address" required autocomplete="email">
+                    <div class="error-message" id="signInEmailError"></div>
                 </div>
 
                 <div class="form-group">
@@ -104,6 +101,7 @@
                     </a>
                     <span id="apple-signin-desc" class="sr-only">Sign in using your Apple ID</span>
                 </div>
+                <button type="submit" class="btn-primary">Sign In</button>
             </form>
 
             <!-- Sign Up Form -->

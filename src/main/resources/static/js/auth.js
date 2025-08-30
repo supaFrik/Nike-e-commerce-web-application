@@ -1,13 +1,14 @@
 /**
- * Authentication Page JavaScript
- * Handles sign in/sign up forms, validation, and authentication flow
+ * auth-fixed.js
+ * Simplified: sign-in validation only checks email format + non-empty password.
+ * sign-up uses strong password rule.
  */
 
 class AuthenticationManager {
     constructor() {
         this.validationRules = {
             email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/
+            strongPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/
         };
         this.init();
     }
@@ -15,7 +16,6 @@ class AuthenticationManager {
     init() {
         this.setupFormElements();
         this.setupEventListeners();
-        this.injectStyles();
     }
 
     setupFormElements() {
@@ -24,88 +24,160 @@ class AuthenticationManager {
         this.signInPassword = document.getElementById('signInPassword');
         this.signInEmailError = document.getElementById('signInEmailError');
         this.signInPasswordError = document.getElementById('signInPasswordError');
-        // Add references for sign up form and toggle link
+
         this.signUpForm = document.getElementById('signUpForm');
+        this.signUpEmail = document.querySelector('#signUpEmail');
+        this.signUpPassword = document.querySelector('#signUpPassword');
+        this.signUpName = document.querySelector('#signUpName');
+
         this.toggleAuthLink = document.getElementById('toggleAuthLink');
         this.authFooterText = document.getElementById('authFooterText');
-        this.toggleFormDesc = document.getElementById('toggle-form-desc');
     }
 
     setupEventListeners() {
+        // SIGN IN: only basic checks; do NOT block legitimate login attempts with strong password rule
         if (this.signInForm) {
             this.signInForm.addEventListener('submit', (e) => {
                 if (!this.validateSignIn()) {
+                    // prevent submission only when basic fields are clearly invalid (empty or malformed email)
+                    e.preventDefault();
+                }
+                // otherwise allow the form to submit normally to Spring Security
+            });
+        }
+
+        // SIGN UP: use strong validation; prevent submit if invalid
+        if (this.signUpForm) {
+            this.signUpForm.addEventListener('submit', (e) => {
+                if (!this.validateSignUp()) {
                     e.preventDefault();
                 }
             });
         }
-        // Add event listener for toggle link
-        if (this.toggleAuthLink) {
-            this.toggleAuthLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.toggleForms();
+
+        // Toggle between forms (footer link and below sign up form)
+        const toggleAuthLink = document.getElementById('toggleAuthLink');
+        const switchToSignIn = document.getElementById('switchToSignIn');
+        if (toggleAuthLink) {
+            toggleAuthLink.addEventListener('click', (ev) => {
+                ev.preventDefault();
+                this.showSignUp();
+            });
+        }
+        if (switchToSignIn) {
+            switchToSignIn.addEventListener('click', (ev) => {
+                ev.preventDefault();
+                this.showSignIn();
             });
         }
     }
 
     validateSignIn() {
         let valid = true;
-        // Email validation
-        if (!this.validationRules.email.test(this.signInEmail.value)) {
-            this.signInEmailError.textContent = 'Please enter a valid email address.';
-            this.signInEmail.setAttribute('aria-invalid', 'true');
+
+        // Email must be present & valid
+        const email = this.signInEmail && this.signInEmail.value ? this.signInEmail.value.trim() : '';
+        if (!email || !this.validationRules.email.test(email)) {
+            if (this.signInEmailError) this.signInEmailError.textContent = 'Please enter a valid email address.';
+            if (this.signInEmail) this.signInEmail.setAttribute('aria-invalid', 'true');
             valid = false;
         } else {
-            this.signInEmailError.textContent = '';
-            this.signInEmail.setAttribute('aria-invalid', 'false');
+            if (this.signInEmailError) this.signInEmailError.textContent = '';
+            if (this.signInEmail) this.signInEmail.setAttribute('aria-invalid', 'false');
         }
-        // Password validation
-        if (!this.validationRules.password.test(this.signInPassword.value)) {
-            this.signInPasswordError.textContent = 'Password must be at least 8 characters, include uppercase, lowercase, and a number.';
-            this.signInPassword.setAttribute('aria-invalid', 'true');
+
+        // Password must not be empty (no strong rule here)
+        const pass = this.signInPassword && this.signInPassword.value ? this.signInPassword.value : '';
+        if (!pass) {
+            if (this.signInPasswordError) this.signInPasswordError.textContent = 'Please enter your password.';
+            if (this.signInPassword) this.signInPassword.setAttribute('aria-invalid', 'true');
             valid = false;
         } else {
-            this.signInPasswordError.textContent = '';
-            this.signInPassword.setAttribute('aria-invalid', 'false');
+            if (this.signInPasswordError) this.signInPasswordError.textContent = '';
+            if (this.signInPassword) this.signInPassword.setAttribute('aria-invalid', 'false');
+        }
+
+        return valid;
+    }
+
+    validateSignUp() {
+        let valid = true;
+        // Email
+        if (!this.signUpEmail || !this.validationRules.email.test(this.signUpEmail.value || '')) {
+            // show error next to sign-up email (if you had an element)
+            valid = false;
+        }
+        // Name
+        if (!this.signUpName || !this.signUpName.value.trim()) {
+            valid = false;
+        }
+        // Strong password
+        if (!this.signUpPassword || !this.validationRules.strongPassword.test(this.signUpPassword.value || '')) {
+            // show error message for sign up password
+            valid = false;
         }
         return valid;
     }
 
+    showSignUp() {
+        if (!this.signInForm || !this.signUpForm) return;
+        this.signInForm.classList.remove('active');
+        this.signInForm.style.display = 'none';
+        this.signUpForm.classList.add('active');
+        this.signUpForm.style.display = '';
+        // Update footer text
+        if (this.authFooterText) {
+            this.authFooterText.innerHTML = 'Already have an account? <a href="#" id="switchToSignIn">Sign In</a>';
+            // Re-attach event listener for new link
+            const switchToSignIn = document.getElementById('switchToSignIn');
+            if (switchToSignIn) {
+                switchToSignIn.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    this.showSignIn();
+                });
+            }
+        }
+    }
+
+    showSignIn() {
+        if (!this.signInForm || !this.signUpForm) return;
+        this.signUpForm.classList.remove('active');
+        this.signUpForm.style.display = 'none';
+        this.signInForm.classList.add('active');
+        this.signInForm.style.display = '';
+        // Update footer text
+        if (this.authFooterText) {
+            this.authFooterText.innerHTML = 'Dont have an account? <a href="#" id="toggleAuthLink">Sign Up</a>';
+            // Re-attach event listener for new link
+            const toggleAuthLink = document.getElementById('toggleAuthLink');
+            if (toggleAuthLink) {
+                toggleAuthLink.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    this.showSignUp();
+                });
+            }
+        }
+    }
+
     toggleForms() {
-        const isSignInActive = this.signInForm.classList.contains('active');
-        if (isSignInActive) {
-            // Hide sign in, show sign up
+        // simply toggle 'active' class and display style
+        if (!this.signInForm || !this.signUpForm) return;
+        const signInActive = this.signInForm.classList.contains('active');
+        if (signInActive) {
             this.signInForm.classList.remove('active');
             this.signInForm.style.display = 'none';
             this.signUpForm.classList.add('active');
             this.signUpForm.style.display = '';
-            // Update link text and description
-            this.authFooterText.innerHTML = `Already have an account? <a href="#" id="toggleAuthLink" aria-describedby="toggle-form-desc">Sign In</a><span id="toggle-form-desc" class="sr-only">Switch between sign in and sign up forms</span>`;
         } else {
-            // Hide sign up, show sign in
             this.signUpForm.classList.remove('active');
             this.signUpForm.style.display = 'none';
             this.signInForm.classList.add('active');
             this.signInForm.style.display = '';
-            // Update link text and description
-            this.authFooterText.innerHTML = `Dont have an account? <a href="#" id="toggleAuthLink" aria-describedby="toggle-form-desc">Sign Up</a><span id="toggle-form-desc" class="sr-only">Switch between sign in and sign up forms</span>`;
         }
-        // Re-attach event listener to new link
-        this.toggleAuthLink = document.getElementById('toggleAuthLink');
-        if (this.toggleAuthLink) {
-            this.toggleAuthLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.toggleForms();
-            });
-        }
-    }
-
-    injectStyles() {
-        // Optionally inject custom styles if needed
     }
 }
 
-// Toggle password visibility for password fields
+// Toggle password visibility
 window.togglePassword = function(inputId) {
     const input = document.getElementById(inputId);
     if (!input) return;
@@ -119,7 +191,6 @@ window.togglePassword = function(inputId) {
     }
 };
 
-// Initialize the authentication manager when DOM is ready
 window.addEventListener('DOMContentLoaded', () => {
     new AuthenticationManager();
 });
