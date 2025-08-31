@@ -23,7 +23,6 @@
                                 <!-- Greeting + link to profile -->
                                 <a href="${env}/profile" class="header-link" aria-label="Profile">
                                     Hi, <c:out value="${currentCustomer.username}" />
-                                    <!-- use an inline svg (no <button> inside <a>) -->
                                     <span class="profile-icon" aria-hidden="true">
                                         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -47,7 +46,6 @@
                               <a href="${env}/auth" class="header-link">Join Us</a>
                                                             <span class="separator">|</span>
                               <a href="${env}/auth" class="header-link">Sign In</a>
-
                             </c:otherwise>
                         </c:choose>
                     </div>
