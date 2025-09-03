@@ -19,12 +19,6 @@ public class CustomerHomeController extends BaseController {
 	@Autowired
 	private ProductService productService;
 
-	// Cart page
-	@RequestMapping(value = "/cart", method = RequestMethod.GET)
-	public String cart() {
-		return "customer/cart";
-	}
-
 	// Checkout page
 	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
 	public String checkout() {
