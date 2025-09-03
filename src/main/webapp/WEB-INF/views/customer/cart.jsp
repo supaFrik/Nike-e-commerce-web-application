@@ -1,8 +1,7 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ include file="/WEB-INF/views/common/variables.jsp" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,7 +52,7 @@
         <div class="container">
             <div class="cart-header">
                 <h1 class="cart-title">Shopping Cart</h1>
-                <span class="item-count" id="itemCount">2 items</span>
+                <span class="item-count" id="itemCount">${fn:length(cartItems)} item${fn:length(cartItems) != 1 ? 's' : ''}</span>
             </div>
 
             <div class="cart-content" id="cartContent">
@@ -71,71 +70,42 @@
                 <div class="cart-layout" id="cartLayout" style="display: block;">
                     <div class="cart-items">
                         <div class="cart-items-list" id="cartItemsList">
-                            <!-- Sample Cart Item 1 -->
-                            <div class="cart-item" data-index="0">
-                                <div class="item-image" onclick="viewProduct('air-jordan-1-low')">
-                                    <img src="${env}/customer/img/products/AIR+JORDAN+1+LOW.avif" alt="Air Jordan 1 Low">
-                                </div>
-                                <div class="item-details">
-                                    <div class="item-header">
-                                        <div class="item-info">
-                                            <h3>Air Jordan 1 Low</h3>
-                                            <p class="item-category">Men's Shoes</p>
-                                            <p class="item-size">Size: US M 10</p>
-                                            <p class="item-color">Color: White/Black</p>
-                                        </div>
-                                        <div class="item-price">$110.00</div>
+                            <c:forEach var="item" items="${cartItems}">
+                                <div class="cart-item">
+                                    <div class="item-image" onclick="viewProduct('${item.product.slug}')">
+                                        <img src="${env}/customer/img/products/${item.product.image}" alt="${item.product.name}">
                                     </div>
-                                    <div class="item-actions">
-                                        <div class="quantity-controls">
-                                            <button class="quantity-btn" onclick="updateQuantity(0, -1)">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                            <input type="text" class="quantity-input" value="1" 
-                                                   onchange="setQuantity(0, this.value)" readonly>
-                                            <button class="quantity-btn" onclick="updateQuantity(0, 1)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
+                                    <div class="item-details">
+                                        <div class="item-header">
+                                            <div class="item-info">
+                                                <h3>${item.product.name}</h3>
+                                                <p class="item-category">${item.product.category.name}</p>
+                                                <p class="item-size">Size: ${item.size}</p>
+                                                <p class="item-color">Color: ${item.color}</p>
+                                            </div>
+                                            <div class="item-price">
+                                                <fmt:formatNumber value="${item.product.price}" type="currency" />
+                                            </div>
                                         </div>
-                                        <button class="remove-btn" onclick="removeItem(0)" title="Remove item">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Sample Cart Item 2 -->
-                            <div class="cart-item" data-index="1">
-                                <div class="item-image" onclick="viewProduct('nike-blazer-mid-77')">
-                                    <img src="${env}/customer/img/products/BLAZER+MID+'77+VNTG.avif" alt="Nike Blazer Mid '77 Vintage">
-                                </div>
-                                <div class="item-details">
-                                    <div class="item-header">
-                                        <div class="item-info">
-                                            <h3>Nike Blazer Mid '77 Vintage</h3>
-                                            <p class="item-category">Men's Shoes</p>
-                                            <p class="item-size">Size: US M 9.5</p>
-                                            <p class="item-color">Color: White/Black</p>
+                                        <div class="item-actions">
+                                            <div class="quantity-controls">
+                                                <form action="${env}/cart/update/${item.product.id}" method="post">
+                                                    <button type="submit" name="quantity" value="${item.quantity - 1}" class="quantity-btn">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                    <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                                                    <button type="submit" name="quantity" value="${item.quantity + 1}" class="quantity-btn">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                            <a href="${env}/cart/remove/${item.product.id}" class="remove-btn">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
                                         </div>
-                                        <div class="item-price">$100.00</div>
-                                    </div>
-                                    <div class="item-actions">
-                                        <div class="quantity-controls">
-                                            <button class="quantity-btn" onclick="updateQuantity(1, -1)">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                            <input type="text" class="quantity-input" value="2" 
-                                                   onchange="setQuantity(1, this.value)" readonly>
-                                            <button class="quantity-btn" onclick="updateQuantity(1, 1)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                        <button class="remove-btn" onclick="removeItem(1)" title="Remove item">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
                                     </div>
                                 </div>
-                            </div>
+                            </c:forEach>
                         </div>
                         
                         <div class="cart-actions">
@@ -162,23 +132,23 @@
                         <div class="order-summary">
                             <div class="summary-row">
                                 <span>Subtotal</span>
-                                <span id="subtotalAmount">$310.00</span>
+                                <span id="subtotalAmount"><fmt:formatNumber value="${subtotal}" type="currency"/></span>
                             </div>
                             <div class="summary-row">
                                 <span>Estimated Shipping</span>
-                                <span id="shippingAmount">$5.00</span>
+                                <span id="shippingAmount"><fmt:formatNumber value="${shipping}" type="currency"/></span>
                             </div>
                             <div class="summary-row">
                                 <span>Estimated Tax</span>
-                                <span id="taxAmount">$24.80</span>
+                                <span id="taxAmount"><fmt:formatNumber value="${tax}" type="currency"/></span>
                             </div>
                             <div class="summary-row discount-row" id="discountRow" style="display: none;">
                                 <span>Discount</span>
-                                <span id="discountAmount">-$0.00</span>
+                                <span id="discountAmount"><fmt:formatNumber value="${discount}" type="currency"/></span>
                             </div>
                             <div class="summary-row total-row">
                                 <span>Total</span>
-                                <span id="totalAmount">$339.80</span>
+                                <span id="totalAmount"><fmt:formatNumber value="${total}" type="currency"/></span>
                             </div>
                         </div>
 

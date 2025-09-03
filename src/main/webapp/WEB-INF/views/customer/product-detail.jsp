@@ -61,13 +61,15 @@
                         <div class="size-options" role="radiogroup" aria-labelledby="size-selection-title" aria-describedby="size-help">
                             <span id="size-help" class="sr-only">Select your shoe size. Unavailable sizes are marked as such.</span>
                             <c:forEach var="variant" items="${product.variants}">
-                                <div class="size-option${variant.stock == 0 ? ' unavailable' : ''}" data-size="${variant.size}" onclick="selectSize(this)" role="radio" aria-checked="false" aria-disabled="${variant.stock == 0}" aria-label="VN Size ${variant.size}${variant.stock == 0 ? ' - Unavailable' : ' - Available'}" tabindex="${variant.stock == 0 ? '-1' : '0'}">VN ${variant.size}</div>
+                                <div class="size-option${variant.stock == 0 ? ' unavailable' : ''}" data-size="${variant.size}" onclick="selectSize(this)" role="radio" aria-checked="false" aria-disabled="${variant.stock == 0}" aria-label="VN Size ${variant.size}${variant.stock == 0 ? ' - Unavailable' : ' - Available'}" tabindex="${variant.stock == 0 ? '-1' : '0'}">
+                                    VN ${variant.size}
+                                </div>
                             </c:forEach>
                         </div>
                     </div>
                     
                     <div class="product-actions" role="group" aria-label="Product actions">
-                        <button class="btn btn-primary btn-full add-to-cart" onclick="addToCart()" aria-describedby="add-to-cart-desc">
+                        <button class="btn btn-primary btn-full add-to-cart" onclick="addToCart(${product.id})" aria-describedby="add-to-cart-desc">
                             Add to Bag
                         </button>
                         <span id="add-to-cart-desc" class="sr-only">Add this product to your shopping bag</span>
@@ -300,6 +302,5 @@
 
     <!-- JavaScript Files -->
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
-
 </body>
 </html>
