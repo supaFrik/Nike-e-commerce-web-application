@@ -101,7 +101,6 @@
                     </a>
                     <span id="apple-signin-desc" class="sr-only">Sign in using your Apple ID</span>
                 </div>
-                <button type="submit" class="btn-primary">Sign In</button>
             </form>
 
             <!-- Sign Up Form -->

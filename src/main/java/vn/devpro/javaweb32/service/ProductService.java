@@ -3,9 +3,9 @@ package vn.devpro.javaweb32.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import vn.devpro.javaweb32.dto.customer.ProductDetailDto;
-import vn.devpro.javaweb32.dto.customer.ProductImageDto;
-import vn.devpro.javaweb32.dto.customer.ProductVariantDto;
+import vn.devpro.javaweb32.dto.product.ProductDetailDto;
+import vn.devpro.javaweb32.dto.product.ProductImageDto;
+import vn.devpro.javaweb32.dto.product.ProductVariantDto;
 import vn.devpro.javaweb32.entity.product.Product;
 import vn.devpro.javaweb32.repository.ProductRepository;
 

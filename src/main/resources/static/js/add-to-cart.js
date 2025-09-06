@@ -1,7 +1,10 @@
+// Size selection logic
 function selectSize(element) {
-    // Remove 'selected' from all size options
-    document.querySelectorAll('.size-option').forEach(opt => opt.classList.remove('selected'));
-    // Add 'selected' to the clicked element if not unavailable
+    document.querySelectorAll('.size-option').forEach(opt => {
+        opt.classList.remove('selected');
+        opt.setAttribute('aria-checked', 'false');
+    });
+
     if (!element.classList.contains('unavailable')) {
         element.classList.add('selected');
         element.setAttribute('aria-checked', 'true');
@@ -12,23 +15,28 @@ function selectSize(element) {
 function addToCart(productId) {
     var selectedSizeElem = document.querySelector('.size-option.selected');
     if (!selectedSizeElem) {
-        alert('Senpai please select a size before adding to cart.');
+        alert('Please select a size before adding to cart.');
         return;
     }
     var size = selectedSizeElem.getAttribute('data-size');
     var quantity = 1;
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/cart/add/' + ${product.id}, true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                alert('Product added to cart successfully!');
-            } else {
-                alert('Failed to add product to cart. Please try again.');
-            }
+
+    fetch('/api/cart/add/' + productId, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            [document.querySelector('meta[name="_csrf_header"]').content]:
+                document.querySelector('meta[name="_csrf"]').content
+        },
+        body: 'quantity=' + encodeURIComponent(quantity) + '&size=' + encodeURIComponent(size)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('Added! Cart count: ' + data.itemCount + ', Subtotal: $' + data.subtotal);
         }
-    };
-    var data = 'quantity=' + encodeURIComponent(quantity) + '&size=' + encodeURIComponent(size);
-    xhr.send(data);
+    })
+    .catch(err => console.error('Error:', err));
 }
+
+
