@@ -1,12 +1,6 @@
-package vn.devpro.javaweb32.dto.customer;
-
-import vn.devpro.javaweb32.entity.product.Category;
-import vn.devpro.javaweb32.entity.product.ProductImage;
-import vn.devpro.javaweb32.entity.product.ProductVariant;
+package vn.devpro.javaweb32.dto.cart;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
 
 public class ProductCartDto {
     private Long id;

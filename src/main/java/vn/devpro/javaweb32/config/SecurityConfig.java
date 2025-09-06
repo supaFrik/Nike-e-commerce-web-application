@@ -46,7 +46,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> {})
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/", "/auth/**", "/signup", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/products", "/products/**", "/product-detail", "/product-detail/**").permitAll()
+                        .antMatchers("/", "/auth/**", "/signup", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/products", "/products/**", "/product-detail", "/product-detail/**", "/cart/**").permitAll()
                         .antMatchers("/cart", "/cart/**").authenticated()
                         .anyRequest().authenticated()
                 )

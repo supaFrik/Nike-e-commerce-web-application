@@ -1,13 +1,17 @@
 package vn.devpro.javaweb32.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.security.web.csrf.CsrfToken;
+import vn.devpro.javaweb32.entity.cart.CartItem;
 import vn.devpro.javaweb32.entity.customer.Credential;
 import vn.devpro.javaweb32.entity.customer.Customer;
 import vn.devpro.javaweb32.repository.CredentialRepository;
+import vn.devpro.javaweb32.service.CartService;
 import vn.devpro.javaweb32.service.CurrentUserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +21,13 @@ import java.util.Optional;
 @ControllerAdvice
 public class GlobalModelAttributes {
 
+    private final CartService cartService;
     private final CredentialRepository credentialRepository;
 
     @Autowired
-    public GlobalModelAttributes(CredentialRepository credentialRepository) {
+    public GlobalModelAttributes(CartService cartService, CredentialRepository credentialRepository) {
         this.credentialRepository = credentialRepository;
+        this.cartService = cartService;
     }
 
     @ModelAttribute
@@ -39,6 +45,20 @@ public class GlobalModelAttributes {
                 Customer customer = c.getCustomer();
                 model.addAttribute("currentCustomer", customer);
             }
+        }
+    }
+
+    @ModelAttribute
+    public void addGlobalAtrributes2(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
+            credentialRepository.findByEmail(authentication.getName()).ifPresent(c -> {
+                model.addAttribute("currentCustomer", c.getCustomer());
+                int count = cartService.getCartItems(c.getCustomer()).stream().mapToInt(CartItem::getQuantity).sum();
+                model.addAttribute("cartCount", count);
+            });
+        } else {
+            model.addAttribute("cartCount", 0);
         }
     }
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import vn.devpro.javaweb32.dto.customer.SignupForm;
+import vn.devpro.javaweb32.dto.auth.SignupForm;
 import vn.devpro.javaweb32.service.AuthService;
 import vn.devpro.javaweb32.service.CustomerService;
 

@@ -6,17 +6,18 @@ import vn.devpro.javaweb32.entity.product.Product;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "cart_items", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"customer_id", "product_id", "size"})
+})
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "product_id")
     private Product product;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     private int quantity;

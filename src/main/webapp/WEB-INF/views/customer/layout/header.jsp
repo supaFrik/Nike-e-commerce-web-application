@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!-- Header -->
 <header class="header" id="header">
@@ -108,7 +110,7 @@
                                 <line x1="3" y1="6" x2="21" y2="6"></line>
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
-                            <span class="cart-count" id="cartCount">0</span>
+                            <span class="cart-count" id="cartCount">${cartCount != null ? cartCount : 0}</span>
                         </a>
                     </div>
                 </div>
@@ -133,7 +135,7 @@
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <path d="M16 10a4 4 0 0 1-8 0"></path>
                         </svg>
-                        <span class="cart-count" id="mobileCartCount">0</span>
+                        <span class="cart-count" id="cartCount">${cartCount != null ? cartCount : 0}
                     </a>
                     <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                         <span></span>

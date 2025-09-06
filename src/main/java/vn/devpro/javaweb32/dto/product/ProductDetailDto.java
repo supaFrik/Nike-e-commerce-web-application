@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.dto.customer;
+package vn.devpro.javaweb32.dto.product;
 
 import vn.devpro.javaweb32.entity.product.Category;
 import vn.devpro.javaweb32.entity.product.ProductImage;
@@ -44,3 +44,4 @@ public class ProductDetailDto {
     public List<ProductImage> getImages() { return images; }
     public Category getCategory() { return category; }
 }
+
