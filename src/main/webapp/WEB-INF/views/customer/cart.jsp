@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +16,6 @@
     
 </head>
 <body>
-
     <!-- Cart Progress -->
     <div class="cart-progress">
         <div class="container">
@@ -52,7 +53,7 @@
         <div class="container">
             <div class="cart-header">
                 <h1 class="cart-title">Shopping Cart</h1>
-                <span class="item-count" id="itemCount">${fn:length(cartItems)} item${fn:length(cartItems) != 1 ? 's' : ''}</span>
+                <span class="cartItems-count" id="cartItemsCount">${fn:length(cartItems)} cartItems${fn:length(cartItems) != 1 ? 's' : ''}</span>
             </div>
 
             <div class="cart-content" id="cartContent">
@@ -66,40 +67,40 @@
                     <a href="${env}/" class="btn btn-primary">Get Started</a>
                 </div>
 
-                <!-- Cart Items -->
+                <!-- Cart cartItemss -->
                 <div class="cart-layout" id="cartLayout" style="display: block;">
-                    <div class="cart-items">
-                        <div class="cart-items-list" id="cartItemsList">
-                            <c:forEach var="item" items="${cartItems}">
-                                <div class="cart-item">
-                                    <div class="item-image" onclick="viewProduct('${item.product.slug}')">
-                                        <img src="${env}/customer/img/products/${item.product.image}" alt="${item.product.name}">
+                    <div class="cart-cartItemss">
+                        <div class="cart-cartItemss-list" id="cartItemsList">
+                            <c:forEach var="cartItems" cartItemss="${cartItems}">
+                                <div class="cart-cartItems">
+                                    <div class="cartItems-image" onclick="viewProduct('${cartItems.product.slug}')">
+                                        <img src="${env}/customer/img/products/${cartItems.product.image}" alt="${cartItems.product.name}">
                                     </div>
-                                    <div class="item-details">
-                                        <div class="item-header">
-                                            <div class="item-info">
-                                                <h3>${item.product.name}</h3>
-                                                <p class="item-category">${item.product.category.name}</p>
-                                                <p class="item-size">Size: ${item.size}</p>
-                                                <p class="item-color">Color: ${item.color}</p>
+                                    <div class="cartItems-details">
+                                        <div class="cartItems-header">
+                                            <div class="cartItems-info">
+                                                <h3>${cartItems.product.name}</h3>
+                                                <p class="cartItems-category">${cartItems.product.category.name}</p>
+                                                <p class="cartItems-size">Size: ${cartItems.size}</p>
+                                                <p class="cartItems-color">Color: ${cartItems.color}</p>
                                             </div>
-                                            <div class="item-price">
-                                                <fmt:formatNumber value="${item.product.price}" type="currency" />
+                                            <div class="cartItems-price">
+                                                <fmt:formatNumber value="${cartItems.product.price}" type="currency" />
                                             </div>
                                         </div>
-                                        <div class="item-actions">
+                                        <div class="cartItems-actions">
                                             <div class="quantity-controls">
-                                                <form action="${env}/cart/update/${item.product.id}" method="post">
-                                                    <button type="submit" name="quantity" value="${item.quantity - 1}" class="quantity-btn">
+                                                <form action="${env}/cart/update/${cartItems.product.id}" method="post">
+                                                    <button type="submit" name="quantity" value="${cartItems.quantity - 1}" class="quantity-btn">
                                                         <i class="fas fa-minus"></i>
                                                     </button>
-                                                    <input type="text" class="quantity-input" value="${item.quantity}" readonly>
-                                                    <button type="submit" name="quantity" value="${item.quantity + 1}" class="quantity-btn">
+                                                    <input type="text" class="quantity-input" value="${cartItems.quantity}" readonly>
+                                                    <button type="submit" name="quantity" value="${cartItems.quantity + 1}" class="quantity-btn">
                                                         <i class="fas fa-plus"></i>
                                                     </button>
                                                 </form>
                                             </div>
-                                            <a href="${env}/cart/remove/${item.product.id}" class="remove-btn">
+                                            <a href="${env}/cart/remove/${cartItems.product.id}" class="remove-btn">
                                                 <i class="fas fa-trash-alt"></i>
                                             </a>
                                         </div>
@@ -184,7 +185,6 @@
         </div>
     </main>
 
-    <script src="${env}/customer/scripts/pages/main.js"></script>
-    <script src="${env}/customer/scripts/pages/cart.js"></script>
+    <script src="${env}/js/add-to-cart.js"></script>
 </body>
 </html>

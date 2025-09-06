@@ -1,10 +1,9 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">
 
 <!DOCTYPE html>
 <html lang="en">
@@ -73,13 +72,38 @@
                             Add to Bag
                         </button>
                         <span id="add-to-cart-desc" class="sr-only">Add this product to your shopping bag</span>
-                        <button class="btn btn-outline btn-full wishlist-btn" onclick="addToWishlist()" aria-describedby="wishlist-desc">
+                        <button class="btn btn-outline btn-full wishlist-btn" onclick="addToWishlist(${product.id})" aria-describedby="wishlist-desc">
                             <i class="far fa-heart" aria-hidden="true"></i>
                             Favourite
                         </button>
                         <span id="wishlist-desc" class="sr-only">Add this product to your wishlist</span>
                     </div>
-                    
+
+
+                    <script>
+                    function addToCart(productId) {
+                        const csrfHeader = "${_csrf.headerName}";
+                        const csrfToken  = "${_csrf.token}";
+
+                        fetch("${pageContext.request.contextPath}/cart/add/" + productId, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded",
+                                [csrfHeader]: csrfToken
+                            },
+                            body: new URLSearchParams({ quantity: 1 })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Added! Cart total = " + data.cartTotal);
+                                // hoặc update badge trên header giỏ hàng
+                                document.getElementById("cart-count").innerText = data.cartTotal;
+                            }
+                        });
+                    }
+                    </script>
+
                     <div class="exclusion-notice" role="note" aria-label="Promotion exclusion notice">
                         <p>This product is excluded from site promotions and discounts.</p>
                     </div>
@@ -301,6 +325,7 @@
     <jsp:include page="/WEB-INF/views/customer/layout/footer.jsp" />
 
     <!-- JavaScript Files -->
+    <script src="/js/add-to-cart.js"></script>
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>
 </html>
