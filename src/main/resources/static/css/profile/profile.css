@@ -1,0 +1,161 @@
+/* Profile Header */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: var(--size-spacing-l);
+    padding: var(--size-spacing-xxl) 0 var(--size-spacing-l) 0;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-grey-200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xxxl);
+    color: var(--color-grey-400);
+    flex-shrink: 0;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-spacing-xs);
+    flex: 1;
+}
+
+.profile-name {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.profile-member {
+    font-size: var(--font-size-s);
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+.profile-nav {
+    display: flex;
+    gap: var(--size-spacing-xl);
+    font-size: var(--font-size-s);
+    border-bottom: var(--size-border-width-s) solid var(--color-border-tertiary);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: var(--size-spacing-s);
+}
+
+.profile-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.profile-nav a {
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    position: relative;
+    white-space: nowrap;
+    padding: var(--size-spacing-s) 0;
+    transition: color var(--transition-duration-fast) var(--transition-timing-function-ease);
+}
+
+.profile-nav a:hover {
+    color: var(--color-text-hover);
+}
+
+.profile-nav a.active::after {
+    content: '';
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    bottom: calc(-1 * var(--size-spacing-s) - var(--size-border-width-s));
+    height: var(--size-border-width-m);
+    background: var(--color-text-primary);
+    border-radius: var(--size-border-radius-s);
+}
+}
+
+/* Responsive Design - Mobile First */
+@media (max-width: 600px) {
+    .profile-header { 
+        flex-direction: column; 
+        align-items: center;
+        gap: var(--size-spacing-m);
+        padding: var(--size-spacing-xl) var(--size-spacing-grid-gutter) var(--size-spacing-m) var(--size-spacing-grid-gutter);
+        text-align: center;
+    }
+    
+    .profile-avatar {
+        width: 60px;
+        height: 60px;
+        font-size: var(--font-size-xl);
+    }
+    
+    .profile-name {
+        font-size: var(--font-size-l);
+    }
+    
+    .profile-member {
+        font-size: var(--font-size-xs);
+    }
+    
+    .profile-nav {
+        gap: var(--size-spacing-l);
+        justify-content: center;
+        padding: 0 var(--size-spacing-grid-gutter);
+    }
+}
+
+@media (min-width: 601px) and (max-width: 768px) {
+    .profile-header {
+        padding: var(--size-spacing-xxl) var(--size-spacing-l) var(--size-spacing-l) var(--size-spacing-l);
+    }
+    
+    .profile-nav {
+        padding: 0 var(--size-spacing-l);
+    }
+}
+
+@media (min-width: 769px) {
+    .profile-header {
+        padding: var(--size-spacing-xxl) 0 var(--size-spacing-l) 0;
+    }
+}
+
+/* Profile Container */
+.profile-container {
+    max-width: 600px;
+    margin: var(--size-spacing-xl) auto;
+    padding: var(--size-spacing-xl);
+    background: var(--color-bg-primary);
+    border-radius: var(--size-border-radius-m);
+    box-shadow: var(--shadow-20);
+}
+
+.profile-container h2 {
+    margin-bottom: var(--size-spacing-s);
+    font-size: var(--font-size-l);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+/* Interest Section */
+.interest-section {
+    margin-top: var(--size-spacing-xl);
+    padding: var(--size-spacing-s);
+    border: var(--size-border-width-s) solid var(--color-border-tertiary);
+    border-radius: var(--size-border-radius-s);
+    background: var(--color-bg-secondary);
+}
+
+.interest-section h3 {
+    margin-top: 0;
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
