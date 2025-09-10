@@ -1,4 +1,4 @@
-/* =============================================================================
+    /* =============================================================================
    LANDING PAGE RESPONSIVE STYLES
    All responsive breakpoints and mobile optimizations for landing page
    ============================================================================= */
@@ -357,7 +357,6 @@
         min-height: 44px;
         padding: 12px 24px;
         font-size: 14px;
-        border-radius: 6px;
         touch-action: manipulation;
     }
     

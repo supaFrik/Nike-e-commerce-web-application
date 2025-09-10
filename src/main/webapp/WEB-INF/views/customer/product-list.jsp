@@ -256,12 +256,12 @@
                             </button>
                             <form id="sort-form" method="GET">
                                 <ul id="sort-options" class="sort-options" role="listbox" tabindex="-1">
-                                    <li class="sort-option${param.sort == 'featured' || empty param.sort ? ' active' : ''}" data-value="featured" role="option" aria-selected="${param.sort == 'featured' || empty param.sort ? 'true' : 'false'}">Featured</li>
+                                    <li class="sort-option${param.sort == 'favourites' || empty param.sort ? ' active' : ''}" data-value="favourites" role="option" aria-selected="${param.sort == 'favourites' || empty param.sort ? 'true' : 'false'}">Favourites</li>
                                     <li class="sort-option${param.sort == 'newest' ? ' active' : ''}" data-value="newest" role="option" aria-selected="${param.sort == 'newest' ? 'true' : 'false'}">Newest</li>
                                     <li class="sort-option${param.sort == 'price_desc' ? ' active' : ''}" data-value="price_desc" role="option" aria-selected="${param.sort == 'price_desc' ? 'true' : 'false'}">Price: High-Low</li>
                                     <li class="sort-option${param.sort == 'price_asc' ? ' active' : ''}" data-value="price_asc" role="option" aria-selected="${param.sort == 'price_asc' ? 'true' : 'false'}">Price: Low-High</li>
                                 </ul>
-                                <input type="hidden" name="sort" id="sort-input" value="${param.sort != null ? param.sort : 'featured'}" />
+                                <input type="hidden" name="sort" id="sort-input" value="${param.sort != null ? param.sort : 'favourites'}" />
                                 <c:if test="${not empty selectedCategory}">
                                     <input type="hidden" name="category" value="${selectedCategory}" />
                                 </c:if>
@@ -306,7 +306,7 @@
                                                                 ${product.name}
                                                             </div>
                                                             <div class="product-card__subtitle" id="product-${status.index + 1}-desc">
-                                                                ${product.type}
+                                                                ${product.type}'s Shoes
                                                             </div>
                                                         </div>
                                                     </div>

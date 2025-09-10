@@ -33,7 +33,7 @@ public class ProductController {
     @GetMapping("/products")
     public String productList(
             @RequestParam(required = false) String category,
-            @RequestParam(required = false, defaultValue = "featured") String sort,
+            @RequestParam(required = false) String sort,
              Model model) {
 
         List<Product> products;

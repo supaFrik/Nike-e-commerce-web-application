@@ -1,10 +1,11 @@
-
 /* PRODUCT INFO & DETAILS STYLES */
 .product-info { padding-left: var(--size-spacing-m); }
 .product-header { margin-bottom: var(--size-spacing-l); }
 .product-title { font-size: var(--font-size-xxxl); font-weight: var(--font-weight-bold); margin-bottom: var(--size-spacing-s); color: var(--color-black); line-height: 1.1; }
 .product-subtitle { font-size: var(--font-size-m); color: var(--color-grey-500); margin-bottom: var(--size-spacing-s); text-transform: capitalize;}
 .product-price { font-size: var(--font-size-l); font-weight: var(--font-weight-medium); color: var(--color-black); }
+.color-options { display: flex; flex-direction: row; }
+.color-selection-title { margin: 0; font-size: var(--font-size-s), font-weight: var(--font-weight-medium); }
 .size-selection { margin-bottom: var(--size-spacing-l); }
 .size-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--size-spacing-m); }
 .size-header h4 { margin: 0; font-size: var(--font-size-s); font-weight: var(--font-weight-medium); }
