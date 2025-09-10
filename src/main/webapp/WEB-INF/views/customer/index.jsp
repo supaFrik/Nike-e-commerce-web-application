@@ -22,7 +22,6 @@
 <section class="hero" aria-label="Hero banner section">
     <div class="video-container">
         <video autoplay loop muted playsinline class="video-placeholder"
-               poster="${env}/images/stairs-nike-poster.jpg"
                aria-label="Nike promotional video about Mars Yard sneakers"
                aria-describedby="hero-description">
             <source src="${env}/videos/stairs-nike-1080p-h264.mp4" type="video/mp4">
@@ -173,7 +172,7 @@
                                             <c:choose>
                                                 <c:when test="${not empty product.images and not empty product.images[0].url}">
                                                  <a aria-label="${product.name}" href="${env}/product-detail?id=${product.id}"
-                                                 class="product-card__img-link-overlay" data-testid="prodict-card-img-link-overlay"
+                                                 class="product-card__img-link-overlay" data-testid="product-card-img-link-overlay"
                                                  aria-describedby="product-${status.index + 1}-desc">
                                                     <img src="${env}/images/products/${product.images[0].url}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                 </a>
@@ -308,10 +307,10 @@
             </div>
 
             <div class="cart-items" id="cartItems" aria-label="Cart items list">
-                <!-- Cart items will be populated by JavaScript -->
             </div>
         </div>
     </div>
+
     <!--  JS-->
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>

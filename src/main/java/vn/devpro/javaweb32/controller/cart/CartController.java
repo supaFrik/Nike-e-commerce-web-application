@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import vn.devpro.javaweb32.entity.cart.CartItem;
+import vn.devpro.javaweb32.entity.customer.Credential;
 import vn.devpro.javaweb32.entity.customer.Customer;
 import vn.devpro.javaweb32.repository.CredentialRepository;
 import vn.devpro.javaweb32.service.CartService;
@@ -25,13 +26,14 @@ public class CartController {
     private Customer getCurrentCustomer() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return credentialRepository.findByEmail(email)
-                .orElseThrow()
-                .getCustomer();
+                .map(Credential::getCustomer)
+                .orElse(null);
     }
 
     @GetMapping("/cart")
     public String viewCart(HttpSession httpSession, Model model) {
         Customer customer = getCurrentCustomer();
+        if(customer == null) return "redirect:/auth";
         var cartItems = cartService.getCartItems(customer);
 
         double subtotal = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
@@ -39,12 +41,13 @@ public class CartController {
         double tax = subtotal * 0.08;
         double total = subtotal + shipping + tax;
 
+        model.addAttribute("discount", 0.0);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("subtotal", subtotal);
         model.addAttribute("shipping", shipping);
         model.addAttribute("tax", tax);
         model.addAttribute("total", total);
 
-        return "/customer/cart";
+        return "customer/cart";
     }
 }

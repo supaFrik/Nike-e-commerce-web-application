@@ -27,7 +27,6 @@ public class ProductVariant {
         this.product = product;
     }
 
-
     public Long getId() {
         return id;
     }

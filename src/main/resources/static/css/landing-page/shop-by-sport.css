@@ -183,7 +183,6 @@
   .sport-button {
     bottom: var(--size-spacing-s);
     left: var(--size-spacing-s);
-    padding: var(--size-spacing-xs) var(--size-spacing-s);
     font-size: var(--font-size-s);
   }
 }
