@@ -17,3 +17,5 @@
 <!-- Product Detail -->
 <script src="${env}/js/thumbnail-scope.js"></script>
 <script src="${env}/js/add-to-cart.js"></script>
+<script src="${env}/js/update-button.js"></script>
+

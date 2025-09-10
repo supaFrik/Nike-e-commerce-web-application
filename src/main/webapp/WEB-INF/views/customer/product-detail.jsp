@@ -49,6 +49,23 @@
                         <div class="product-price">${product.price}₫</div>
                     </div>
                     
+                    <!-- Color Selection -->
+                    <div class="color-selection" role="group" aria-labelledby="color-selection-title">
+                        <div class="color-header">
+                            <h4 id="color-selection-title">Select Color</h4>
+                        </div>
+                        <div class="color-options" role="radiogroup" aria-labelledby="color-selection-title">
+                            <c:forEach var="variant" items="${product.variants}">
+                                <c:if test="${not empty variant.color}">
+                                    <div class="color-option" data-color="${variant.color}" onclick="selectColor(this)" role="radio" aria-checked="false" aria-label="Color ${variant.color}" tabindex="0">
+                                        ${variant.color}
+                                    </div>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </div>
+                    <!-- End Color Selection -->
+
                     <div class="size-selection" role="group" aria-labelledby="size-selection-title">
                         <div class="size-header">
                             <h4 id="size-selection-title">Select Size</h4>
@@ -81,26 +98,98 @@
 
 
                     <script>
-                    function addToCart(productId) {
-                        const csrfHeader = "${_csrf.headerName}";
-                        const csrfToken  = "${_csrf.token}";
+                    // Build a JS array of all valid variants
+                    var productVariants = [
+                    <c:forEach var="variant" items="${product.variants}">
+                        {
+                            size: "${variant.size}",
+                            color: "${variant.color}",
+                            stock: ${variant.stock}
+                        },
+                    </c:forEach>
+                    ];
 
-                        fetch("${pageContext.request.contextPath}/cart/add/" + productId, {
-                            method: "POST",
+                    function selectSize(element) {
+                        document.querySelectorAll('.size-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                            opt.setAttribute('aria-checked', 'false');
+                        });
+                        if (!element.classList.contains('unavailable')) {
+                            element.classList.add('selected');
+                            element.setAttribute('aria-checked', 'true');
+                        }
+                        // Enable only colors available for this size
+                        var selectedSize = element.getAttribute('data-size');
+                        var availableColors = productVariants.filter(v => v.size === selectedSize && v.stock > 0).map(v => v.color);
+                        document.querySelectorAll('.color-option').forEach(opt => {
+                            if (availableColors.includes(opt.getAttribute('data-color'))) {
+                                opt.classList.remove('unavailable');
+                                opt.setAttribute('aria-disabled', 'false');
+                            } else {
+                                opt.classList.add('unavailable');
+                                opt.setAttribute('aria-disabled', 'true');
+                                opt.classList.remove('selected');
+                                opt.setAttribute('aria-checked', 'false');
+                            }
+                        });
+                    }
+
+                    function selectColor(element) {
+                        document.querySelectorAll('.color-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                            opt.setAttribute('aria-checked', 'false');
+                        });
+                        if (!element.classList.contains('unavailable')) {
+                            element.classList.add('selected');
+                            element.setAttribute('aria-checked', 'true');
+                        }
+                        // Enable only sizes available for this color
+                        var selectedColor = element.getAttribute('data-color');
+                        var availableSizes = productVariants.filter(v => v.color === selectedColor && v.stock > 0).map(v => v.size);
+                        document.querySelectorAll('.size-option').forEach(opt => {
+                            if (availableSizes.includes(opt.getAttribute('data-size'))) {
+                                opt.classList.remove('unavailable');
+                                opt.setAttribute('aria-disabled', 'false');
+                            } else {
+                                opt.classList.add('unavailable');
+                                opt.setAttribute('aria-disabled', 'true');
+                                opt.classList.remove('selected');
+                                opt.setAttribute('aria-checked', 'false');
+                            }
+                        });
+                    }
+
+                    function addToCart(productId) {
+                        var selectedSizeElem = document.querySelector('.size-option.selected');
+                        var selectedColorElem = document.querySelector('.color-option.selected');
+                        if (!selectedSizeElem || !selectedColorElem) {
+                            alert('Please select both size and color before adding to cart.');
+                            return;
+                        }
+                        var size = selectedSizeElem.getAttribute('data-size');
+                        var color = selectedColorElem.getAttribute('data-color');
+                        var variant = productVariants.find(v => v.size === size && v.color === color && v.stock > 0);
+                        if (!variant) {
+                            alert('Selected size and color combination is not available.');
+                            return;
+                        }
+                        var quantity = 1;
+                        fetch('/api/cart/add/' + productId, {
+                            method: 'POST',
                             headers: {
-                                "Content-Type": "application/x-www-form-urlencoded",
-                                [csrfHeader]: csrfToken
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                [document.querySelector('meta[name="_csrf_header"]').content]:
+                                    document.querySelector('meta[name="_csrf"]').content
                             },
-                            body: new URLSearchParams({ quantity: 1 })
+                            body: 'quantity=' + encodeURIComponent(quantity) + '&size=' + encodeURIComponent(size) + '&color=' + encodeURIComponent(color)
                         })
                         .then(res => res.json())
                         .then(data => {
                             if (data.success) {
-                                alert("Added! Cart total = " + data.cartTotal);
-                                // hoặc update badge trên header giỏ hàng
-                                document.getElementById("cart-count").innerText = data.cartTotal;
+                                showToast('Added! Cart count: ' + data.itemCount);
                             }
-                        });
+                        })
+                        .catch(err => console.error('Error:', err));
                     }
                     </script>
 

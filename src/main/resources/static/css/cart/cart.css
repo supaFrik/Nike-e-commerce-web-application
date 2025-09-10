@@ -162,8 +162,8 @@
 }
 
 .item-image {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 200px;
     flex-shrink: 0;
     overflow: hidden;
     cursor: pointer;
@@ -199,6 +199,7 @@
 .item-category,
 .item-size,
 .item-color {
+text-transform: capitalize;
     font-size: var(--font-size-xxs);
     color: var(--color-text-secondary);
     margin-bottom: var(--size-spacing-xs);

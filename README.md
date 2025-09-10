@@ -30,6 +30,10 @@ Welcome to the **Nike E-Commerce Web Application** – where championship perfor
 - [Getting Started](#getting-started)
 - [How it works](#how-it-works)
 - [Contact](#contact)
+- [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [Screenshots](#screenshots)
+- [License](#license)
 
 ---
 
@@ -92,10 +96,40 @@ Experience a seamless shopping journey:
 3. Securely checkout and manage your orders.
 4. Admins can manage products, orders, and users via the dashboard.
 
-<p align="center">
-  <img src="src/main/resources/static/images/the-best-nike-sneakers-to-wear-in-the-winter.jpg" alt="How it works" width="400"/>
-  <!-- Add more workflow or UI screenshots as needed -->
-</p>
+## 🗂 Folder Structure
+
+A quick look at the main project folders:
+
+```
+Nike Ecommerce Web Application/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   ├── resources/
+│   │   │   ├── static/
+│   │   │   ├── db/
+│   │   │   └── application.properties
+│   │   └── webapp/
+│   │       └── WEB-INF/
+│   │           └── views/
+├── pom.xml
+├── docker-compose.yml
+├── README.md
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request. For major changes, open an issue first to discuss what you would like to change.
+
+1. Fork the repo
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## 🤝 Contact
 - **Author:** [supaFrikky](mailto:tqv2005business@gmail.com)

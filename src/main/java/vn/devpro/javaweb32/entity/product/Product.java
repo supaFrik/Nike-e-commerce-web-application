@@ -1,5 +1,7 @@
 package vn.devpro.javaweb32.entity.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import vn.devpro.javaweb32.entity.base.BaseModel;
 
 import javax.persistence.*;
@@ -30,8 +32,8 @@ public class Product {
 
     private String status;
 
-    @Column(name = "featured", nullable = false)
-    private boolean featured;
+    @Column(name = "favourites", nullable = false)
+    private boolean favourites;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -40,6 +42,7 @@ public class Product {
     private List<ProductVariant> variants = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("product")
     private List<ProductImage> images = new ArrayList<>();
 
     @ManyToOne
@@ -56,14 +59,14 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, BigDecimal price, String description, String type, String status, boolean featured, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
+    public Product(Long id, String name, BigDecimal price, String description, String type, String status, boolean favourites, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.type = type;
         this.status = status;
-        this.featured = featured;
+        this.favourites = favourites;
         this.createdAt = createdAt;
         this.variants = variants;
         this.images = images;
@@ -118,12 +121,12 @@ public class Product {
         this.status = status;
     }
 
-    public boolean isFeatured() {
-        return featured;
+    public boolean isFavourites() {
+        return favourites;
     }
 
-    public void setFeatured(boolean featured) {
-        this.featured = featured;
+    public void setFavourites(boolean favourites) {
+        this.favourites = favourites;
     }
 
     public LocalDateTime getCreatedAt() {

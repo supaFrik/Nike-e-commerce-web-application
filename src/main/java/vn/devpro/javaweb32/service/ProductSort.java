@@ -1,12 +1,7 @@
 package vn.devpro.javaweb32.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import vn.devpro.javaweb32.entity.product.Product;
-import vn.devpro.javaweb32.repository.ProductRepository;
-
-import java.util.List;
 
 @Service
 public class ProductSort {
@@ -18,7 +13,7 @@ public class ProductSort {
         } else if ("price_desc".equals(sort)) {
             return Sort.by(Sort.Direction.DESC, "price");
         } else {
-            return Sort.by(Sort.Direction.DESC, "featured").and(Sort.by(Sort.Direction.DESC, "createdAt"));
+            return Sort.by(Sort.Direction.DESC, "favourites").and(Sort.by(Sort.Direction.DESC, "createdAt"));
         }
     }
 }
