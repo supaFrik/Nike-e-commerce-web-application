@@ -4,6 +4,7 @@ import vn.devpro.javaweb32.entity.customer.Customer;
 import vn.devpro.javaweb32.entity.product.Product;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "cart_items", uniqueConstraints = {
@@ -14,24 +15,29 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     private int quantity;
 
     private String size;
 
+    private String color;
+
     public CartItem() {
     }
 
-    public CartItem(Product product, int quantity, Customer customer, String size) {
+    public CartItem(Product product, int quantity, Customer customer, String size, String color) {
         this.product = product;
         this.quantity = quantity;
         this.customer = customer;
         this.size = size;
+        this.color = color;
     }
 
     public Long getId() {
@@ -74,7 +80,16 @@ public class CartItem {
         this.size = size;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     public double getTotal() {
-        return product.getPrice().multiply(java.math.BigDecimal.valueOf(quantity)).doubleValue();
+        if (product == null || product.getPrice() == null) return 0.0;
+        return product.getPrice().multiply(BigDecimal.valueOf(quantity)).doubleValue();
     }
 }

@@ -83,7 +83,7 @@
   color: var(--color-text-secondary);
   margin-bottom: var(--size-spacing-xs);
   font-weight: var(--font-weight-normal);
-  text-transform: uppercase;
+  text-transform: capitalize;
   letter-spacing: 0.5px;
 }
 

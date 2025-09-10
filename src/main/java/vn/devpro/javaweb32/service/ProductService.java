@@ -34,7 +34,7 @@ public class ProductService {
         var images = product.getImages().stream()
                 .map(i -> new ProductImageDto(i.getId(), i.getUrl(), i.getProduct()))
                 .toList();
-        return new ProductDetailDto(product.getId(), product.getName(), product.getPrice(), product.getDescription(), product.getStatus(), product.isFeatured(), product.getCreatedAt(), product.getVariants(), product.getImages(), product.getCategory());
+        return new ProductDetailDto(product.getId(), product.getName(), product.getPrice(), product.getDescription(), product.getStatus(), product.isFavourites(), product.getCreatedAt(), product.getVariants(), product.getImages(), product.getCategory());
     }
 
     public List<Product> getProductsByCategory(String categoryName) {

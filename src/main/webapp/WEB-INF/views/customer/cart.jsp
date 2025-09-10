@@ -53,54 +53,63 @@
         <div class="container">
             <div class="cart-header">
                 <h1 class="cart-title">Shopping Cart</h1>
-                <span class="cartItems-count" id="cartItemsCount">${fn:length(cartItems)} cartItems${fn:length(cartItems) != 1 ? 's' : ''}</span>
+                <span class="item-count" id="itemCount">
+                    ${fn:length(cartItems)} product
+                    <c:if test="${fn:length(cartItems) > 1}">s</c:if>
+                </span>
             </div>
 
             <div class="cart-content" id="cartContent">
                 <!-- Empty Cart State -->
-                <div class="empty-cart" id="emptyCart" style="display: none;">
-                    <div class="empty-cart-icon">
-                        <i class="fas fa-shopping-bag"></i>
+                <c:if test="${empty cartItems}">
+                    <div class="empty-cart" id="emptyCart">
+                        <div class="empty-cart-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <h2>Your bag is empty</h2>
+                        <p>Once you add something to your bag - it will appear here. Ready to get started?</p>
+                        <a href="${env}/products" class="btn btn-primary">Get Started</a>
                     </div>
-                    <h2>Your bag is empty</h2>
-                    <p>Once you add something to your bag - it will appear here. Ready to get started?</p>
-                    <a href="${env}/" class="btn btn-primary">Get Started</a>
-                </div>
+                </c:if>
 
-                <!-- Cart cartItemss -->
+                <!-- Cart -->
                 <div class="cart-layout" id="cartLayout" style="display: block;">
-                    <div class="cart-cartItemss">
-                        <div class="cart-cartItemss-list" id="cartItemsList">
-                            <c:forEach var="cartItems" cartItemss="${cartItems}">
-                                <div class="cart-cartItems">
-                                    <div class="cartItems-image" onclick="viewProduct('${cartItems.product.slug}')">
-                                        <img src="${env}/customer/img/products/${cartItems.product.image}" alt="${cartItems.product.name}">
+                    <div class="cart-items">
+                        <div class="cart-items-list" id="cartItemsList">
+                            <c:forEach var="cartItem" items="${cartItems}">
+                                <div class="cart-item" data-product-id="${cartItem.product.id}">
+                                    <div class="item-image" onclick="viewProduct('${cartItem.product.id}')">
+                                        <img src="${env}/images/products/${cartItem.product.imageUrl}" alt="${cartItem.product.name}">
                                     </div>
-                                    <div class="cartItems-details">
-                                        <div class="cartItems-header">
-                                            <div class="cartItems-info">
-                                                <h3>${cartItems.product.name}</h3>
-                                                <p class="cartItems-category">${cartItems.product.category.name}</p>
-                                                <p class="cartItems-size">Size: ${cartItems.size}</p>
-                                                <p class="cartItems-color">Color: ${cartItems.color}</p>
+                                    <div class="item-details">
+                                        <div class="item-header">
+                                            <div class="item-info">
+                                                <h3>${cartItem.product.name}</h3>
+                                                <p class="item-category">${cartItem.product.category.name}</p>
+                                                <p class="item-size">Size: ${cartItem.size}</p>
+                                                <p class="item-color">Color: ${cartItem.color}</p>
                                             </div>
-                                            <div class="cartItems-price">
-                                                <fmt:formatNumber value="${cartItems.product.price}" type="currency" />
+                                            <div class="item-price">
+                                                <fmt:formatNumber value="${cartItem.product.price}" type="currency" />
                                             </div>
                                         </div>
-                                        <div class="cartItems-actions">
+                                        <div class="item-actions">
                                             <div class="quantity-controls">
-                                                <form action="${env}/cart/update/${cartItems.product.id}" method="post">
-                                                    <button type="submit" name="quantity" value="${cartItems.quantity - 1}" class="quantity-btn">
+                                                    <button type="button" name="quantity" value="${cartItem.quantity - 1}" class="quantity-btn"
+                                                    onclick="updateCart(${cartItem.product.id}, ${cartItem.quantity - 1}, '${cartItem.size}', '${cartItem.color}')">
                                                         <i class="fas fa-minus"></i>
                                                     </button>
-                                                    <input type="text" class="quantity-input" value="${cartItems.quantity}" readonly>
-                                                    <button type="submit" name="quantity" value="${cartItems.quantity + 1}" class="quantity-btn">
+
+                                                    <input type="text" class="quantity-input" value="${cartItem.quantity}" id="qty-${cartItem.product.id}" readonly>
+
+                                                    <button type="button" name="quantity" value="${cartItem.quantity + 1}" class="quantity-btn"
+                                                    onclick="updateCart(${cartItem.product.id}, ${cartItem.quantity + 1}, '${cartItem.size}', '${cartItem.color}')">
                                                         <i class="fas fa-plus"></i>
                                                     </button>
-                                                </form>
+
                                             </div>
-                                            <a href="${env}/cart/remove/${cartItems.product.id}" class="remove-btn">
+                                            <a href="javascript:void(0)" class="remove-btn" title="Remove item"
+                                            onclick="removeCart(${cartItem.product.id}, '${cartItem.size}', '${cartItem.color}')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </a>
                                         </div>
@@ -186,5 +195,6 @@
     </main>
 
     <script src="${env}/js/add-to-cart.js"></script>
+    <script src="${env}/js/update-button.js"></script>
 </body>
 </html>

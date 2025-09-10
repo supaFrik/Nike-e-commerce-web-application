@@ -2,21 +2,21 @@ package vn.devpro.javaweb32.dto.cart;
 
 import java.math.BigDecimal;
 
-public class ProductCartDto {
+public class CartItemDto {
     private Long id;
     private String name;
     private BigDecimal price;
     private String description;
-    private String images;
+    private String imageUrl;
+    public CartItemDto() {
+    }
 
-    public ProductCartDto() {}
-
-    public ProductCartDto(Long id, String name, BigDecimal price, String description, String images) {
+    public CartItemDto(Long id, String name, BigDecimal price, String description, String imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
-        this.images = images;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -34,11 +34,9 @@ public class ProductCartDto {
     public void setName(String name) {
         this.name = name;
     }
-
     public BigDecimal getPrice() {
         return price;
     }
-
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
@@ -51,11 +49,11 @@ public class ProductCartDto {
         this.description = description;
     }
 
-    public String getImages() {
-        return images;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImages(String images) {
-        this.images = images;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
