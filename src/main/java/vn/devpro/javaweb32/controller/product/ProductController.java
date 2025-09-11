@@ -1,8 +1,9 @@
-package vn.devpro.javaweb32.controller.customer;
+package vn.devpro.javaweb32.controller.product;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import vn.devpro.javaweb32.dto.product.ProductDetailDto;
 import vn.devpro.javaweb32.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,9 @@ import vn.devpro.javaweb32.repository.ProductRepository;
 import vn.devpro.javaweb32.service.ProductService;
 import vn.devpro.javaweb32.service.ProductSort;
 
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.stream.Collector;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -43,7 +45,6 @@ public class ProductController {
         } else {
             products = productRepository.findAll(sortOrder);
         }
-
         model.addAttribute("products", products);
         model.addAttribute("selectedCategory", category);
         model.addAttribute("totalProducts",  productRepository.count());
@@ -59,9 +60,26 @@ public class ProductController {
     }
 
     @GetMapping("/product-detail")
-    public String productDetailById(@RequestParam("id") Long id, Model model) {
+    public String productDetailById(@RequestParam("id") Long id, Model model) throws Exception {
+
         ProductDetailDto product = productService.getDetail(id);
+
+        List<String> colors = product.getVariants().stream()
+                        .map(v -> v.getColor() == null ? "" : v.getColor().trim())
+                                .filter(s -> !s.isEmpty())
+                                        .map(String::trim)
+                                                .filter(Objects::nonNull)
+                                                        .collect(Collectors.toCollection(LinkedHashSet::new))
+                .stream().collect(Collectors.toList());
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        String variantsJson = mapper.writeValueAsString(product.getVariants());
+
         model.addAttribute("product", product);
+        model.addAttribute("colors", colors);
+        model.addAttribute("variants", variantsJson);
+
         return "customer/product-detail";
     }
 }

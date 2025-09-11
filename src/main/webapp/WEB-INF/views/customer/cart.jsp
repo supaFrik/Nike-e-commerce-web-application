@@ -54,8 +54,7 @@
             <div class="cart-header">
                 <h1 class="cart-title">Shopping Cart</h1>
                 <span class="item-count" id="itemCount">
-                    ${fn:length(cartItems)} product
-                    <c:if test="${fn:length(cartItems) > 1}">s</c:if>
+                    <span id="cartTotalCount">${fn:length(cartItems)} product<c:if test="${fn:length(cartItems) > 1}">s</c:if></span>
                 </span>
             </div>
 
@@ -196,5 +195,20 @@
 
     <script src="${env}/js/add-to-cart.js"></script>
     <script src="${env}/js/update-button.js"></script>
+    <script>
+    // Fetch and update cart total count from backend
+    function updateCartCount() {
+        fetch('/api/cart/count')
+            .then(res => res.json())
+            .then(data => {
+                if (data.itemCount !== undefined) {
+                    document.getElementById('cartTotalCount').innerHTML = data.itemCount + ' product' + (data.itemCount > 1 ? 's' : '');
+                }
+            });
+    }
+    // Call on page load
+    updateCartCount();
+    // Optionally, call updateCartCount() after cart actions (add, update, remove)
+    </script>
 </body>
 </html>

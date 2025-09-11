@@ -23,12 +23,13 @@ public class ProductService {
     public ProductDetailDto getDetail(Long id) {
         Product product = productRepository.findById(id).
                 orElseThrow(() -> new RuntimeException(("Product Not Found!")));
+
         return mapToDto(product);
     }
 
     private ProductDetailDto mapToDto(Product product) {
         var variants = product.getVariants().stream()
-                .map(v -> new ProductVariantDto(v.getProduct(), v.getId(), v.getSize(), v.getColor(), v.getStock(), v.getPrice()))
+                .map(v -> new ProductVariantDto()
                 .toList();
 
         var images = product.getImages().stream()

@@ -58,6 +58,7 @@ function showToast(message) {
                   margin: 0;
                   font-size: .8125rem;
                   text-transform: uppercase;
+                  padding:0 6px;
                 }
                 .toast i:last-child {
                   color: #ccc;
@@ -84,34 +85,59 @@ function showToast(message) {
 
 // Add to cart logic
 function addToCart(productId) {
-    var selectedSizeElem = document.querySelector('.size-option.selected');
-    if (!selectedSizeElem) {
-        showToast('Please select a size before adding to cart.');
-        return;
-    }
-    var size = selectedSizeElem.getAttribute('data-size');
-    var selectedColorElem = document.querySelector('.color-option.selected');
-    if (!selectedColorElem) {
-        showToast('Please select a color before adding to cart.');
-        return;
-    }
-    var color = selectedColorElem.getAttribute('data-color');
-    var quantity = 1;
+  const selectedSizeElem = document.querySelector('.size-option.selected');
+  const selectedColorElem = document.querySelector('.color-option.selected');
 
-    fetch('/api/cart/add/' + productId, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            [document.querySelector('meta[name="_csrf_header"]').content]:
-                document.querySelector('meta[name="_csrf"]').content
-        },
-        body: 'quantity=' + encodeURIComponent(quantity) + '&size=' + encodeURIComponent(size) + '&color=' + encodeURIComponent(color)
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            showToast('Added! Cart count: ' + data.itemCount);
-        }
-    })
-    .catch(err => console.error('Error:', err));
+  if (!selectedSizeElem || !selectedColorElem) {
+    showToast('Please select size and color first.');
+    return;
+  }
+
+  const size = selectedSizeElem.getAttribute('data-size');
+  const color = selectedColorElem.getAttribute('data-color');
+  const quantity = 1;
+
+  const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');
+  const csrfHeaderMeta = document.querySelector('meta[name="_csrf_header"]');
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  };
+  if (csrfTokenMeta && csrfHeaderMeta) {
+    headers[csrfHeaderMeta.getAttribute('content')] = csrfTokenMeta.getAttribute('content');
+  }
+
+  const body = new URLSearchParams({
+    quantity: quantity,
+    size: size,
+    color: color
+  }).toString();
+
+  fetch('/api/cart/add/' + productId, {
+    method: 'POST',
+    headers: headers,
+    body: body,
+    credentials: 'same-origin'
+  })
+  .then(res => {
+    if (!res.ok) {
+      return res.json().then(err => Promise.reject(err));
+    }
+    return res.json();
+  })
+  .then(data => {
+    if (data.success) {
+      const badge = document.getElementById('cartBadge');
+      if (badge && data.itemCount != null) {
+        badge.innerText = data.itemCount;
+      }
+      showToast('Added to cart — ' + data.itemCount + ' items');
+    } else {
+      showToast('Add to cart failed: ' + (data.error || JSON.stringify(data)));
+    }
+  })
+  .catch(err => {
+    console.error('Add to cart error', err);
+    const msg = err && err.error ? err.error : (err && err.message ? err.message : 'Unknown error');
+    showToast('Add to cart error: ' + msg);
+  });
 }
