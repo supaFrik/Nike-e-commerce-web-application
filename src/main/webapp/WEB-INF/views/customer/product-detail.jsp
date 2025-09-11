@@ -46,41 +46,47 @@
                     <div class="product-header">
                         <h1 class="product-title" id="product-title">${product.name}</h1>
                         <p class="product-subtitle" id="product-subtitle">${product.category != null ? product.category.name : ''}</p>
-                        <div class="product-price">${product.price}₫</div>
+                        <div class="product-price">
+                            <c:choose>
+                                <c:when test="${not empty product.variants}">
+                                    <fmt:formatNumber value="${product.variants[0].price}" type="currency" currencySymbol="₫"/>
+                                </c:when>
+                                <c:otherwise>
+                                    Price not available
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                     </div>
-                    
+
                     <!-- Color Selection -->
                     <div class="color-selection" role="group" aria-labelledby="color-selection-title">
                         <div class="color-header">
                             <h4 id="color-selection-title">Select Color</h4>
                         </div>
-                        <div class="color-options" role="radiogroup" aria-labelledby="color-selection-title">
-                            <c:forEach var="variant" items="${product.variants}">
-                                <c:if test="${not empty variant.color}">
-                                    <div class="color-option" data-color="${variant.color}" onclick="selectColor(this)" role="radio" aria-checked="false" aria-label="Color ${variant.color}" tabindex="0">
-                                        ${variant.color}
-                                    </div>
-                                </c:if>
+                        <div id="color-options">
+                            <c:forEach var="color" items="${colors}">
+                                <button type="button"
+                                        class="color-btn color-option"
+                                        data-color="${fn:escapeXml(color)}"
+                                        onclick="selectColor(this)">
+                                    ${color}
+                                </button>
                             </c:forEach>
                         </div>
                     </div>
-                    <!-- End Color Selection -->
 
+                    <!-- Size selection -->
                     <div class="size-selection" role="group" aria-labelledby="size-selection-title">
                         <div class="size-header">
                             <h4 id="size-selection-title">Select Size</h4>
-                            <a href="#" class="size-guide" aria-label="Open size guide">
+                            <a href="https://www.nike.com/ph/size-fit/unisex-footwear-mens-based" class="size-guide" aria-label="Open size guide">
                                 <i class="fas fa-ruler" aria-hidden="true"></i>
                                 Size Guide
                             </a>
                         </div>
-                        <div class="size-options" role="radiogroup" aria-labelledby="size-selection-title" aria-describedby="size-help">
+                        <div class="size-options" id="size-options" role="radiogroup" aria-labelledby="size-selection-title" aria-describedby="size-help">
                             <span id="size-help" class="sr-only">Select your shoe size. Unavailable sizes are marked as such.</span>
-                            <c:forEach var="variant" items="${product.variants}">
-                                <div class="size-option${variant.stock == 0 ? ' unavailable' : ''}" data-size="${variant.size}" onclick="selectSize(this)" role="radio" aria-checked="false" aria-disabled="${variant.stock == 0}" aria-label="VN Size ${variant.size}${variant.stock == 0 ? ' - Unavailable' : ' - Available'}" tabindex="${variant.stock == 0 ? '-1' : '0'}">
-                                    VN ${variant.size}
-                                </div>
-                            </c:forEach>
+                            <!-- We'll populate sizes client-side based on color selection -->
                         </div>
                     </div>
                     
@@ -96,101 +102,77 @@
                         <span id="wishlist-desc" class="sr-only">Add this product to your wishlist</span>
                     </div>
 
-
                     <script>
-                    // Build a JS array of all valid variants
-                    var productVariants = [
-                    <c:forEach var="variant" items="${product.variants}">
-                        {
-                            size: "${variant.size}",
-                            color: "${variant.color}",
-                            stock: ${variant.stock}
-                        },
-                    </c:forEach>
-                    ];
+                    var productVariants = ${variants};
+                    // Example: productVariants = [{"id":1,"color":"White","size":"7","price":120,"stock":10},{"id":2,"color":"White","size":"8","price":120,"stock":0},{"id":3,"color":"Black","size":"7","price":120,"stock":5},{"id":4,"color":"Black","size":"8","price":120,"stock":2}];
 
-                    function selectSize(element) {
-                        document.querySelectorAll('.size-option').forEach(opt => {
-                            opt.classList.remove('selected');
-                            opt.setAttribute('aria-checked', 'false');
+                    function clearSelection(selector) {
+                        document.querySelectorAll(selector).forEach(function(el) {
+                            el.classList.remove('selected');
+                            el.setAttribute('aria-checked', 'false');
                         });
-                        if (!element.classList.contains('unavailable')) {
-                            element.classList.add('selected');
-                            element.setAttribute('aria-checked', 'true');
-                        }
-                        // Enable only colors available for this size
-                        var selectedSize = element.getAttribute('data-size');
-                        var availableColors = productVariants.filter(v => v.size === selectedSize && v.stock > 0).map(v => v.color);
-                        document.querySelectorAll('.color-option').forEach(opt => {
-                            if (availableColors.includes(opt.getAttribute('data-color'))) {
-                                opt.classList.remove('unavailable');
-                                opt.setAttribute('aria-disabled', 'false');
+                    }
+
+                    function renderSizesForColor(color) {
+                        var sizeOptionsContainer = document.getElementById('size-options');
+                        sizeOptionsContainer.innerHTML = '';
+                        var sizesForColor = productVariants.filter(function(variant) {
+                            return variant.color === color;
+                        });
+                        sizesForColor.forEach(function(variant) {
+                            var sizeBtn = document.createElement('button');
+                            sizeBtn.type = 'button';
+                            sizeBtn.className = 'size-btn size-option' + (variant.stock > 0 ? '' : ' disabled');
+                            sizeBtn.textContent = variant.size;
+                            sizeBtn.setAttribute('data-size', variant.size);
+                            sizeBtn.setAttribute('data-price', variant.price);
+                            sizeBtn.setAttribute('role', 'radio');
+                            sizeBtn.setAttribute('aria-checked', 'false');
+                            sizeBtn.setAttribute('tabindex', '-1');
+                            if (variant.stock === 0) {
+                                sizeBtn.disabled = true;
+                                sizeBtn.setAttribute('aria-disabled', 'true');
+                                sizeBtn.title = 'Out of stock';
                             } else {
-                                opt.classList.add('unavailable');
-                                opt.setAttribute('aria-disabled', 'true');
-                                opt.classList.remove('selected');
-                                opt.setAttribute('aria-checked', 'false');
+                                sizeBtn.onclick = function() { selectSize(this); };
+                                sizeBtn.setAttribute('tabindex', '0');
                             }
+                            sizeOptionsContainer.appendChild(sizeBtn);
                         });
                     }
 
                     function selectColor(element) {
-                        document.querySelectorAll('.color-option').forEach(opt => {
-                            opt.classList.remove('selected');
-                            opt.setAttribute('aria-checked', 'false');
-                        });
-                        if (!element.classList.contains('unavailable')) {
-                            element.classList.add('selected');
-                            element.setAttribute('aria-checked', 'true');
-                        }
-                        // Enable only sizes available for this color
+                        clearSelection('.color-option');
+                        element.classList.add('selected');
+                        element.setAttribute('aria-checked', 'true');
                         var selectedColor = element.getAttribute('data-color');
-                        var availableSizes = productVariants.filter(v => v.color === selectedColor && v.stock > 0).map(v => v.size);
-                        document.querySelectorAll('.size-option').forEach(opt => {
-                            if (availableSizes.includes(opt.getAttribute('data-size'))) {
-                                opt.classList.remove('unavailable');
-                                opt.setAttribute('aria-disabled', 'false');
-                            } else {
-                                opt.classList.add('unavailable');
-                                opt.setAttribute('aria-disabled', 'true');
-                                opt.classList.remove('selected');
-                                opt.setAttribute('aria-checked', 'false');
-                            }
-                        });
+                        renderSizesForColor(selectedColor);
+                        // Select first available size by default
+                        var firstSizeBtn = document.querySelector('#size-options .size-option:not(.disabled)');
+                        if (firstSizeBtn) {
+                            selectSize(firstSizeBtn);
+                        }
                     }
 
-                    function addToCart(productId) {
-                        var selectedSizeElem = document.querySelector('.size-option.selected');
-                        var selectedColorElem = document.querySelector('.color-option.selected');
-                        if (!selectedSizeElem || !selectedColorElem) {
-                            alert('Please select both size and color before adding to cart.');
-                            return;
+                    function selectSize(element) {
+                        clearSelection('.size-option');
+                        element.classList.add('selected');
+                        element.setAttribute('aria-checked', 'true');
+                        // Update price display
+                        var price = element.getAttribute('data-price');
+                        var priceDiv = document.querySelector('.product-price');
+                        if (priceDiv && price) {
+                            priceDiv.innerText = price + '₫';
                         }
-                        var size = selectedSizeElem.getAttribute('data-size');
-                        var color = selectedColorElem.getAttribute('data-color');
-                        var variant = productVariants.find(v => v.size === size && v.color === color && v.stock > 0);
-                        if (!variant) {
-                            alert('Selected size and color combination is not available.');
-                            return;
-                        }
-                        var quantity = 1;
-                        fetch('/api/cart/add/' + productId, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                                [document.querySelector('meta[name="_csrf_header"]').content]:
-                                    document.querySelector('meta[name="_csrf"]').content
-                            },
-                            body: 'quantity=' + encodeURIComponent(quantity) + '&size=' + encodeURIComponent(size) + '&color=' + encodeURIComponent(color)
-                        })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                showToast('Added! Cart count: ' + data.itemCount);
-                            }
-                        })
-                        .catch(err => console.error('Error:', err));
                     }
+
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Initialize with the first color selected
+                        var firstColorBtn = document.querySelector('.color-option');
+                        if (firstColorBtn) {
+                            selectColor(firstColorBtn);
+                        }
+                    });
                     </script>
 
                     <div class="exclusion-notice" role="note" aria-label="Promotion exclusion notice">
