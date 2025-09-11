@@ -9,6 +9,7 @@ import vn.devpro.javaweb32.repository.CartItemRepository;
 import vn.devpro.javaweb32.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CartService {
@@ -27,23 +28,37 @@ public class CartService {
     // Them san pham
     @Transactional
     public void addProduct(Customer customer, Long productId, int quantity, String size, String color) {
+       if(customer == null) throw new IllegalArgumentException("Customer is null");
+       if(quantity < 0) throw new IllegalArgumentException("Quantity is negative");
+
         Product product = productRepository.findById(productId)
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
         boolean validVariant = product.getVariants().stream()
             .anyMatch(v -> v.getSize().equals(size) && v.getColor().equals(color) && v.getStock() != null && v.getStock() > 0);
-        if (!validVariant) {
-            throw new IllegalArgumentException("Selected size and color combination is not available or out of stock.");
+        boolean variantAvailable = product.getVariants().stream()
+                .filter(v -> v != null)
+                .anyMatch(v -> v.getSize() == size &&
+                        v.getColor().equals(color) &&
+                        v.getStock() >= quantity &&
+                        v.getStock() != null);
+        if(!variantAvailable) {
+            throw new IllegalArgumentException("Selected size/color is currently not available");
         }
-        CartItem cartItem = cartItemRepository.findByCustomerAndProduct_idAndSizeAndColor(customer, productId, size, color);
-        if (cartItem == null) {
-            cartItem = new CartItem();
-            cartItem.setCustomer(customer);
-            cartItem.setProduct(product);
-            cartItem.setQuantity(quantity);
-            cartItem.setSize(size);
-            cartItem.setColor(color);
-        } else {
+
+        Optional<CartItem> existing = cartItemRepository.findByCustomerAndProduct_idAndSizeAndColor(customer,  productId, size, color);
+
+        CartItem cartItem = new CartItem();
+        if(existing.isPresent()) {
+            cartItem = existing.get();
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
+        }
+        else {
+            CartItem newCartItem = new CartItem();
+            newCartItem.setQuantity(quantity);
+            newCartItem.setSize(size);
+            newCartItem.setColor(color);
+            newCartItem.setCustomer(customer);
+            newCartItem.setProduct(product);
         }
         cartItemRepository.save(cartItem);
     }
@@ -55,8 +70,9 @@ public class CartService {
 
     @Transactional
     public void updateQuantity(Customer customer, Long productId, String size, String color, int quantity) {
-        CartItem cartItem = cartItemRepository.findByCustomerAndProduct_idAndSizeAndColor(customer, productId, size, color);
-        if (cartItem != null) {
+        var opt = cartItemRepository.findByCustomerAndProduct_idAndSizeAndColor(customer, productId, size, color);
+        if (opt.isPresent()) {
+            CartItem cartItem = opt.get();
             cartItem.setQuantity(quantity);
             cartItemRepository.save(cartItem);
         }
