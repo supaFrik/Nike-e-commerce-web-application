@@ -1,6 +1,9 @@
 package vn.devpro.javaweb32.entity.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.awt.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -8,6 +11,7 @@ import java.math.BigDecimal;
 public class ProductVariant {
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
     @Id
@@ -15,7 +19,11 @@ public class ProductVariant {
     private Long id;
 
     private String size;
-    private String color;
+
+    @ManyToOne
+    @JoinColumn(name = "color_id")
+    private Color color;
+
     private Integer stock;
     private BigDecimal price;
 
@@ -43,11 +51,11 @@ public class ProductVariant {
         this.size = size;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
