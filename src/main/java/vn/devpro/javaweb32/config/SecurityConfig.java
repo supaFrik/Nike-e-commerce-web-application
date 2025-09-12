@@ -28,10 +28,9 @@ public class SecurityConfig {
             var credential = credentialRepository.findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
 
-            // build UserDetails mapping các cờ enabled/locked
             User.UserBuilder builder = User.withUsername(credential.getEmail())
                     .password(credential.getPasswordHash())
-                    .roles("USER")
+                    .roles("USER", "ADMIN")
                     .disabled(!credential.isEnabled());
 
             // map "locked" -> accountLocked

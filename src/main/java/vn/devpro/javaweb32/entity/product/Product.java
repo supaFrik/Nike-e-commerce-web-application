@@ -1,8 +1,6 @@
 package vn.devpro.javaweb32.entity.product;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import vn.devpro.javaweb32.entity.base.BaseModel;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -45,6 +43,10 @@ public class Product {
     @JsonIgnoreProperties("product")
     private List<ProductImage> images = new ArrayList<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("product")
+    private List<ProductColor> colors = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -59,7 +61,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String name, BigDecimal price, String description, String type, String status, boolean favourites, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
+    public Product(Long id, String name, BigDecimal price, String description, String type, String status, boolean favourites, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, List<ProductColor> colors, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -70,6 +72,7 @@ public class Product {
         this.createdAt = createdAt;
         this.variants = variants;
         this.images = images;
+        this.colors = colors;
         this.category = category;
     }
 
@@ -153,6 +156,14 @@ public class Product {
         this.images = images;
     }
 
+    public List<ProductColor> getColors() {
+        return colors;
+    }
+
+    public void setColors(List<ProductColor> colors) {
+        this.colors = colors;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -166,7 +177,7 @@ public class Product {
             return 0;
         }
         // Use a set to count unique colors
-        java.util.Set<String> colors = new java.util.HashSet<>();
+        java.util.Set<ProductColor> colors = new java.util.HashSet<>();
         for (ProductVariant variant : variants) {
             if (variant.getColor() != null) {
                 colors.add(variant.getColor());

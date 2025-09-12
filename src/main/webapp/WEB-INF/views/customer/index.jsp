@@ -178,7 +178,7 @@
                                                 </a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                aria-describedby="product-${status.index + 1}-desc">
+                                                <aria-describedby="product-${status.index + 1}-desc">
                                                     <img src="${env}/images/products/default-product.avif" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                 </c:otherwise>
                                             </c:choose>

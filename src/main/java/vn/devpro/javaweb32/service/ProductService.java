@@ -3,6 +3,7 @@ package vn.devpro.javaweb32.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import vn.devpro.javaweb32.dto.product.ProductColorDto;
 import vn.devpro.javaweb32.dto.product.ProductDetailDto;
 import vn.devpro.javaweb32.dto.product.ProductImageDto;
 import vn.devpro.javaweb32.dto.product.ProductVariantDto;
@@ -29,13 +30,17 @@ public class ProductService {
 
     private ProductDetailDto mapToDto(Product product) {
         var variants = product.getVariants().stream()
-                .map(v -> new ProductVariantDto()
+                .map(v -> new ProductVariantDto(v.getProduct(), v.getId(), v.getPrice(), v.getSize(), v.getStock(), v.getColorName()))
                 .toList();
 
         var images = product.getImages().stream()
                 .map(i -> new ProductImageDto(i.getId(), i.getUrl(), i.getProduct()))
                 .toList();
-        return new ProductDetailDto(product.getId(), product.getName(), product.getPrice(), product.getDescription(), product.getStatus(), product.isFavourites(), product.getCreatedAt(), product.getVariants(), product.getImages(), product.getCategory());
+
+        var colors = product.getColors().stream()
+                .map(c -> new ProductColorDto(c.getId(), c.getColorName(), c.getFolderPath()))
+                .toList();
+        return new ProductDetailDto(product.getId(), product.getName(), product.getPrice(), product.getDescription(), product.getStatus(), product.isFavourites(), product.getCreatedAt(), variants, images, colors, product.getCategory());
     }
 
     public List<Product> getProductsByCategory(String categoryName) {

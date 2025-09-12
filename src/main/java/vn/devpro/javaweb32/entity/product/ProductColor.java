@@ -3,29 +3,37 @@ package vn.devpro.javaweb32.entity.product;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "colors")
+@Table(name = "product_colors")
 public class ProductColor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 20, nullable = false)
-    private String name;
-
-    @Column(length = 20, nullable = false)
-    private String hex;
+    //Black, Grey, Orange,...
+    private String colorName;
 
     @Column(length = 30, nullable = false)
-    private String imageUrl;
+    // Nike Air Max Dn8/Black
+    private String folderPath;
+
+    @Column(length = 30, nullable = false)
+    // AIR+MAX+DN8
+    private String baseImage;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     public ProductColor() {
     }
 
-    public ProductColor(Long id, String name, String hex, String imageUrl) {
+    public ProductColor(Long id, String colorName, String folderPath, String baseImage, Product product) {
         this.id = id;
-        this.name = name;
-        this.hex = hex;
-        this.imageUrl = imageUrl;
+        this.colorName = colorName;
+        this.folderPath = folderPath;
+        this.baseImage = baseImage;
+        this.product = product;
     }
 
     public Long getId() {
@@ -36,27 +44,40 @@ public class ProductColor {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getColorName() {
+        return colorName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setColorName(String name) {
+        this.colorName = colorName;
     }
 
-    public String getHex() {
-        return hex;
+    public String getFolderPath() {
+        return folderPath;
     }
 
-    public void setHex(String hex) {
-        this.hex = hex;
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getBaseImage() {
+        return baseImage;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setBaseImage(String baseImage) {
+        this.baseImage = baseImage;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    @Override
+    public String toString() {
+        return this.colorName;
     }
 }

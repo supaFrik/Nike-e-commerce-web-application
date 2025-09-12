@@ -5,30 +5,29 @@ import vn.devpro.javaweb32.entity.product.Product;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 
 public class ProductColorDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
-
-    private String hex;
-
-    @JoinColumn(name= "product_id")
-    private Product product;
+    private String colorName;
+    private String folderPath;
+    private String imageUrl;
 
     public ProductColorDto() {
+        super();
     }
 
-    public ProductColorDto(Long id, String name, String hex, Product product) {
+    public ProductColorDto(Long id, String colorName, String folderPath, String imageUrl) {
         this.id = id;
-        this.name = name;
-        this.hex = hex;
-        this.product = product;
+        this.colorName = colorName;
+        this.folderPath = folderPath;
+        this.imageUrl = imageUrl;
     }
 
+    public ProductColorDto(Long id, String colorName, String folderPath) {
+    }
     public Long getId() {
         return id;
     }
@@ -37,27 +36,27 @@ public class ProductColorDto {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getColorName() {
+        return colorName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
     }
 
-    public String getHex() {
-        return hex;
+    public String getFolderPath() {
+        return folderPath;
     }
 
-    public void setHex(String hex) {
-        this.hex = hex;
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
     }
 
-    public Product getProduct() {
-        return product;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

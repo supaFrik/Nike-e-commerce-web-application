@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
+import vn.devpro.javaweb32.dto.product.ProductColorDto;
 import vn.devpro.javaweb32.dto.product.ProductDetailDto;
+import vn.devpro.javaweb32.dto.product.ProductVariantDto;
 import vn.devpro.javaweb32.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,9 +17,9 @@ import vn.devpro.javaweb32.repository.ProductRepository;
 import vn.devpro.javaweb32.service.ProductService;
 import vn.devpro.javaweb32.service.ProductSort;
 
-import java.util.LinkedHashSet;
+import java.awt.*;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Controller
@@ -64,13 +66,22 @@ public class ProductController {
 
         ProductDetailDto product = productService.getDetail(id);
 
-        List<String> colors = product.getVariants().stream()
-                        .map(v -> v.getColor() == null ? "" : v.getColor().trim())
-                                .filter(s -> !s.isEmpty())
-                                        .map(String::trim)
-                                                .filter(Objects::nonNull)
-                                                        .collect(Collectors.toCollection(LinkedHashSet::new))
-                .stream().collect(Collectors.toList());
+        var colors = product.getVariants().stream()
+                .map(v -> v.getColorName())
+                .filter(Objects::nonNull)
+                .map(colorNameOrObj -> {
+                    return new ProductColorDto(null, colorNameOrObj.toString(), null);
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toMap(
+                                c -> c.getColorName() == null ? "" : c.getColorName().toLowerCase(),
+                                c-> c,
+                                (existing, replacement) -> existing,
+                                LinkedHashMap::new
+                        ),
+                        m -> new ArrayList<>(m.values())
+                ));
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
