@@ -3,7 +3,6 @@ package vn.devpro.javaweb32.entity.product;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.awt.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -22,10 +21,30 @@ public class ProductVariant {
 
     @ManyToOne
     @JoinColumn(name = "color_id")
-    private Color color;
+    private ProductColor color;
 
+    @Column(nullable = false)
     private Integer stock;
+
+    @Column(nullable = false)
     private BigDecimal price;
+
+    @Column(nullable = false)
+    private String colorName;
+
+    public ProductVariant() {
+        super();
+    }
+
+    public ProductVariant(Product product, Long id, String size, ProductColor color, Integer stock, BigDecimal price, String colorName) {
+        this.product = product;
+        this.id = id;
+        this.size = size;
+        this.color = color;
+        this.stock = stock;
+        this.price = price;
+        this.colorName = colorName;
+    }
 
     public Product getProduct() {
         return product;
@@ -51,11 +70,11 @@ public class ProductVariant {
         this.size = size;
     }
 
-    public Color getColor() {
+    public ProductColor getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(ProductColor color) {
         this.color = color;
     }
 
@@ -75,4 +94,11 @@ public class ProductVariant {
         this.price = price;
     }
 
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
 }
