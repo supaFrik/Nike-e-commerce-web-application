@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
@@ -29,7 +30,7 @@
                         <div class="thumbnail-nav" role="list" aria-label="Product image thumbnails">
                             <c:forEach var="img" items="${product.images}" varStatus="status">
                                 <div class="thumbnail-item${status.index == 0 ? ' active' : ''}" data-index="${status.index}" role="listitem" tabindex="${status.index + 1}">
-                                    <img src="${env}/images/products/${product.name}/${img.url}" alt="Product image ${status.index + 1}">
+                                    <img src="${env}/images/products/${product.name}/${c.name}/${img.url}" alt="Product image ${status.index + 1}">
                                 </div>
                             </c:forEach>
                         </div>
@@ -64,12 +65,14 @@
                             <h4 id="color-selection-title">Select Color</h4>
                         </div>
                         <div id="color-options">
-                            <c:forEach var="color" items="${colors}">
+                            <c:forEach var="c" items="${colors}">
                                 <button type="button"
                                         class="color-btn color-option"
-                                        data-color="${fn:escapeXml(color)}"
+                                        data-color-id="${c.id}"
+                                        data-color-name="${fn:escapeXml(c.name)}"
                                         onclick="selectColor(this)">
-                                    ${color}
+                                    <img src="${env}/images/products/${product.name}/${c.imageUrl}.avif"
+                                         alt="${fn:escapeXml(c.name)}" />
                                 </button>
                             </c:forEach>
                         </div>
@@ -103,8 +106,8 @@
                     </div>
 
                     <script>
-                    var productVariants = ${variants};
-                    // Example: productVariants = [{"id":1,"color":"White","size":"7","price":120,"stock":10},{"id":2,"color":"White","size":"8","price":120,"stock":0},{"id":3,"color":"Black","size":"7","price":120,"stock":5},{"id":4,"color":"Black","size":"8","price":120,"stock":2}];
+                    var productVariants = <c:out value='${variantsJson}' escapeXml='false'/>;
+                    var sizeOptionsContainer = document.getElementById('size-options');
 
                     function clearSelection(selector) {
                         document.querySelectorAll(selector).forEach(function(el) {
@@ -113,12 +116,14 @@
                         });
                     }
 
-                    function renderSizesForColor(color) {
-                        var sizeOptionsContainer = document.getElementById('size-options');
+                    function renderSizesForColor(colorName) {
+                        if (!sizeOptionsContainer) return;
+
                         sizeOptionsContainer.innerHTML = '';
                         var sizesForColor = productVariants.filter(function(variant) {
-                            return variant.color === color;
+                            return variant.color === colorName;
                         });
+
                         sizesForColor.forEach(function(variant) {
                             var sizeBtn = document.createElement('button');
                             sizeBtn.type = 'button';
@@ -129,6 +134,7 @@
                             sizeBtn.setAttribute('role', 'radio');
                             sizeBtn.setAttribute('aria-checked', 'false');
                             sizeBtn.setAttribute('tabindex', '-1');
+
                             if (variant.stock === 0) {
                                 sizeBtn.disabled = true;
                                 sizeBtn.setAttribute('aria-disabled', 'true');
@@ -137,6 +143,7 @@
                                 sizeBtn.onclick = function() { selectSize(this); };
                                 sizeBtn.setAttribute('tabindex', '0');
                             }
+
                             sizeOptionsContainer.appendChild(sizeBtn);
                         });
                     }
@@ -145,12 +152,67 @@
                         clearSelection('.color-option');
                         element.classList.add('selected');
                         element.setAttribute('aria-checked', 'true');
-                        var selectedColor = element.getAttribute('data-color');
-                        renderSizesForColor(selectedColor);
-                        // Select first available size by default
+
+                        var colorName = element.getAttribute('data-color-name');
+                        var colorImageFolder = element.querySelector("img").src;
+
+                        updateThumbnailsForColor(colorName);
+
+                        // Render sizes for the selected color
+                        renderSizesForColor(colorName);
+
+                        // Auto-select first available size
                         var firstSizeBtn = document.querySelector('#size-options .size-option:not(.disabled)');
                         if (firstSizeBtn) {
                             selectSize(firstSizeBtn);
+                        }
+                    }
+
+                    function updateThumbnailsForColor(colorName) {
+                        // Get all thumbnails for the selected color
+                        var thumbnailContainer = document.querySelector('.thumbnail-nav');
+                        if (!thumbnailContainer) return;
+
+                        // Clear existing thumbnails
+                        thumbnailContainer.innerHTML = '';
+
+                        // Find product images for this color
+                        <c:forEach var="c" items="${colors}">
+                            if ('${fn:escapeXml(c.name)}' === colorName) {
+                                <c:forEach var="img" items="${product.images}" varStatus="status">
+                                    var thumbnailItem = document.createElement('div');
+                                    thumbnailItem.className = 'thumbnail-item' + (${status.index} === 0 ? ' active' : '');
+                                    thumbnailItem.setAttribute('data-index', '${status.index}');
+                                    thumbnailItem.setAttribute('role', 'listitem');
+                                    thumbnailItem.setAttribute('tabindex', '${status.index + 1}');
+                                    thumbnailItem.onclick = function() { selectThumbnail(this); };
+
+                                    var img = document.createElement('img');
+                                    img.src = '${env}/images/products/${product.name}/' + colorName + '/${img.url}';
+                                    img.alt = 'Product image ${status.index + 1}';
+
+                                    thumbnailItem.appendChild(img);
+                                    thumbnailContainer.appendChild(thumbnailItem);
+                                </c:forEach>
+                            }
+                        </c:forEach>
+                    }
+
+                    function selectThumbnail(element) {
+                        // Clear previous selections
+                        document.querySelectorAll('.thumbnail-item').forEach(function(item) {
+                            item.classList.remove('active');
+                        });
+
+                        // Select current thumbnail
+                        element.classList.add('active');
+
+                        // Update main image
+                        var img = element.querySelector('img');
+                        var mainImage = document.getElementById('currentImage');
+                        if (img && mainImage) {
+                            mainImage.src = img.src;
+                            mainImage.alt = img.alt;
                         }
                     }
 
@@ -158,15 +220,24 @@
                         clearSelection('.size-option');
                         element.classList.add('selected');
                         element.setAttribute('aria-checked', 'true');
+
                         // Update price display
                         var price = element.getAttribute('data-price');
                         var priceDiv = document.querySelector('.product-price');
                         if (priceDiv && price) {
-                            priceDiv.innerText = price + '₫';
+                            // Format price with proper currency
+                            var formattedPrice = new Intl.NumberFormat('vi-VN', {
+                                style: 'currency',
+                                currency: 'VND'
+                            }).format(price);
+                            priceDiv.innerHTML = formattedPrice;
                         }
                     }
 
+                    // Initialize when DOM is ready
                     document.addEventListener('DOMContentLoaded', function() {
+                        sizeOptionsContainer = document.getElementById('size-options');
+
                         // Initialize with the first color selected
                         var firstColorBtn = document.querySelector('.color-option');
                         if (firstColorBtn) {

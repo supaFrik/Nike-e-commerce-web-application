@@ -1,8 +1,6 @@
 package vn.devpro.javaweb32.dto.product;
 
 import vn.devpro.javaweb32.entity.product.Category;
-import vn.devpro.javaweb32.entity.product.ProductImage;
-import vn.devpro.javaweb32.entity.product.ProductVariant;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,11 +14,12 @@ public class ProductDetailDto {
     private String status;
     private boolean favourites;
     private LocalDateTime createdAt;
-    private List<ProductVariant> variants;
-    private List<ProductImage> images;
+    private List<ProductVariantDto> variants;
+    private List<ProductImageDto> images;
+    private List<ProductColorDto> colors;
     private Category category;
 
-    public ProductDetailDto(Long id, String name, BigDecimal price, String description, String status, boolean favourites, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, Category category) {
+    public ProductDetailDto(Long id, String name, BigDecimal price, String description, String status, boolean favourites, LocalDateTime createdAt, List<ProductVariantDto> variants, List<ProductImageDto> images, List<ProductColorDto> colors ,Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -30,6 +29,7 @@ public class ProductDetailDto {
         this.createdAt = createdAt;
         this.variants = variants;
         this.images = images;
+        this.colors = colors;
         this.category = category;
     }
 
@@ -40,7 +40,8 @@ public class ProductDetailDto {
     public String getStatus() { return status; }
     public boolean isFavourites() { return favourites; }
     public LocalDateTime getCreatedAt() { return createdAt; }
-    public List<ProductVariant> getVariants() { return variants; }
-    public List<ProductImage> getImages() { return images; }
+    public List<ProductVariantDto> getVariants() { return variants; }
+    public List<ProductImageDto> getImages() { return images; }
+    public List<ProductColorDto> getColors() { return colors; }
     public Category getCategory() { return category; }
 }

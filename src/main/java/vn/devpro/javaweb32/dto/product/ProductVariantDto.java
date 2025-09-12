@@ -9,28 +9,22 @@ public class ProductVariantDto {
     @JoinColumn(table = "product_id")
     private Product product;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String color;
     private BigDecimal price;
     private String size;
     private Integer stock;
+    private String colorName;
 
     public ProductVariantDto() {
     }
 
-    public ProductVariantDto(Product product, Long id, String color, BigDecimal price, String size, Integer stock) {
+    public ProductVariantDto(Product product, Long id, BigDecimal price, String size, Integer stock, String colorName) {
         this.product = product;
         this.id = id;
-        this.color = color;
         this.price = price;
         this.size = size;
         this.stock = stock;
-    }
-
-    public ProductVariantDto(Product product, Long id, String size, String color, Integer stock, BigDecimal price) {
+        this.colorName = colorName;
     }
 
     public Product getProduct() {
@@ -47,14 +41,6 @@ public class ProductVariantDto {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public BigDecimal getPrice() {
@@ -79,5 +65,13 @@ public class ProductVariantDto {
 
     public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
     }
 }
