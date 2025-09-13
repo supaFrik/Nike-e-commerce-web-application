@@ -94,7 +94,7 @@ function addToCart(productId) {
   }
 
   const size = selectedSizeElem.getAttribute('data-size');
-  const color = selectedColorElem.getAttribute('data-color');
+  const color = selectedColorElem.getAttribute('data-color-name'); // Updated to use data-color-name
   const quantity = 1;
 
   const csrfTokenMeta = document.querySelector('meta[name="_csrf"]');

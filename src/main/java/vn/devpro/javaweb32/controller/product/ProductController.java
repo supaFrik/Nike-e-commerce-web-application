@@ -47,6 +47,13 @@ public class ProductController {
         } else {
             products = productRepository.findAll(sortOrder);
         }
+
+        products.forEach(product -> {
+            List<String> imageUrls = productService.getProductMainImageUrl(product);
+            String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : null;
+            product.setImageUrl(imageUrl);
+        });
+
         model.addAttribute("products", products);
         model.addAttribute("selectedCategory", category);
         model.addAttribute("totalProducts",  productRepository.count());
@@ -63,25 +70,9 @@ public class ProductController {
 
     @GetMapping("/product-detail")
     public String productDetailById(@RequestParam("id") Long id, Model model) throws Exception {
-
         ProductDetailDto product = productService.getDetail(id);
 
-        var colors = product.getVariants().stream()
-                .map(v -> v.getColorName())
-                .filter(Objects::nonNull)
-                .map(colorNameOrObj -> {
-                    return new ProductColorDto(null, colorNameOrObj.toString(), null);
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.collectingAndThen(
-                        Collectors.toMap(
-                                c -> c.getColorName() == null ? "" : c.getColorName().toLowerCase(),
-                                c-> c,
-                                (existing, replacement) -> existing,
-                                LinkedHashMap::new
-                        ),
-                        m -> new ArrayList<>(m.values())
-                ));
+        var colors = product.getColors();
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
@@ -89,7 +80,7 @@ public class ProductController {
 
         model.addAttribute("product", product);
         model.addAttribute("colors", colors);
-        model.addAttribute("variants", variantsJson);
+        model.addAttribute("variantsJson", variantsJson);
 
         return "customer/product-detail";
     }

@@ -51,29 +51,24 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Transient
+    private String imageUrl;
+
     public String getImageUrl() {
+        if (imageUrl != null) {
+            return imageUrl;
+        }
         if (images != null && !images.isEmpty() && images.get(0) != null) {
             return images.get(0).getUrl();
         }
         return null;
     }
 
-    public Product() {
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public Product(Long id, String name, BigDecimal price, String description, String type, String status, boolean favourites, LocalDateTime createdAt, List<ProductVariant> variants, List<ProductImage> images, List<ProductColor> colors, Category category) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.description = description;
-        this.type = type;
-        this.status = status;
-        this.favourites = favourites;
-        this.createdAt = createdAt;
-        this.variants = variants;
-        this.images = images;
-        this.colors = colors;
-        this.category = category;
+    public Product() {
     }
 
     public Long getId() {
