@@ -13,16 +13,18 @@ public class ProductColorDto {
 
     private String colorName;
     private String folderPath;
+    private String baseImage;
     private String imageUrl;
 
     public ProductColorDto() {
         super();
     }
 
-    public ProductColorDto(Long id, String colorName, String folderPath, String imageUrl) {
+    public ProductColorDto(Long id, String colorName, String folderPath, String baseImage, String imageUrl) {
         this.id = id;
         this.colorName = colorName;
         this.folderPath = folderPath;
+        this.baseImage = baseImage;
         this.imageUrl = imageUrl;
     }
 
@@ -50,6 +52,14 @@ public class ProductColorDto {
 
     public void setFolderPath(String folderPath) {
         this.folderPath = folderPath;
+    }
+
+    public String getBaseImage() {
+        return baseImage;
+    }
+
+    public void setBaseImage(String baseImage) {
+        this.baseImage = baseImage;
     }
 
     public String getImageUrl() {
