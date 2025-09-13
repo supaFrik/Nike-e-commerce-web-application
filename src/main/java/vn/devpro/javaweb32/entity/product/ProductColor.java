@@ -1,5 +1,7 @@
 package vn.devpro.javaweb32.entity.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -23,6 +25,7 @@ public class ProductColor {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
     public ProductColor() {
