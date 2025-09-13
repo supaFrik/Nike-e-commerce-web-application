@@ -69,10 +69,11 @@
                                 <button type="button"
                                         class="color-btn color-option"
                                         data-color-id="${c.id}"
-                                        data-color-name="${fn:escapeXml(c.name)}"
+                                        data-color-name="${fn:escapeXml(c.colorName)}"
+                                        data-color-image="${c.imageUrl}"
                                         onclick="selectColor(this)">
-                                    <img src="${env}/images/products/${product.name}/${c.imageUrl}.avif"
-                                         alt="${fn:escapeXml(c.name)}" />
+                                    <img src="${env}${c.imageUrl}"
+                                         alt="${fn:escapeXml(c.colorName)}" />
                                 </button>
                             </c:forEach>
                         </div>

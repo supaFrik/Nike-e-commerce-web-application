@@ -289,11 +289,21 @@
                                         <div class="product-card__body" data-testid="product-card__body">
                                             <figure>
                                                 <a aria-label="${product.name}" href="${env}/product-detail?id=${product.id}"
-                                                   class="product-card__img-link-overlay" data-testid="prodict-card-img-link-overlay"
+                                                   class="product-card__img-link-overlay" data-testid="product-card-img-link-overlay"
                                                    aria-describedby="product-${status.index + 1}-desc">
-                                                    <div class="wall-image-loader content-card__image" data-testid="wall-image-loader">
-                                                        <img src="${env}/images/products/${product.imageUrl != null ? product.imageUrl : 'default-product.avif'}"
-                                                             alt="${product.name}" loading="lazy" aria-describedby="product-${status.index + 1}-desc">
+                                                        <div class="wall-image-loader content-card__image" data-testid="wall-image-loader">
+                                                        <c:choose>
+                                                            <c:when test="${not empty product.imageUrl}">
+                                                                <img src="${env}${product.imageUrl}"
+                                                                     alt="${product.name}" loading="lazy"
+                                                                     aria-describedby="product-${status.index + 1}-desc">
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <img src="${env}/images/products/default-product.avif"
+                                                                     alt="${product.name}" loading="lazy"
+                                                                     aria-describedby="product-${status.index + 1}-desc">
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </div>
                                                 </a>
                                                 <div class="product-card__info">
