@@ -49,8 +49,8 @@ public class ProductController {
         }
 
         products.forEach(product -> {
-            List<String> imageUrls = productService.getProductMainImageUrl(product);
-            String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : null;
+            String imageUrls = productService.getProductMainImageUrl(product);
+            String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls : null;
             product.setImageUrl(imageUrl);
         });
 

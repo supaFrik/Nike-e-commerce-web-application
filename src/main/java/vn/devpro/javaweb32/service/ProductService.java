@@ -25,45 +25,25 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public String pathSegment(String s) {
-        if (s == null) return null;
-        return URLDecoder.decode(s.trim(), StandardCharsets.UTF_8);
-    }
-
-    private List<String> buildImageUrl(String productName, String colorFolderPath, String baseImage, int imageCount) {
-        List<String> imageUrls = new ArrayList<>();
-
+    private String buildImageUrl(String productName, String colorFolderPath, String baseImage) {
         if (productName == null || colorFolderPath == null || baseImage == null) {
             return null;
         }
 
-        for (int i = 1; i <= imageCount; i++) {
-            String productFolder = pathSegment(productName);
-            String colorFolder = pathSegment(colorFolderPath);
-            String fileName = pathSegment(baseImage.toUpperCase().replace("%20", "+"));
+        StringBuilder urlBuilder = new StringBuilder("/images/products/");
+        urlBuilder.append(productName);
+        urlBuilder.append("/").append(colorFolderPath);
+        urlBuilder.append("/").append(baseImage).append("-1.avif");
 
-
-            StringBuilder urlBuilder = new StringBuilder("/images/products/");
-            urlBuilder.append(productFolder);
-            urlBuilder.append("/").append(colorFolder);
-            urlBuilder.append("/").append(fileName);
-            urlBuilder.append("-").append(i);
-            if (!fileName.toLowerCase().endsWith(".avif")) {
-                urlBuilder.append(".avif");
-            }
-
-            // URL: /images/product/Nike Air Max Dn8/Black/AIR+MAX+DN8-1.avif
-            imageUrls.add(urlBuilder.toString());
-        }
-        return imageUrls;
+        return urlBuilder.toString();
     }
 
-    public List<String> getProductMainImageUrl(Product product) {
+    public String getProductMainImageUrl(Product product) {
         if (product != null && product.getColors() != null && !product.getColors().isEmpty()) {
             ProductColor firstColor = product.getColors().get(0);
-            return buildImageUrl(product.getName(), firstColor.getFolderPath(), firstColor.getBaseImage(), 1);
+            return buildImageUrl(product.getName(), firstColor.getFolderPath(), firstColor.getBaseImage());
         }
-        return buildImageUrl("default-product", "default", "default-product.avif", 1);
+        return buildImageUrl("default-product", "default", "default-product");
     }
 
     public ProductDetailDto getDetail(Long id) {
@@ -90,9 +70,9 @@ public class ProductService {
 
         var colors = product.getColors().stream()
                 .map(c -> {
-                    List<String> imageUrls = buildImageUrl(product.getName(), c.getFolderPath(), c.getBaseImage(), 1);
-                    String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls.get(0) : null;
-                    return new ProductColorDto(c.getId(), c.getColorName(), c.getFolderPath(), imageUrl);
+                    String imageUrls = buildImageUrl(product.getName(), c.getFolderPath(), c.getBaseImage());
+                    String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls : null;
+                    return new ProductColorDto(c.getId(), c.getColorName(), c.getFolderPath(), c.getBaseImage(), imageUrl);
                 })
                 .toList();
 

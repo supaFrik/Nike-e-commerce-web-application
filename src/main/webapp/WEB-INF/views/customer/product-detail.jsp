@@ -28,16 +28,19 @@
                     <h2 id="product-images-title" class="sr-only">Product Images</h2>
                     <div class="image-preview">
                         <div class="thumbnail-nav" role="list" aria-label="Product image thumbnails">
-                            <c:forEach var="img" items="${product.images}" varStatus="status">
-                                <div class="thumbnail-item${status.index == 0 ? ' active' : ''}" data-index="${status.index}" role="listitem" tabindex="${status.index + 1}">
-                                    <img src="${env}/images/products/${product.name}/${c.name}/${img.url}" alt="Product image ${status.index + 1}">
+                            <c:forEach begin="1" end="10" var="i">
+                                <div class="thumbnail-item${i == 1 ? ' active' : ''}" data-index="${i - 1}" role="listitem" tabindex="${i}" style="display: none;">
+                                    <img src="${env}/images/products/${product.name}/${colors[0].folderPath}/${colors[0].baseImage}-${i}.avif"
+                                         alt="Product image ${i}"
+                                         onload="this.parentElement.style.display = 'block';"
+                                         onerror="this.parentElement.style.display = 'none';">
                                 </div>
                             </c:forEach>
                         </div>
                         <div class="main-image-container" role="region" aria-labelledby="main-image-title" aria-live="polite">
                             <h3 id="main-image-title" class="sr-only">Main Product Image</h3>
                             <div class="main-image">
-                                <img id="currentImage" src="${env}/images/products/${product.name}/${product.images[0].url}" alt="${product.name}">
+                                <img id="currentImage" src="${env}/images/products/${product.name}/${colors[0].folderPath}/${colors[0].baseImage}-1.avif" alt="${product.name}">
                             </div>
                         </div>
                     </div>
@@ -66,12 +69,7 @@
                         </div>
                         <div id="color-options">
                             <c:forEach var="c" items="${colors}">
-                                <button type="button"
-                                        class="color-btn color-option"
-                                        data-color-id="${c.id}"
-                                        data-color-name="${fn:escapeXml(c.colorName)}"
-                                        data-color-image="${c.imageUrl}"
-                                        onclick="selectColor(this)">
+                                <button type="button" class="color-btn color-option" data-color-id="${c.id}" data-color-name="${fn:escapeXml(c.colorName)}" data-color-image="${c.imageUrl}" onclick="selectColor(this)">
                                     <img src="${env}${c.imageUrl}"
                                          alt="${fn:escapeXml(c.colorName)}" />
                                 </button>
@@ -105,6 +103,119 @@
                         </button>
                         <span id="wishlist-desc" class="sr-only">Add this product to your wishlist</span>
                     </div>
+
+                    <script>
+                    var productColors = [
+                                            <c:forEach var="c" items="${colors}" varStatus="status">
+                                            {
+                                                id: ${c.id},
+                                                colorName: '${fn:escapeXml(c.colorName)}',
+                                                folderPath: '${fn:escapeXml(c.folderPath)}',
+                                                baseImage: '${fn:escapeXml(c.baseImage)}',
+                                                imageUrl: '${c.imageUrl}'
+                                            }<c:if test="${!status.last}">,</c:if>
+                                            </c:forEach>
+                                        ];
+                                        var productName = '${fn:escapeXml(product.name)}';
+                                        var envPath = '${env}';
+
+                                        var productVariants = <c:out value='${variantsJson}' escapeXml='false'/>;
+                                        var sizeOptionsContainer = document.getElementById('size-options');
+
+                                        function clearSelection(selector) {
+                                            document.querySelectorAll(selector).forEach(function(el) {
+                                                el.classList.remove('selected');
+                                                el.setAttribute('aria-checked', 'false');
+                                            });
+                                        }
+
+                                        function renderSizesForColor(colorName) {
+                                            sizeOptionsContainer.innerHTML = '';
+                                            var sizesForColor = productVariants.filter(function(variant) {
+                                                return variant.color === colorName;
+                                            });
+
+                                            sizesForColor.forEach(function(variant) {
+                                                var sizeBtn = document.createElement('button');
+                                                sizeBtn.type = 'button';
+                                                sizeBtn.className = 'size-btn size-option' + (variant.stock > 0 ? '' : ' disabled');
+                                                sizeBtn.textContent = variant.size;
+                                                sizeBtn.setAttribute('data-size', variant.size);
+                                                sizeBtn.setAttribute('data-price', variant.price);
+                                                sizeBtn.setAttribute('role', 'radio');
+                                                sizeBtn.setAttribute('aria-checked', 'false');
+                                                sizeBtn.setAttribute('tabindex', '-1');
+
+                                                if (variant.stock === 0) {
+                                                    sizeBtn.disabled = true;
+                                                    sizeBtn.setAttribute('aria-disabled', 'true');
+                                                    sizeBtn.title = 'Out of stock';
+                                                } else {
+                                                    sizeBtn.onclick = function() { selectSize(this); };
+                                                    sizeBtn.setAttribute('tabindex', '0');
+                                                }
+
+                                                sizeOptionsContainer.appendChild(sizeBtn);
+                                            });
+                                        }
+
+                                        function selectColor(element) {
+                                            clearSelection('.color-option');
+                                            element.classList.add('selected');
+
+                                            var colorName = element.getAttribute('data-color-name');
+                                            var colorImageFolder = element.querySelector("img").src;
+
+                                            updateThumbnailsForColor(colorName);
+                                            renderSizesForColor(colorName);
+                                            var firstSizeBtn = document.querySelector('#size-options .size-option:not(.disabled)');
+                                            if (firstSizeBtn) {
+                                                selectSize(firstSizeBtn);
+                                            }
+                                        }
+
+
+                                        function selectThumbnail(element) {
+                                            // Clear previous selections
+                                            document.querySelectorAll('.thumbnail-item').forEach(function(item) {
+                                                item.classList.remove('active');
+                                            });
+
+                                            element.classList.add('active');
+
+                                            var img = element.querySelector('img');
+                                            var mainImage = document.getElementById('currentImage');
+                                            if (img && mainImage) {
+                                                mainImage.src = img.src;
+                                                mainImage.alt = img.alt;
+                                            }
+                                        }
+
+                                        function selectSize(element) {
+                                            clearSelection('.size-option');
+                                            element.classList.add('selected');
+                                            element.setAttribute('aria-checked', 'true');
+
+                                            var price = element.getAttribute('data-price');
+                                            var priceDiv = document.querySelector('.product-price');
+                                            if (priceDiv && price) {
+                                                var formattedPrice = new Intl.NumberFormat('vi-VN', {
+                                                    style: 'currency',
+                                                    currency: 'VND'
+                                                }).format(price);
+                                                priceDiv.innerHTML = formattedPrice;
+                                            }
+                                        }
+
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            sizeOptionsContainer = document.getElementById('size-options');
+
+                                            var firstColorBtn = document.querySelector('.color-option');
+                                            if (firstColorBtn) {
+                                                selectColor(firstColorBtn);
+                                            }
+                                        });
+                    </script>
 
                     <script>
                     var productVariants = <c:out value='${variantsJson}' escapeXml='false'/>;
@@ -158,11 +269,8 @@
                         var colorImageFolder = element.querySelector("img").src;
 
                         updateThumbnailsForColor(colorName);
-
-                        // Render sizes for the selected color
                         renderSizesForColor(colorName);
 
-                        // Auto-select first available size
                         var firstSizeBtn = document.querySelector('#size-options .size-option:not(.disabled)');
                         if (firstSizeBtn) {
                             selectSize(firstSizeBtn);
@@ -170,45 +278,60 @@
                     }
 
                     function updateThumbnailsForColor(colorName) {
-                        // Get all thumbnails for the selected color
                         var thumbnailContainer = document.querySelector('.thumbnail-nav');
                         if (!thumbnailContainer) return;
 
-                        // Clear existing thumbnails
                         thumbnailContainer.innerHTML = '';
 
-                        // Find product images for this color
-                        <c:forEach var="c" items="${colors}">
-                            if ('${fn:escapeXml(c.name)}' === colorName) {
-                                <c:forEach var="img" items="${product.images}" varStatus="status">
-                                    var thumbnailItem = document.createElement('div');
-                                    thumbnailItem.className = 'thumbnail-item' + (${status.index} === 0 ? ' active' : '');
-                                    thumbnailItem.setAttribute('data-index', '${status.index}');
-                                    thumbnailItem.setAttribute('role', 'listitem');
-                                    thumbnailItem.setAttribute('tabindex', '${status.index + 1}');
-                                    thumbnailItem.onclick = function() { selectThumbnail(this); };
+                        // Find the selected color data from productColors array
+                        var selectedColor = productColors.find(function(color) {
+                            return color.colorName === colorName;
+                        });
 
-                                    var img = document.createElement('img');
-                                    img.src = '${env}/images/products/${product.name}/' + colorName + '/${img.url}';
-                                    img.alt = 'Product image ${status.index + 1}';
+                        if (!selectedColor) return;
 
-                                    thumbnailItem.appendChild(img);
-                                    thumbnailContainer.appendChild(thumbnailItem);
-                                </c:forEach>
-                            }
-                        </c:forEach>
+                        var maxImages = 10;
+                        for (var i = 1; i <= maxImages; i++) {
+                            var thumbnailItem = document.createElement('div');
+                            thumbnailItem.className = 'thumbnail-item' + (i === 1 ? ' active' : '');
+                            thumbnailItem.setAttribute('data-index', (i - 1).toString());
+                            thumbnailItem.setAttribute('role', 'listitem');
+                            thumbnailItem.setAttribute('tabindex', i.toString());
+                            thumbnailItem.onclick = function() { selectThumbnail(this); };
+                            thumbnailItem.style.display = 'none';
+
+                            var img = document.createElement('img');
+                            img.src = envPath + '/images/products/' + productName + '/' + selectedColor.folderPath + '/' + selectedColor.baseImage + '-' + i + '.avif';
+                            img.alt = 'Product image ' + i;
+
+                            // Show thumbnail only if image loads successfully
+                            img.onload = function() {
+                                this.parentElement.style.display = 'block';
+                            };
+
+                            // Hide thumbnail if image fails to load
+                            img.onerror = function() {
+                                this.parentElement.style.display = 'none';
+                            };
+
+                            thumbnailItem.appendChild(img);
+                            thumbnailContainer.appendChild(thumbnailItem);
+                        }
+
+                        var mainImage = document.getElementById('currentImage');
+                        if (mainImage && selectedColor) {
+                            mainImage.src = envPath + '/images/products/' + productName + '/' + selectedColor.folderPath + '/' + selectedColor.baseImage + '-1.avif';
+                            mainImage.alt = productName + ' - ' + colorName;
+                        }
                     }
 
                     function selectThumbnail(element) {
-                        // Clear previous selections
                         document.querySelectorAll('.thumbnail-item').forEach(function(item) {
                             item.classList.remove('active');
                         });
 
-                        // Select current thumbnail
                         element.classList.add('active');
 
-                        // Update main image
                         var img = element.querySelector('img');
                         var mainImage = document.getElementById('currentImage');
                         if (img && mainImage) {
@@ -226,7 +349,6 @@
                         var price = element.getAttribute('data-price');
                         var priceDiv = document.querySelector('.product-price');
                         if (priceDiv && price) {
-                            // Format price with proper currency
                             var formattedPrice = new Intl.NumberFormat('vi-VN', {
                                 style: 'currency',
                                 currency: 'VND'
@@ -235,7 +357,6 @@
                         }
                     }
 
-                    // Initialize when DOM is ready
                     document.addEventListener('DOMContentLoaded', function() {
                         sizeOptionsContainer = document.getElementById('size-options');
 
@@ -466,9 +587,5 @@
     </main>
     
     <jsp:include page="/WEB-INF/views/customer/layout/footer.jsp" />
-
-    <!-- JavaScript Files -->
-    <script src="/js/add-to-cart.js"></script>
-    <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>
 </html>
