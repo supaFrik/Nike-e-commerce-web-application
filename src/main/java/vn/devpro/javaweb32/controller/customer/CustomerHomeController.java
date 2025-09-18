@@ -11,7 +11,7 @@ import java.util.List;
 
 import vn.devpro.javaweb32.controller.BaseController;
 import vn.devpro.javaweb32.entity.product.Product;
-import vn.devpro.javaweb32.service.ProductService;
+import vn.devpro.javaweb32.service.customer.ProductService;
 
 @Controller
 public class CustomerHomeController extends BaseController {

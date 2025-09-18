@@ -8,7 +8,7 @@ import vn.devpro.javaweb32.entity.cart.CartItem;
 import vn.devpro.javaweb32.entity.customer.Credential;
 import vn.devpro.javaweb32.entity.customer.Customer;
 import vn.devpro.javaweb32.repository.CredentialRepository;
-import vn.devpro.javaweb32.service.CartService;
+import vn.devpro.javaweb32.service.customer.CartService;
 
 import javax.servlet.http.HttpSession;
 

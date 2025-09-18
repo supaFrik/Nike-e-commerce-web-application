@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.service;
+package vn.devpro.javaweb32.service.customer;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -14,17 +14,17 @@
                 <a href="index.html">
                     <b class="logo-icon">
                         <!-- Dark Logo icon -->
-                        <img src="${resource }/backend/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                        <img src="${env }/backend/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
                         <!-- Light Logo icon -->
-                        <img src="${resource }/backend/assets/images/logo-icon.png" alt="homepage" class="light-logo" />
+                        <img src="${env }/backend/assets/images/logo-icon.png" alt="homepage" class="light-logo" />
                     </b>
                     <!--End Logo icon -->
                     <!-- Logo text -->
                     <span class="logo-text">
                         <!-- dark Logo text -->
-                        <img src="${resource }/backend/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                        <img src="${env }/backend/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
                         <!-- Light Logo text -->
-                        <img src="${resource }/backend/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+                        <img src="${env }/backend/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
                     </span>
                 </a>
             </div>
@@ -177,7 +177,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        <img src="assets/images/users/profile-pic.jpg" alt="user" class="rounded-circle"
+                        <img src="${env }/administrator/assets/images/users/profile-pic.jpg" alt="user" class="rounded-circle"
                             width="40">
                         <span class="ml-2 d-none d-lg-inline-block"><span>Hello,</span> <span
                                 class="text-dark">${loginedUser.name }</span> <i data-feather="chevron-down"
@@ -198,7 +198,7 @@
                                 class="svg-icon mr-2 ml-1"></i>
                             Account Setting</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="${resource }/logout"><i data-feather="power"
+                        <a class="dropdown-item" href="${env }/logout"><i data-feather="power"
                                 class="svg-icon mr-2 ml-1"></i>
                             Logout</a>
                         <div class="dropdown-divider"></div>

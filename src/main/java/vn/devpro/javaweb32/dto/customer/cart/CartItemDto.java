@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.dto.cart;
+package vn.devpro.javaweb32.dto.customer.cart;
 
 import java.math.BigDecimal;
 

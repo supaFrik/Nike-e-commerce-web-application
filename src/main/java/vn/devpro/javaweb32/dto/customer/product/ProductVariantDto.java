@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.dto.product;
+package vn.devpro.javaweb32.dto.customer.product;
 
 import vn.devpro.javaweb32.entity.product.Product;
 

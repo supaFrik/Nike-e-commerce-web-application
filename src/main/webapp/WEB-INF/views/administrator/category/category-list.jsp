@@ -14,14 +14,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="${root}/backend/assets/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="${root}/administrator/assets/images/favicon.png">
     <title>${title }</title>
     
     <!-- variables -->
-    <%@ include file="/WEB-INF/views/common/variables.jsp" %>
-
+    <jsp:include page="/WEB-INF/views/common/variables.jsp"></jsp:include>
+    
     <!-- Custome css resource file -->
-    <jsp:include page="/WEB-INF/views/backend/layout/css.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/views/administrator/layout/css.jsp"></jsp:include>
 </head>
 
 <body>
@@ -31,11 +31,11 @@
     <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
         
         <!-- Topbar header - style you can find in pages.scss -->
-        <jsp:include page="/WEB-INF/views/backend/layout/header.jsp"></jsp:include>
+        <jsp:include page="/WEB-INF/views/administrator/layout/header.jsp"></jsp:include>
         <!-- End Topbar header -->
        
         <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <jsp:include page="/WEB-INF/views/backend/layout/left-slide-bar.jsp"></jsp:include>
+        <jsp:include page="/WEB-INF/views/administrator/layout/left-slide-bar.jsp"></jsp:include>
         <!-- End Left Sidebar - style you can find in sidebar.scss  -->
         
         <!-- Page wrapper  -->
@@ -152,8 +152,8 @@
 		                                        	<td>${loop.index + 1 }</td>
 		                                        	<td>${category.id }</td>
 		                                        	<td>${category.name }</td>
-		                                        	<td>${category.userCreateCategory.username }</td>
-		                                        	<td>${category.userUpdateCategory.username }</td>
+		                                        	<%-- <td>${category.userCreateCategory.username }</td> --%>
+		                                        	<%-- <td>${category.userUpdateCategory.username }</td> --%>
 		                                        	<td>
 		                                        		<fmt:formatDate value="${category.createDate }" pattern="dd-MM-yyyy"/>
 		                                        	</td>
@@ -172,9 +172,9 @@
 		                                        		</td>
 	                                        		<td>${category.description }</td>
 	                                        		<td>
-	                                        			<a href="${root }/admin/category/edit/${category.id }" role="button" 
+	                                        			<a href="${env }/admin/category/edit/${category.id }" role="button" 
 	                                                							class="btn btn-primary">Edit</a>
-	                                                	<a href="${root }/admin/category/delete/${category.id }" role="button" 
+	                                                	<a href="${env }/admin/category/delete/${category.id }" role="button" 
 	                                                							class="btn btn-secondary">Delete</a>
 	                                        		</td>
                                         		</tr>
@@ -231,7 +231,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <jsp:include page="/WEB-INF/views/backend/layout/footer.jsp"></jsp:include>
+            <jsp:include page="/WEB-INF/views/administrator/layout/footer.jsp"></jsp:include>
             <!-- ============================================================== -->
             <!-- End footer -->
             <!-- ============================================================== -->
@@ -247,7 +247,7 @@
     <!-- ============================================================== -->
     
 	<!-- Slider js: All Jquery-->
-    <jsp:include page="/WEB-INF/views/backend/layout/js.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/views/administrator/layout/js.jsp"></jsp:include>
 </body>
 
 </html>
