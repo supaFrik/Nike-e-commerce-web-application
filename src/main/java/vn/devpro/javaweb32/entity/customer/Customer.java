@@ -1,15 +1,13 @@
 package vn.devpro.javaweb32.entity.customer;
 
+import vn.devpro.javaweb32.common.base.BaseEntity;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "customer")
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class Customer extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -22,19 +20,10 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(Long id, String username, List<Address> addresses, Credential credential) {
-        this.id = id;
-        this.username = username;
-        this.addresses = addresses;
+    public Customer(Credential credential, List<Address> addresses, String username) {
         this.credential = credential;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.addresses = addresses;
+        this.username = username;
     }
 
     public String getUsername() {

@@ -1,6 +1,4 @@
-package vn.devpro.javaweb32.dto.product;
-
-import vn.devpro.javaweb32.entity.product.Product;
+package vn.devpro.javaweb32.dto.customer.product;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

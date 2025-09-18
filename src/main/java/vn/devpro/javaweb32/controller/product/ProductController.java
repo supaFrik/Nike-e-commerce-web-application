@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
-import vn.devpro.javaweb32.dto.product.ProductColorDto;
-import vn.devpro.javaweb32.dto.product.ProductDetailDto;
-import vn.devpro.javaweb32.dto.product.ProductVariantDto;
+import vn.devpro.javaweb32.dto.customer.product.ProductDetailDto;
 import vn.devpro.javaweb32.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,13 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vn.devpro.javaweb32.repository.ProductRepository;
-import vn.devpro.javaweb32.service.ProductService;
-import vn.devpro.javaweb32.service.ProductSort;
+import vn.devpro.javaweb32.service.customer.ProductService;
+import vn.devpro.javaweb32.service.customer.ProductSort;
 
-import java.awt.*;
-import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ProductController {

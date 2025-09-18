@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.dto.auth;
+package vn.devpro.javaweb32.dto.customer.auth;
 
 public class SignupForm {
     private String username;

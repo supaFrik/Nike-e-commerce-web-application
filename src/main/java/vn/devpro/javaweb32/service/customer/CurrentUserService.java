@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.service;
+package vn.devpro.javaweb32.service.customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -7,7 +7,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.devpro.javaweb32.dto.customer.SimpleCustomerDto;
-import vn.devpro.javaweb32.entity.customer.Credential;
 import vn.devpro.javaweb32.entity.customer.Customer;
 import vn.devpro.javaweb32.repository.CredentialRepository;
 

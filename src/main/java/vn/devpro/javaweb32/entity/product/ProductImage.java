@@ -1,27 +1,21 @@
 package vn.devpro.javaweb32.entity.product;
 
+import vn.devpro.javaweb32.common.base.BaseEntity;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "product_images")
-public class ProductImage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class ProductImage extends BaseEntity {
     private String url;
+
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(name = "is_active")
 
     public String getUrl() {
         return url;
@@ -37,5 +31,12 @@ public class ProductImage {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

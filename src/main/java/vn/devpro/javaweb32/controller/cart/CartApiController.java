@@ -3,12 +3,12 @@ package vn.devpro.javaweb32.controller.cart;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import vn.devpro.javaweb32.dto.cart.AddToCartRequest;
+import vn.devpro.javaweb32.dto.customer.cart.AddToCartRequest;
 import vn.devpro.javaweb32.entity.cart.CartItem;
 import vn.devpro.javaweb32.entity.customer.Credential;
 import vn.devpro.javaweb32.entity.customer.Customer;
 import vn.devpro.javaweb32.repository.CredentialRepository;
-import vn.devpro.javaweb32.service.CartService;
+import vn.devpro.javaweb32.service.customer.CartService;
 
 import java.util.List;
 import java.util.Map;

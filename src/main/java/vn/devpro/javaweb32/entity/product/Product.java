@@ -1,20 +1,17 @@
 package vn.devpro.javaweb32.entity.product;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import vn.devpro.javaweb32.common.base.BaseEntity;
+import vn.devpro.javaweb32.entity.customer.Customer;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "products")
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Product extends BaseEntity {
 
     @Column(length = 25, nullable = false)
     private String name;
@@ -28,13 +25,25 @@ public class Product {
     @Column(length = 20, nullable = false)
     private String type;
 
+    @Column(nullable = true)
+    private BigDecimal salePrice;
+
+    @Column(length = 255, nullable = true)
+    private String avatar;
+
+    @ManyToOne
+    @JoinColumn(name = "user_create_id")
+    private Customer userCreateProduct;
+
+    @ManyToOne
+    @JoinColumn(name = "user_update_id")
+    private Customer userUpdateProduct;
+
+    @Column(length = 255, nullable = true)
+    private String seo;
+
+    @Column(nullable = false)
     private String status;
-
-    @Column(name = "favourites", nullable = false)
-    private boolean favourites;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductVariant> variants = new ArrayList<>();
@@ -54,6 +63,10 @@ public class Product {
     @Transient
     private String imageUrl;
 
+    @Column(nullable = false)
+    private boolean favourites;
+
+
     public String getImageUrl() {
         if (imageUrl != null) {
             return imageUrl;
@@ -69,14 +82,6 @@ public class Product {
     }
 
     public Product() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -111,28 +116,41 @@ public class Product {
         this.type = type;
     }
 
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
+    public String getAvatar() {
+        return avatar;
+    }
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+    public Customer getUserCreateProduct() {
+        return userCreateProduct;
+    }
+    public void setUserCreateProduct(Customer userCreateProduct) {
+        this.userCreateProduct = userCreateProduct;
+    }
+    public Customer getUserUpdateProduct() {
+        return userUpdateProduct;
+    }
+    public void setUserUpdateProduct(Customer userUpdateProduct) {
+        this.userUpdateProduct = userUpdateProduct;
+    }
+    public String getSeo() {
+        return seo;
+    }
+    public void setSeo(String seo) {
+        this.seo = seo;
+    }
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public boolean isFavourites() {
-        return favourites;
-    }
-
-    public void setFavourites(boolean favourites) {
-        this.favourites = favourites;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public List<ProductVariant> getVariants() {
@@ -179,5 +197,22 @@ public class Product {
             }
         }
         return colors.size();
+    }
+
+    public boolean isFavourites() {
+        return favourites;
+    }
+
+    public boolean getFavourites() {
+        return favourites;
+    }
+
+    public void setFavourites(boolean favourites) {
+        this.favourites = favourites;
+    }
+
+    public void addRelationalProductImage(ProductImage productImage) {
+        images.add(productImage);
+        productImage.setProduct(this);
     }
 }

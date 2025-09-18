@@ -1,16 +1,14 @@
 package vn.devpro.javaweb32.entity.product;
 
+import vn.devpro.javaweb32.common.base.BaseEntity;
 import vn.devpro.javaweb32.entity.base.BaseModel;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@Table(name = "category")
+public class Category extends BaseEntity {
     private  String name;
 
     @OneToMany(mappedBy = "category")

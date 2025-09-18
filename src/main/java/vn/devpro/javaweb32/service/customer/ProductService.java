@@ -1,19 +1,16 @@
-package vn.devpro.javaweb32.service;
+package vn.devpro.javaweb32.service.customer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import vn.devpro.javaweb32.dto.product.ProductColorDto;
-import vn.devpro.javaweb32.dto.product.ProductDetailDto;
-import vn.devpro.javaweb32.dto.product.ProductImageDto;
-import vn.devpro.javaweb32.dto.product.ProductVariantDto;
+import vn.devpro.javaweb32.dto.customer.product.ProductColorDto;
+import vn.devpro.javaweb32.dto.customer.product.ProductDetailDto;
+import vn.devpro.javaweb32.dto.customer.product.ProductImageDto;
+import vn.devpro.javaweb32.dto.customer.product.ProductVariantDto;
 import vn.devpro.javaweb32.entity.product.Product;
 import vn.devpro.javaweb32.entity.product.ProductColor;
 import vn.devpro.javaweb32.repository.ProductRepository;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -83,7 +80,7 @@ public class ProductService {
                 product.getDescription(),
                 product.getStatus(),
                 product.isFavourites(),
-                product.getCreatedAt(),
+                product.getCreateDate(),
                 variants,
                 images,
                 colors,
@@ -93,6 +90,6 @@ public class ProductService {
 
     public List<Product> getProductsByCategory(String categoryName) {
         return productRepository.findByCategory_NameIgnoreCase(categoryName,
-                Sort.by(Sort.Direction.DESC, "createdAt"));
+                Sort.by(Sort.Direction.DESC, "createDate"));
     }
 }
