@@ -57,7 +57,7 @@ public class ProductService {
                         v.getPrice(),
                         v.getSize(),
                         v.getStock(),
-                        v.getColorName()
+                        v.getColor() != null ? v.getColor().getColorName() : "Unknown"
                 ))
                 .toList();
 
@@ -79,7 +79,7 @@ public class ProductService {
                 product.getPrice(),
                 product.getDescription(),
                 product.getStatus(),
-                product.isFavourites(),
+                product.getFavourites(),
                 product.getCreateDate(),
                 variants,
                 images,

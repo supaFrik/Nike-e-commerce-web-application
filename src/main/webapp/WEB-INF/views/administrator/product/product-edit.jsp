@@ -80,8 +80,9 @@
                 	<div class="col-12">
 	                    <div class="card">
 	                        <div class="card-body">
-	                        	<sf:form class="form" action="${env }/admin/product/edit-save" method="post" modelAttribute="product" enctype="multipart/form-data">
-	                        		 
+	                        	<sf:form class="form" action="${env }/admin/product/edit-save" method="post"
+	                        	modelAttribute="product" enctype="multipart/form-data">
+
 	                        		 <div class="form-body">
 
 										<sf:hidden path="id" />
@@ -92,6 +93,7 @@
 												<div class="form-group mb-4">
 			                                        <label for="category">Select category</label>
 			                                        <sf:select path="category.id" class="form-control" id="category">
+			                                            <sf:option value="" disabled="true">-- Select a Category --</sf:option>
 			                                            <sf:options items="${categories }" itemValue="id" itemLabel="name"></sf:options>
 			                                        </sf:select>
                                         		</div>
@@ -109,14 +111,30 @@
 	                        		 		<div class="col-md-6">
 												<div class="form-group mb-4">
 			                                        <label for="price">Price</label>
-			                                        <sf:input path="price" type="number" autocomplete="off" id="price" name="price" class="form-control" placeholder="price"></sf:input>
+			                                        <sf:input path="price" type="number" autocomplete="off" id="price" name="price" class="form-control" placeholder="price" step="0.01"></sf:input>
                                         		</div>
 	                                    	</div>
 										
 	                        		 		<div class="col-md-6">
 												<div class="form-group mb-4">
 			                                        <label for="salePrice">Sale price</label>
-			                                        <sf:input path="salePrice" type="number" autocomplete="off" id="salePrice" name="salePrice" class="form-control" placeholder="Sale price"></sf:input>
+			                                        <sf:input path="salePrice" type="number" autocomplete="off" id="salePrice" name="salePrice" class="form-control" placeholder="Sale price" step="0.01"></sf:input>
+                                        		</div>
+	                                    	</div>
+										</div>
+
+										<div class="row">
+	                        		 		<div class="col-md-6">
+												<div class="form-group mb-4">
+			                                        <label for="type">Product type</label>
+			                                        <sf:input path="type" type="text" class="form-control" id="type" name="type" placeholder="Product type (e.g., shoes, clothing)"></sf:input>
+                                        		</div>
+	                                    	</div>
+
+	                        		 		<div class="col-md-6">
+												<div class="form-group mb-4">
+			                                        <label for="seo">SEO</label>
+			                                        <sf:input path="seo" type="text" class="form-control" id="seo" name="seo" placeholder="SEO keywords"></sf:input>
                                         		</div>
 	                                    	</div>
 										</div>
@@ -126,7 +144,8 @@
 												<div class="form-group mb-4">
 			                                        <label for="create">Create by</label>
 			                                        <sf:select path="userCreateProduct.id" class="form-control" id="createBy">
-			                                            <sf:options items="${users }" itemValue="id" itemLabel="username"></sf:options>
+			                                            <sf:option value="" disabled="true">-- Select Creator --</sf:option>
+			                                            <sf:options items="${customers }" itemValue="id" itemLabel="username"></sf:options>
 			                                        </sf:select>
                                         		</div>
 	                                    	</div>
@@ -135,7 +154,8 @@
 												<div class="form-group mb-4">
 			                                        <label for="update">Update by</label>
 			                                        <sf:select path="userUpdateProduct.id" class="form-control" id="updateBy">
-			                                            <sf:options items="${users }" itemValue="id" itemLabel="username"></sf:options>
+			                                            <sf:option value="" disabled="true">-- Select Updater --</sf:option>
+                                                        <sf:options items="${customers }" itemValue="id" itemLabel="username"></sf:options>
 			                                        </sf:select>
                                         		</div>
 	                                    	</div>
@@ -145,8 +165,7 @@
 	                        		 		<div class="col-md-6">
 												<div class="form-group mb-4">
 			                                        <label for="createdate">Create date</label>
-			                                        
-			                                        <sf:input path="createDate" class="form-control" type="date" 
+			                                        <sf:input path="createDate" class="form-control" type="date"
 			                                        			id="createDate" name="createDate"></sf:input>
                                         		</div>
 	                                    	</div>
@@ -154,8 +173,7 @@
 											<div class="col-md-6">
 												<div class="form-group mb-4">
 			                                        <label for="updatedate">Update date</label>
-			                                       
-			                                        <sf:input path="updateDate" class="form-control" type="date" 
+			                                        <sf:input path="updateDate" class="form-control" type="date"
 			                                        			id="updateDate" name="updateDate"></sf:input>
                                         		</div>
 	                                    	</div>
@@ -165,48 +183,29 @@
 	                        		 		<div class="col-md-12">
 												<div class="form-group mb-4">
 			                                        <label for="description">Description</label>
-			                                        <sf:textarea path="shortDescription" id="shortDescription" name="shortDescription"
-																class="form-control" rows="3" placeholder="Short desription..."></sf:textarea>
+			                                        <sf:textarea path="description" id="description" name="description"
+																class="form-control" rows="4" placeholder="Product description..."></sf:textarea>
                                         		</div>
 	                                    	</div>
 										</div>
 										
 										<div class="row">
-	                        		 		<div class="col-md-12">
+	                        		 		<div class="col-md-3">
 												<div class="form-group mb-4">
-			                                        <label for="detailDescription">Detail description</label>
-			                                        <sf:textarea path="detailDescription" id="detailDescription" name="detailDescription"
-																class="form-control" rows="3" placeholder="detail desription..."></sf:textarea>
+													<div class="form-check">
+														<sf:checkbox path="favourites" class="form-check-input" id="favourites" name="favourites"></sf:checkbox>
+				                                        <label class="form-check-label" for="favourites">Featured Product</label>
+													</div>
                                         		</div>
 	                                    	</div>
-										</div>
-										
-										<div class="row">
-	                        		 		<div class="col-md-2">
+
+	                                    	<div class="col-md-9">
 												<div class="form-group mb-4">
-													<label for="isHot">&nbsp;&nbsp;&nbsp;&nbsp;</label>
-													<sf:checkbox path="isHot" class="form-check-input" id="isHot" name="isHot"></sf:checkbox>
-			                                        <label for="isHot">Is a hot product?</label>
-			                                       
-                                        		</div>
-	                                    	</div>
-	                                    	
-	                                    	<div class="col-md-10">
-												<div class="form-group mb-4">
-													<label for="isHot">&nbsp;&nbsp;&nbsp;&nbsp;</label>
-													<sf:checkbox path="status" class="form-check-input" id="status" name="status"></sf:checkbox>
-			                                        <label for="status">Active</label>
-			                                       
-                                        		</div>
-	                                    	</div>
-	                                    	
-										</div>
-										
-										<div class="row">
-	                        		 		<div class="col-md-12">
-												<div class="form-group mb-4">
-			                                        <label for="avatarFile">Choose product Avatar</label>
-                                    				<input id="avatarFile" name="avatarFile" type="file" class="form-control-file" multiple="multiple" >
+													<label for="status">Status</label>
+													<sf:select path="status" class="form-control" id="status">
+														<sf:option value="ACTIVE">Active</sf:option>
+														<sf:option value="INACTIVE">Inactive</sf:option>
+													</sf:select>
                                         		</div>
 	                                    	</div>
 										</div>
@@ -214,8 +213,8 @@
 										<div class="row">
 	                        		 		<div class="col-md-12">
 												<div class="form-group mb-4">
-			                                        <label for="image">Choose product Image</label>
-                                    				<input id="imageFiles" name="imageFiles" type="file" class="form-control-file" multiple="multiple" >
+			                                        <label for="avatarFile">Choose product Avatar</label>
+                                    				<input id="avatarFile" name="avatarFile" type="file" class="form-control-file" accept="image/*">
                                         		</div>
 	                                    	</div>
 										</div>
@@ -223,8 +222,9 @@
 										<div class="row">
 	                        		 		<div class="col-md-12">
 												<div class="form-group mb-4">
-			                                        <label for="image">Choose product Image</label>
-                                    				<input id="imageFiles" name="imageFiles" type="file" class="form-control-file" multiple="multiple" >
+			                                        <label for="imageFiles">Choose product Images</label>
+                                    				<input id="imageFiles" name="imageFiles" type="file"
+                                    				class="form-control-file" multiple="multiple" accept="image/*">
                                         		</div>
 	                                    	</div>
 										</div>
@@ -232,28 +232,10 @@
 										<div class="row">
 	                        		 		<div class="col-md-12">
 												<div class="form-group mb-4">
-			                                        <label for="image">Choose product Image</label>
-                                    				<input id="imageFiles" name="imageFiles" type="file" class="form-control-file" multiple="multiple" >
-                                        		</div>
-	                                    	</div>
-										</div>
-										
-										<div class="row">
-	                        		 		<div class="col-md-12">
-												<div class="form-group mb-4">
-			                                        <label for="image">Choose product Image</label>
-                                    				<input id="imageFiles" name="imageFiles" type="file" class="form-control-file" multiple="multiple" >
-                                        		</div>
-	                                    	</div>
-										</div>
-										
-										<div class="row">
-	                        		 		<div class="col-md-12">
-												<div class="form-group mb-4">
-			                                        <a href="${env }/admin/product/view" class="btn btn-secondary active" role="button" aria-pressed="true">
+			                                        <a href="${env }/admin/product/list" class="btn btn-secondary active" role="button" aria-pressed="true">
 			                                        	Back to list
 			                                        </a>
-                                    				<button type="submit" class="btn btn-primary">Save edit product</button>
+                                    				<button type="submit" class="btn btn-primary">Save Changes</button>
                                         		</div>
 	                                    	</div>
 										</div>

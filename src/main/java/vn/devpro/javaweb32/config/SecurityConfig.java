@@ -8,10 +8,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import vn.devpro.javaweb32.entity.customer.Credential;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import vn.devpro.javaweb32.repository.CredentialRepository;
 
 import org.springframework.security.core.userdetails.User;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -45,7 +48,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.ignoringAntMatchers("/api/**"))
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/", "/auth/**", "/signup", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/products", "/products/**", "/product-detail", "/product-detail/**", "/cart/**", "api/cart/**", "admin/**").permitAll()
+                        .antMatchers("/", "/auth/**", "/signup", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/slick/**").permitAll()
+                        .antMatchers("/products", "/products/**", "/product-detail", "/product-detail/**").permitAll()
+                        .antMatchers("/admin/**").permitAll()
+                        .antMatchers("/api/cart/**").authenticated()
                         .antMatchers("/cart", "/cart/**").authenticated()
                         .anyRequest().authenticated()
                 )
@@ -64,6 +70,25 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
+                )
+                // Handle authentication exceptions for API requests
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(new AuthenticationEntryPoint() {
+                            @Override
+                            public void commence(HttpServletRequest request, HttpServletResponse response,
+                                                 org.springframework.security.core.AuthenticationException authException) throws IOException {
+                                String requestURI = request.getRequestURI();
+                                if (requestURI.startsWith("/api/")) {
+                                    // For API requests, return JSON error instead of redirecting
+                                    response.setStatus(401);
+                                    response.setContentType("application/json");
+                                    response.getWriter().write("{\"error\":\"Authentication required\",\"success\":false}");
+                                } else {
+                                    // For web requests, redirect to login page
+                                    response.sendRedirect(request.getContextPath() + "/auth");
+                                }
+                            }
+                        })
                 )
                 .userDetailsService(uds);
 

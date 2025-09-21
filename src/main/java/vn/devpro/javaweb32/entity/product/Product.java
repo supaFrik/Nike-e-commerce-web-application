@@ -1,5 +1,6 @@
 package vn.devpro.javaweb32.entity.product;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import vn.devpro.javaweb32.common.base.BaseEntity;
 import vn.devpro.javaweb32.entity.customer.Customer;
@@ -24,9 +25,6 @@ public class Product extends BaseEntity {
 
     @Column(length = 20, nullable = false)
     private String type;
-
-    @Column(nullable = true)
-    private BigDecimal salePrice;
 
     @Column(length = 255, nullable = true)
     private String avatar;
@@ -58,6 +56,7 @@ public class Product extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonBackReference
     private Category category;
 
     @Transient
@@ -114,13 +113,6 @@ public class Product extends BaseEntity {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public BigDecimal getSalePrice() {
-        return salePrice;
-    }
-    public void setSalePrice(BigDecimal salePrice) {
-        this.salePrice = salePrice;
     }
     public String getAvatar() {
         return avatar;
@@ -197,10 +189,6 @@ public class Product extends BaseEntity {
             }
         }
         return colors.size();
-    }
-
-    public boolean isFavourites() {
-        return favourites;
     }
 
     public boolean getFavourites() {

@@ -33,32 +33,31 @@ public class CartService {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-        boolean validVariant = product.getVariants().stream()
-            .anyMatch(v -> v.getSize().equals(size) && v.getColor().equals(color) && v.getStock() != null && v.getStock() > 0);
+
         boolean variantAvailable = product.getVariants().stream()
                 .filter(v -> v != null)
-                .anyMatch(v -> v.getSize() == size &&
-                        v.getColor().equals(color) &&
-                        v.getStock() >= quantity &&
-                        v.getStock() != null);
+                .anyMatch(v -> v.getSize() != null && v.getSize().equals(size) &&
+                        v.getColor() != null && v.getColor().getColorName().equals(color) &&
+                        v.getStock() != null && v.getStock() >= quantity);
+
         if(!variantAvailable) {
-            throw new IllegalArgumentException("Selected size/color is currently not available");
+            throw new IllegalArgumentException("Selected size/color is currently not available or out of stock");
         }
 
         Optional<CartItem> existing = cartItemRepository.findByCustomerAndProduct_idAndSizeAndColor(customer,  productId, size, color);
 
-        CartItem cartItem = new CartItem();
+        CartItem cartItem;
         if(existing.isPresent()) {
             cartItem = existing.get();
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
         else {
-            CartItem newCartItem = new CartItem();
-            newCartItem.setQuantity(quantity);
-            newCartItem.setSize(size);
-            newCartItem.setColor(color);
-            newCartItem.setCustomer(customer);
-            newCartItem.setProduct(product);
+            cartItem = new CartItem();
+            cartItem.setQuantity(quantity);
+            cartItem.setSize(size);
+            cartItem.setColor(color);
+            cartItem.setCustomer(customer);
+            cartItem.setProduct(product);
         }
         cartItemRepository.save(cartItem);
     }

@@ -7,3 +7,7 @@
 <link rel="stylesheet" href="${env}/css/product-detail/product-info.css">
 <link rel="stylesheet" href="${env}/css/product-detail/reviews.css">
 <link rel="stylesheet" href="${env}/css/product-detail/social-recommendations.css">
+
+<script src="${env}/js/thumbnail-scope.js"></script>
+<script src="${env}/js/add-to-cart.js"></script>
+<script src="${env}/js/update-button.js"></script>
