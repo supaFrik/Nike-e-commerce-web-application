@@ -12,17 +12,30 @@ public class CustomerAdminService extends BaseService<Customer> {
 
 	@Override
 	public Class<Customer> clazz() {
-
 		return Customer.class;
 	}
 
-	public List<Customer> findAllActive () {
-		String sql = "SELECT * FROM customer WHERE status=1";
-		return executeNativeSql (sql);
+	public List<Customer> findAllActive() {
+		// Updated to use ACTIVE status string instead of numeric 1
+		String sql = "SELECT * FROM customer WHERE status = 'ACTIVE' OR status IS NULL";
+		return executeNativeSql(sql);
 	}
 
-	public List<Customer> findAdminUser () {
-		String sql = "SELECT * FROM customer u, customer_role ur, role r WHERE u.id=ur.customer_id AND ur.role_id = r.id AND r.name='ADMIN'";
-		return super.executeNativeSql (sql);
+	public List<Customer> findAdminUser() {
+		// Simplified query to get all customers for now
+		// You can enhance this later when role management is properly implemented
+		String sql = "SELECT * FROM customer WHERE (status = 'ACTIVE' OR status IS NULL) ORDER BY username ASC";
+		return executeNativeSql(sql);
+	}
+
+	public List<Customer> findAll() {
+		String sql = "SELECT * FROM customer ORDER BY username ASC";
+		return executeNativeSql(sql);
+	}
+
+	public Customer findByUsername(String username) {
+		String sql = "SELECT * FROM customer WHERE username = '" + username + "'";
+		List<Customer> customers = executeNativeSql(sql);
+		return customers.isEmpty() ? null : customers.get(0);
 	}
 }

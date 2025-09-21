@@ -43,7 +43,6 @@
 .link-underline:hover { color: var(--color-text-primary); }
 .color-options-shoes { margin-top: 24px; display: flex; gap: 16px; }
 .color-option { border: 2px solid transparent; border-radius: 12px; cursor: pointer; transition: border-color 0.2s; }
-.color-option:hover { border-color: var(--podium-cds-color-border-active); }
 .color-option.selected { border-color: var(--podium-cds-color-border-active); }
 .color-option-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
 @media (max-width: 1200px) { .product-info { padding-left: var(--size-spacing-s); } }

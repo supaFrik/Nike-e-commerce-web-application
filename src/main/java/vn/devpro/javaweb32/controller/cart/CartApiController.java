@@ -51,7 +51,6 @@ public class CartApiController {
                     "subtotal", subtotal
             ));
         } catch (IllegalArgumentException ex) {
-            // validation-like errors -> 400
             return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
         } catch (Exception ex) {
             ex.printStackTrace();

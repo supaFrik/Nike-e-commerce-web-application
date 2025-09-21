@@ -3,7 +3,6 @@ package vn.devpro.javaweb32.dto.customer.product;
 import vn.devpro.javaweb32.entity.product.Category;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
