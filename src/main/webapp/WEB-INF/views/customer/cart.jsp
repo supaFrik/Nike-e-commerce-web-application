@@ -78,7 +78,7 @@
                             <c:forEach var="cartItem" items="${cartItems}">
                                 <div class="cart-item" data-product-id="${cartItem.product.id}">
                                     <div class="item-image" onclick="viewProduct('${cartItem.product.id}')">
-                                        <img src="${env}/images/products/${cartItem.product.imageUrl}" alt="${cartItem.product.name}">
+                                        <img src="${env}/images/products/${cartItem.product.name}/${cartItem.color}/${cartItem.product.imageUrl}.avif" alt="${cartItem.product.name}">
                                     </div>
                                     <div class="item-details">
                                         <div class="item-header">

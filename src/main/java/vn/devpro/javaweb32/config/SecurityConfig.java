@@ -36,7 +36,6 @@ public class SecurityConfig {
                     .roles("USER", "ADMIN")
                     .disabled(!credential.isEnabled());
 
-            // map "locked" -> accountLocked
             builder.accountLocked(credential.isLocked());
 
             return builder.build();
@@ -56,7 +55,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth")
+                        .loginPage("/login")
+                        .failureUrl("/login?error")
                         .loginProcessingUrl("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
@@ -71,7 +71,6 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-                // Handle authentication exceptions for API requests
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new AuthenticationEntryPoint() {
                             @Override
@@ -79,12 +78,10 @@ public class SecurityConfig {
                                                  org.springframework.security.core.AuthenticationException authException) throws IOException {
                                 String requestURI = request.getRequestURI();
                                 if (requestURI.startsWith("/api/")) {
-                                    // For API requests, return JSON error instead of redirecting
                                     response.setStatus(401);
                                     response.setContentType("application/json");
                                     response.getWriter().write("{\"error\":\"Authentication required\",\"success\":false}");
                                 } else {
-                                    // For web requests, redirect to login page
                                     response.sendRedirect(request.getContextPath() + "/auth");
                                 }
                             }

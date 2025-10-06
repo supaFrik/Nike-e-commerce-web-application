@@ -26,7 +26,7 @@ public class AuthService {
     @Transactional
     public Customer register(String username, String email, String rawPassword) {
         if(credentialRepository.findByEmail(email).isPresent()) {
-            throw new IllegalStateException("Email already exists");
+            throw new IllegalArgumentException("Email already exists");
         }
         Customer customer = new Customer();
         customer.setUsername(username);
@@ -39,7 +39,6 @@ public class AuthService {
         cred.setCustomer(customer);
 
         //Liên kết 2 chiều
-        cred.setCustomer(customer);
         customer.setCredential(cred);
 
         //Lưu customer
@@ -47,10 +46,10 @@ public class AuthService {
     }
     public Customer login(String email, String rawPassword) {
         Credential credential = credentialRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (!passwordEncoder.matches(rawPassword, credential.getPasswordHash())) {
-            throw new RuntimeException("Invalid password");
+            throw new IllegalArgumentException("Invalid password");
         }
         return credential.getCustomer();
     }

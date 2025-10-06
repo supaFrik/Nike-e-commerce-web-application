@@ -1,83 +1,127 @@
 package vn.devpro.javaweb32.dto.administrator;
 
-public class ProductSearch {
-	private int status;
-	private int categoryId;
-	private String keyword;
-	
-	private String beginDate;
-	private String endDate;
-	
-	private int itemOnPage;
-	private int currentPage;
-	private int totalItems;
-	private int totalPages;
-	
-	public ProductSearch() {
-		super();
-	}
-	
-	public ProductSearch(int status, int categoryId, String keyword, String beginDate, String endDate, int itemOnPage,
-			int currentPage, int totalItems, int totalPages) {
-		super();
-		this.status = status;
-		this.categoryId = categoryId;
-		this.keyword = keyword;
-		this.beginDate = beginDate;
-		this.endDate = endDate;
-		this.itemOnPage = itemOnPage;
-		this.currentPage = currentPage;
-		this.totalItems = totalItems;
-		this.totalPages = totalPages;
-	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
-	public int getCategoryId() {
-		return categoryId;
-	}
-	public void setCategoryId(int categoryId) {
-		this.categoryId = categoryId;
-	}
-	public String getKeyword() {
-		return keyword;
-	}
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
-	public String getBeginDate() {
-		return beginDate;
-	}
-	public void setBeginDate(String beginDate) {
-		this.beginDate = beginDate;
-	}
-	public String getEndDate() {
-		return endDate;
-	}
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-	public int getItemOnPage() {
-		return itemOnPage;
-	}
-	public void setItemOnPage(int itemOnPage) {
-		this.itemOnPage = itemOnPage;
-	}
-	public int getCurrentPage() {
-		return currentPage;
-	}
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
-	}
-		
-	public int getTotalItems() {
-		return totalItems;
-	}
-	public void setTotalItems(int totalItems) {
-		this.totalItems = totalItems;
-	}
-}
+import java.util.Date;
 
+public class ProductSearch {
+
+    private String keyword;
+    private String status;
+    private Integer categoryId;
+    private Date beginDate;
+    private Date endDate;
+
+    // Pagination fields
+    private int currentPage = 1;
+    private int itemOnPage = 10;
+    private int totalItems = 0;
+    private int totalPages = 0;
+
+    // Constructors
+    public ProductSearch() {
+        this.status = "In Order";
+        this.categoryId = 0;
+        this.currentPage = 1;
+        this.itemOnPage = 10;
+    }
+
+    // Getters and Setters
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Date getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(Date beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public int getItemOnPage() {
+        return itemOnPage;
+    }
+
+    public void setItemOnPage(int itemOnPage) {
+        this.itemOnPage = itemOnPage;
+    }
+
+    public int getTotalItems() {
+        return totalItems;
+    }
+
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
+        this.totalPages = (int) Math.ceil((double) totalItems / itemOnPage);
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public int getOffset() {
+        return (currentPage - 1) * itemOnPage;
+    }
+
+    public boolean hasPrevious() {
+        return currentPage > 1;
+    }
+
+    public boolean hasNext() {
+        return currentPage < totalPages;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductSearch{" +
+                "keyword='" + keyword + '\'' +
+                ", status=" + status +
+                ", categoryId=" + categoryId +
+                ", beginDate=" + beginDate +
+                ", endDate=" + endDate +
+                ", currentPage=" + currentPage +
+                ", itemOnPage=" + itemOnPage +
+                ", totalItems=" + totalItems +
+                ", totalPages=" + totalPages +
+                '}';
+    }
+}

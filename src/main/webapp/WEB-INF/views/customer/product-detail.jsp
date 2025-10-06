@@ -105,7 +105,6 @@
                     </div>
 
                     <script>
-                        // Product data initialization
                         var productColors = [
                             <c:forEach var="c" items="${colors}" varStatus="status">
                             {
