@@ -167,7 +167,6 @@
 													<th scope="col">Category</th>
 													<th scope="col">Name</th>
 													<th scope="col">Price</th>
-													<th scope="col">Sale price</th>
 													<th scope="col">Avatar</th>
 													<th scope="col">Description</th>
 													<th scope="col">Details</th>
@@ -332,7 +331,7 @@
 													<th scope="col">Category</th>
 													<th scope="col">Name</th>
 													<th scope="col">Price</th>
-													<th scope="col">Sale price</th>
+													<th scope="col">Sale Price</th>
 													<th scope="col">Avatar</th>
 													<th scope="col">Description</th>
 													<th scope="col">Details</th>
@@ -341,7 +340,7 @@
 													<th scope="col">Create date</th>
 													<th scope="col">Update date</th>
 													<th scope="col">Status</th>
-													<th scope="col">Is hot</th>
+													<th scope="col">Is favourite</th>
 													<th scope="col">Seo</th>
 													<th scope="col">Actions</th>
 												</tr>

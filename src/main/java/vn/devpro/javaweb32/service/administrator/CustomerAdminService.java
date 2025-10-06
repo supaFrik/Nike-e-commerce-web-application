@@ -24,7 +24,7 @@ public class CustomerAdminService extends BaseService<Customer> {
 	public List<Customer> findAdminUser() {
 		// Simplified query to get all customers for now
 		// You can enhance this later when role management is properly implemented
-		String sql = "SELECT * FROM customer WHERE (status = 'ACTIVE' OR status IS NULL) ORDER BY username ASC";
+		String sql = "SELECT * FROM customer WHERE (status='In Order' OR status='Bestseller' OR status='Hot Take' OR status='On Sale' OR status='Limited' OR status='Just In' OR status IS NULL) ORDER BY username ASC";
 		return executeNativeSql(sql);
 	}
 

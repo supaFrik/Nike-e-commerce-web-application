@@ -1,7 +1,5 @@
 package vn.devpro.javaweb32.entity.customer;
 
-import org.apache.catalina.User;
-
 import javax.persistence.*;
 
 @Entity

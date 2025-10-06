@@ -69,7 +69,7 @@ public class ProductService {
                 .map(c -> {
                     String imageUrls = buildImageUrl(product.getName(), c.getFolderPath(), c.getBaseImage());
                     String imageUrl = (imageUrls != null && !imageUrls.isEmpty()) ? imageUrls : null;
-                    return new ProductColorDto(c.getId(), c.getColorName(), c.getFolderPath(), c.getBaseImage(), imageUrl);
+                    return new ProductColorDto(c.getId(), c.getColorName(), c.getFolderPath(), c.getBaseImage(), imageUrl, c.isDefault());
                 })
                 .toList();
 

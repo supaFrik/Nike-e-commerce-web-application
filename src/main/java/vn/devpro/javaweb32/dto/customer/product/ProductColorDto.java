@@ -13,17 +13,19 @@ public class ProductColorDto {
     private String folderPath;
     private String baseImage;
     private String imageUrl;
+    private boolean defaultImage;
 
     public ProductColorDto() {
         super();
     }
 
-    public ProductColorDto(Long id, String colorName, String folderPath, String baseImage, String imageUrl) {
+    public ProductColorDto(Long id, String colorName, String folderPath, String baseImage, String imageUrl, boolean defaultImage) {
         this.id = id;
         this.colorName = colorName;
         this.folderPath = folderPath;
         this.baseImage = baseImage;
         this.imageUrl = imageUrl;
+        this.defaultImage = defaultImage;
     }
 
     public ProductColorDto(Long id, String colorName, String folderPath) {
@@ -66,5 +68,13 @@ public class ProductColorDto {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean isDefaultImage() {
+        return defaultImage;
+    }
+
+    public void setDefaultImage(boolean defaultImage) {
+        this.defaultImage = defaultImage;
     }
 }

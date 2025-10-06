@@ -20,6 +20,9 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(nullable = true)
+    private BigDecimal salePrice;
+
     @Column(length = 500, nullable = false)
     private String description;
 
@@ -97,6 +100,14 @@ public class Product extends BaseEntity {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
+
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
     }
 
     public String getDescription() {

@@ -34,7 +34,17 @@
             <!-- Sign In Form -->
             <c:set var="_csrf" value="${_csrf}" />
             <form class="auth-form form-toggle active" id="signInForm" method="post" action="${pageContext.request.contextPath}/login">
+
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+                <!--Login Error Box-->
+                <c:if test="${not empty param.error}">
+                    <div class="error-message" role="alert" aria-live="assertive" aria-live-"assertive">
+                        Invalid username or password. Please try again.
+                        <a href="${env}/forgot-password" class="forgot-link" aria-describedby="forgot-password-desc">Forgot password?</a>
+                    </div>
+                </c:if>
+
                 <div class="form-group">
                     <label class="form-label" for="signInEmail">Email address</label>
                     <input type="email" class="form-input" id="signInEmail" name="username" placeholder="Email address" required autocomplete="email">
@@ -201,6 +211,25 @@
         </div>
     </div>
 
+    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("error") === "true") {
+          showToast("Invalid username or password. Please try again.");
+      }
+
+      function showToast(message) {
+          const toast = document.getElementById("toast");
+          toast.textContent = message;
+          toast.classList.add("active");
+
+          setTimeout(() => {
+              toast.classList.remove("active");
+          }, 3500);
+      }
+    });
+    </script>
     <script src="${env}/js/auth.js"></script>
 </body>
 </html>
