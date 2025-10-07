@@ -1,196 +1,192 @@
-/**
- * auth-fixed.js
- * Simplified: sign-in validation only checks email format + non-empty password.
- * sign-up uses strong password rule.
- */
+// ==========================
+// auth.js – Toggle & Validation (cleaned & fixed duplicate checks)
+// ==========================
 
-class AuthenticationManager {
-    constructor() {
-        this.validationRules = {
-            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            strongPassword: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/
-        };
-        this.init();
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    const ctx = (window.APP_CTX || '').replace(/\/$/, '');
 
-    init() {
-        this.setupFormElements();
-        this.setupEventListeners();
-    }
+    // ---------- 1. Toggle Sign In / Sign Up ----------
+    const signInForm = document.getElementById('signInForm');
+    const signUpForm = document.getElementById('signUpForm');
+    const toggleAuthLink = document.getElementById('toggleAuthLink');
+    const titleEl = document.getElementById('authTitle');
+    const subtitleEl = document.getElementById('authSubtitle');
 
-    setupFormElements() {
-        this.signInForm = document.getElementById('signInForm');
-        this.signInEmail = document.getElementById('signInEmail');
-        this.signInPassword = document.getElementById('signInPassword');
-        this.signInEmailError = document.getElementById('signInEmailError');
-        this.signInPasswordError = document.getElementById('signInPasswordError');
-
-        this.signUpForm = document.getElementById('signUpForm');
-        this.signUpEmail = document.querySelector('#signUpEmail');
-        this.signUpPassword = document.querySelector('#signUpPassword');
-        this.signUpName = document.querySelector('#signUpName');
-
-        this.toggleAuthLink = document.getElementById('toggleAuthLink');
-        this.authFooterText = document.getElementById('authFooterText');
-    }
-
-    setupEventListeners() {
-        // SIGN IN: only basic checks; do NOT block legitimate login attempts with strong password rule
-        if (this.signInForm) {
-            this.signInForm.addEventListener('submit', (e) => {
-                if (!this.validateSignIn()) {
-                    // prevent submission only when basic fields are clearly invalid (empty or malformed email)
-                    e.preventDefault();
-                }
-                // otherwise allow the form to submit normally to Spring Security
-            });
-        }
-
-        // SIGN UP: use strong validation; prevent submit if invalid
-        if (this.signUpForm) {
-            this.signUpForm.addEventListener('submit', (e) => {
-                if (!this.validateSignUp()) {
-                    e.preventDefault();
-                }
-            });
-        }
-
-        // Toggle between forms (footer link and below sign up form)
-        const toggleAuthLink = document.getElementById('toggleAuthLink');
-        const switchToSignIn = document.getElementById('switchToSignIn');
-        if (toggleAuthLink) {
-            toggleAuthLink.addEventListener('click', (ev) => {
-                ev.preventDefault();
-                this.showSignUp();
-            });
-        }
-        if (switchToSignIn) {
-            switchToSignIn.addEventListener('click', (ev) => {
-                ev.preventDefault();
-                this.showSignIn();
-            });
+    function updateForms(showSignUp) {
+        if (!signInForm || !signUpForm) return;
+        if (showSignUp) {
+            signInForm.classList.remove('active');
+            signUpForm.classList.add('active');
+            if (toggleAuthLink) toggleAuthLink.textContent = 'Sign In';
+            if (titleEl) titleEl.textContent = 'Create Account';
+            if (subtitleEl) subtitleEl.textContent = 'Sign Up to Nike';
+        } else {
+            signUpForm.classList.remove('active');
+            signInForm.classList.add('active');
+            if (toggleAuthLink) toggleAuthLink.textContent = 'Sign Up';
+            if (titleEl) titleEl.textContent = 'Welcome back';
+            if (subtitleEl) subtitleEl.textContent = 'Sign In to Nike';
         }
     }
 
-    validateSignIn() {
+    if (toggleAuthLink && signInForm && signUpForm) {
+        toggleAuthLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const showSignUp = signInForm.classList.contains('active');
+            updateForms(showSignUp);
+        });
+    }
+
+    // Exposed for server-triggered toggle (e.g., signupError)
+    window.toggleToSignUp = function () { updateForms(true); };
+
+    if (!signUpForm) return; // nothing else needed if signup form not present
+
+    // ---------- 2. Elements for signup (MATCH JSP IDs) ----------
+    const usernameInput = document.getElementById('signUpName');
+    const emailInput = document.getElementById('signUpEmail');
+    const passwordInput = document.getElementById('signUpPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword'); // only if present
+
+    const usernameError = document.getElementById('signUpNameError');
+    const emailError = document.getElementById('signUpEmailError');
+    const passwordError = document.getElementById('signUpPasswordError');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+    const submitBtn = signUpForm.querySelector('button[type="submit"]');
+
+    // ---------- 3. Helpers ----------
+    const showError = (el, msg) => { if (el) { el.style.display = msg ? 'block' : (el.id.includes('Password') ? el.style.display : 'none'); el.textContent = msg || ''; } };
+    const clearErrors = () => {
+        [usernameError, emailError, passwordError, confirmPasswordError]
+            .forEach(e => e && showError(e, ''));
+    };
+
+    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/;
+
+    // ---------- 4. Duplicate check (single endpoint) ----------
+    async function fetchDuplicateStatus({ username, email }) {
+        const params = new URLSearchParams();
+        if (username) params.append('username', username);
+        if (email) params.append('email', email.toLowerCase());
+        if ([...params.keys()].length === 0) return { usernameExists: false, emailExists: false };
+        try {
+            const res = await fetch(`${ctx}/api/auth/check-duplicate?${params.toString()}`, { headers: { 'Accept': 'application/json' } });
+            if (!res.ok) throw new Error('Duplicate check failed');
+            const data = await res.json();
+            return {
+                usernameExists: !!data.usernameExists,
+                emailExists: !!data.emailExists
+            };
+        } catch (e) {
+            return { usernameExists: false, emailExists: false };
+        }
+    }
+
+    async function validateDuplicates() {
+        const username = (usernameInput?.value || '').trim();
+        const email = (emailInput?.value || '').trim();
+        if (!username && !email) return true;
+        // Basic format guard to avoid noisy calls
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return false;
+        const { usernameExists, emailExists } = await fetchDuplicateStatus({ username, email });
+
+        if (usernameExists) showError(usernameError, 'Username already exists');
+        if (emailExists) showError(emailError, 'Email already exists');
+        return !(usernameExists || emailExists);
+    }
+
+    usernameInput?.addEventListener('blur', async () => {
+        const v = usernameInput.value.trim();
+        if (v.length < 3) return;
+        const { usernameExists } = await fetchDuplicateStatus({ username: v });
+        showError(usernameError, usernameExists ? 'Username already exists' : '');
+    });
+
+    emailInput?.addEventListener('blur', async () => {
+        const v = emailInput.value.trim();
+        if (!v || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) {
+            signUpForm.dataset.emailDuplicate = 'false';
+            updateSubmitDisabled();
+            return;
+        }
+        const { emailExists } = await fetchDuplicateStatus({ email: v });
+        if (emailExists) {
+            showError(emailError, 'Email already exists');
+            signUpForm.dataset.emailDuplicate = 'true';
+        } else {
+            showError(emailError, '');
+            signUpForm.dataset.emailDuplicate = 'false';
+        }
+        updateSubmitDisabled();
+    });
+
+    [usernameInput, emailInput, passwordInput, confirmPasswordInput].forEach(input => {
+        input?.addEventListener('input', () => {
+            const errElIdMap = {
+                'signUpName': usernameError,
+                'signUpEmail': emailError,
+                'signUpPassword': passwordError,
+                'confirmPassword': confirmPasswordError
+            };
+            showError(errElIdMap[input.id], '');
+        });
+    });
+
+    // ---------- 6. Form submit validation ----------
+    function updateSubmitDisabled() {
+        if (!submitBtn) return;
+        const emailDup = signUpForm.dataset.emailDuplicate === 'true';
+        submitBtn.disabled = emailDup;
+        if (emailDup) {
+            submitBtn.title = 'Email already exists';
+        } else {
+            submitBtn.removeAttribute('title');
+        }
+    }
+
+    signUpForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
         let valid = true;
 
-        // Email must be present & valid
-        const email = this.signInEmail && this.signInEmail.value ? this.signInEmail.value.trim() : '';
-        if (!email || !this.validationRules.email.test(email)) {
-            if (this.signInEmailError) this.signInEmailError.textContent = 'Please enter a valid email address.';
-            if (this.signInEmail) this.signInEmail.setAttribute('aria-invalid', 'true');
-            valid = false;
-        } else {
-            if (this.signInEmailError) this.signInEmailError.textContent = '';
-            if (this.signInEmail) this.signInEmail.setAttribute('aria-invalid', 'false');
+        const username = (usernameInput?.value || '').trim();
+        const email = (emailInput?.value || '').trim();
+        const password = passwordInput?.value || '';
+        const confirmPassword = confirmPasswordInput?.value || '';
+
+        if (!username) { showError(usernameError, 'Username is required'); valid = false; }
+        if (!email) { showError(emailError, 'Email is required'); valid = false; }
+        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError(emailError, 'Invalid email format'); valid = false; }
+
+        if (!password) { showError(passwordError, 'Password is required'); valid = false; }
+        else if (!strongPasswordRegex.test(password)) { showError(passwordError, 'Must be 8+ chars incl. upper, lower & number'); valid = false; }
+
+        if (confirmPasswordInput && password !== confirmPassword) {
+            showError(confirmPasswordError, 'Passwords do not match'); valid = false;
         }
 
-        // Password must not be empty (no strong rule here)
-        const pass = this.signInPassword && this.signInPassword.value ? this.signInPassword.value : '';
-        if (!pass) {
-            if (this.signInPasswordError) this.signInPasswordError.textContent = 'Please enter your password.';
-            if (this.signInPassword) this.signInPassword.setAttribute('aria-invalid', 'true');
+        if (signUpForm.dataset.emailDuplicate === 'true') {
+            showError(emailError, 'Email already exists');
             valid = false;
-        } else {
-            if (this.signInPasswordError) this.signInPasswordError.textContent = '';
-            if (this.signInPassword) this.signInPassword.setAttribute('aria-invalid', 'false');
         }
 
-        return valid;
-    }
-
-    validateSignUp() {
-        let valid = true;
-        // Email
-        if (!this.signUpEmail || !this.validationRules.email.test(this.signUpEmail.value || '')) {
-            // show error next to sign-up email (if you had an element)
-            valid = false;
-        }
-        // Name
-        if (!this.signUpName || !this.signUpName.value.trim()) {
-            valid = false;
-        }
-        // Strong password
-        if (!this.signUpPassword || !this.validationRules.strongPassword.test(this.signUpPassword.value || '')) {
-            // show error message for sign up password
-            valid = false;
-        }
-        return valid;
-    }
-
-    showSignUp() {
-        if (!this.signInForm || !this.signUpForm) return;
-        this.signInForm.classList.remove('active');
-        this.signInForm.style.display = 'none';
-        this.signUpForm.classList.add('active');
-        this.signUpForm.style.display = '';
-        // Update footer text
-        if (this.authFooterText) {
-            this.authFooterText.innerHTML = 'Already have an account? <a href="#" id="switchToSignIn">Sign In</a>';
-            // Re-attach event listener for new link
-            const switchToSignIn = document.getElementById('switchToSignIn');
-            if (switchToSignIn) {
-                switchToSignIn.addEventListener('click', (ev) => {
-                    ev.preventDefault();
-                    this.showSignIn();
-                });
+        if (valid) {
+            submitBtn && (submitBtn.disabled = true);
+            const dupOk = await validateDuplicates();
+            if (!dupOk) {
+                valid = false;
+                signUpForm.dataset.emailDuplicate = emailError?.textContent ? 'true' : 'false';
+                updateSubmitDisabled();
             }
         }
-    }
 
-    showSignIn() {
-        if (!this.signInForm || !this.signUpForm) return;
-        this.signUpForm.classList.remove('active');
-        this.signUpForm.style.display = 'none';
-        this.signInForm.classList.add('active');
-        this.signInForm.style.display = '';
-        // Update footer text
-        if (this.authFooterText) {
-            this.authFooterText.innerHTML = 'Dont have an account? <a href="#" id="toggleAuthLink">Sign Up</a>';
-            // Re-attach event listener for new link
-            const toggleAuthLink = document.getElementById('toggleAuthLink');
-            if (toggleAuthLink) {
-                toggleAuthLink.addEventListener('click', (ev) => {
-                    ev.preventDefault();
-                    this.showSignUp();
-                });
-            }
-        }
-    }
-
-    toggleForms() {
-        // simply toggle 'active' class and display style
-        if (!this.signInForm || !this.signUpForm) return;
-        const signInActive = this.signInForm.classList.contains('active');
-        if (signInActive) {
-            this.signInForm.classList.remove('active');
-            this.signInForm.style.display = 'none';
-            this.signUpForm.classList.add('active');
-            this.signUpForm.style.display = '';
+        if (valid) {
+            signUpForm.removeAttribute('data-email-duplicate');
+            submitBtn && (submitBtn.disabled = false);
+            signUpForm.submit();
         } else {
-            this.signUpForm.classList.remove('active');
-            this.signUpForm.style.display = 'none';
-            this.signInForm.classList.add('active');
-            this.signInForm.style.display = '';
+            submitBtn && (submitBtn.disabled = false);
         }
-    }
-}
-
-// Toggle password visibility
-window.togglePassword = function(inputId) {
-    const input = document.getElementById(inputId);
-    if (!input) return;
-    const btn = input.parentElement.querySelector('.password-toggle');
-    if (input.type === 'password') {
-        input.type = 'text';
-        if (btn) btn.setAttribute('aria-pressed', 'true');
-    } else {
-        input.type = 'password';
-        if (btn) btn.setAttribute('aria-pressed', 'false');
-    }
-};
-
-window.addEventListener('DOMContentLoaded', () => {
-    new AuthenticationManager();
+    });
 });

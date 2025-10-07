@@ -15,7 +15,11 @@
 .error-message[role="alert"] {
   display: none;
 }
-
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
 .toast {
   position: fixed;
   bottom: 25px;

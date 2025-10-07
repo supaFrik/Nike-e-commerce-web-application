@@ -31,9 +31,11 @@ public class SecurityConfig {
             var credential = credentialRepository.findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
 
+            String role = credential.getRole(); //USER hoặc ADMIN
+
             User.UserBuilder builder = User.withUsername(credential.getEmail())
                     .password(credential.getPasswordHash())
-                    .roles("USER", "ADMIN")
+                    .roles(role)
                     .disabled(!credential.isEnabled());
 
             builder.accountLocked(credential.isLocked());
@@ -47,20 +49,48 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.ignoringAntMatchers("/api/**"))
                 .authorizeHttpRequests(auth -> auth
-                        .antMatchers("/", "/auth/**", "/signup", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/slick/**").permitAll()
-                        .antMatchers("/products", "/products/**", "/product-detail", "/product-detail/**").permitAll()
-                        .antMatchers("/admin/**").permitAll()
+                        .antMatchers(
+                                "/",
+                                "/auth/**",
+                                "/signup",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**",
+                                "/videos/**",
+                                "/fonts/**",
+                                "/slick/**"
+                        ).permitAll()
+                        .antMatchers(
+                                "/products",
+                                "/products/**",
+                                "/product-detail",
+                                "/product-detail/**"
+                        ).permitAll()
+                        // Public AJAX endpoints for pre-signup validation
+                        .antMatchers(
+                                "/api/auth/email-exists",
+                                "/api/auth/check-duplicate",
+                                "/api/auth/check-duplicate/**"
+                        ).permitAll()
+                        .antMatchers("/admin/**").hasRole("ADMIN")
                         .antMatchers("/api/cart/**").authenticated()
                         .antMatchers("/cart", "/cart/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .failureUrl("/login?error")
+                        .loginPage("/auth")
                         .loginProcessingUrl("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/", true)
+                        .successHandler((request, response, authentication) -> {
+                            boolean isAdmin = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                            if (isAdmin) {
+                                response.sendRedirect("/admin/home");
+                            } else {
+                                response.sendRedirect("/");
+                            }
+                        })
                         .failureUrl("/auth?error=true")
                         .permitAll()
                 )

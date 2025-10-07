@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface CredentialRepository extends JpaRepository<Credential, Long> {
     @EntityGraph(attributePaths = {"customer"})
     Optional<Credential> findByEmail(String email);
+
+    boolean existsByEmail(String email);
 }

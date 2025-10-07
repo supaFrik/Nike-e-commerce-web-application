@@ -22,17 +22,20 @@ public class ProductDto {
     private List<VariantDto> variants = new ArrayList<>();
 
     public static class ColorDto {
-        private String colorName;                     // colors[0].colorName
-        private MultipartFile[] images;               // colors[0].images (multiple)
-        private boolean defaultPreview;               // colors[0].defaultPreview (checkbox)
-        private String existingPreviewFilename;       // colors[0].existingPreview (for edit, optional)
+        private String colorName;
+        private MultipartFile[] images;
+        private boolean defaultPreview;
+        private String existingPreviewFilename;
 
         public String getColorName() { return colorName; }
         public void setColorName(String colorName) { this.colorName = colorName; }
+
         public MultipartFile[] getImages() { return images; }
         public void setImages(MultipartFile[] images) { this.images = images; }
+
         public boolean isDefaultPreview() { return defaultPreview; }
         public void setDefaultPreview(boolean defaultPreview) { this.defaultPreview = defaultPreview; }
+
         public String getExistingPreviewFilename() { return existingPreviewFilename; }
         public void setExistingPreviewFilename(String existingPreviewFilename) { this.existingPreviewFilename = existingPreviewFilename; }
     }

@@ -1,29 +1,30 @@
-package vn.devpro.javaweb32.service.administrator;
+package vn.devpro.javaweb32.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import vn.devpro.javaweb32.entity.product.Product;
+import vn.devpro.javaweb32.entity.product.ProductImage;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 public interface FileStorageService {
-    /**
-     * Lưu 1 file vào thư mục tạm và trả về Path tới file temp.
-     */
-    Path saveTempFile(MultipartFile file) throws IOException;
 
     /**
-     * Đăng ký di chuyển tempFile -> finalAbsolutePath vào sau khi transaction commit.
-     * Nếu rollback sẽ auto xóa tempFile.
+     * Lưu các file upload tạm thời cho một color.
+     * Trả về danh sách ProductImage với url tạm (ví dụ: "temp/{uuid}/{filename}")
      */
-    void registerMoveOnCommit(Path tempFile, Path finalAbsolutePath);
+    List<ProductImage> saveTempFile(List<MultipartFile> files, String folderPath, String baseImagePrefix) throws IOException;
 
     /**
-     * Xóa temp file (dùng khi cần).
+     * Sau khi DB lưu thành công product (và cascade đã persist ProductImage),
+     * chuyển các file từ temp -> thư mục sản phẩm, cập nhật ProductImage.url và persist lại.
      */
-    void deleteIfExists(Path path);
+    void moveTempToProductFolder(Product product) throws IOException;
 
     /**
-     * Trả về thư mục gốc cho ảnh sản phẩm (ABSOLUTE)
+     * Đăng ký một move (src -> dest) để thực hiện **sau khi transaction commit**.
+     * Nếu không có transaction active thì thực hiện move ngay lập tức.
      */
-    Path getProductBaseDir();
+    void registerMoveOnCommit(Path src, Path dest);
 }

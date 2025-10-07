@@ -24,10 +24,13 @@ public class Credential {
     private boolean locked = false;
     private String provider = "local";
 
+    @Column(nullable = false)
+    private String role = "USER"; //Default
+
     public Credential() {
     }
 
-    public Credential(Long id, Customer customer, String email, String passwordHash, boolean enabled, boolean locked, String provider) {
+    public Credential(Long id, Customer customer, String email, String passwordHash, boolean enabled, boolean locked, String provider, String role) {
         this.id = id;
         this.customer = customer;
         this.email = email;
@@ -35,6 +38,7 @@ public class Credential {
         this.enabled = enabled;
         this.locked = locked;
         this.provider = provider;
+        this.role = role;
     }
 
     public Long getId() {
@@ -91,5 +95,13 @@ public class Credential {
 
     public void setProvider(String provider) {
         this.provider = provider;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
