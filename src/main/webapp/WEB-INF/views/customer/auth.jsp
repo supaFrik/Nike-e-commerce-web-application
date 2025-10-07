@@ -9,13 +9,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nike - Sign In</title>
-    
     <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/customer/imported/auth.jsp" />
 </head>
 <body>
     <div class="auth-container" role="main" aria-labelledby="auth-main-title">
-        <!-- Left side - Form section -->
         <div class="auth-form-section" role="region" aria-labelledby="auth-header-title">
             <div class="auth-header">
                 <div class="auth-logo">
@@ -28,56 +26,48 @@
                 <span id="auth-main-title" class="sr-only">Nike authentication page for signing in or creating an account</span>
             </div>
 
-            <!-- Success message -->
-            <div class="success-message" id="successMessage" role="status" aria-live="polite" aria-atomic="true"></div>
+            <!-- Global signup / login messages -->
+            <c:if test="${not empty signupSuccess}">
+                <div class="success-message" role="status" aria-live="polite">${signupSuccess}</div>
+            </c:if>
+            <c:if test="${not empty signupError}">
+                <div class="error-message" role="alert" aria-live="assertive">${signupError}</div>
+            </c:if>
 
             <!-- Sign In Form -->
             <c:set var="_csrf" value="${_csrf}" />
             <form class="auth-form form-toggle active" id="signInForm" method="post" action="${pageContext.request.contextPath}/login">
-
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-                <!--Login Error Box-->
                 <c:if test="${not empty param.error}">
-                    <div class="error-message" role="alert" aria-live="assertive" aria-live-"assertive">
+                    <div class="error-message" role="alert" aria-live="assertive">
                         Invalid username or password. Please try again.
                         <a href="${env}/forgot-password" class="forgot-link" aria-describedby="forgot-password-desc">Forgot password?</a>
                     </div>
                 </c:if>
-
                 <div class="form-group">
                     <label class="form-label" for="signInEmail">Email address</label>
+
                     <input type="email" class="form-input" id="signInEmail" name="username" placeholder="Email address" required autocomplete="email">
                     <div class="error-message" id="signInEmailError"></div>
                 </div>
-
                 <div class="form-group">
                     <label class="form-label" for="signInPassword">Password</label>
                     <div class="password-container">
-                        <input type="password" name = "password" class="form-input" id="signInPassword" placeholder="Password"
-                               required aria-required="true" aria-describedby="signInPasswordError password-toggle-desc"
-                               aria-invalid="false" autocomplete="current-password">
-                        <button type="button" class="password-toggle" onclick="togglePassword('signInPassword')"
-                                aria-label="Toggle password visibility" aria-describedby="password-toggle-desc"
-                                aria-pressed="false">
+                        <input type="password" name="password" class="form-input" id="signInPassword" placeholder="Password" required autocomplete="current-password">
+                        <button type="button" class="password-toggle" onclick="togglePassword('signInPassword')" aria-label="Toggle password visibility" aria-pressed="false">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                         </button>
-                        <span id="password-toggle-desc" class="sr-only">Click to show or hide password</span>
                     </div>
                     <div class="error-message" id="signInPasswordError" role="alert" aria-live="polite"></div>
                 </div>
-
                 <div class="forgot-password">
                     <a href="#" onclick="showForgotPassword()" aria-describedby="forgot-password-desc">Forgot password?</a>
                     <span id="forgot-password-desc" class="sr-only">Reset your password if you've forgotten it</span>
                 </div>
-
-                <button type="submit" class="btn-primary" aria-describedby="signin-btn-desc">Sign In</button>
-                <span id="signin-btn-desc" class="sr-only">Sign in to your Nike account</span>
-
+                <button type="submit" class="btn-primary">Sign In</button>
                 <div class="auth-divider" role="separator" aria-label="Alternative sign in options">
                     <span class="auth-divider-text">or sign in with</span>
                 </div>
@@ -114,48 +104,57 @@
             </form>
 
             <!-- Sign Up Form -->
-            <form class="auth-form form-toggle" id="signUpForm" role="form" aria-labelledby="signup-form-title" aria-describedby="signup-form-desc" method = "post" action="${env}/signup">
-                <h2 id="signup-form-title" class="sr-only">Sign Up Form</h2>
-                <span id="signup-form-desc" class="sr-only">Create a new Nike account by providing your name, email, and password</span>
-                
+            <form class="auth-form form-toggle" id="signUpForm" method="post" action="${env}/auth/signup">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                <c:set var="usernameHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['username']}" />
+                <c:set var="emailHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['email']}" />
                 <div class="form-group">
                     <label class="form-label" for="signUpName">Your name</label>
-                    <input type="text" name = "username" class="form-input" id="signUpName" placeholder="Your name"
-                           required aria-required="true" aria-describedby="signUpNameError"
-                           aria-invalid="false" autocomplete="name">
-                    <div class="error-message" id="signUpNameError" role="alert" aria-live="polite"></div>
+                    <input type="text" name="username" class="form-input" id="signUpName" placeholder="Your name"
+                           value="${signupForm.username}" required autocomplete="name" aria-describedby="signUpNameError">
+                    <div id="signUpNameError" class="error-message" role="alert" aria-live="assertive"
+                         style="${usernameHasError ? '' : 'display:none;'} color:#d32f2f; margin-top:4px;">
+                        <c:if test="${usernameHasError}">
+                            ${org.springframework.validation.BindingResult.signupForm.fieldErrors['username'][0].defaultMessage}
+                        </c:if>
+                    </div>
                 </div>
-
                 <div class="form-group">
-                    <label class="form-label" for="signUpEmail">Email address</label>
-                    <input type="email" name = "email" class="form-input" id="signUpEmail" placeholder="Email address"
-                           required aria-required="true" aria-describedby="signUpEmailError"
-                           aria-invalid="false" autocomplete="email">
-                    <div class="error-message" id="signUpEmailError" role="alert" aria-live="polite"></div>
+                    <label class="form-label" for="signUpEmail">Email</label>
+                    <input type="email" name="email" class="form-input" id="signUpEmail" placeholder="Email address"
+                           value="${signupForm.email}" required autocomplete="email" aria-describedby="signUpEmailError">
+                    <div id="signUpEmailError" class="error-message" role="alert" aria-live="assertive"
+                         style="${emailHasError ? '' : 'display:none;'} color:#d32f2f; margin-top:4px;">
+                        <c:if test="${emailHasError}">
+                            ${org.springframework.validation.BindingResult.signupForm.fieldErrors['email'][0].defaultMessage}
+                        </c:if>
+                    </div>
                 </div>
-
                 <div class="form-group">
                     <label class="form-label" for="signUpPassword">Password</label>
+                    <div id="signUpPasswordError" class="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
                     <div class="password-container">
-                        <input type="password" name = "password" class="form-input" id="signUpPassword" placeholder="Password"
-                               required aria-required="true" aria-describedby="signUpPasswordError password-toggle-signup-desc"
-                               aria-invalid="false" autocomplete="new-password">
-                        <button type="button" class="password-toggle" onclick="togglePassword('signUpPassword')"
-                                aria-label="Toggle password visibility" aria-describedby="password-toggle-signup-desc"
-                                aria-pressed="false">
+                        <input type="password" name="password" class="form-input" id="signUpPassword" placeholder="Password" required autocomplete="new-password" aria-describedby="signUpPasswordError">
+                        <c:if test="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['password']}">
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function(){
+                                    var pwdErr = document.getElementById('signUpPasswordError');
+                                    if(pwdErr){
+                                        pwdErr.style.display='block';
+                                        pwdErr.textContent='${org.springframework.validation.BindingResult.signupForm.fieldErrors['password'][0].defaultMessage}';
+                                    }
+                                });
+                            </script>
+                        </c:if>
+                        <button type="button" class="password-toggle" onclick="togglePassword('signUpPassword')" aria-label="Toggle password visibility" aria-pressed="false">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                         </button>
-                        <span id="password-toggle-signup-desc" class="sr-only">Click to show or hide password</span>
                     </div>
-                    <div class="error-message" id="signUpPasswordError" role="alert" aria-live="polite"></div>
                 </div>
-
-                <button type="submit" class="btn-primary" aria-describedby="signup-btn-desc">Sign Up</button>
-                <span id="signup-btn-desc" class="sr-only">Create your Nike account</span>
-
+                <button type="submit" class="btn-primary">Sign Up</button>
                 <div class="auth-divider" role="separator" aria-label="Alternative sign up options">
                     <span class="auth-divider-text">or sign up with</span>
                 </div>
@@ -191,44 +190,50 @@
                 </div>
             </form>
 
+            <c:if test="${usernameHasError || emailHasError}">
+                <script>
+                    document.addEventListener('DOMContentLoaded', function(){
+                        if(typeof toggleToSignUp === 'function'){ toggleToSignUp(); }
+                    });
+                </script>
+            </c:if>
+
             <div class="auth-footer" role="region" aria-labelledby="auth-footer-title">
-                <h3 id="auth-footer-title" class="sr-only">Account Navigation</h3>
                 <p id="authFooterText">
-                    Dont have an account? <a href="#" id="toggleAuthLink" aria-describedby="toggle-form-desc">Sign Up</a>
-                    <span id="toggle-form-desc" class="sr-only">Switch between sign in and sign up forms</span>
+                    Dont have an account? <a href="#" id="toggleAuthLink">Sign Up</a>
                 </p>
             </div>
         </div>
-
-        <!-- Right side - Image section -->
         <div class="auth-image-section" role="complementary" aria-labelledby="auth-image-title">
-            <h2 id="auth-image-title" class="sr-only">Nike Brand Section</h2>
             <div class="auth-image-logo">
-                <img src="${env}/images/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike logo" 
-                     aria-describedby="auth-image-desc">
-                <span id="auth-image-desc" class="sr-only">Nike swoosh logo displayed on the authentication page</span>
+                <img src="${env}/images/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike logo">
             </div>
         </div>
     </div>
 
     <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("error") === "true") {
-          showToast("Invalid username or password. Please try again.");
-      }
-
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("error") === "true") {
+            showToast("Invalid username or password. Please try again.");
+        }
+        const hasSignupError = '${signupError}' !== '';
+        if (hasSignupError) {
+            if (typeof toggleToSignUp === 'function') { toggleToSignUp(); }
+        }
+        const hasSignupSuccess = '${signupSuccess}' !== '';
+        if (hasSignupSuccess) {
+            showToast('${signupSuccess}');
+        }
+      });
       function showToast(message) {
+          if(!message) return;
           const toast = document.getElementById("toast");
           toast.textContent = message;
           toast.classList.add("active");
-
-          setTimeout(() => {
-              toast.classList.remove("active");
-          }, 3500);
+          setTimeout(() => { toast.classList.remove("active"); }, 3500);
       }
-    });
     </script>
     <script src="${env}/js/auth.js"></script>
 </body>

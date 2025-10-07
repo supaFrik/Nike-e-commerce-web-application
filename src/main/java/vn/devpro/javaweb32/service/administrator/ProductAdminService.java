@@ -3,10 +3,6 @@ package vn.devpro.javaweb32.service.administrator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 import vn.devpro.javaweb32.common.base.BaseService;
 import vn.devpro.javaweb32.dto.customer.product.ProductDto;
@@ -15,11 +11,12 @@ import vn.devpro.javaweb32.entity.product.ProductColor;
 import vn.devpro.javaweb32.entity.product.ProductImage;
 import vn.devpro.javaweb32.entity.product.ProductVariant;
 import vn.devpro.javaweb32.dto.administrator.ProductSearch;
-import vn.devpro.javaweb32.service.administrator.FileStorageService;
+import vn.devpro.javaweb32.service.FileStorageService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +25,9 @@ import java.util.UUID;
 
 @Service
 public class ProductAdminService extends BaseService<Product> {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private FileStorageService fileStorageService;
@@ -82,121 +82,220 @@ public class ProductAdminService extends BaseService<Product> {
         return (i >= 0) ? n.substring(i) : ".avif";
     }
 
-
     @Transactional
     public Product saveProductFromDto(ProductDto dto) throws IOException {
+        System.out.println("=== DEBUGGING PRODUCT SAVE ===");
+
+        if (dto == null) throw new IllegalArgumentException("productDto is null");
+        if (dto.getCategoryId() == null) {
+            throw new IllegalArgumentException("Category is required");
+        }
+
+        System.out.println("DTO received - Name: " + dto.getName());
+        System.out.println("DTO Colors count: " + (dto.getColors() != null ? dto.getColors().size() : "null"));
+
+        // Debug
+        if (dto.getColors() != null) {
+            for (int i = 0; i < dto.getColors().size(); i++) {
+                var color = dto.getColors().get(i);
+                System.out.println("Color " + i + ": " + (color != null ? color.getColorName() : "null"));
+                if (color != null && color.getImages() != null) {
+                    System.out.println("  - Images count: " + color.getImages().length);
+                }
+            }
+        }
+
         Product product;
-        if (dto.getId() != null) {
-            product = getById(dto.getId());
-            if (product == null) product = new Product();
-        } else {
+        boolean isNew = (dto.getId() == null);
+        if (isNew) {
             product = new Product();
+            product.setCreateDate(new Date());
+        } else {
+            product = getById(dto.getId());
+            if (product == null) {
+                product = new Product();
+                product.setCreateDate(new Date());
+            }
         }
 
         product.setName(dto.getName());
-        product.setPrice(dto.getPrice() != null ? dto.getPrice() : BigDecimal.ZERO);
-        product.setSalePrice(dto.getSalePrice());
         product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setSalePrice(dto.getSalePrice());
         product.setType(dto.getType());
         product.setSeo(dto.getSeo());
-        product.setStatus(dto.getStatus());
+        product.setStatus(dto.getStatus() != null ? dto.getStatus() : "ACTIVE");
         product.setFavourites(dto.isFavourites());
+        product.setUpdateDate(new Date());
 
-        // colors
-        List<ProductColor> colorEntities = new ArrayList<>();
-        String safeProductName = sanitizeForFilename(product.getName());
+        // Set category
+        var category = categoryAdminService.getById(dto.getCategoryId());
+        if (category == null) {
+            throw new IllegalArgumentException("Category id not found: " + dto.getCategoryId());
+        }
+        product.setCategory(category);
 
-        List<Path> tempToRemoveIfFail = new ArrayList<>(); // cleanup if exception before commit
-
-        for (int i = 0; i < dto.getColors().size(); i++) {
-            ProductDto.ColorDto c = dto.getColors().get(i);
-            if (c.getColorName() == null || c.getColorName().trim().isEmpty()) continue;
-
-            String safeColor = sanitizeForFilename(c.getColorName());
-            String folderPath = safeProductName + "/" + safeColor;
-            String baseImagePrefix = safeColor + "+" + safeProductName;
-            if (baseImagePrefix.length() > 80) baseImagePrefix = baseImagePrefix.substring(0, 80);
-
-            ProductColor pc = new ProductColor();
-            pc.setColorName(c.getColorName().trim());
-            pc.setProduct(product);
-            pc.setFolderPath(folderPath);
-            pc.setBaseImage(baseImagePrefix);
-
-            List<ProductImage> images = new ArrayList<>();
-
-            MultipartFile[] uploaded = c.getImages();
-            if (uploaded != null) {
-                for (MultipartFile mf : uploaded) {
-                    if (mf == null || mf.isEmpty()) continue;
-                    // Lưu temp file ảnh
-                    Path temp = fileStorageService.saveTempFile(mf);
-                    tempToRemoveIfFail.add(temp);
-
-                    // Ext: Tạo UUID theo file ảnh
-                    String ext = getExtensionFromTemp(temp);
-                    String finalFilename = baseImagePrefix + "-" + UUID.randomUUID() + ext;
-                    Path finalAbs = fileStorageService.getProductBaseDir().resolve(folderPath).resolve(finalFilename);
-
-                    fileStorageService.registerMoveOnCommit(temp, finalAbs);
-
-                    ProductImage pi = new ProductImage();
-                    String publicUrl = "/images/products/" + folderPath + "/" + finalFilename;
-                    pi.setUrl(publicUrl);
-                    pi.setStatus("ACTIVE");
-                    pi.setProduct(product);
-                    images.add(pi);
-                }
-            }
-
-            for (ProductImage pi : images) {
-                pc.addRelationalProductImage(pi);
-            }
-
-            if (c.getExistingPreviewFilename() != null && !c.getExistingPreviewFilename().isBlank()) {
-                String existing = c.getExistingPreviewFilename().trim();
-                if (!existing.contains("..") && !existing.contains("/") && !existing.contains("\\")) {
-                    pc.setPreviewImage(existing);
-                }
-            } else if (!images.isEmpty()) {
-                pc.setPreviewImage(images.get(0).getUrl().substring(images.get(0).getUrl().lastIndexOf('/') + 1));
-            } else {
-                pc.setPreviewImage(null);
-            }
-
-            colorEntities.add(pc);
+        if (product.getColors() == null) {
+            product.setColors(new ArrayList<>());
+        }
+        if (product.getVariants() == null) {
+            product.setVariants(new ArrayList<>());
         }
 
-        List<ProductVariant> variants = new ArrayList<>();
-        for (int i = 0; i < dto.getVariants().size(); i++) {
-            ProductDto.VariantDto v = dto.getVariants().get(i);
-            ProductVariant pv = new ProductVariant();
-            pv.setProduct(product);
-            pv.setSize(v.getSize());
-            pv.setPrice(v.getPrice() != null ? v.getPrice() : BigDecimal.ZERO);
-            pv.setStock(v.getStock() != null ? v.getStock() : 0);
-            if (v.getColorIndex() != null && v.getColorIndex() >= 0 && v.getColorIndex() < colorEntities.size()) {
-                ProductColor linked = colorEntities.get(v.getColorIndex());
-                pv.setColor(linked);
-                pv.setColorName(linked.getColorName());
+        System.out.println("Saving basic product...");
+        Product saved = saveOrUpdate(product);
+        System.out.println("Product saved with ID: " + saved.getId());
+
+        if (dto.getColors() != null && !dto.getColors().isEmpty()) {
+            System.out.println("Processing " + dto.getColors().size() + " colors...");
+
+            saved.getColors().clear();
+
+            int colorCount = 0;
+            for (ProductDto.ColorDto cDto : dto.getColors()) {
+                if (cDto == null || cDto.getColorName() == null || cDto.getColorName().isBlank()) {
+                    System.out.println("Skipping null/empty color");
+                    continue;
+                }
+
+                System.out.println("Creating ProductColor for: " + cDto.getColorName());
+
+                ProductColor pc = new ProductColor();
+                pc.setColorName(cDto.getColorName().trim());
+                pc.setProduct(saved);
+
+                String safeProductName = sanitizeForFilename(saved.getName());
+                String safeColorName = sanitizeForFilename(cDto.getColorName());
+                String folderPath = safeProductName + "/" + safeColorName;
+                pc.setFolderPath(folderPath);
+                pc.setBaseImage(safeColorName + "+" + safeProductName);
+
+                pc.setPreviewImage("default.jpg");
+
+                System.out.println("  - Folder path: " + folderPath);
+                System.out.println("  - Base image: " + pc.getBaseImage());
+
+                // Process images if any
+                List<ProductImage> savedImages = new ArrayList<>();
+                MultipartFile[] files = cDto.getImages();
+
+                if (files != null && files.length > 0) {
+                    System.out.println("  - Processing " + files.length + " image files");
+                    List<MultipartFile> validFiles = new ArrayList<>();
+                    for (MultipartFile file : files) {
+                        if (file != null && !file.isEmpty()) {
+                            validFiles.add(file);
+                            System.out.println("    - Valid file: " + file.getOriginalFilename());
+                        }
+                    }
+
+                    if (!validFiles.isEmpty()) {
+                        try {
+                            savedImages = fileStorageService.saveTempFile(validFiles, folderPath, pc.getBaseImage());
+                            System.out.println("  - Saved " + savedImages.size() + " images to temp");
+
+                            // Link images to product and color
+                            for (ProductImage img : savedImages) {
+                                img.setProduct(saved);
+                                img.setColor(pc);
+                            }
+
+                            // Update preview image if we have uploads
+                            if (!savedImages.isEmpty()) {
+                                String previewUrl = savedImages.get(0).getUrl();
+                                if (previewUrl.contains("/")) {
+                                    pc.setPreviewImage(previewUrl.substring(previewUrl.lastIndexOf('/') + 1));
+                                } else {
+                                    pc.setPreviewImage(previewUrl);
+                                }
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Error processing images: " + e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    System.out.println("  - No images to process");
+                }
+
+                // Handle existing preview for edit mode
+                if (cDto.getExistingPreviewFilename() != null && !cDto.getExistingPreviewFilename().isBlank()) {
+                    ProductImage existingPreview = new ProductImage();
+                    existingPreview.setUrl(cDto.getExistingPreviewFilename());
+                    existingPreview.setStatus("ACTIVE");
+                    existingPreview.setProduct(saved);
+                    existingPreview.setColor(pc);
+                    savedImages.add(0, existingPreview);
+                }
+
+                pc.setImages(savedImages);
+
+                // CRITICAL: Add to parent collection for cascade
+                saved.getColors().add(pc);
+                colorCount++;
+
+                System.out.println("  - ProductColor created and added to product");
             }
-            variants.add(pv);
+
+            System.out.println("Total colors processed: " + colorCount);
+            System.out.println("Product colors collection size: " + saved.getColors().size());
+        } else {
+            System.out.println("No colors to process (DTO colors is null or empty)");
         }
 
-        product.getColors().clear();
-        product.getColors().addAll(colorEntities);
+        // variants
+        if (dto.getVariants() != null && !dto.getVariants().isEmpty()) {
+            System.out.println("Processing " + dto.getVariants().size() + " variants...");
+            saved.getVariants().clear();
 
-        product.getVariants().clear();
-        product.getVariants().addAll(variants);
+            for (ProductDto.VariantDto v : dto.getVariants()) {
+                if (v == null) continue;
 
-        // timestamps
-        Date now = new Date();
-        if (product.getCreateDate() == null) product.setCreateDate(now);
-        product.setUpdateDate(now);
-        super.saveOrUpdate(product);
+                ProductVariant pv = new ProductVariant();
+                pv.setProduct(saved);
+                pv.setSize(v.getSize());
+                pv.setPrice(v.getPrice() != null ? v.getPrice() : saved.getPrice());
+                pv.setStock(v.getStock() != null ? v.getStock() : 0);
 
-        return product;
+                // Link to color if specified
+                if (v.getColorIndex() != null && v.getColorIndex() >= 0 &&
+                    saved.getColors() != null && v.getColorIndex() < saved.getColors().size()) {
+                    ProductColor linkedColor = saved.getColors().get(v.getColorIndex());
+                    pv.setColor(linkedColor);
+                    pv.setColorName(linkedColor.getColorName());
+                }
+
+                saved.getVariants().add(pv);
+            }
+            System.out.println("Variants processed: " + saved.getVariants().size());
+        }
+
+        System.out.println("Final save with colors and variants...");
+        System.out.println("About to save product with " + saved.getColors().size() + " colors");
+
+        // Final save with all relations
+        saved = saveOrUpdate(saved);
+
+        System.out.println("Flushing to database...");
+        entityManager.flush();
+
+        System.out.println("=== SAVE COMPLETE ===");
+        System.out.println("Final product ID: " + saved.getId());
+        System.out.println("Final colors count: " + (saved.getColors() != null ? saved.getColors().size() : "null"));
+
+        // Move temp files to final location
+        if (saved.getColors() != null && !saved.getColors().isEmpty()) {
+            try {
+                fileStorageService.moveTempToProductFolder(saved);
+                System.out.println("File move completed");
+            } catch (Exception e) {
+                System.err.println("Warning: File move failed: " + e.getMessage());
+            }
+        }
+
+        return saved;
     }
+
     public ProductSearch buildSearchModel(HttpServletRequest request) {
         ProductSearch productSearch = new ProductSearch();
 
@@ -249,7 +348,7 @@ public class ProductAdminService extends BaseService<Product> {
                 default: return "In Order";
             }
         } catch (NumberFormatException e) {
-            return statusParam; // fallback nếu param đã là text
+            return statusParam;
         }
     }
 }

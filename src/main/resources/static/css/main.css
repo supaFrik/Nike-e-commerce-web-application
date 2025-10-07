@@ -150,7 +150,6 @@ a {
 }
 .form-group input:focus {
   outline: none;
-  border-color: var(--color-border-active);
 }
 
 .checkbox {

@@ -33,7 +33,6 @@
 .form-input:focus {
   outline: none;
   border-color: var(--color-black);
-  box-shadow: var(--form-shadow-focus);
 }
 
 .form-input::placeholder {
