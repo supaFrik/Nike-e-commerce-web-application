@@ -58,6 +58,13 @@
             <!-- Container fluid  -->
             <!-- ============================================================== -->
             <div class="container-fluid">
+                <!-- Flash messages -->
+                <c:if test="${not empty message}">
+                    <div class="alert alert-success">${message}</div>
+                </c:if>
+                <c:if test="${not empty error}">
+                    <div class="alert alert-danger">${error}</div>
+                </c:if>
                 <!-- ============================================================== -->
                 <!-- Start Page Content -->
                 <!-- ============================================================== -->
@@ -106,81 +113,8 @@
                                     <!-- Column -->
                                 </div>
                                 <div class="table-responsive">
-                                	
-                               	<div class="row">
-                       		 		<div class="col-md-6">
-										<div class="form-group mb-4">
-	                                        <a href="${root }/admin/category/add" role="button" class="btn btn-primary">Add New Category</a>
-                                      	</div>
-                                   	</div>
-									
-                                    <div class="col-md-6">
-	                                    <ul class="pagination float-right">
-	                                        <li class="page-item disabled">
-	                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-	                                        </li>
-	                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-	                                        <li class="page-item">
-	                                            <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-	                                        </li>
-	                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-	                                        <li class="page-item">
-	                                            <a class="page-link" href="#">Next</a>
-	                                        </li>
-	                                    </ul>
-                                    </div>
-                                </div>
-                                
-                                    <table id="zero_config" class="table table-striped table-bordered no-wrap">
+                                    <table class="table table-striped table-bordered no-wrap">
                                         <thead>
-                                            <tr>
-                                            	<th scope="col">No.</th>
-                                                <th scope="col">Id</th>
-                                                <th scope="col">Name</th>    
-                                                <th scope="col">Create by</th>
-                                                <th scope="col">Update by</th>
-                                                <th scope="col">Create date</th>
-                                                <th scope="col">Update date</th>
-                                                <th scope="col">Status</th>  
-                                                <th scope="col">Description</th>
-                                                <th scope="col">Actions</th>                                              
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        	<c:forEach var="category" items="${categories }" varStatus="loop">
-                                        		<tr>
-		                                        	<td>${loop.index + 1 }</td>
-		                                        	<td>${category.id }</td>
-		                                        	<td>${category.name }</td>
-		                                        	<%-- <td>${category.userCreateCategory.username }</td> --%>
-		                                        	<%-- <td>${category.userUpdateCategory.username }</td> --%>
-		                                        	<td>
-		                                        		<fmt:formatDate value="${category.createDate }" pattern="dd-MM-yyyy"/>
-		                                        	</td>
-		                                        	<td>
-		                                        		<fmt:formatDate value="${category.updateDate }" pattern="dd-MM-yyyy"/>
-		                                        	</td>
-		                                        	<td>
-		                                        		<c:choose>
-		                                        			<c:when test="${category.status }">
-		                                        				<span>Active</span>
-		                                        			</c:when>
-		                                        			<c:otherwise>
-		                                        				<span>Inactive</span>
-		                                        			</c:otherwise>
-		                                        		</c:choose>
-		                                        		</td>
-	                                        		<td>${category.description }</td>
-	                                        		<td>
-	                                        			<a href="${env }/admin/category/edit/${category.id }" role="button" 
-	                                                							class="btn btn-primary">Edit</a>
-	                                                	<a href="${env }/admin/category/delete/${category.id }" role="button" 
-	                                                							class="btn btn-secondary">Delete</a>
-	                                        		</td>
-                                        		</tr>
-                                        	</c:forEach>
-                                        </tbody>
-                                        <tfoot>
                                             <tr>
                                             	<th scope="col">No.</th>
                                                 <th scope="col">Id</th>
@@ -193,33 +127,55 @@
                                                 <th scope="col">Description</th>
                                                 <th scope="col">Actions</th>
                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                        <c:forEach var="category" items="${categories}" varStatus="loop">
+                                            <tr>
+                                                <td>${loop.index + 1}</td>
+                                                <td>${category.id}</td>
+                                                <td>${category.name}</td>
+                                                <td><fmt:formatDate value="${category.createDate}" pattern="dd-MM-yyyy"/></td>
+                                                <td><fmt:formatDate value="${category.updateDate}" pattern="dd-MM-yyyy"/></td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${empty category.status || fn:toLowerCase(category.status) eq 'active'}">
+                                                            <span class="badge badge-success">Active</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge badge-secondary">Inactive</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td>
+                                                    <a href="${env}/admin/category/edit/${category.id}" class="btn btn-sm btn-primary">Edit</a>
+                                                    <c:choose>
+                                                        <c:when test="${empty category.status || fn:toLowerCase(category.status) eq 'active'}">
+                                                            <a href="${env}/admin/category/delete/${category.id}" class="btn btn-sm btn-danger" onclick="return confirm('Inactivate this category?');">Delete</a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="${env}/admin/category/activate/${category.id}" class="btn btn-sm btn-success">Activate</a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                        <c:if test="${empty categories}">
+                                            <tr><td colspan="7" class="text-center">No categories found.</td></tr>
+                                        </c:if>
+                                        </tbody>
+                                        <tfoot>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Create date</th>
+                                            <th>Update date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
                                         </tfoot>
                                     </table>
-                                    
-                                    <div class="row">
-	                        		 		<div class="col-md-6">
-												<div class="form-group mb-4">
-			                                        <a href="${root }/admin/category/add" role="button" class="btn btn-primary">Add New Category</a>
-                                        		</div>
-	                                    	</div>
-										
-	                                    <div class="col-md-6">
-		                                    <ul class="pagination float-right">
-		                                        <li class="page-item disabled">
-		                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-		                                        </li>
-		                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-		                                        <li class="page-item">
-		                                            <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-		                                        </li>
-		                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-		                                        <li class="page-item">
-		                                            <a class="page-link" href="#">Next</a>
-		                                        </li>
-		                                    </ul>
-	                                    </div>
-	                                  </div>
-	                            </div>
+                                </div>
                             </div>
                         </div>
                     </div>

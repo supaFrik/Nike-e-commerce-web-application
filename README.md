@@ -74,7 +74,7 @@ This full-stack e-commerce platform provides a complete online shopping solution
 - **CSRF Protection** - Cross-site request forgery prevention
 - **Custom Authentication** - Email-based login with credential validation
 
----
+<img src="src/main/resources/static/images/screenshot/Featured.png" alt="Features" style="display: block; margin: 0 auto;" />
 
 ## 🛠 Tech Stack
 
