@@ -15,6 +15,9 @@ public abstract class BaseService <Model extends BaseEntity> {
     @PersistenceContext
     EntityManager entityManager;
 
+    // Provide controlled access for subclasses
+    protected EntityManager em() { return entityManager; }
+
     public abstract Class<Model> clazz();
 
     //Lay mot ban ghi theo id

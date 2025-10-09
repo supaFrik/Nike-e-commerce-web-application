@@ -1,34 +1,96 @@
 package vn.devpro.javaweb32.service.administrator;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import vn.devpro.javaweb32.common.base.BaseService;
 import vn.devpro.javaweb32.entity.product.Category;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class CategoryAdminService extends BaseService<Category> {
 
-	@Override
-	public Class<Category> clazz() {
-		return Category.class;
-	}
+    public static final String STATUS_ACTIVE = "Active";
+    public static final String STATUS_INACTIVE = "Inactive";
 
-	public List<Category> findAllActive(){
-		// Updated to use ACTIVE status string instead of numeric 1
-		String sql = "SELECT * FROM category WHERE status = 'ACTIVE' OR status IS NULL";
-		return executeNativeSql(sql);
-	}
+    @Override
+    public Class<Category> clazz() {
+        return Category.class;
+    }
 
-	public List<Category> findAll(){
-		String sql = "SELECT * FROM category ORDER BY name ASC";
-		return executeNativeSql(sql);
-	}
+    /**
+     * Find all product
+     */
+    public List<Category> findAllActive() {
+        return findActiveOrdered();
+    }
 
-	public Category findByName(String name) {
-		String sql = "SELECT * FROM category WHERE name = '" + name + "'";
-		List<Category> categories = executeNativeSql(sql);
-		return categories.isEmpty() ? null : categories.get(0);
-	}
+    /**
+     * Find a category by exact (case-insensitive) name.
+     */
+    public Category findByName(String name) {
+        if (name == null) return null;
+        String jpql = "SELECT c FROM Category c WHERE lower(c.name) = :name";
+        List<Category> results = em().createQuery(jpql, Category.class)
+                .setParameter("name", name.trim().toLowerCase())
+                .setMaxResults(1)
+                .getResultList();
+        return results.isEmpty() ? null : results.get(0);
+    }
+
+    /**
+     * Check if any other category already uses the given name.
+     */
+    public boolean existsByName(String name) {
+        return findByName(name) != null;
+    }
+
+    /**
+     * Return active (or null status) categories ordered by name.
+     */
+    public List<Category> findActiveOrdered() {
+        String jpql = "SELECT c FROM Category c WHERE c.status IS NULL OR lower(c.status) = :st ORDER BY lower(c.name) ASC";
+        return em().createQuery(jpql, Category.class)
+                .setParameter("st", STATUS_ACTIVE.toLowerCase())
+                .getResultList();
+    }
+
+    /**
+     * Create a new category (sets create date and active status if not already set).
+     */
+    @Transactional
+    public Category create(Category category) {
+        if (category == null) return null;
+        if (category.getCreateDate() == null) {
+            category.setCreateDate(new Date());
+        }
+        if (category.getStatus() == null) {
+            category.setStatus(STATUS_ACTIVE);
+        }
+        return saveOrUpdate(category);
+    }
+
+    /**
+     * Update an existing category (sets update date).
+     */
+    @Transactional
+    public Category update(Category category) {
+        if (category == null) return null;
+        category.setUpdateDate(new Date());
+        return saveOrUpdate(category);
+    }
+
+    /**
+     * Soft delete: mark category inactive.
+     */
+    @Transactional
+    public void softDelete(Long categoryId) {
+        if (categoryId == null) return;
+        Category category = getById(categoryId);
+        if (category != null) {
+            category.setStatus(STATUS_INACTIVE);
+            update(category);
+        }
+    }
 }
