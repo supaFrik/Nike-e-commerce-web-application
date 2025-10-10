@@ -1,63 +1,84 @@
 package vn.devpro.javaweb32.entity.product;
 
 import vn.devpro.javaweb32.common.base.BaseEntity;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_images")
+@Table(name = "product_images",
+        indexes = { @Index(name = "idx_pi_product_color", columnList = "product_id,color_id") })
 public class ProductImage extends BaseEntity {
 
-    @Column(name = "url")
-    private String url;
+    @Column(length = 1024, nullable = false)
+    private String path;
 
-    @Column(name = "status")
-    private String status;
+    @Column(length = 255, nullable = true)
+    private String title;
+
+    @Column(length = 512, nullable = true)
+    private String altText;
+
+    @Column(name = "is_thumbnail")
+    private Boolean isThumbnail = Boolean.FALSE;
+
+    @Column(name = "order_index")
+    private Integer orderIndex = 0;
 
     /**
-     * Quan hệ nhiều ảnh → 1 sản phẩm
+     * NOTE: BaseEntity đã có "status". Đừng thêm
+     * DÙng 'visible' cho mục đích nhất định. Chỉ thêm khi baseEntity k còn hiệu lực
      */
-    @ManyToOne
+    @Column(name = "visible")
+    private Boolean visible = Boolean.TRUE;
+
+    @Column(name = "created_by", length = 100)
+    private String createdBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 
-    /**
-     * Quan hệ nhiều ảnh → 1 màu sắc
-     */
-    @ManyToOne
-    @JoinColumn(name = "product_color_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "color_id")
     private ProductColor color;
 
-    // ========== GETTER/SETTER ==========
+    public ProductImage() {}
+
+    public ProductImage(String path, String title) {
+        this.path = path;
+        this.title = title;
+    }
 
     public String getUrl() {
-        return url;
+        return this.path;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+    public Long getId() { return super.getId(); }
 
-    public String getStatus() {
-        return status;
-    }
+    public String getPath() { return path; }
+    public void setPath(String path) { this.path = path; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public Product getProduct() {
-        return product;
-    }
+    public String getAltText() { return altText; }
+    public void setAltText(String altText) { this.altText = altText; }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+    public Boolean getIsThumbnail() { return isThumbnail; }
+    public void setIsThumbnail(Boolean isThumbnail) { this.isThumbnail = isThumbnail; }
 
-    public ProductColor getColor() {
-        return color;
-    }
+    public Integer getOrderIndex() { return orderIndex; }
+    public void setOrderIndex(Integer orderIndex) { this.orderIndex = orderIndex; }
 
-    public void setColor(ProductColor color) {
-        this.color = color;
-    }
+    public Boolean getVisible() { return visible; }
+    public void setVisible(Boolean visible) { this.visible = visible; }
+
+    public String getCreatedBy() { return createdBy; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
+
+    public ProductColor getColor() { return color; }
+    public void setColor(ProductColor color) { this.color = color; }
 }

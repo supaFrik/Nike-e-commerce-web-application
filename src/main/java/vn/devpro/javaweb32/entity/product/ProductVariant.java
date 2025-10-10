@@ -1,104 +1,101 @@
 package vn.devpro.javaweb32.entity.product;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import vn.devpro.javaweb32.common.base.BaseEntity;
+import vn.devpro.javaweb32.entity.product.enums.InventoryStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "product_variants")
-public class ProductVariant {
-    @ManyToOne
+@Table(name = "product_variants",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "color_id", "size_label"}))
+public class ProductVariant extends BaseEntity {
+
+    @Column(length = 100)
+    private String sku;
+
+    @Column(name = "size_label", length = 50, nullable = false)
+    private String sizeLabel; // e.g. "EU 42.5"
+
+    @Column(name = "size_value", length = 50)
+    private String sizeValue;
+
+    @Column(precision = 12, scale = 2, nullable = false)
+    private BigDecimal price = BigDecimal.ZERO;
+
+    @Column(name = "stock")
+    private Integer stock = 0;
+
+    @Column(name = "active")
+    private Boolean active = Boolean.TRUE;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "inventory_status", length = 20)
+    private InventoryStatus inventoryStatus = InventoryStatus.IN_ORDER;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    @JsonIgnore
     private Product product;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private String size;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "color_id")
     private ProductColor color;
 
-    @Column(nullable = false)
-    private Integer stock;
+    public ProductVariant() {}
 
-    @Column(nullable = false)
-    private BigDecimal price;
-
-    @Column(nullable = false)
-    private String colorName;
-
-    public ProductVariant() {
-        super();
+    public ProductVariant(String sizeLabel, BigDecimal price, Integer stock) {
+        this.sizeLabel = sizeLabel;
+        this.price = price == null ? BigDecimal.ZERO : price;
+        this.stock = stock == null ? 0 : stock;
+        updateInventoryStatus();
     }
 
-    public ProductVariant(Product product, Long id, String size, ProductColor color, Integer stock, BigDecimal price, String colorName) {
-        this.product = product;
-        this.id = id;
-        this.size = size;
-        this.color = color;
-        this.stock = stock;
-        this.price = price;
-        this.colorName = colorName;
+    public void updateInventoryStatus() {
+        if (Boolean.FALSE.equals(this.active)) {
+            this.inventoryStatus = InventoryStatus.DISCONTINUED;
+            return;
+        }
+        if (this.stock == null || this.stock <= 0) {
+            this.inventoryStatus = InventoryStatus.OUT_OF_STOCK;
+        } else if (this.stock <= 5) { // Chinh theo ý
+            this.inventoryStatus = InventoryStatus.FEW_LEFT;
+        } else {
+            this.inventoryStatus = InventoryStatus.IN_ORDER;
+        }
     }
 
-    public Product getProduct() {
-        return product;
-    }
+    public Long getId() { return super.getId(); }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+    public String getSku() { return sku; }
+    public void setSku(String sku) { this.sku = sku; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getSizeLabel() { return sizeLabel; }
+    public void setSizeLabel(String sizeLabel) { this.sizeLabel = sizeLabel; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getSizeValue() { return sizeValue; }
+    public void setSizeValue(String sizeValue) { this.sizeValue = sizeValue; }
 
-    public String getSize() {
-        return size;
-    }
+    public BigDecimal getPrice() { return price; }
+    public void setPrice(BigDecimal price) { this.price = price; }
 
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public ProductColor getColor() {
-        return color;
-    }
-
-    public void setColor(ProductColor color) {
-        this.color = color;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
+    public Integer getStock() { return stock; }
     public void setStock(Integer stock) {
         this.stock = stock;
+        updateInventoryStatus();
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) {
+        this.active = active;
+        updateInventoryStatus();
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+    public InventoryStatus getInventoryStatus() { return inventoryStatus; }
+    public void setInventoryStatus(InventoryStatus inventoryStatus) { this.inventoryStatus = inventoryStatus; }
 
-    public String getColorName() {
-        return colorName;
-    }
+    public Product getProduct() { return product; }
+    public void setProduct(Product product) { this.product = product; }
 
-    public void setColorName(String colorName) {
-        this.colorName = colorName;
-    }
+    public ProductColor getColor() { return color; }
+    public void setColor(ProductColor color) { this.color = color; }
 }
