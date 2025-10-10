@@ -17,7 +17,7 @@ public class Product extends BaseEntity {
     @Column(length = 25, nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal price;
 
     @Column(nullable = true)
@@ -65,25 +65,15 @@ public class Product extends BaseEntity {
     @Transient
     private String imageUrl;
 
-    @Column(nullable = false)
-    private boolean favourites;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "main_image_id")
+    private ProductImage mainImage;
 
-
-    public String getImageUrl() {
-        if (imageUrl != null) {
-            return imageUrl;
-        }
-        if (images != null && !images.isEmpty() && images.get(0) != null) {
-            return images.get(0).getUrl();
-        }
-        return null;
+    public Product() {
     }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public Product() {
     }
 
     public String getName() {
@@ -192,7 +182,6 @@ public class Product extends BaseEntity {
         if (variants == null || variants.isEmpty()) {
             return 0;
         }
-        // Use a set to count unique colors
         java.util.Set<ProductColor> colors = new java.util.HashSet<>();
         for (ProductVariant variant : variants) {
             if (variant.getColor() != null) {
@@ -202,16 +191,27 @@ public class Product extends BaseEntity {
         return colors.size();
     }
 
-    public boolean getFavourites() {
-        return favourites;
-    }
-
-    public void setFavourites(boolean favourites) {
-        this.favourites = favourites;
-    }
-
     public void addRelationalProductImage(ProductImage productImage) {
         images.add(productImage);
         productImage.setProduct(this);
+    }
+
+    public String getImageUrl() {
+        if (imageUrl != null) {
+            return imageUrl;
+        }
+        if (mainImage != null) {
+            // productImage in repo appears to use getUrl()
+            try {
+                return mainImage.getUrl();
+            } catch (NoSuchMethodError | NullPointerException ex) {
+                // Trả về path nếu URL k có
+                return mainImage.getPath();
+            }
+        }
+        if (images != null && !images.isEmpty() && images.get(0) != null) {
+            return images.get(0).getUrl();
+        }
+        return null;
     }
 }
