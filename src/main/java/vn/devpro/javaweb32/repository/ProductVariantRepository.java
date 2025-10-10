@@ -19,20 +19,28 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
     @EntityGraph(attributePaths = {"color", "product"})
     List<ProductVariant> findByProduct(Product product);
 
+    // NOTE: use "sizeLabel" to match entity field name. If your entity still uses "size", revert to "AndSize".
     @EntityGraph(attributePaths = {"color", "product"})
-    Optional<ProductVariant> findByProductIdAndColor_IdAndSize(Long productId, Long colorId, String size);
+    Optional<ProductVariant> findByProductIdAndColor_IdAndSizeLabel(Long productId, Long colorId, String sizeLabel);
 
     @EntityGraph(attributePaths = {"color"})
     List<ProductVariant> findByProductIdAndColor_Id(Long productId, Long colorId);
 
+    // Convenience sorted by sizeLabel; if you have numeric sizeValue, consider ordering by sizeValue instead.
+    @EntityGraph(attributePaths = {"color"})
+    List<ProductVariant> findByProductIdAndColor_IdOrderBySizeLabelAsc(Long productId, Long colorId);
+
     @Query("select distinct v.color from ProductVariant v where v.product.id = :productId")
     List<ProductColor> findDistinctColorsByProductId(@Param("productId") Long productId);
 
-    @Query("select distinct v.size from ProductVariant v " +
-            "where v.product.id = :productId and v.color.id = :colorId and (v.stock is null or v.stock > 0) " +
-            "order by v.size")
+    @Query("select distinct v.sizeLabel from ProductVariant v " +
+            "where v.product.id = :productId and v.color.id = :colorId and coalesce(v.stock,0) > 0 " +
+            "order by v.sizeLabel")
     List<String> findAvailableSizesByProductIdAndColorId(@Param("productId") Long productId,
                                                          @Param("colorId") Long colorId);
 
     List<ProductVariant> findByProductIdAndStockGreaterThan(Long productId, Integer stockThreshold);
+
+    // Useful helper to check duplicates before insert
+    boolean existsByProductIdAndColor_IdAndSizeLabel(Long productId, Long colorId, String sizeLabel);
 }
