@@ -23,7 +23,7 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal salePrice;
 
     @Column(length = 1000, nullable = false)

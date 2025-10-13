@@ -15,5 +15,4 @@ public enum InventoryStatus {
     public String getDisplayName() {
         return displayName;
     }
-
 }

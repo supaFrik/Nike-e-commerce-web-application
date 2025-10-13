@@ -43,8 +43,9 @@ function validateFormFields() {
     // Validate price is a positive number
     const priceElement = document.getElementById('productPrice');
     if (priceElement) {
-        const price = parseFloat(priceElement.value);
-        if (isNaN(price) || price <= 0) {
+        const raw = priceElement.dataset.raw || priceElement.value;
+        const price = sanitizePriceInput(raw);
+        if (price === null || price <= 0) {
             window.Toast.show('Please enter a valid price');
             priceElement.focus();
             return false;
@@ -86,10 +87,12 @@ function submitToBackend(formData){
 
 // Collect all form data
 function collectFormData() {
+    const priceField = document.getElementById('productPrice');
+    const priceValue = sanitizePriceInput(priceField ? (priceField.dataset.raw || priceField.value) : null) || 0;
     const base = {
         name: document.getElementById('productName')?.value || '',
         description: document.getElementById('productDescription')?.value || '',
-        price: parseFloat(document.getElementById('productPrice')?.value || 0),
+        price: priceValue,
         salePrice: null,
         type: document.querySelector('input[name="gender"]:checked')?.id?.toUpperCase() || 'UNISEX',
         categoryId: parseInt(document.getElementById('categoryIdHidden')?.value || 0) || null,
@@ -216,3 +219,10 @@ window.FormHandler = {
     collectData: collectFormData,
     reset: resetForm
 };
+
+function sanitizePriceInput(val){
+    if(!val) return null;
+    const digits = val.toString().replace(/[^0-9]/g,'');
+    if(!digits) return null;
+    return parseInt(digits,10);
+}

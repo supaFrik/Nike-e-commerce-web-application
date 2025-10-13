@@ -145,4 +145,31 @@ public class ProductResponseDto {
         if (images == null || images.isEmpty() || images.get(0) == null) return null;
         return images.get(0).getUrl();
     }
+
+    public String getImageUrl() {
+        if (avatarUrl != null && !avatarUrl.isBlank()) return avatarUrl;
+        return getFirstImageUrl();
+    }
+
+    public int getColorCount() {
+        return colors == null ? 0 : colors.size();
+    }
+
+    public boolean hasSale() {
+        return salePrice != null && price != null && salePrice.compareTo(price) < 0;
+    }
+
+
+    // Optional
+    public java.math.BigDecimal getDisplayPrice() {
+        return hasSale() ? salePrice : price;
+    }
+
+    public java.math.BigDecimal getEffectivePrice() {
+        return getDisplayPrice();
+    }
+
+    public boolean getHasSale() { // for JSP EL property resolution
+        return hasSale();
+    }
 }

@@ -125,7 +125,9 @@
                     <div class="pricing-grid">
                         <div class="form-group">
                             <label class="form-label">Base Pricing</label>
-                            <input id="productPrice" name="price" type="number" step="0.01" class="form-input" placeholder="1000000">
+                            <div class="price-input-wrapper">
+                                <input id="productPrice" name="price" type="text" inputmode="numeric" class="form-input" placeholder="1.000.000 ₫" autocomplete="off" />
+                            </div>
                         </div>
                     </div>
 

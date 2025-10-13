@@ -27,6 +27,7 @@ function updateStockSummary() {
     if (!window.AppState) return;
     const el = document.getElementById('stockSummary');
     if (!el) return;
+    if (!window.AppState.currentColor) { el.textContent = 'Stock: — (add a color)'; return; }
     const currentColor = window.AppState.currentColor;
     let currentTotal = 0;
     let grandTotal = 0;
@@ -46,6 +47,10 @@ function updateStockSummary() {
 function updateSizeOptions() {
     const sizeContainer = document.getElementById('sizeOptions');
     if (!sizeContainer) return;
+    if (!window.AppState.currentColor) {
+        sizeContainer.innerHTML = '<div class="size-placeholder">Add a color first to manage sizes.</div>';
+        return;
+    }
 
     sizeContainer.innerHTML = '';
 

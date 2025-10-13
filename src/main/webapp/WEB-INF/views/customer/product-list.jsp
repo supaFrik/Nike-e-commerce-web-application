@@ -1,8 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -35,54 +35,14 @@
                     <div class="left-nav-container">
                         <div class="categories__content">
                             <h2 id="categories-title" class="sr-only">Product Categories</h2>
-                            <a href="${env}/products?category=lifestyle" class="categories__item" aria-describedby="lifestyle-desc">
-                                Lifestyle
-                                <span id="lifestyle-desc" class="sr-only">Browse lifestyle shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=jordan" class="categories__item" aria-describedby="jordan-desc">
-                                Jordan
-                                <span id="jordan-desc" class="sr-only">Browse Jordan shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=running" class="categories__item" aria-describedby="running-desc">
-                                Running
-                                <span id="running-desc" class="sr-only">Browse running shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=basketball" class="categories__item" aria-describedby="basketball-desc">
-                                Basketball
-                                <span id="basketball-desc" class="sr-only">Browse basketball shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=american-football" class="categories__item" aria-describedby="american-football-desc">
-                                American Football
-                                <span id="american-football-desc" class="sr-only">Browse American football shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=football" class="categories__item" aria-describedby="football-desc">
-                                Football
-                                <span id="football-desc" class="sr-only">Browse football shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=training" class="categories__item" aria-describedby="training-desc">
-                                Training & Gym
-                                <span id="training-desc" class="sr-only">Browse training and gym shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=skateboarding" class="categories__item" aria-describedby="skateboarding-desc">
-                                Skateboarding
-                                <span id="skateboarding-desc" class="sr-only">Browse skateboarding shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=golf" class="categories__item" aria-describedby="golf-desc">
-                                Golf
-                                <span id="golf-desc" class="sr-only">Browse golf shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=tennis" class="categories__item" aria-describedby="tennis-desc">
-                                Tennis
-                                <span id="tennis-desc" class="sr-only">Browse tennis shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=athletics" class="categories__item" aria-describedby="athletics-desc">
-                                Athletics
-                                <span id="athletics-desc" class="sr-only">Browse athletics shoes collection</span>
-                            </a>
-                            <a href="${env}/products?category=walking" class="categories__item" aria-describedby="walking-desc">
-                                Walking
-                                <span id="walking-desc" class="sr-only">Browse walking shoes collection</span>
-                            </a>
+                            <!-- Dynamic categories list -->
+                            <c:forEach var="cat" items="${categories}">
+                                <c:set var="catSlug" value="${fn:toLowerCase(cat.name)}" />
+                                <a href="${env}/products?category=${catSlug}" class="categories__item<c:if test='${catSlug == selectedCategory}'> active</c:if>" aria-describedby="${catSlug}-desc">
+                                    <c:out value="${cat.name}"/>
+                                    <span id="${catSlug}-desc" class="sr-only">Browse <c:out value='${cat.name}'/> shoes collection</span>
+                                </a>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>
@@ -229,7 +189,15 @@
                 <!-- Product List header -->
                 <div class="product-header" role="region" aria-labelledby="page-title">
                     <div class="product-title-section">
-                        <h1 class="product-title" id="page-title">Men's Shoes <c:out value="${totalProducts}" default="0"/></h1>
+                        <h1 class="product-title" id="page-title">
+                            <c:choose>
+                                <c:when test="${not empty selectedCategory}">
+                                    <c:out value="${selectedCategory}"/> Shoes
+                                </c:when>
+                                <c:otherwise>All Shoes</c:otherwise>
+                            </c:choose>
+                            <c:out value=" ${totalProducts}"/>
+                        </h1>
                     </div>
                     <div class="header-controls" role="group" aria-label="Page controls">
                         <button class="mobile-filter-btn" onclick="toggleMobileFilters()" style="display: none;"
@@ -315,7 +283,7 @@
                                                                 ${product.name}
                                                             </div>
                                                             <div class="product-card__subtitle" id="product-${status.index + 1}-desc">
-                                                                ${product.type}'s Shoes
+                                                                ${product.type}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -332,9 +300,20 @@
                                                 </div>
                                                 <div class="product-card__price-wrapper">
                                                     <div class="product-card__price-container">
-                                                        <div class="product-card__price" data-testid="product-card__price"
-                                                             aria-label="Price: <fmt:formatNumber value='${product.price}' type='number' maxFractionDigits='0'/> VND">
-                                                            <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>₫
+                                                        <div class="product-card__price" data-testid="product-card__price">
+                                                            <c:choose>
+                                                                <c:when test="${product.hasSale}">
+                                                                    <span class="sale-price">
+                                                                        <fmt:formatNumber value="${product.salePrice}" type="number" maxFractionDigits="0"/>₫
+                                                                    </span>
+                                                                    <span class="orig-price" style="text-decoration:line-through; color:#777; margin-left:4px;">
+                                                                        <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>₫
+                                                                    </span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>₫
+                                                                </c:otherwise>
+                                                            </c:choose>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -530,8 +509,7 @@
         </div>
     </div>
 
-    <!-- Include JavaScript -->
+    <!-- JavaScript -->
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>
 </html>
-

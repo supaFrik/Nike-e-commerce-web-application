@@ -3,6 +3,7 @@ package vn.devpro.javaweb32.service.mapper;
 import org.springframework.stereotype.Component;
 import vn.devpro.javaweb32.dto.customer.product.*;
 import vn.devpro.javaweb32.entity.product.*;
+import vn.devpro.javaweb32.entity.product.enums.ProductStatus;
 
 import java.util.stream.Collectors;
 
@@ -16,6 +17,9 @@ public class CustomerProductMapper {
         dto.setHexCode(color.getHexCode());
         dto.setActive(color.getActive());
         dto.setSwatchUrl(color.getSwatchPath());
+        dto.setFolderPath(color.getFolderPath());
+        dto.setBaseImage(color.getBaseImage());
+        dto.setImageUrl(color.getImageUrl());
         if (color.getProduct() != null && color.getProduct().getImages() != null && !color.getProduct().getImages().isEmpty()) {
             dto.setPreviewImage(color.getProduct().getImages().get(0).getPath());
         }
@@ -61,7 +65,7 @@ public class CustomerProductMapper {
         dto.setAvatarUrl(product.getAvatar());
         dto.setSeo(product.getSeo());
         if (product.getProductStatus() != null) {
-            dto.setStatus(product.getProductStatus().name());
+            dto.setStatus(humanize(product.getProductStatus()));
         }
         dto.setType(product.getType());
         dto.setCreateDate(product.getCreateDate());
@@ -84,5 +88,19 @@ public class CustomerProductMapper {
                 .collect(Collectors.toList()));
         }
         return dto;
+    }
+    public String humanize(ProductStatus status) {
+        if(status == null) return "";
+        switch (status) {
+            case ACTIVE: return "In Order";
+            case DISCONTINUED: return "Unavailable";
+            case FEW_LEFT: return "Left Order";
+            case OUT_OF_STOCK: return "Out of Stock";
+            case DRAFT: return "Comming soon";
+
+            default:
+                String s = status.name().toLowerCase().replaceAll("_", " ");
+                return Character.toUpperCase(s.charAt(0)) + s.substring(1);
+        }
     }
 }
