@@ -26,14 +26,19 @@ function initializeColors() {
 function updateColorOptions() {
     const colorContainer = document.getElementById('colorOptions');
     if (!colorContainer) return;
-    
-    // Check if AppState is available
     if (!window.AppState || !window.AppState.availableColors) {
         console.error('AppState or availableColors not available in updateColorOptions');
         return;
     }
-    
     colorContainer.innerHTML = '';
+    if (window.AppState.availableColors.length === 0) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'color-placeholder';
+        placeholder.textContent = 'No colors yet. Add one below.';
+        colorContainer.appendChild(placeholder);
+        updateColorInfo();
+        return;
+    }
 
     window.AppState.availableColors.forEach(color => {
         const colorDiv = document.createElement('div');
@@ -60,28 +65,26 @@ function updateColorOptions() {
 
 // Update color information in UI
 function updateColorInfo() {
-    // Update color info (with null checks)
     const currentColorNameEl = document.getElementById('currentColorName');
     if (currentColorNameEl) {
-        currentColorNameEl.textContent = window.AppState.currentColor;
+        currentColorNameEl.textContent = window.AppState.currentColor || '—';
     }
-    
-    // Update size section labels (with null checks)
     const sizeColorNameEl = document.getElementById('sizeColorName');
     if (sizeColorNameEl) {
-        sizeColorNameEl.textContent = window.AppState.currentColor;
+        sizeColorNameEl.textContent = window.AppState.currentColor || '—';
     }
-    
     const addSizeColorNameEl = document.getElementById('addSizeColorName');
     if (addSizeColorNameEl) {
-        addSizeColorNameEl.textContent = window.AppState.currentColor;
+        addSizeColorNameEl.textContent = window.AppState.currentColor || '—';
     }
-    
-    // Update image counter for current color
-    const currentImages = window.AppState.colorImageData[window.AppState.currentColor] || [];
     const imageCounterEl = document.getElementById('imageCounter');
     if (imageCounterEl) {
-        imageCounterEl.textContent = `${currentImages.length} / ${window.AppState.maxImages} images uploaded for ${window.AppState.currentColor}`;
+        if (!window.AppState.currentColor) {
+            imageCounterEl.textContent = '0 / ' + window.AppState.maxImages + ' images (no color selected)';
+        } else {
+            const currentImages = window.AppState.colorImageData[window.AppState.currentColor] || [];
+            imageCounterEl.textContent = `${currentImages.length} / ${window.AppState.maxImages} images uploaded for ${window.AppState.currentColor}`;
+        }
     }
 }
 
@@ -130,21 +133,24 @@ function addNewColor() {
     }
 
     window.AppState.availableColors.push(newColor);
-    window.AppState.colorImageData[newColor] = []; // Initialize empty image array for new color
-    window.AppState.colorSizeData[newColor] = ['40']; // Initialize with default size for new color
-    // defaultImageData[newColor] will be set when first image is uploaded
+    window.AppState.colorImageData[newColor] = [];
+    window.AppState.colorSizeData[newColor] = ['40'];
+    if (!window.AppState.colorSizeStockData[newColor]) window.AppState.colorSizeStockData[newColor] = { '40': 0 };
+    if (!window.AppState.currentColor) {
+        window.AppState.setCurrentColor(newColor);
+    }
     updateColorOptions();
     input.value = '';
-    
-    // Automatically switch to the new color
     switchToColor(newColor);
 }
 
 // Remove color
 function removeColor(color) {
-    if (window.AppState.availableColors.length <= 1) {
-        window.Toast.show('You must have at least one color');
-        return;
+    // Allow removing last color (user can decide later) – warn instead of blocking
+    if (window.AppState.availableColors.length === 1) {
+        if (!confirm('Removing the last color will clear all size & image inputs. Continue?')) {
+            return;
+        }
     }
     
     // Confirm deletion if color has images
@@ -165,7 +171,9 @@ function removeColor(color) {
         window.AppState.setCurrentColor(window.AppState.availableColors[0]);
         window.AppState.setCurrentImageIndex(0);
     }
-    
+    if (window.AppState.availableColors.length === 0) {
+        window.AppState.setCurrentColor(null);
+    }
     updateColorOptions();
     
     // Update sizes and images after color removal

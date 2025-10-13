@@ -1,5 +1,4 @@
 // Global State Management
-// This module manages all the global variables and state for the product form
 
 // Product data storage
 let colorImageData = {}; // Store images by color: { "Black": [images], "White": [images] }
@@ -7,25 +6,20 @@ let colorSizeData = {}; // Store sizes by color: { "Black": ["S", "M"], "White":
 let defaultImageData = {}; // Store default image ID by color: { "Black": "imageId1", "White": "imageId2" }
 let colorSizeStockData = {}; // NEW: per color -> { sizeLabel: stock }
 
-// UI state variables
 let currentImageIndex = 0;
-let currentColor = 'Black'; // Currently selected color
+let currentColor = null; // No default color; user will add
 let selectedCategory = null; // Store selected category
 
-// Configuration constants
 const maxImages = 10;
 let defaultSizes = ['36', '37', '38', '39', '40', '41']; // Default available sizes
-let availableColors = ['Black']; // Default colors
+let availableColors = [];
 
-// State getters and setters
 window.AppState = {
-    // Data getters
     getColorImageData: () => colorImageData,
     getColorSizeData: () => colorSizeData,
     getDefaultImageData: () => defaultImageData,
     getColorSizeStockData: () => colorSizeStockData,
 
-    // UI state getters
     getCurrentImageIndex: () => currentImageIndex,
     getCurrentColor: () => currentColor,
     getSelectedCategory: () => selectedCategory,
@@ -33,19 +27,16 @@ window.AppState = {
     getDefaultSizes: () => defaultSizes,
     getAvailableColors: () => availableColors,
     
-    // State setters
     setCurrentImageIndex: (index) => { currentImageIndex = index; },
     setCurrentColor: (color) => { currentColor = color; },
     setSelectedCategory: (category) => { selectedCategory = category; },
     setAvailableColors: (colors) => { availableColors = colors; },
     
-    // Data manipulation methods
     setColorImageData: (color, images) => { colorImageData[color] = images; },
     setColorSizeData: (color, sizes) => { colorSizeData[color] = sizes; },
     setDefaultImageData: (color, imageId) => { defaultImageData[color] = imageId; },
     setColorSizeStockData: (color, stockMap) => { colorSizeStockData[color] = stockMap; },
 
-    // Utility methods
     addColor: (color) => {
         if (!availableColors.includes(color)) {
             availableColors.push(color);
@@ -63,7 +54,6 @@ window.AppState = {
         delete defaultImageData[color];
     },
     
-    // Initialize default data
     initialize: () => {
         availableColors.forEach(color => {
             if (!colorImageData[color]) { colorImageData[color] = []; }
@@ -72,21 +62,19 @@ window.AppState = {
         });
     },
     
-    // Reset all data to defaults
     reset: () => {
         colorImageData = {};
         colorSizeData = {};
         colorSizeStockData = {};
         defaultImageData = {};
         currentImageIndex = 0;
-        currentColor = 'Black';
+        currentColor = null;
         selectedCategory = null;
-        availableColors = ['Black'];
+        availableColors = [];
         window.AppState.initialize();
     }
 };
 
-// Add direct property access for easier use
 Object.defineProperty(window.AppState, 'availableColors', {
     get: () => availableColors,
     set: (colors) => { availableColors = colors; }

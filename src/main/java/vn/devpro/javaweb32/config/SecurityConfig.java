@@ -68,6 +68,10 @@ public class SecurityConfig {
                                 "/product-detail",
                                 "/product-detail/**"
                         ).permitAll()
+                        .antMatchers(
+                                "/api/products",
+                                "/api/products/**"
+                        ).permitAll()
                         // Public AJAX endpoints for pre-signup validation
                         .antMatchers(
                                 "/api/auth/email-exists",

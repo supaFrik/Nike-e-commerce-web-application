@@ -7,14 +7,20 @@ public class ProductColorResponseDto {
     private Boolean active;
     private String swatchUrl;  // đường dẫn ảnh mẫu màu
     private String previewImage; // ảnh hiển thị mặc định trên UI
+    private String folderPath;
+    private String baseImage;
+    private String imageUrl;
 
-    public ProductColorResponseDto(Long id, String colorName, String hexCode, Boolean active, String swatchUrl, String previewImage) {
+    public ProductColorResponseDto(Long id, String colorName, String hexCode, Boolean active, String swatchUrl, String previewImage, String folderPath, String baseImage, String imageUrl) {
         this.id = id;
         this.colorName = colorName;
         this.hexCode = hexCode;
         this.active = active;
         this.swatchUrl = swatchUrl;
         this.previewImage = previewImage;
+        this.folderPath = folderPath;
+        this.baseImage = baseImage;
+        this.imageUrl = imageUrl;
     }
 
     public ProductColorResponseDto() {
@@ -66,5 +72,29 @@ public class ProductColorResponseDto {
 
     public void setPreviewImage(String previewImage) {
         this.previewImage = previewImage;
+    }
+
+    public String getFolderPath() {
+        return folderPath;
+    }
+
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
+    }
+
+    public String getBaseImage() {
+        return baseImage;
+    }
+
+    public void setBaseImage(String baseImage) {
+        this.baseImage = baseImage;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

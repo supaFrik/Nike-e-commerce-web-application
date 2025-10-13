@@ -131,6 +131,7 @@ figure {
 }
 
 .product-card__title {
+text-transform: capitalize;
     font-weight: 500;
     color: var(--color-text-primary);
     margin-bottom: 0;

@@ -107,7 +107,6 @@
             </label>
             <h3 class="section-heading">Category</h3>
             <div class="field-cols">
-              <!-- Provide id=editCategorySelect for JS; value will be category key -->
               <label class="field boxed">
                 <span>Product Category</span>
                 <select id="editCategorySelect" name="category"></select>
@@ -149,7 +148,6 @@
     </article>
   </template>
 
-  <!-- Embed categories for dynamic tabs & select -->
   <script>
     window.APP_CTX='${env}';
     window.__CATEGORIES__ = [

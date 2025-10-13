@@ -27,29 +27,41 @@
                 <div class="product-images" role="region" aria-labelledby="product-images-title">
                     <h2 id="product-images-title" class="sr-only">Product Images</h2>
                     <div class="image-preview">
-                        <div class="thumbnail-nav" role="list" aria-label="Product image thumbnails">
-                            <c:forEach begin="1" end="10" var="i">
-                                <div class="thumbnail-item${i == 1 ? ' active' : ''}" data-index="${i - 1}" role="listitem" tabindex="${i}" style="display: none;">
-                                    <img src="${env}/images/products/${product.name}/${colors[0].folderPath}/${colors[0].baseImage}-${i}.avif"
-                                         alt="Product image ${i}"
-                                         onload="this.parentElement.style.display = 'block';"
-                                         onerror="this.parentElement.style.display = 'none';">
+                        <c:choose>
+                            <c:when test="${not empty colors}">
+                                <div class="thumbnail-nav" role="list" aria-label="Product image thumbnails">
+                                    <c:forEach begin="1" end="10" var="i">
+                                        <div class="thumbnail-item${i == 1 ? ' active' : ''}" data-index="${i - 1}" role="listitem" tabindex="${i}" style="display: none;">
+                                            <img src="${env}/images/products/${product.name}/${colors[0].folderPath}/${colors[0].baseImage}-${i}.avif"
+                                                 alt="Product image ${i}"
+                                                 onload="this.parentElement.style.display = 'block';"
+                                                 onerror="this.parentElement.style.display = 'none';">
+                                        </div>
+                                    </c:forEach>
                                 </div>
-                            </c:forEach>
-                        </div>
-                        <div class="main-image-container" role="region" aria-labelledby="main-image-title" aria-live="polite">
-                            <h3 id="main-image-title" class="sr-only">Main Product Image</h3>
-                            <div class="main-image">
-                                <img id="currentImage" src="${env}/images/products/${product.name}/${colors[0].folderPath}/${colors[0].baseImage}-1.avif" alt="${product.name}">
-                            </div>
-                        </div>
+                                <div class="main-image-container" role="region" aria-labelledby="main-image-title" aria-live="polite">
+                                    <h3 id="main-image-title" class="sr-only">Main Product Image</h3>
+                                    <div class="main-image">
+                                        <img id="currentImage" src="${env}/images/products/${product.name}/${colors[0].folderPath}/${colors[0].baseImage}-1.avif" alt="${product.name}">
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="main-image-container" role="region" aria-labelledby="main-image-title" aria-live="polite">
+                                    <h3 id="main-image-title" class="sr-only">Main Product Image</h3>
+                                    <div class="main-image">
+                                        <img id="currentImage" src="${env}/images/products/default-product.avif" alt="${product.name}">
+                                    </div>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
                 
                 <div class="product-info" role="region" aria-labelledby="product-title">
                     <div class="product-header">
                         <h1 class="product-title" id="product-title">${product.name}</h1>
-                        <p class="product-subtitle" id="product-subtitle">${product.category != null ? product.category.name : ''}</p>
+                        <p class="product-subtitle" id="product-subtitle">${product.categoryName}</p>
                         <div class="product-price">
                             <c:choose>
                                 <c:when test="${not empty product.variants}">

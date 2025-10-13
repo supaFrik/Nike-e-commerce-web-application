@@ -40,6 +40,7 @@
 }
 
 .categories__item {
+text-transform: capitalize;
     font-size: 16px;
     padding: 4px 0;
     text-decoration: none;

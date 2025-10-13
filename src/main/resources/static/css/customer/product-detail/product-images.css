@@ -3,7 +3,6 @@
 }
 /* ==================================================
 @media (max-width: 1024px) {
-  /* Ensure product-header is always on top in responsive layouts */
   .product-detail {
     display: flex;
     flex-direction: column;

@@ -148,13 +148,18 @@ function loadDraftIfAvailable(){
         if(!raw) return;
         const draft = JSON.parse(raw);
         if(!draft || !draft.name) return;
-        // Populate simple fields
         const nameEl = document.getElementById('productName');
         const descEl = document.getElementById('productDescription');
         const priceEl = document.getElementById('productPrice');
         if(nameEl) nameEl.value = draft.name;
         if(descEl) descEl.value = draft.description || '';
-        if(priceEl && draft.price) priceEl.value = draft.price;
+        if(priceEl && draft.price){
+            if(window.PriceFormatter){
+                window.PriceFormatter.setRawValue(draft.price);
+            } else {
+                priceEl.value = draft.price; // fallback
+            }
+        }
         if(draft.type){
             const radio = document.getElementById(draft.type.toUpperCase());
             if(radio) radio.checked = true;
