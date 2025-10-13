@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import vn.devpro.javaweb32.common.base.BaseEntity;
 import vn.devpro.javaweb32.entity.customer.Customer;
+import vn.devpro.javaweb32.entity.product.enums.ProductStatus;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "products")
@@ -17,13 +20,13 @@ public class Product extends BaseEntity {
     @Column(length = 25, nullable = false)
     private String name;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private BigDecimal salePrice;
 
-    @Column(length = 500, nullable = false)
+    @Column(length = 1000, nullable = false)
     private String description;
 
     @Column(length = 20, nullable = false)
@@ -44,17 +47,20 @@ public class Product extends BaseEntity {
     private String seo;
 
     @Column(nullable = false)
-    private String status;
+    private ProductStatus productStatus;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(FetchMode.SUBSELECT)
     private List<ProductVariant> variants = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("product")
+    @Fetch(FetchMode.SUBSELECT)
     private List<ProductImage> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("product")
+    @Fetch(FetchMode.SUBSELECT)
     private List<ProductColor> colors = new ArrayList<>();
 
     @ManyToOne
@@ -72,8 +78,41 @@ public class Product extends BaseEntity {
     public Product() {
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+
+    public int getColorCount() {
+        if (variants == null || variants.isEmpty()) {
+            return 0;
+        }
+        java.util.Set<ProductColor> colors = new java.util.HashSet<>();
+        for (ProductVariant variant : variants) {
+            if (variant.getColor() != null) {
+                colors.add(variant.getColor());
+            }
+        }
+        return colors.size();
+    }
+
+    public void addRelationalProductImage(ProductImage productImage) {
+        images.add(productImage);
+        productImage.setProduct(this);
+    }
+
+    public String getImageUrl() {
+        if (imageUrl != null) {
+            return imageUrl;
+        }
+        if (mainImage != null) {
+            try {
+                return mainImage.getUrl();
+            } catch (NoSuchMethodError | NullPointerException ex) {
+                // Trả về path nếu URL k có
+                return mainImage.getPath();
+            }
+        }
+        if (images != null && !images.isEmpty() && images.get(0) != null) {
+            return images.get(0).getUrl();
+        }
+        return null;
     }
 
     public String getName() {
@@ -115,35 +154,45 @@ public class Product extends BaseEntity {
     public void setType(String type) {
         this.type = type;
     }
+
     public String getAvatar() {
         return avatar;
     }
+
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
     public Customer getUserCreateProduct() {
         return userCreateProduct;
     }
+
     public void setUserCreateProduct(Customer userCreateProduct) {
         this.userCreateProduct = userCreateProduct;
     }
+
     public Customer getUserUpdateProduct() {
         return userUpdateProduct;
     }
+
     public void setUserUpdateProduct(Customer userUpdateProduct) {
         this.userUpdateProduct = userUpdateProduct;
     }
+
     public String getSeo() {
         return seo;
     }
+
     public void setSeo(String seo) {
         this.seo = seo;
     }
-    public String getStatus() {
-        return status;
+
+    public ProductStatus getProductStatus() {
+        return productStatus;
     }
-    public void setStatus(String status) {
-        this.status = status;
+
+    public void setProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
     }
 
     public List<ProductVariant> getVariants() {
@@ -178,40 +227,24 @@ public class Product extends BaseEntity {
         this.category = category;
     }
 
-    public int getColorCount() {
-        if (variants == null || variants.isEmpty()) {
-            return 0;
-        }
-        java.util.Set<ProductColor> colors = new java.util.HashSet<>();
-        for (ProductVariant variant : variants) {
-            if (variant.getColor() != null) {
-                colors.add(variant.getColor());
-            }
-        }
-        return colors.size();
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public void addRelationalProductImage(ProductImage productImage) {
-        images.add(productImage);
-        productImage.setProduct(this);
+    public ProductImage getMainImage() {
+        return mainImage;
     }
 
-    public String getImageUrl() {
-        if (imageUrl != null) {
-            return imageUrl;
+    public void setMainImage(ProductImage mainImage) {
+        this.mainImage = mainImage;
+    }
+
+    public Integer getTotalStock() {
+        if (variants == null || variants.isEmpty()) return null;
+        int sum = 0; boolean any = false;
+        for (ProductVariant v : variants) {
+            if (v != null && v.getStock() != null) { sum += v.getStock(); any = true; }
         }
-        if (mainImage != null) {
-            // productImage in repo appears to use getUrl()
-            try {
-                return mainImage.getUrl();
-            } catch (NoSuchMethodError | NullPointerException ex) {
-                // Trả về path nếu URL k có
-                return mainImage.getPath();
-            }
-        }
-        if (images != null && !images.isEmpty() && images.get(0) != null) {
-            return images.get(0).getUrl();
-        }
-        return null;
+        return any ? sum : null;
     }
 }

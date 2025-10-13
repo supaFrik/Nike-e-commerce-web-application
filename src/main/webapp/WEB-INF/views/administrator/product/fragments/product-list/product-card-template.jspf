@@ -1,0 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<template id="productCardTemplate">
+  <article class="product-card" tabindex="0" role="button" aria-pressed="false">
+    <div class="thumb" data-ref="thumb">
+      <span class="thumb-placeholder" aria-hidden="true">No Image</span>
+      <img data-ref="image" alt="" loading="lazy" />
+    </div>
+    <h3 class="title" data-ref="title"></h3>
+    <div class="meta">
+      <span data-ref="price" class="price"></span>
+      <span data-ref="stock" class="stock" title="Total stock"></span>
+    </div>
+  </article>
+</template>

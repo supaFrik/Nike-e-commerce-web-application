@@ -47,7 +47,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService uds) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringAntMatchers("/api/**"))
+                .csrf(csrf -> csrf.ignoringAntMatchers("/api/**", "/admin/api/**"))
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers(
                                 "/",
@@ -58,7 +58,9 @@ public class SecurityConfig {
                                 "/images/**",
                                 "/videos/**",
                                 "/fonts/**",
-                                "/slick/**"
+                                "/slick/**",
+                                "/static/**",
+                                "/webjars/**"
                         ).permitAll()
                         .antMatchers(
                                 "/products",

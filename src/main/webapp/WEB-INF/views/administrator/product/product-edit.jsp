@@ -190,16 +190,7 @@
 										</div>
 										
 										<div class="row">
-	                        		 		<div class="col-md-3">
-												<div class="form-group mb-4">
-													<div class="form-check">
-														<sf:checkbox path="favourites" class="form-check-input" id="favourites" name="favourites"></sf:checkbox>
-				                                        <label class="form-check-label" for="favourites">Featured Product</label>
-													</div>
-                                        		</div>
-	                                    	</div>
-
-	                                    	<div class="col-md-9">
+	                        		 		<div class="col-md-9">
 												<div class="form-group mb-4">
 													<label for="status">Status</label>
 													<sf:select path="status" class="form-control" id="status">

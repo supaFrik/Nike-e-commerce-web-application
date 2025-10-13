@@ -36,7 +36,7 @@ public class CartService {
 
         boolean variantAvailable = product.getVariants().stream()
                 .filter(v -> v != null)
-                .anyMatch(v -> v.getSize() != null && v.getSize().equals(size) &&
+                .anyMatch(v -> v.getSizeLabel() != null && v.getSizeLabel().equals(size) &&
                         v.getColor() != null && v.getColor().getColorName().equals(color) &&
                         v.getStock() != null && v.getStock() >= quantity);
 

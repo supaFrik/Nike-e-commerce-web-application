@@ -3,11 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<!-- CSS Files -->
-<link rel="stylesheet" href="${env}/css/base.css">
-<link rel="stylesheet" href="${env}/css/main.css">
-<link rel="stylesheet" href="${env}/css/header.css">
-<link rel="stylesheet" href="${env}/css/footer.css">
+<link rel="stylesheet" href="${env}/css/common/base.css">
+<link rel="stylesheet" href="${env}/css/common/main.css">
+<link rel="stylesheet" href="${env}/css/common/header.css">
+<link rel="stylesheet" href="${env}/css/common/footer.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="${env}/slick/slick.css">
 

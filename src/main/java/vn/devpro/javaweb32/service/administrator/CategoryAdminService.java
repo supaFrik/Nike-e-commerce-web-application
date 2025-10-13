@@ -20,14 +20,14 @@ public class CategoryAdminService extends BaseService<Category> {
     }
 
     /**
-     * Find all product
+     * Tất cả sản phẩm
      */
     public List<Category> findAllActive() {
         return findActiveOrdered();
     }
 
     /**
-     * Find a category by exact (case-insensitive) name.
+     * Tìm category dựa vào tên (non-case sensitive)
      */
     public Category findByName(String name) {
         if (name == null) return null;
@@ -40,7 +40,7 @@ public class CategoryAdminService extends BaseService<Category> {
     }
 
     /**
-     * Check if any other category already uses the given name.
+     * Kiếm tra xem có trùng tên category k
      */
     public boolean existsByName(String name) {
         return findByName(name) != null;
@@ -57,7 +57,7 @@ public class CategoryAdminService extends BaseService<Category> {
     }
 
     /**
-     * Create a new category (sets create date and active status if not already set).
+     * Thêm category mới
      */
     @Transactional
     public Category create(Category category) {
@@ -72,7 +72,7 @@ public class CategoryAdminService extends BaseService<Category> {
     }
 
     /**
-     * Update an existing category (sets update date).
+     * Cập nhaajt category
      */
     @Transactional
     public Category update(Category category) {
@@ -82,7 +82,7 @@ public class CategoryAdminService extends BaseService<Category> {
     }
 
     /**
-     * Soft delete: mark category inactive.
+     * Đánh dấu là category k hoạt động
      */
     @Transactional
     public void softDelete(Long categoryId) {

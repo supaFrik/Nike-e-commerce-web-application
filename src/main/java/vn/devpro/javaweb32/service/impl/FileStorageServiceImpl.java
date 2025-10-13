@@ -12,7 +12,6 @@ import vn.devpro.javaweb32.service.FileStorageService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
@@ -50,31 +49,26 @@ public class FileStorageServiceImpl implements FileStorageService, Jw32Contant {
     public List<ProductImage> saveTempFile(List<MultipartFile> files, String folderPath, String baseImagePrefix) throws IOException {
         if (files == null) return new ArrayList<>();
         List<ProductImage> result = new ArrayList<>();
-
-        // tạo 1 temp-folder per call: temp/{uuid}/{folderPath}/
         String uid = UUID.randomUUID().toString();
         Path tempDir = Paths.get(FOLDER_UPLOAD, "temp", uid);
         Files.createDirectories(tempDir);
-
         int idx = 1;
         for (MultipartFile mf : files) {
             if (mf == null || mf.isEmpty()) continue;
             if (!isImageMimeType(mf)) {
-                LOGGER.log(Level.WARNING, "Skipping non-image file: " + mf.getOriginalFilename());
+                LOGGER.log(Level.WARNING, () -> "Skipping non-image file: " + mf.getOriginalFilename());
                 continue;
             }
             String ext = getExtension(mf.getOriginalFilename());
             String fname = baseImagePrefix + "-" + (idx++) + ext;
             Path target = tempDir.resolve(fname);
-
             try (InputStream in = mf.getInputStream()) {
                 Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
             }
-
             ProductImage pi = new ProductImage();
             // lưu url relative so với FOLDER_UPLOAD, ví dụ: temp/{uid}/{fname}
             String relative = "temp/" + uid + "/" + fname;
-            pi.setUrl(relative);
+            pi.setPath(relative);
             pi.setStatus("TEMP");
             result.add(pi);
         }
@@ -84,81 +78,68 @@ public class FileStorageServiceImpl implements FileStorageService, Jw32Contant {
     @Override
     public void moveTempToProductFolder(Product product) throws IOException {
         if (product == null) return;
+        if (product.getImages() == null) return; // product-level images only; color images optional
 
-        // Collect move operations in-memory
-        List<Runnable> moves = new ArrayList<>();
-        List<ProductImage> changedImages = new ArrayList<>();
+        // For simplicity: final folder is products/{productId}/ (ensure id available)
+        Long pid = product.getId();
+        if (pid == null) {
+            // persist first to get ID
+            em.persist(product);
+            em.flush();
+            pid = product.getId();
+        }
+        final String productFolder = "products/" + pid;
+        Path destRoot = Paths.get(FOLDER_UPLOAD, productFolder);
+        if (!Files.exists(destRoot)) Files.createDirectories(destRoot);
 
-        if (product.getColors() != null) {
-            for (ProductColor color : product.getColors()) {
-                if (color.getImages() == null) continue;
-                for (ProductImage img : color.getImages()) {
-                    String url = img.getUrl();
-                    if (url == null) continue;
-
-                    // if URL points to temp: "temp/...."
-                    if (url.startsWith("temp/")) {
-                        Path src = Paths.get(FOLDER_UPLOAD, url);
-                        // ensure dest folder exists: FOLDER_UPLOAD + color.folderPath
-                        Path destDir = Paths.get(FOLDER_UPLOAD, color.getFolderPath());
-                        if (!Files.exists(destDir)) Files.createDirectories(destDir);
-
-                        Path dest = destDir.resolve(src.getFileName());
-                        // schedule move on commit (or execute immediately)
-                        registerMoveOnCommit(src, dest);
-
-                        // update ProductImage.url to final relative path: e.g. {color.folderPath}/{filename}
-                        String newRelative = color.getFolderPath() + "/" + src.getFileName().toString();
-                        img.setUrl(newRelative);
-                        img.setStatus("ACTIVE");
-
-                        changedImages.add(img);
-                    } else {
-                        // already non-temp -> keep as is
-                    }
+        for (ProductImage img : product.getImages()) {
+            if (img == null) continue;
+            String rel = img.getPath();
+            if (rel == null) continue;
+            if (rel.startsWith("temp/")) {
+                Path src = Paths.get(FOLDER_UPLOAD, rel);
+                if (!Files.exists(src)) {
+                    LOGGER.log(Level.WARNING, () -> "Temp file missing, skip move: " + src);
+                    continue;
                 }
+                Path dest = destRoot.resolve(src.getFileName());
+                registerMoveOnCommit(src, dest);
+                String newRelative = productFolder + "/" + src.getFileName();
+                img.setPath(newRelative);
+                img.setStatus("ACTIVE");
             }
         }
 
-        // persist updated urls for ProductImage (we merge product)
         try {
-            // merge product so that updated ProductImage urls persisted
             em.merge(product);
             em.flush();
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Failed to persist product image URLs after scheduling file moves: " + ex.getMessage(), ex);
-            throw new IOException("Không thể cập nhật đường dẫn ảnh trong DB", ex);
+            LOGGER.log(Level.SEVERE, "Failed to persist product image paths: " + ex.getMessage(), ex);
+            throw new IOException("Cannot update image paths in DB", ex);
         }
     }
 
     @Override
     public void registerMoveOnCommit(Path src, Path dest) {
-        // If no transaction active, attempt immediate move
         if (!TransactionSynchronizationManager.isSynchronizationActive()) {
             try {
                 Files.createDirectories(dest.getParent());
-                Files.move(src, dest, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-            } catch (AtomicMoveNotSupportedException amnse) {
-                // fallback to non-atomic
                 try {
+                    Files.move(src, dest, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+                } catch (AtomicMoveNotSupportedException amnse) {
                     Files.move(src, dest, StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, "Immediate move failed: " + src + " -> " + dest, e);
                 }
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, "Immediate move failed: " + src + " -> " + dest, e);
             }
             return;
         }
+        final Path s = src;
 
         // If transaction is active, register to move after commit
-        final Path s = src;
         final Path d = dest;
-        final List<Exception> errors = new CopyOnWriteArrayList<>();
-
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
+            @Override public void afterCommit() {
                 try {
                     if (s != null && d != null) {
                         Files.createDirectories(d.getParent());
@@ -169,9 +150,7 @@ public class FileStorageServiceImpl implements FileStorageService, Jw32Contant {
                         }
                     }
                 } catch (Exception ex) {
-                    // log — không ném ra để không phá vỡ luồng transaction đã commit
                     LOGGER.log(Level.SEVERE, "Error moving file after commit: " + s + " -> " + d, ex);
-                    errors.add(ex);
                 }
             }
         });

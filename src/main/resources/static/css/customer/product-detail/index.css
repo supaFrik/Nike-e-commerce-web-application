@@ -1,0 +1,9 @@
+/* Aggregated Product Detail Styles */
+@import "./product-detail-layout.css";
+@import "./product-images.css";
+@import "./product-info.css";
+@import "./reviews.css";
+@import "./social-recommendations.css";
+@import "./animations.css"; /* animations can safely follow structure */
+@import "./product-detail-responsive.css"; /* responsive overrides last */
+
