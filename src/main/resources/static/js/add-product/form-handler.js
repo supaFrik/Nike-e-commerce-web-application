@@ -77,11 +77,24 @@ function submitToBackend(formData){
         if(!res.ok){
             throw new Error(data.error || data.message || 'Server error');
         }
-        window.Toast.show('Product created successfully');
-        setTimeout(()=>{ window.location.href = ctx + (data.redirectUrl || '/admin/product/list'); }, 800);
+        // SUCCESS --------------------------------------------------
+        try { localStorage.removeItem('productDraft'); } catch(e) {  }
+        // Reset state
+        if(window.FormHandler && typeof window.FormHandler.reset === 'function') {
+            window.FormHandler.reset();
+        } else if(window.AppState && typeof window.AppState.reset === 'function') {
+            window.AppState.reset();
+        }
+        window.Toast && window.Toast.show('Product created successfully');
+        const urlParams = new URLSearchParams(window.location.search);
+        const stayMode = urlParams.has('stay') || window.location.hash === '#stay';
+        if(stayMode){
+            return;
+        }
+        setTimeout(()=>{ window.location.href = ctx + (data.redirectUrl || '/admin/product/list'); }, 600);
     }).catch(err => {
         console.error('Create product failed', err);
-        window.Toast.show('Create failed: '+ err.message);
+        window.Toast && window.Toast.show('Create failed: '+ err.message);
     });
 }
 

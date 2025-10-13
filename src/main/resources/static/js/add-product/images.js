@@ -68,28 +68,30 @@ function updateImageDisplay() {
     }
 
     if (currentImages.length === 0) {
-        // Show placeholder (with null checks)
         if (mainImage) mainImage.style.display = 'none';
         if (uploadPlaceholder) uploadPlaceholder.style.display = 'block';
         if (thumbnailsContainer) thumbnailsContainer.innerHTML = '';
         return;
     }
 
-    // Ensure currentImageIndex is within bounds
     if (window.AppState.currentImageIndex >= currentImages.length) {
         window.AppState.setCurrentImageIndex(0);
     }
 
-    // Show main image (with null checks)
     if (mainImage) {
         mainImage.style.display = 'block';
+        mainImage.onerror = function(){
+            console.warn('[ImageManager] Main image failed to load:', mainImage.src);
+            this.onerror = null;
+            this.src = (window.APP_CTX || '') + '/images/placeholder.svg';
+            this.classList.add('image-error');
+        };
         mainImage.src = currentImages[window.AppState.currentImageIndex].src;
     }
     if (uploadPlaceholder) {
         uploadPlaceholder.style.display = 'none';
     }
 
-    // Generate thumbnails (with null check)
     if (thumbnailsContainer) {
         thumbnailsContainer.innerHTML = '';
         
@@ -99,6 +101,12 @@ function updateImageDisplay() {
 
             const thumbnail = document.createElement('img');
             thumbnail.src = image.src;
+            thumbnail.onerror = function(){
+                console.warn('[ImageManager] Thumbnail failed to load:', thumbnail.src);
+                this.onerror = null;
+                this.src = (window.APP_CTX || '') + '/images/placeholder.svg';
+                this.classList.add('image-error');
+            };
             thumbnail.alt = `Thumbnail ${index + 1} - ${window.AppState.currentColor}`;
             thumbnail.className = `thumbnail ${index === window.AppState.currentImageIndex ? 'active' : ''}`;
             thumbnail.onclick = () => selectImage(index);
@@ -130,12 +138,10 @@ function updateImageDisplay() {
     }
 }
 
-// Get current color images
 function getCurrentColorImages() {
     return window.AppState.colorImageData[window.AppState.currentColor] || [];
 }
 
-// Select image for main display
 function selectImage(index) {
     window.AppState.setCurrentImageIndex(index);
     updateImageDisplay();
@@ -168,20 +174,16 @@ function removeImage(index) {
     updateImageDisplay();
 }
 
-// Process uploaded files
 function processUploadedFiles(files) {
     const currentImages = getCurrentColorImages();
     
-    // Filter only image files
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
     
-    // Check if adding these files would exceed the limit
     if (currentImages.length + imageFiles.length > window.AppState.maxImages) {
         window.Toast.show(`You can only upload a maximum of ${window.AppState.maxImages} images for ${window.AppState.currentColor}. Currently you have ${currentImages.length} images.`);
         return;
     }
 
-    // Process multiple files and collect results
     let processedCount = 0;
     const newImages = [];
 
@@ -197,7 +199,6 @@ function processUploadedFiles(files) {
             newImages.push(imageData);
             processedCount++;
             
-            // When all files are processed, update the images array once
             if (processedCount === imageFiles.length) {
                 const updatedImages = [...currentImages, ...newImages];
                 setCurrentColorImages(updatedImages);

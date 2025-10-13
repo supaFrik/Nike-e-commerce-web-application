@@ -136,7 +136,7 @@
     </aside>
   </main>
   <template id="productCardTemplate">
-    <article class="product-card" tabindex="0" role="button" aria-pressed="false">
+    <article class="product-card" tabindex="0" role="button" aria-pressed="false" data-status="">
       <div class="thumb" data-ref="thumb">
         <img data-ref="image" alt="" />
       </div>
@@ -145,6 +145,7 @@
         <span data-ref="price" class="price"></span>
         <span data-ref="stock" class="stock"></span>
       </div>
+      <span class="status-dot" data-ref="statusDot" aria-hidden="true"></span>
     </article>
   </template>
 
