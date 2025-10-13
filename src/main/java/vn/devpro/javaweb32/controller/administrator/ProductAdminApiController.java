@@ -307,6 +307,8 @@ public class ProductAdminApiController implements Jw32Contant {
         m.put("stock", totalStock != null ? totalStock : 0);
         m.put("category", catName);
         m.put("categoryKey", catKey);
+        m.put("status", p.getStatus());
+        m.put("productStatus", p.getProductStatus() != null ? p.getProductStatus().name() : null); // enum name
         return m;
     }
 

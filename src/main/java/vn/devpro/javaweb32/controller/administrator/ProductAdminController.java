@@ -221,8 +221,8 @@ public class ProductAdminController extends BaseController implements Jw32Contan
 
     @PostMapping("/edit-save")
     public String saveEditedProduct(@ModelAttribute("productDto") ProductDto productDto,
-                                    Model model,
-                                    RedirectAttributes redirectAttributes) {
+                                    RedirectAttributes redirectAttributes,
+                                    Model model) {
         try {
             productService.saveProductFromDto(productDto);
             redirectAttributes.addFlashAttribute("success", "Cập nhật sản phẩm thành công");
@@ -242,7 +242,6 @@ public class ProductAdminController extends BaseController implements Jw32Contan
     public String deleteProduct(@PathVariable("productId") Long productId, RedirectAttributes redirectAttributes) {
         try {
             productService.deleteById(productId);
-            redirectAttributes.addFlashAttribute("success", "Xóa sản phẩm thành công");
         } catch (Exception ex) {
             redirectAttributes.addFlashAttribute("error", "Lỗi khi xóa sản phẩm: " + ex.getMessage());
         }

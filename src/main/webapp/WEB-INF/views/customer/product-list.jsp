@@ -192,7 +192,7 @@
                         <h1 class="product-title" id="page-title">
                             <c:choose>
                                 <c:when test="${not empty selectedCategory}">
-                                    <c:out value="${selectedCategory}"/> Shoes
+                                    <c:out value="${selectedCategory}"/>
                                 </c:when>
                                 <c:otherwise>All Shoes</c:otherwise>
                             </c:choose>

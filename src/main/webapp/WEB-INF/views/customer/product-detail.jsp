@@ -708,8 +708,14 @@
             </div>
         </section>
     </main>
-    
-    <jsp:include page="/WEB-INF/views/customer/layout/footer.jsp" />
 
+    <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
+    <script>
+      if (typeof window.toggleMobileMenu !== 'function') {
+        window.toggleMobileMenu = function(){
+          console.warn('toggleMobileMenu fallback: mobile-nav.js not loaded');
+        };
+      }
+    </script>
 </body>
 </html>

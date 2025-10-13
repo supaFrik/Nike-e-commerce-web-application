@@ -49,7 +49,15 @@
         if(thumb){ thumb.classList.add('no-image'); }
         img.remove(); }
     }
-    const title=node.querySelector('[data-ref="title"]'); if(title) title.textContent = p.name||'Unnamed'; const price=node.querySelector('[data-ref="price"]'); if(price) price.textContent = formatCurrency(p.displayPrice); const stock=node.querySelector('[data-ref="stock"]'); if(stock) stock.textContent = (p.stock!=null? p.stock+' in stock':'—'); node.tabIndex=0; node.addEventListener('click', ()=> openEditor(p)); node.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openEditor(p); }}); return node; }
+    const title=node.querySelector('[data-ref="title"]'); if(title) title.textContent = p.name||'Unnamed'; const price=node.querySelector('[data-ref="price"]'); if(price) price.textContent = formatCurrency(p.displayPrice); const stock=node.querySelector('[data-ref="stock"]'); if(stock) stock.textContent = (p.stock!=null? p.stock+' in stock':'\u2014');
+    // NEW: status dot
+    const statusDot = node.querySelector('[data-ref="statusDot"]');
+    const rawEnum = p.productStatus; // e.g. ACTIVE, FEW_LEFT
+    const rawBase = p.status; // legacy base status string
+    let statusVal = rawEnum || rawBase || 'UNKNOWN';
+    if(statusDot){ statusDot.dataset.status = statusVal; statusDot.title = 'Status: ' + statusVal.replace(/_/g,' '); }
+    node.dataset.status = statusVal;
+    node.tabIndex=0; node.addEventListener('click', ()=> openEditor(p)); node.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openEditor(p); }}); return node; }
 
   function renderPagination(){ if(!els.paginationList) return; els.paginationList.innerHTML=''; const pages = state.totalPages; for(let i=1;i<=pages;i++){ const btn=document.createElement('button'); btn.type='button'; btn.textContent=i; btn.dataset.page=i; btn.className='page-pill'; if(i===state.page) btn.classList.add('active'); els.paginationList.appendChild(btn); } if(els.paginationSummary){ els.paginationSummary.textContent = `${state.totalItems} product${state.totalItems!==1?'s':''} • Page ${state.page} of ${pages}`; } }
 
