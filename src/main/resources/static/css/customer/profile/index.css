@@ -1,0 +1,17 @@
+/* Aggregated Profile Area Styles */
+@import "./profile.css"; /* base layout & common */
+@import "./favourites.css";
+@import "./interests.css";
+@import "./benefits.css";
+@import "./apps.css"; /* app promos last */
+/* Aggregated Auth Styles (single include)
+   This file replaces multiple <link> tags in auth.jsp.
+   Order: layout -> header -> forms -> buttons -> animations -> error (overrides last)
+*/
+@import "./auth-layout.css";
+@import "./auth-header.css";
+@import "./auth-forms.css";
+@import "./auth-buttons.css";
+@import "./auth-animations.css";
+@import "./auth-error.css";
+

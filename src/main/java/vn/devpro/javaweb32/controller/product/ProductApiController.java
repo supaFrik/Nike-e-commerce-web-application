@@ -31,7 +31,7 @@ public class ProductApiController {
         List<String> sizes = product.getVariants().stream()
                 .filter(v -> v.getColor() != null && v.getColor().getColorName() != null &&
                            v.getColor().getColorName().equalsIgnoreCase(color))
-                .map(ProductVariant::getSize)
+                .map(ProductVariant::getSizeValue)
                 .distinct()
                 .toList();
         return ResponseEntity.ok(sizes);

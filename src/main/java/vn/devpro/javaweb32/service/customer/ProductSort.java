@@ -13,7 +13,7 @@ public class ProductSort {
         } else if ("price_desc".equals(sort)) {
             return Sort.by(Sort.Direction.DESC, "price");
         } else {
-            return Sort.by(Sort.Direction.DESC, "favourites").and(Sort.by(Sort.Direction.DESC, "createDate"));
+            return Sort.by(Sort.Direction.DESC, "createDate").and(Sort.by(Sort.Direction.DESC, "id"));
         }
     }
 }

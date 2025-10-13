@@ -9,14 +9,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>17</java.version>
-    </properties>
-
-    <!-- Tích hợp framework spring boot vào maven project -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -24,13 +16,21 @@
         <relativePath/>
     </parent>
 
+    <properties>
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.outputTimestamp>2025-01-01T00:00:00Z</project.build.outputTimestamp>
+    </properties>
+
     <dependencies>
-        <!-- Cấu hình MVC để tích hợp vào Spring Boot -->
+        <!-- Spring MVC / Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- Devtools (runtime only) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -38,57 +38,47 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- View engine for JSP support -->
+        <!-- JSP + JSTL support -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.apache.taglibs</groupId>
             <artifactId>taglibs-standard-impl</artifactId>
             <version>1.2.5</version>
         </dependency>
 
-        <!--Flyway để quản lý phiên bản database -->
+        <!-- Flyway DB migrations -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-mysql</artifactId>
         </dependency>
 
-        <!-- Tomcat embedded server for JSP support -->
+        <!-- JSP compilation (Jasper) -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
         </dependency>
 
-        <!-- spring JPA -->
+        <!-- Spring Data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Updated MySQL connector for JDK 11 -->
+        <!-- MySQL driver (version managed by Boot BOM) -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.0.33</version>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Spring Boot Test Starter -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Validation support -->
+        <!-- Validation (Jakarta Bean Validation API) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -100,75 +90,88 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <!-- Java Time module for Jackson (version managed) -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.15.2</version>
+        </dependency>
+
+        <!-- Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <finalName>Javaweb32</finalName>
         <plugins>
-            <!-- Spring Boot Maven Plugin -->
+            <!-- Enforce Java version and basic sanity -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals><goal>enforce</goal></goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>[17,18)</version>
+                                </requireJavaVersion>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Spring Boot Plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
 
-            <!-- Maven Compiler Plugin for JDK 11 -->
+            <!-- Compiler plugin using release flag -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                    <encoding>UTF-8</encoding>
+                    <release>${maven.compiler.release}</release>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <parameters>true</parameters>
+                    <showWarnings>true</showWarnings>
                 </configuration>
             </plugin>
 
-            <!-- Maven WAR Plugin -->
+            <!-- WAR packaging -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
                 <configuration>
                     <warSourceDirectory>src/main/webapp</warSourceDirectory>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/webapp</directory>
-                            <targetPath>/</targetPath>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                        </resource>
-                    </webResources>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
 
-            <!-- Flyway Maven Plugin for database migrations -->
+            <!-- Flyway (optional via CLI; plugin present for manual invocation) -->
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>8.5.13</version>
             </plugin>
 
-            <!-- Maven Surefire Plugin for testing -->
+            <!-- Surefire (unit tests) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.1.2</version>
                 <configuration>
-                    <skipTests>false</skipTests>
+                    <useModulePath>false</useModulePath>
                 </configuration>
             </plugin>
         </plugins>

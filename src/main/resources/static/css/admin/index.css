@@ -1,0 +1,6 @@
+/* Aggregated Admin Styles */
+@import "./common/variables.css";
+@import "./common/base.css";
+@import "./common/components.css";
+/* Page-level CSS files will import these again safely (duplicate @import ignored) */
+

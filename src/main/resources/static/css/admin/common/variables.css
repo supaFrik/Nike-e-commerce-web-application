@@ -1,0 +1,16 @@
+:root {
+  /* Admin Product List (ap-) scoped variables */
+  --ap-border: var(--color-border-tertiary, #e5e5e5);
+  --ap-border-strong: var(--color-border-primary, #111);
+  --ap-bg: var(--color-bg-primary, #fff);
+  --ap-bg-alt: var(--color-bg-secondary, #f5f5f5);
+  --ap-bg-panel: #fff;
+  --ap-text: var(--color-text-primary, #111);
+  --ap-text-dim: var(--color-text-secondary, #707072);
+  --ap-radius-s: 6px;
+  --ap-radius-m: 12px;
+  --ap-gap: 1.2rem;
+  --ap-transition: 150ms ease;
+  font-size: 16px; /* Maintain original base size */
+}
+

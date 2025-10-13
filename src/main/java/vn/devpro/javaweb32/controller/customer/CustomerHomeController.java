@@ -5,31 +5,46 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Collections;
 import java.util.List;
 
 import vn.devpro.javaweb32.controller.BaseController;
-import vn.devpro.javaweb32.entity.product.Product;
-import vn.devpro.javaweb32.service.customer.ProductService;
+import vn.devpro.javaweb32.dto.customer.product.ProductResponseDto;
+import vn.devpro.javaweb32.entity.product.Category;
+import vn.devpro.javaweb32.service.customer.CustomerProductService;
+import vn.devpro.javaweb32.service.administrator.CategoryAdminService;
 
 @Controller
 public class CustomerHomeController extends BaseController {
 
-	@Autowired
-	private ProductService productService;
+    private static final String RUNNING_CATEGORY_NAME = "running"; // slug/name used to resolve running products
 
-	// Checkout page
-	@RequestMapping(value = "/checkout", method = RequestMethod.GET)
-	public String checkout() {
-		return "customer/checkout";
-	}
+    @Autowired
+    private CustomerProductService productService; // renamed to existing service
 
-    //Home
+    @Autowired
+    private CategoryAdminService categoryService;
+
+    // Checkout page
+    @GetMapping("/checkout")
+    public String checkout() {
+        return "customer/checkout";
+    }
+
+    // Home
     @GetMapping({"/", "/index"})
     public String home(Model model) {
-        List<Product> runningProducts = productService.getProductsByCategory("running");
+        List<ProductResponseDto> runningProducts = fetchRunningProducts();
         model.addAttribute("activeProducts", runningProducts);
         return "customer/index";
+    }
+
+    private List<ProductResponseDto> fetchRunningProducts() {
+        Category running = categoryService.findByName(RUNNING_CATEGORY_NAME);
+        if (running == null) {
+            return Collections.emptyList();
+        }
+        return productService.getProductsByCategory(running.getId());
     }
 }

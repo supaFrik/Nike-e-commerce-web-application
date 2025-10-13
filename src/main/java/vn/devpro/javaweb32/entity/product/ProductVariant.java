@@ -15,13 +15,10 @@ public class ProductVariant extends BaseEntity {
     private String sku;
 
     @Column(name = "size_label", length = 50, nullable = false)
-    private String sizeLabel; // e.g. "EU 42.5"
+    private String sizeLabel; // e.g. "VN 42"
 
     @Column(name = "size_value", length = 50)
     private String sizeValue;
-
-    @Column(precision = 12, scale = 2, nullable = false)
-    private BigDecimal price = BigDecimal.ZERO;
 
     @Column(name = "stock")
     private Integer stock = 0;
@@ -43,9 +40,8 @@ public class ProductVariant extends BaseEntity {
 
     public ProductVariant() {}
 
-    public ProductVariant(String sizeLabel, BigDecimal price, Integer stock) {
+    public ProductVariant(String sizeLabel, Integer stock) {
         this.sizeLabel = sizeLabel;
-        this.price = price == null ? BigDecimal.ZERO : price;
         this.stock = stock == null ? 0 : stock;
         updateInventoryStatus();
     }
@@ -67,24 +63,26 @@ public class ProductVariant extends BaseEntity {
     public Long getId() { return super.getId(); }
 
     public String getSku() { return sku; }
+
     public void setSku(String sku) { this.sku = sku; }
 
     public String getSizeLabel() { return sizeLabel; }
+
     public void setSizeLabel(String sizeLabel) { this.sizeLabel = sizeLabel; }
 
     public String getSizeValue() { return sizeValue; }
+
     public void setSizeValue(String sizeValue) { this.sizeValue = sizeValue; }
 
-    public BigDecimal getPrice() { return price; }
-    public void setPrice(BigDecimal price) { this.price = price; }
-
     public Integer getStock() { return stock; }
+
     public void setStock(Integer stock) {
         this.stock = stock;
         updateInventoryStatus();
     }
 
     public Boolean getActive() { return active; }
+
     public void setActive(Boolean active) {
         this.active = active;
         updateInventoryStatus();

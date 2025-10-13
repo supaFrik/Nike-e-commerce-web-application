@@ -1,0 +1,63 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<aside class="edit-panel" aria-labelledby="edit-heading">
+      <div class="edit-panel-inner">
+        <div class="edit-panel-header">
+          <div class="title-line">
+            <h2 id="edit-heading">Edit Products</h2>
+            <a href="${env}/admin/product/add" class="see-full" aria-label="Open full view of product editor">See full view →</a>
+          </div>
+          <button id="closeEdit" class="icon-btn" aria-label="Close edit panel">&times;</button>
+        </div>
+        <div class="edit-tabs" role="tablist" aria-label="Edit product sections">
+          <button class="edit-tab active" role="tab" aria-selected="true" data-section="desc">Descriptions</button>
+          <button class="edit-tab" role="tab" aria-selected="false" data-section="inventory">Inventory</button>
+          <button class="edit-tab" role="tab" aria-selected="false" data-section="pricing">Pricing</button>
+        </div>
+        <form id="editForm" novalidate>
+          <section class="edit-section" data-section="desc" role="tabpanel" aria-labelledby="tab-desc">
+            <div class="image-box" aria-label="Product image preview">
+              <img id="editImage" src="" alt="Selected product image" />
+            </div>
+            <h3 class="section-heading">Description</h3>
+            <label class="field boxed">
+              <span>Product Name</span>
+              <input name="name" required maxlength="80" />
+            </label>
+            <label class="field boxed">
+              <span>Description</span>
+              <textarea name="description" rows="4" maxlength="400"></textarea>
+            </label>
+            <h3 class="section-heading">Category</h3>
+            <div class="field-cols">
+              <label class="field boxed">
+                <span>Product Category</span>
+                <select name="category">
+                  <option value="running">Running</option>
+                  <option value="basketball">Basketball</option>
+                  <option value="lifestyle">Lifestyle</option>
+                </select>
+              </label>
+              <label class="field boxed">
+                <span>Price (₫)</span>
+                <input name="price" type="number" step="0.01" min="0" required />
+              </label>
+              <label class="field boxed">
+                <span>Stock</span>
+                <input name="stock" type="number" min="0" required />
+              </label>
+            </div>
+          </section>
+          <section class="edit-section" data-section="inventory" role="tabpanel" hidden>
+            <p class="placeholder">Inventory controls will go here.</p>
+          </section>
+            <section class="edit-section" data-section="pricing" role="tabpanel" hidden>
+            <p class="placeholder">Pricing tiers / discounts configuration.</p>
+          </section>
+          <div class="panel-actions sticky-actions">
+            <button id="discardBtn" type="button" class="btn ghost">Discard</button>
+            <button type="submit" class="btn primary">Update Product</button>
+          </div>
+        </form>
+      </div>
+    </aside>

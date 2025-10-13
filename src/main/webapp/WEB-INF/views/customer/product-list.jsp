@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Men's Shoes. Nike VN</title>
-        
+
     <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/customer/imported/product-list.jsp" />
 
@@ -24,12 +24,12 @@
         <div class="product-listing">
             <div class="sidebar" role="complementary" aria-labelledby="filters-title">
                 <!-- Mobile close button -->
-                <button class="mobile-filter-close" onclick="toggleMobileFilters()" style="display: none;" 
+                <button class="mobile-filter-close" onclick="toggleMobileFilters()" style="display: none;"
                         aria-label="Close filters">
                     <i class="fas fa-times" aria-hidden="true"></i>
                     Close Filters
                 </button>
-                
+
                 <!-- Nike-style sidebar categories -->
                 <div class="left-nav-categories" role="navigation" aria-labelledby="categories-title">
                     <div class="left-nav-container">
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <aside class="filters" id="left-nav" role="region" aria-labelledby="filters-title">
                     <div class="filters-inner">
                         <nav aria-label="Product filters">
@@ -95,12 +95,12 @@
                                 <div class="filters-group__wrapper">
                                     <div class="filters-group__close">
                                         <span class="filters-group-btn">
-                                            <div aria-expanded="false" aria-label="Filter by gender" role="button" 
+                                            <div aria-expanded="false" aria-label="Filter by gender" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="gender-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Gender <span class="filter-group_count">(1)</span>
                                                 </div>
-                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg" 
+                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" transform="rotate(180)" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -114,12 +114,12 @@
                                     </div>
                                     <div class="filters-group__close">
                                         <span class="filters-group-btn">
-                                            <div aria-expanded="false" aria-label="Filter by price range" role="button" 
+                                            <div aria-expanded="false" aria-label="Filter by price range" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="price-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Shop By Price
                                                 </div>
-                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg" 
+                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" transform="rotate(180)" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -133,15 +133,15 @@
                                     </div>
                                     <div class="filters-group__close">
                                         <span class="filters-group-btn">
-                                            <div aria-expanded="false" aria-label="Filter by shoe size" role="button" 
+                                            <div aria-expanded="false" aria-label="Filter by shoe size" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="size-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Size
                                                     <div class="filter-group_count">
-    
+
                                                     </div>
                                                 </div>
-                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg" 
+                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" transform="rotate(180)" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -155,15 +155,15 @@
                                     </div>
                                     <div class="filters-group__close">
                                         <span class="filters-group-btn">
-                                            <div aria-expanded="false" aria-label="Filter by shoe height" role="button" 
+                                            <div aria-expanded="false" aria-label="Filter by shoe height" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="height-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Shoe Height
                                                     <div class="filter-group_count">
-    
+
                                                     </div>
                                                 </div>
-                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg" 
+                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" transform="rotate(180)" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -177,15 +177,15 @@
                                     </div>
                                     <div class="filters-group__close">
                                         <span class="filters-group-btn">
-                                            <div aria-expanded="false" aria-label="Filter by collections" role="button" 
+                                            <div aria-expanded="false" aria-label="Filter by collections" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="collections-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Collections
                                                     <div class="filter-group_count">
-    
+
                                                     </div>
                                                 </div>
-                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg" 
+                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" transform="rotate(180)" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -199,15 +199,15 @@
                                     </div>
                                     <div class="filters-group__close">
                                         <span class="filters-group-btn">
-                                            <div aria-expanded="false" aria-label="Filter by shoe width" role="button" 
+                                            <div aria-expanded="false" aria-label="Filter by shoe width" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="width-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Width
                                                     <div class="filter-group_count">
-    
+
                                                     </div>
                                                 </div>
-                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg" 
+                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" transform="rotate(180)" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -232,13 +232,13 @@
                         <h1 class="product-title" id="page-title">Men's Shoes <c:out value="${totalProducts}" default="0"/></h1>
                     </div>
                     <div class="header-controls" role="group" aria-label="Page controls">
-                        <button class="mobile-filter-btn" onclick="toggleMobileFilters()" style="display: none;" 
+                        <button class="mobile-filter-btn" onclick="toggleMobileFilters()" style="display: none;"
                                 aria-label="Show filters" aria-describedby="mobile-filter-desc">
                             <i class="fas fa-filter" aria-hidden="true"></i>
                             Filters
                         </button>
                         <span id="mobile-filter-desc" class="sr-only">Open filter sidebar to narrow product selection</span>
-                        <button class="hide-filters-btn" aria-label="Toggle filter visibility" 
+                        <button class="hide-filters-btn" aria-label="Toggle filter visibility"
                                 aria-describedby="hide-filters-desc">
                             Hide Filters
                             <svg aria-hidden="true" class="icon-filter-ds" focusable="false" viewBox="0 0 24 24" role="img" width="24px" height="24px" fill="none">
@@ -256,12 +256,11 @@
                             </button>
                             <form id="sort-form" method="GET">
                                 <ul id="sort-options" class="sort-options" role="listbox" tabindex="-1">
-                                    <li class="sort-option${param.sort == 'favourites' || empty param.sort ? ' active' : ''}" data-value="favourites" role="option" aria-selected="${param.sort == 'favourites' || empty param.sort ? 'true' : 'false'}">Favourites</li>
-                                    <li class="sort-option${param.sort == 'newest' ? ' active' : ''}" data-value="newest" role="option" aria-selected="${param.sort == 'newest' ? 'true' : 'false'}">Newest</li>
+                                    <li class="sort-option${param.sort == 'newest' || empty param.sort ? ' active' : ''}" data-value="newest" role="option" aria-selected="${param.sort == 'newest' || empty param.sort ? 'true' : 'false'}">Newest</li>
                                     <li class="sort-option${param.sort == 'price_desc' ? ' active' : ''}" data-value="price_desc" role="option" aria-selected="${param.sort == 'price_desc' ? 'true' : 'false'}">Price: High-Low</li>
                                     <li class="sort-option${param.sort == 'price_asc' ? ' active' : ''}" data-value="price_asc" role="option" aria-selected="${param.sort == 'price_asc' ? 'true' : 'false'}">Price: Low-High</li>
                                 </ul>
-                                <input type="hidden" name="sort" id="sort-input" value="${param.sort != null ? param.sort : 'favourites'}" />
+                                <input type="hidden" name="sort" id="sort-input" value="${param.sort != null ? param.sort : 'newest'}" />
                                 <c:if test="${not empty selectedCategory}">
                                     <input type="hidden" name="category" value="${selectedCategory}" />
                                 </c:if>
@@ -535,5 +534,4 @@
     <jsp:include page="/WEB-INF/views/customer/layout/js.jsp" />
 </body>
 </html>
-
 

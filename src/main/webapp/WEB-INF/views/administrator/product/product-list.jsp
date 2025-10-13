@@ -1,420 +1,165 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- JSTL directives -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
+
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
-
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<!-- Tell the browser to be responsive to screen width -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author" content="">
-<!-- Favicon icon -->
-<link rel="icon" type="image/png" sizes="16x16"
-	href="${env }/administrator/assets/images/favicon.png">
-<title>${title }</title>
-<!-- variables -->
-<jsp:include page="/WEB-INF/views/common/variables.jsp"></jsp:include>
-
-<!-- Custome css resource file -->
-<jsp:include page="/WEB-INF/views/administrator/layout/css.jsp"></jsp:include>
-
+  <meta charset="UTF-8" />
+  <title>Admin Products</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="${env}/css/common/base.css" />
+  <link rel="stylesheet" href="${env}/css/admin/product-list/list-product.css" />
 </head>
-
 <body>
+  <header class="app-header" role="banner">
+    <div class="logo" aria-label="Dashboard Home">Nike</div>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#" class="active">Products</a>
+      <a href="#">Orders</a>
+      <a href="#">Customers</a>
+      <a href="#">Analytics</a>
+      <a href="#">Settings</a>
+    </nav>
+    <div class="user-chip" aria-label="Current user">
+      <span class="avatar" aria-hidden="true">AD</span>
+      <span class="name">Admin</span>
+    </div>
+  </header>
+  <main class="layout" role="main">
+    <section class="product-panel" aria-labelledby="products-heading">
+      <h1 id="products-heading" class="visually-hidden">Products</h1>
+      <div class="panel-header">
+        <div class="toolbar-row">
+          <div class="search-wrapper pill">
+            <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" /></svg>
+            <input id="search" type="search" placeholder="Search product…" aria-label="Search products" />
+          </div>
+          <button id="addProductBtn" class="btn outline add-btn" type="button">Add New Product <span class="plus" aria-hidden="true">+</span></button>
+        </div>
+        <div class="categories-bar">
+          <!-- Added id=categoryTabs so JS can attach -->
+          <div id="categoryTabs" class="tabs categories" role="tablist" aria-label="Product categories">
+            <button role="tab" aria-selected="true" class="tab active" data-filter="all">All products</button>
+          </div>
+          <div class="sort-wrapper" data-sort>
+            <label for="sort" class="visually-hidden">Sort by</label>
+            <select id="sort" aria-hidden="true" tabindex="-1" style="position:absolute;left:-9999px;">
+              <option value="name" selected>Name</option>
+              <option value="price">Price</option>
+              <option value="stock">Stock</option>
+            </select>
+            <button id="sortToggle" class="sort-btn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="sortMenu">
+              <span class="sort-label">Sort by</span>
+              <svg class="sort-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 6h13" />
+                <path d="M3 12h9" />
+                <path d="M3 18h5" />
+                <path d="m19 6-4 4 4 4M15 10h8" />
+              </svg>
+            </button>
+            <div id="sortMenu" class="sort-menu" role="menu" aria-label="Sort products" hidden>
+              <button class="sort-option active" role="menuitemradio" aria-checked="true" data-value="name">Name</button>
+              <button class="sort-option" role="menuitemradio" aria-checked="false" data-value="price">Price</button>
+              <button class="sort-option" role="menuitemradio" aria-checked="false" data-value="stock">Stock</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="productGrid" class="product-grid" aria-live="polite" aria-busy="false"></div>
+      <!-- Added empty state container expected by JS -->
+      <div id="productGridEmpty" style="display:none; font-size:14px; opacity:.7; padding:24px;">No products found.</div>
+      <nav class="pagination" aria-label="Product pages">
+        <div class="pagination-summary" id="paginationSummary" aria-live="polite"></div>
+        <ul id="paginationList" class="pagination-list" role="list"></ul>
+      </nav>
+    </section>
+    <aside class="edit-panel" aria-labelledby="edit-heading">
+      <div class="edit-panel-inner">
+        <div class="edit-panel-header">
+          <div class="title-line">
+            <h2 id="edit-heading">Edit Products</h2>
+            <a href="#" class="see-full" aria-label="Open full view of product editor">See full view →</a>
+          </div>
+          <button id="closeEdit" class="icon-btn" aria-label="Close edit panel">&times;</button>
+        </div>
+        <div class="edit-tabs" role="tablist" aria-label="Edit product sections">
+          <button class="edit-tab active" role="tab" aria-selected="true" data-section="desc">Descriptions</button>
+          <button class="edit-tab" role="tab" aria-selected="false" data-section="inventory">Inventory</button>
+          <button class="edit-tab" role="tab" aria-selected="false" data-section="pricing">Pricing</button>
+        </div>
+        <form id="editForm" novalidate>
+          <section class="edit-section" data-section="desc" role="tabpanel" aria-labelledby="tab-desc">
+            <div class="image-box" aria-label="Product image preview">
+              <img id="editImage" src="" alt="Selected product image" />
+            </div>
+            <h3 class="section-heading">Description</h3>
+            <label class="field boxed">
+              <span>Product Name</span>
+              <input name="name" required maxlength="80" />
+            </label>
+            <label class="field boxed">
+              <span>Description</span>
+              <textarea name="description" rows="4" maxlength="400"></textarea>
+            </label>
+            <h3 class="section-heading">Category</h3>
+            <div class="field-cols">
+              <!-- Provide id=editCategorySelect for JS; value will be category key -->
+              <label class="field boxed">
+                <span>Product Category</span>
+                <select id="editCategorySelect" name="category"></select>
+              </label>
+              <label class="field boxed">
+                <span>Price (₫)</span>
+                <input name="price" type="number" step="0.01" min="0" required />
+              </label>
+              <label class="field boxed">
+                <span>Stock</span>
+                <input name="stock" type="number" min="0" required />
+              </label>
+            </div>
+          </section>
+          <section class="edit-section" data-section="inventory" role="tabpanel" hidden>
+            <p class="placeholder">Inventory controls will go here.</p>
+          </section>
+          <section class="edit-section" data-section="pricing" role="tabpanel" hidden>
+            <p class="placeholder">Pricing tiers / discounts configuration.</p>
+          </section>
+          <div class="panel-actions sticky-actions">
+            <button type="button" id="discardBtn" class="btn ghost">Discard</button>
+            <button type="submit" class="btn primary">Update Product</button>
+          </div>
+        </form>
+      </div>
+    </aside>
+  </main>
+  <template id="productCardTemplate">
+    <article class="product-card" tabindex="0" role="button" aria-pressed="false">
+      <div class="thumb" data-ref="thumb">
+        <img data-ref="image" alt="" />
+      </div>
+      <h3 class="title" data-ref="title"></h3>
+      <div class="meta">
+        <span data-ref="price" class="price"></span>
+        <span data-ref="stock" class="stock"></span>
+      </div>
+    </article>
+  </template>
 
-	<!-- ============================================================== -->
-	<!-- Main wrapper - style you can find in pages.scss -->
-	<!-- ============================================================== -->
-	<div id="main-wrapper" data-theme="light" data-layout="vertical"
-		data-navbarbg="skin6" data-sidebartype="full"
-		data-sidebar-position="fixed" data-header-position="fixed"
-		data-boxed-layout="full">
-
-		<!-- Topbar header - style you can find in pages.scss -->
-		<jsp:include page="/WEB-INF/views/administrator/layout/header.jsp"></jsp:include>
-		<!-- End Topbar header -->
-
-		<!-- Left Sidebar - style you can find in sidebar.scss  -->
-		<jsp:include page="/WEB-INF/views/administrator/layout/left-slide-bar.jsp"></jsp:include>
-		<!-- End Left Sidebar - style you can find in sidebar.scss  -->
-
-		<!-- Page wrapper  -->
-		<!-- ============================================================== -->
-		<div class="page-wrapper">
-			<!-- ============================================================== -->
-			<!-- Bread crumb and right sidebar toggle -->
-			<!-- ============================================================== -->
-			<div class="page-breadcrumb">
-				<div class="row">
-					<div class="col-7 align-self-center">
-						<h2
-							class="page-title text-truncate text-dark font-weight-medium mb-1">List
-							Product</h2>
-					</div>
-				</div>
-			</div>
-			<!-- ============================================================== -->
-			<!-- End Bread crumb and right sidebar toggle -->
-			<!-- ============================================================== -->
-			<!-- Container fluid  -->
-			<!-- ============================================================== -->
-			<div class="container-fluid">
-				<!-- ============================================================== -->
-				<!-- Start Page Content -->
-				<!-- ============================================================== -->
-				<!-- basic table -->
-				<div class="row">
-					<div class="col-12">
-						<div class="card">
-
-							<div class="card-body">
-								<form action="${env }/admin/product/view" method="get">
-									<div class="table-responsive">
-										<div class="row">
-											<div class="col-md-2">
-												<div class="form-group mb-4">
-													<a href="${env }/admin/product/add" role="button"
-														class="btn btn-primary">Add new product</a>
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class="form-group mb-4">
-													<h3>Total products: &nbsp ${searchModel.totalItems }</h3>
-												</div>
-											</div>
-
-											<div class="col-md-3">
-												<div class="form-group mb-4">
-													<%-- label>Current page</label--%> 
-													<input id="currentPage" type="hidden"
-														name="currentPage" class="form-control"
-														value="${searchModel.currentPage }">
-												</div>
-											</div>
-											
-											<div class="col-md-3">
-												<div class="form-group mb-4">
-													<%--label>Total items</label--%> 
-													<input id="totalItems" type="hidden"
-														name="totalItems" class="form-control"
-														value="${searchModel.totalItems }">
-												</div>
-											</div>
-
-										</div>
-										<!-- Tìm kiếm -->
-										<div class="row">
-											<div class="col-md-2">
-												<div class="form-group mb-4">
-													<!-- 
-													<label for="status">&nbsp;&nbsp;&nbsp;&nbsp;</label>
-													<input type="checkbox" class="form-check-input" id="status" name="status" checked="checked" />
-			                                        <label for="status">Active</label>
-			                                         -->
-													<select class="form-control" id="status" name="status">
-														<option value="2">All</option>
-														<option value="1">Active</option>
-														<option value="0">Inactive</option>
-													</select>
-												</div>
-											</div>
-
-											<div class="col-md-2">
-												<select class="form-control" id="categoryId"
-													name="categoryId" style="margin-right: 10px;">
-													<option value="0">All category</option>
-													<c:forEach items="${categories }" var="category">
-														<option value="${category.id }">${category.name }</option>
-													</c:forEach>
-												</select>
-											</div>
-
-											<div class="col-md-2">
-												<input class="form-control" type="date" id="beginDate"
-													name="beginDate" />
-											</div>
-											<div class="col-md-2">
-												<input class="form-control" type="date" id="endDate"
-													name="endDate" />
-											</div>
-
-											<div class="col-md-2">
-												<input type="text" class="form-control" id="keyword"
-													name="keyword" placeholder="Search keyword" />
-											</div>
-
-											<div class="col-md-1">
-												<button type="submit" id="btnSearch" name="btnSearch"
-													class="btn btn-primary">Search</button>
-											</div>
-											
-											<div class="col-md-1">
-												<button type="reset" id="btnClear" name="btnClear"
-													class="btn btn-primary">Clear</button>
-											</div>
-										</div>
-										<!-- Hết tìm kiếm -->
-										<table id="zero_config"
-											class="table table-striped table-bordered no-wrap">
-											<thead>
-												<tr align="center">
-													<th scope="col">No.</th>
-													<th scope="col">Id</th>
-													<th scope="col">Category</th>
-													<th scope="col">Name</th>
-													<th scope="col">Price</th>
-													<th scope="col">Avatar</th>
-													<th scope="col">Description</th>
-													<th scope="col">Details</th>
-													<th scope="col">Create by</th>
-													<th scope="col">Update by</th>
-													<th scope="col">Create date</th>
-													<th scope="col">Update date</th>
-													<th scope="col">Status</th>
-													<th scope="col">Is favourite</th>
-													<th scope="col">Seo</th>
-													<th scope="col">Actions</th>
-												</tr>
-											</thead>
-											<tbody>
-												<c:forEach var="product" items="${products }"
-													varStatus="loop">
-													<tr>
-														<th scope="row">${loop.index + 1 }</th>
-														<td>${product.id }</td>
-														<td>
-															<c:choose>
-																<c:when test="${product.category != null}">
-																	${product.category.name}
-																</c:when>
-																<c:otherwise>
-																	No Category
-																</c:otherwise>
-															</c:choose>
-														</td>
-														<td>${product.name }</td>
-														<td align="right"><fmt:formatNumber
-																value="${product.price }" minFractionDigits="0"></fmt:formatNumber>
-														</td>
-														<td align="right">
-															<c:choose>
-																<c:when test="${product.salePrice != null}">
-																	<fmt:formatNumber value="${product.salePrice }" minFractionDigits="0"></fmt:formatNumber>
-																</c:when>
-																<c:otherwise>
-																	N/A
-																</c:otherwise>
-															</c:choose>
-														</td>
-
-														<td>
-															<c:choose>
-																<c:when test="${product.avatar != null && !empty product.avatar}">
-																	<img width="40px" height="40px"
-																		src="${env }/UploadFiles/${product.avatar }"
-																		class="light-logo">
-																</c:when>
-																<c:otherwise>
-																	No Image
-																</c:otherwise>
-															</c:choose>
-														</td>
-
-														<td>
-															<c:choose>
-																<c:when test="${product.type != null}">
-																	${product.type}'s Shoes
-																</c:when>
-																<c:otherwise>
-																	Product
-																</c:otherwise>
-															</c:choose>
-														</td>
-														<td>
-															<c:choose>
-																<c:when test="${product.description != null}">
-																	${product.description}
-																</c:when>
-																<c:otherwise>
-																	No Description
-																</c:otherwise>
-															</c:choose>
-														</td>
-														<td>
-															<c:choose>
-																<c:when test="${product.userCreateProduct != null}">
-																	${product.userCreateProduct.username}
-																</c:when>
-																<c:otherwise>
-																	Unknown
-																</c:otherwise>
-															</c:choose>
-														</td>
-														<td>
-															<c:choose>
-																<c:when test="${product.userUpdateProduct != null}">
-																	${product.userUpdateProduct.username}
-																</c:when>
-																<c:otherwise>
-																	Unknown
-																</c:otherwise>
-															</c:choose>
-														</td>
-
-														<td>
-															<c:choose>
-																<c:when test="${product.createDate != null}">
-																	<fmt:formatDate value="${product.createDate }" pattern="dd-MM-yyyy" />
-																</c:when>
-																<c:otherwise>
-																	N/A
-																</c:otherwise>
-															</c:choose>
-														</td>
-														<td>
-															<c:choose>
-																<c:when test="${product.updateDate != null}">
-																	<fmt:formatDate value="${product.updateDate }" pattern="dd-MM-yyyy" />
-																</c:when>
-																<c:otherwise>
-																	Not Updated
-																</c:otherwise>
-															</c:choose>
-														</td>
-
-														<td><span id="_product_status_${product.id }">
-																<c:choose>
-																	<c:when test="${product.status == 'Active' || product.status == '1'}">
-																		<span>Active</span>
-																	</c:when>
-																	<c:otherwise>
-																		<span>Inactive</span>
-																	</c:otherwise>
-																</c:choose>
-														</span></td>
-														<td><span id="_product_isFavourites_${product.id }">
-																<c:choose>
-																	<c:when test="${product.favourites == true}">
-																		<span>Yes</span>
-																	</c:when>
-																	<c:otherwise>
-																		<span>No</span>
-																	</c:otherwise>
-																</c:choose>
-														</span></td>
-														<td>
-															<c:choose>
-																<c:when test="${product.seo != null}">
-																	${product.seo}
-																</c:when>
-																<c:otherwise>
-																	N/A
-																</c:otherwise>
-															</c:choose>
-														</td>
-														<td><a
-															href="${env }/admin/product/edit/${product.id }"
-															role="button" class="btn btn-primary">Edit</a> <a
-															href="${env }/admin/product/delete/${product.id }"
-															role="button" class="btn btn-secondary">Delete</a></td>
-													</tr>
-												</c:forEach>
-											</tbody>
-											<tfoot>
-												<tr align="center">
-													<th scope="col">No.</th>
-													<th scope="col">Id</th>
-													<th scope="col">Category</th>
-													<th scope="col">Name</th>
-													<th scope="col">Price</th>
-													<th scope="col">Sale Price</th>
-													<th scope="col">Avatar</th>
-													<th scope="col">Description</th>
-													<th scope="col">Details</th>
-													<th scope="col">Create by</th>
-													<th scope="col">Update by</th>
-													<th scope="col">Create date</th>
-													<th scope="col">Update date</th>
-													<th scope="col">Status</th>
-													<th scope="col">Is favourite</th>
-													<th scope="col">Seo</th>
-													<th scope="col">Actions</th>
-												</tr>
-											</tfoot>
-										</table>
-
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group mb-4">
-													<a href="${env }/admin/product/add" role="button"
-														class="btn btn-primary">Add new product</a>
-												</div>
-											</div>
-											<%-- Phan trang --%>
-											<div class="col-md-6">
-												<div class="pagination float-right">
-													<div id="paging"></div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- ============================================================== -->
-			<!-- End Container fluid  -->
-			<!-- ============================================================== -->
-			<!-- ============================================================== -->
-			<!-- footer -->
-			<!-- ============================================================== -->
-			<jsp:include page="/WEB-INF/views/administrator/layout/footer.jsp"></jsp:include>
-			<!-- ============================================================== -->
-			<!-- End footer -->
-			<!-- ============================================================== -->
-		</div>
-		<!-- ============================================================== -->
-		<!-- End Page wrapper  -->
-		<!-- ============================================================== -->
-	</div>
-
-	<!-- End Wrapper -->
-	<!-- ============================================================== -->
-
-	<!-- Slider js: All Jquery-->
-	<jsp:include page="/WEB-INF/views/administrator/layout/js.jsp"></jsp:include>
-
-	<!-- pagination -->
-	<script type="text/javascript">
-		$( document ).ready(function() {
-			//Dat gia tri cua status ung voi dieu kien search truoc do
-			$("#status").val(${searchModel.status});
-			//Dat gia tri cua category ung voi dieu kien search truoc do
-			$("#categoryId").val(${searchModel.categoryId});
-			//Dat gia tri cua keyword ung voi dieu kien search truoc do
-			$("#keyword").val('${searchModel.keyword}');	
-			$("#beginDate").val('${searchModel.beginDate}');
-			$("#endDate").val('${searchModel.endDate}');
-			
-			$("#paging").pagination({
-				currentPage: ${searchModel.currentPage }, //Trang hien tai
-				items: ${searchModel.totalItems }, //Tong so san pham (total products)
-				itemsOnPage: ${searchModel.itemOnPage },
-				cssStyle: 'light-theme',
-				onPageClick: function(pageNumber, event) {
-					$('#currentPage').val(pageNumber);
-					$('#btnSearch').trigger('click');
-				},
-			});
-		});
-	</script>
-
+  <!-- Embed categories for dynamic tabs & select -->
+  <script>
+    window.APP_CTX='${env}';
+    window.__CATEGORIES__ = [
+      <c:forEach var="cat" items="${categories}" varStatus="s">{
+        id:${cat.id},
+        name:"${fn:escapeXml(cat.name)}",
+        key:"${fn:replace(fn:toLowerCase(fn:trim(cat.name)), ' ', '-')}"
+      }<c:if test="${!s.last}">,</c:if></c:forEach>
+    ];
+  </script>
+  <script src="${env}/js/product-list/product-list.js" defer></script>
 </body>
-
 </html>
