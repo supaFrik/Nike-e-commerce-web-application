@@ -1,30 +1,20 @@
-<p align="center">
-  <img src="src/main/resources/static/images/air-jordan-logo.png" alt="Nike Logo" width="140"/>
-</p>
-
-<h1 align="center">🏃‍♂️ Nike E-Commerce Web Application</h1>
-<p align="center"><em>"Just Do It" - Now with Enterprise-Grade Architecture</em></p>
-
-<p align="center">
-  <a href="https://spring.io/projects/spring-boot"><img src="https://img.shields.io/badge/Spring%20Boot-2.7.18-brightgreen.svg" alt="Spring Boot"/></a>
-  <a href="https://www.oracle.com/java/"><img src="https://img.shields.io/badge/Java-17-orange.svg" alt="Java"/></a>
-  <a href="https://maven.apache.org/"><img src="https://img.shields.io/badge/Maven-3.6+-blue.svg" alt="Maven"/></a>
-  <a href="https://www.mysql.com/"><img src="https://img.shields.io/badge/MySQL-8.0-blue.svg" alt="MySQL"/></a>
-  <a href="https://docker.com"><img src="https://img.shields.io/badge/Docker-Compose-blue.svg" alt="Docker"/></a>
-  <a href="https://hibernate.org/"><img src="https://img.shields.io/badge/JPA-Hibernate-red.svg" alt="JPA"/></a>
-  <a href="https://spring.io/guides/gs/serving-web-content/"><img src="https://img.shields.io/badge/Architecture-MVC-purple.svg" alt="Architecture"/></a>
-  <a href="https://flywaydb.org/"><img src="https://img.shields.io/badge/Database-Flyway-orange.svg" alt="Flyway"/></a>
-  <a href="https://junit.org/junit5/"><img src="https://img.shields.io/badge/Testing-JUnit%205-green.svg" alt="JUnit 5"/></a>
-  <a href="https://spring.io/projects/spring-security"><img src="https://img.shields.io/badge/Security-Spring%20Security-brightgreen.svg" alt="Spring Security"/></a>
-</p>
-
----
-
-## 🚀 Overview
-
-Welcome to the **Nike E-Commerce Web Application** – where championship performance meets cutting-edge technology. Built with enterprise-grade Spring Boot architecture, this application delivers an unparalleled shopping experience with comprehensive customer and admin functionalities.
-
-This full-stack e-commerce platform provides a complete online shopping solution with modern web technologies, secure authentication, robust testing framework, and scalable architecture designed for high performance and maintainability.
+<div style="text-align:center;">
+  <img src="src/main/resources/static/images/air-jordan-logo.png" alt="Nike Logo" width="140" />
+  <h1>🏃‍♂️ Nike E-Commerce Web Application</h1>
+  <p><em>"Just Do It" - Now with Enterprise-Grade Architecture</em></p>
+  <p>
+    <a href="https://spring.io/projects/spring-boot"><img src="https://img.shields.io/badge/Spring%20Boot-2.7.18-brightgreen.svg" alt="Spring Boot"/></a>
+    <a href="https://www.oracle.com/java/"><img src="https://img.shields.io/badge/Java-17-orange.svg" alt="Java"/></a>
+    <a href="https://maven.apache.org/"><img src="https://img.shields.io/badge/Maven-3.6+-blue.svg" alt="Maven"/></a>
+    <a href="https://www.mysql.com/"><img src="https://img.shields.io/badge/MySQL-8.0-blue.svg" alt="MySQL"/></a>
+    <a href="https://docker.com"><img src="https://img.shields.io/badge/Docker-Compose-blue.svg" alt="Docker"/></a>
+    <a href="https://hibernate.org/"><img src="https://img.shields.io/badge/JPA-Hibernate-red.svg" alt="JPA"/></a>
+    <a href="https://spring.io/guides/gs/serving-web-content/"><img src="https://img.shields.io/badge/Architecture-MVC-purple.svg" alt="Architecture"/></a>
+    <a href="https://flywaydb.org/"><img src="https://img.shields.io/badge/Database-Flyway-orange.svg" alt="Flyway"/></a>
+    <a href="https://junit.org/junit5/"><img src="https://img.shields.io/badge/Testing-JUnit%205-green.svg" alt="JUnit 5"/></a>
+    <a href="https://spring.io/projects/spring-security"><img src="https://img.shields.io/badge/Security-Spring%20Security-brightgreen.svg" alt="Spring Security"/></a>
+  </p>
+</div>
 
 ---
 
@@ -57,6 +47,7 @@ This full-stack e-commerce platform provides a complete online shopping solution
 - [✅ Change Log](#change-log)
 - [📄 License](#license)
 
+<a id="features"></a>
 ## ✨ Features <a id="features"></a>
 
 ### 🛍️ Customer Features
@@ -723,30 +714,6 @@ This project is an educational / portfolio implementation inspired by Nike. **Ni
 |------|--------|
 | 2025-10-14 | Added comprehensive per-folder READMEs & updated root README (documentation map, security sanitization, roadmap) |
 
----
-
-## 📄 License <a id="license"></a>
-MIT License (example)
-
-Copyright (c) 2025 YOUR_NAME
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
 ---
 
