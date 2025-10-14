@@ -487,7 +487,7 @@
                 <h4 id="cart-total-title" class="sr-only">Order Summary</h4>
                 <div class="total-row">
                     <span>Subtotal</span>
-                    <span id="cartSubtotal" aria-label="Subtotal amount">$0.00</span>
+                    <span id="cartSubtotal" aria-label="Subtotal amount">0 ₫</span>
                 </div>
                 <div class="total-row">
                     <span>Estimated Delivery & Handling</span>
@@ -495,7 +495,7 @@
                 </div>
                 <div class="total-row total-final">
                     <span>Total</span>
-                    <span id="cartTotal" aria-label="Total amount">$0.00</span>
+                    <span id="cartTotal" aria-label="Total amount">0 ₫</span>
                 </div>
             </div>
             <button class="btn btn-primary btn-full" aria-describedby="member-checkout-desc">

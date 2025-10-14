@@ -37,18 +37,16 @@ public class CartController {
         var cartItems = cartService.getCartItems(customer);
 
         double subtotal = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
-        double shipping = subtotal > 0 ? 5.0 : 0.0;
-        double tax = subtotal * 0.08;
-        double total = subtotal + shipping + tax;
+        double discount = 0.0;
+        double total = subtotal - discount;
 
-        model.addAttribute("discount", 0.0);
+        model.addAttribute("discount", discount);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("subtotal", subtotal);
-        model.addAttribute("shipping", shipping);
-        model.addAttribute("tax", tax);
         model.addAttribute("total", total);
         model.addAttribute("hasItems", !cartItems.isEmpty());
         model.addAttribute("orderAccessible", false);
+        model.addAttribute("currentStep", 1);
 
         return "customer/cart";
     }

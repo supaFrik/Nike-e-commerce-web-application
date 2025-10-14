@@ -16,39 +16,8 @@
     
 </head>
 <body>
-    <!-- Cart Progress -->
-    <div class="cart-progress">
-        <div class="container">
-            <div class="progress-steps">
-                <div class="step active">
-                    <a href="${env}/cart">
-                        <div class="step-icon">
-                            <span>1</span>
-                        </div>
-                        <span class="step-label">Cart</span>
-                    </a>
-                </div>
-                <div class="step ${hasItems ? '' : 'disabled'}">
-                    <c:choose>
-                        <c:when test='${hasItems}'>
-                            <a href="${env}/checkout">
-                                <div class="step-icon"><span>2</span></div>
-                                <span class="step-label">Checkout</span>
-                            </a>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="step-icon" style="opacity:.5;cursor:not-allowed"><span>2</span></div>
-                            <span class="step-label" style="opacity:.5;">Checkout</span>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-                <div class="step disabled">
-                    <div class="step-icon" style="opacity:.5;cursor:not-allowed"><span>3</span></div>
-                    <span class="step-label" style="opacity:.5;">Order</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Order Process -->
+    <jsp:include page="/WEB-INF/views/customer/layout/order-process.jsp" />
 
     <!-- Main Cart Content -->
     <main class="cart-main">
@@ -145,14 +114,6 @@
                                 <span>Subtotal</span>
                                 <span id="subtotalAmount"><fmt:formatNumber value="${subtotal}" type="currency"/></span>
                             </div>
-                            <div class="summary-row">
-                                <span>Estimated Shipping</span>
-                                <span id="shippingAmount"><fmt:formatNumber value="${shipping}" type="currency"/></span>
-                            </div>
-                            <div class="summary-row">
-                                <span>Estimated Tax</span>
-                                <span id="taxAmount"><fmt:formatNumber value="${tax}" type="currency"/></span>
-                            </div>
                             <div class="summary-row discount-row" id="discountRow" style="display: none;">
                                 <span>Discount</span>
                                 <span id="discountAmount"><fmt:formatNumber value="${discount}" type="currency"/></span>
@@ -161,6 +122,9 @@
                                 <span>Total</span>
                                 <span id="totalAmount"><fmt:formatNumber value="${total}" type="currency"/></span>
                             </div>
+                        </div>
+                        <div class="cart-note" style="font-size:0.85rem;color:#666;margin-top:6px;">
+                            Shipping and taxes will be calculated at checkout.
                         </div>
 
                         <!-- Checkout Button -->

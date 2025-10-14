@@ -12,6 +12,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import vn.devpro.javaweb32.repository.CredentialRepository;
 
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -72,7 +75,6 @@ public class SecurityConfig {
                                 "/api/products",
                                 "/api/products/**"
                         ).permitAll()
-                        // Public AJAX endpoints for pre-signup validation
                         .antMatchers(
                                 "/api/auth/email-exists",
                                 "/api/auth/check-duplicate",
@@ -80,6 +82,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .antMatchers("/admin/**").hasRole("ADMIN")
                         .antMatchers("/api/cart/**").authenticated()
+                        .antMatchers("/order", "/order/**").authenticated()
                         .antMatchers("/cart", "/cart/**").authenticated()
                         .anyRequest().authenticated()
                 )
@@ -88,9 +91,14 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/", true)
                         .successHandler((request, response, authentication) -> {
+                            var requestCache = new HttpSessionRequestCache();
+                            SavedRequest saved = requestCache.getRequest(request, response);
                             boolean isAdmin = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+                            if (saved != null) {
+                                response.sendRedirect(saved.getRedirectUrl());
+                                return;
+                            }
                             if (isAdmin) {
                                 response.sendRedirect("/admin/home");
                             } else {
