@@ -3,14 +3,15 @@ package vn.devpro.javaweb32.dto.customer.product;
 import java.math.BigDecimal;
 
 public class ProductSearchCriteria {
-    private String category; // category name (case-insensitive)
-    private Boolean saleOnly; // only products having valid sale price
-    private String size; // variant size label
-    private BigDecimal minPrice; // applied to effective price (salePrice if present else price)
+    private String category;
+    private Boolean saleOnly;
+    private String size; // variant size
+    private BigDecimal minPrice;
     private BigDecimal maxPrice;
     private String sort; // newest | price_asc | price_desc
-    private int page = 1; // 1-based
+    private int page = 1;
     private int pageSize = 24;
+    private String q;
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
@@ -28,5 +29,6 @@ public class ProductSearchCriteria {
     public void setPage(int page) { this.page = Math.max(1, page); }
     public int getPageSize() { return pageSize; }
     public void setPageSize(int pageSize) { if (pageSize > 0 && pageSize <= 200) this.pageSize = pageSize; }
+    public String getQ() { return q; }
+    public void setQ(String q) { this.q = q; }
 }
-

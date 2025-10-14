@@ -84,6 +84,7 @@ public class SecurityConfig {
                         .antMatchers("/api/cart/**").authenticated()
                         .antMatchers("/order", "/order/**").authenticated()
                         .antMatchers("/cart", "/cart/**").authenticated()
+                        .antMatchers("/search", "/search/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

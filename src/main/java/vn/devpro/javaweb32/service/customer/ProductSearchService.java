@@ -34,7 +34,12 @@ public class ProductSearchService {
             products = productService.getAllProducts();
         }
 
+        final String keyword = criteria.getQ() == null ? null : criteria.getQ().trim().toLowerCase();
+
         products = products.stream()
+                .filter(p -> keyword == null || keyword.isBlank() ||
+                        (p.getName() != null && p.getName().toLowerCase().contains(keyword)) ||
+                        (p.getDescription() != null && p.getDescription().toLowerCase().contains(keyword)))
                 .filter(p -> criteria.getSaleOnly() == null || !criteria.getSaleOnly() || p.hasSale())
                 .filter(p -> criteria.getSize() == null || criteria.getSize().isBlank() || (p.getVariants() != null && p.getVariants().stream().anyMatch(v -> criteria.getSize().equalsIgnoreCase(v.getSize()))))
                 .filter(p -> criteria.getMinPrice() == null || (p.getEffectivePrice() != null && p.getEffectivePrice().compareTo(criteria.getMinPrice()) >= 0))
@@ -42,14 +47,20 @@ public class ProductSearchService {
                 .collect(Collectors.toList());
 
         if (criteria.getSort() != null && !products.isEmpty()) {
-            switch (criteria.getSort()) {
+            String sortKey = criteria.getSort();
+            switch (sortKey) {
                 case "price_asc":
+                case "price-low":
+                case "price-low-high":
                     products.sort(Comparator.comparing(ProductResponseDto::getEffectivePrice, Comparator.nullsLast(BigDecimal::compareTo)));
                     break;
                 case "price_desc":
+                case "price-high":
+                case "price-high-low":
                     products.sort(Comparator.comparing(ProductResponseDto::getEffectivePrice, Comparator.nullsLast(BigDecimal::compareTo)).reversed());
                     break;
                 case "newest":
+                case "featured":
                 default:
                     products.sort(Comparator.comparing(ProductResponseDto::getCreateDate, Comparator.nullsLast(Date::compareTo)).reversed());
                     break;
@@ -89,4 +100,3 @@ public class ProductSearchService {
         public int getPageSize() { return pageSize; }
     }
 }
-
