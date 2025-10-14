@@ -29,26 +29,35 @@ This full-stack e-commerce platform provides a complete online shopping solution
 ---
 
 ## 📑 Table of Contents
-- [✨ Features](#-features)
-- [🛠 Tech Stack](#-tech-stack)
-- [🏗 Architecture](#-architecture)
-- [🎨 Frontend Technologies](#-frontend-technologies)
-- [⚙️ Backend Architecture](#️-backend-architecture)
-- [🔒 Security Framework](#-security-framework)
-- [🧪 Testing & Quality Assurance](#-testing--quality-assurance)
-- [⚠️ Exception Handling](#️-exception-handling)
-- [🚀 Getting Started](#-getting-started)
-- [📊 Database Schema](#-database-schema)
-- [🔧 Configuration](#-configuration)
-- [📱 API Endpoints](#-api-endpoints)
-- [🎯 Usage](#-usage)
-- [📁 Project Structure](#-project-structure)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+- [✨ Features](#features)
+- [🛠 Tech Stack](#tech-stack)
+- [🏗 Architecture](#architecture)
+- [🎨 Frontend Technologies](#frontend-technologies)
+- [⚙️ Backend Architecture](#backend-architecture)
+- [🔒 Security Framework](#security-framework)
+- [🧪 Testing & Quality Assurance](#testing-quality)
+- [⚠️ Exception Handling](#exception-handling)
+- [🚀 Getting Started](#getting-started)
+- [📊 Database Schema](#database-schema)
+- [🔧 Configuration](#configuration)
+- [📱 API Endpoints](#api-endpoints)
+- [🎯 Usage Examples](#usage-examples)
+- [📁 Project Structure](#project-structure)
+- [🧭 Documentation Map](#documentation-map)
+- [⚡ Quick Start](#quick-start)
+- [🔐 Configuration & Secrets](#configuration-secrets)
+- [🗂 Project Structure (Excerpt)](#project-structure-excerpt)
+- [♻ Build Profiles](#build-profiles)
+- [🧪 Test Commands](#test-commands)
+- [🖼 Front-End Asset Strategy](#front-end-asset-strategy)
+- [🚨 Security Notes](#security-notes)
+- [🛣 Roadmap](#roadmap)
+- [⚖ Trademark / License Notice](#trademark-license-notice)
+- [🙌 Contributing](#contributing)
+- [✅ Change Log](#change-log)
+- [📄 License](#license)
 
----
-
-## ✨ Features
+## ✨ Features <a id="features"></a>
 
 ### 🛍️ Customer Features
 - **User Registration & Authentication** - Secure signup/login with Spring Security & BCrypt encryption
@@ -76,7 +85,7 @@ This full-stack e-commerce platform provides a complete online shopping solution
 
 <img src="src/main/resources/static/images/screenshot/Featured.png" alt="Features" style="display: block; margin: 0 auto;" />
 
-## 🛠 Tech Stack
+## 🛠 Tech Stack <a id="tech-stack"></a>
 
 ### Backend Framework
 - **Java 17** - Modern Java with enhanced performance and language features
@@ -113,7 +122,7 @@ This full-stack e-commerce platform provides a complete online shopping solution
 
 ---
 
-## 🏗 Architecture
+## 🏗 Architecture <a id="architecture"></a>
 
 The application implements a **layered MVC architecture** with clear separation of concerns and dependency inversion:
 
@@ -149,7 +158,7 @@ The application implements a **layered MVC architecture** with clear separation 
 
 ---
 
-## 🎨 Frontend Technologies
+## 🎨 Frontend Technologies <a id="frontend-technologies"></a>
 
 ### View Layer Architecture
 - **JSP Templates** - Server-side rendering with shared layouts
@@ -172,7 +181,7 @@ The application implements a **layered MVC architecture** with clear separation 
 
 ---
 
-## ⚙️ Backend Architecture
+## ⚙️ Backend Architecture <a id="backend-architecture"></a>
 
 ### MVC Implementation
 - **Controllers** - 11+ specialized controllers handling web and API requests
@@ -195,15 +204,20 @@ The application implements a **layered MVC architecture** with clear separation 
 
 ---
 
-## 🔒 Security Framework
+## 🔒 Security Framework <a id="security-framework"></a>
 
 ### Spring Security Configuration
 ```java
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
 @EnableWebSecurity
-- BCrypt password encoding
-- Role-based authorization (USER/ADMIN)
-- Custom UserDetailsService implementation
-- Session management with timeout handling
+public class SecurityConfig { // Simplified skeleton
+    // 1. PasswordEncoder bean (BCrypt)
+    // 2. HttpSecurity rules (authorize requests, csrf, headers)
+    // 3. UserDetailsService integration
+    // 4. Session management (fixation protection, timeout)
+    // 5. Remember-me & logout configuration (optional)
+}
 ```
 
 ### Authentication Features
@@ -220,7 +234,7 @@ The application implements a **layered MVC architecture** with clear separation 
 
 ---
 
-## 🧪 Testing & Quality Assurance
+## 🧪 Testing & Quality Assurance <a id="testing-quality"></a>
 
 ### Testing Framework
 - **JUnit 5** - Modern testing with DisplayName annotations and advanced assertions
@@ -252,7 +266,7 @@ class SignupPersistenceTest {
 
 ---
 
-## ⚠️ Exception Handling
+## ⚠️ Exception Handling <a id="exception-handling"></a>
 
 ### Comprehensive Error Management
 The application implements robust exception handling across all layers:
@@ -265,10 +279,21 @@ The application implements robust exception handling across all layers:
 
 ### Validation & Error Handling
 ```java
-// AuthService Exception Examples
-throw new IllegalArgumentException("Username is required");
-throw new IllegalArgumentException("Email already exists");
-throw new IllegalArgumentException("Password must be at least 8 chars...");
+// Example service-level validation method
+public void validateRegistration(RegistrationRequest req) {
+    if (req == null) {
+        throw new IllegalArgumentException("Request is required");
+    }
+    if (req.getUsername() == null || req.getUsername().isBlank()) {
+        throw new IllegalArgumentException("Username is required");
+    }
+    if (emailExists(req.getEmail())) {
+        throw new IllegalArgumentException("Email already exists");
+    }
+    if (!isStrongPassword(req.getPassword())) {
+        throw new IllegalArgumentException("Password must be at least 8 chars incl. upper, lower & digit");
+    }
+}
 ```
 
 ### Error Handling Patterns
@@ -285,7 +310,7 @@ throw new IllegalArgumentException("Password must be at least 8 chars...");
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started <a id="getting-started"></a>
 
 ### Prerequisites
 - **Java 17** or higher (OpenJDK recommended)
@@ -338,7 +363,7 @@ throw new IllegalArgumentException("Password must be at least 8 chars...");
 
 ---
 
-## 📊 Database Schema
+## 📊 Database Schema <a id="database-schema"></a>
 
 ### Core Entities
 - **Customer Management**: `customers`, `credentials`, `addresses`, `contact_info`
@@ -354,7 +379,7 @@ throw new IllegalArgumentException("Password must be at least 8 chars...");
 
 ---
 
-## 🔧 Configuration
+## 🔧 Configuration <a id="configuration"></a>
 
 ### Application Properties
 ```properties
@@ -365,8 +390,7 @@ server.servlet.context-path=/
 # Database Configuration
 spring.datasource.url=jdbc:mysql://127.0.0.1:3307/nike_store?useSSL=false
 spring.datasource.username=root
-spring.datasource.password=trinhquocviet2005
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.password=${DB_PASSWORD:CHANGE_ME}
 
 # JPA & HibernateConfiguration
 spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
@@ -389,7 +413,7 @@ logging.level.org.springframework.security=DEBUG
 
 ---
 
-## 📱 API Endpoints
+## 📱 API Endpoints <a id="api-endpoints"></a>
 
 ### Customer Endpoints
 - `GET /` - Landing page with featured products
@@ -416,7 +440,7 @@ logging.level.org.springframework.security=DEBUG
 
 ---
 
-## 🎯 Usage Examples
+## 🎯 Usage Examples <a id="usage-examples"></a>
 
 ### Customer Workflow
 1. **Registration** - Create account with email verification
@@ -433,7 +457,7 @@ logging.level.org.springframework.security=DEBUG
 
 ---
 
-## 📁 Enhanced Project Structure
+## 📁 Enhanced Project Structure <a id="project-structure"></a>
 
 ```
 Nike-e-commerce-web-application/
@@ -494,88 +518,235 @@ Nike-e-commerce-web-application/
 
 ---
 
-## 🤝 Contributing
+## 🧭 Documentation Map (New) <a id="documentation-map"></a>
+Centralized references to detailed style and script docs now included in the repository:
 
-We welcome contributions! Please follow these enhanced guidelines:
+| Domain | Location | Description |
+|--------|----------|-------------|
+| Global CSS Architecture | `src/main/resources/static/css/README.md` | Layering, tokens, conventions |
+| Common Design Tokens | `static/css/common/README.md` | Color, spacing, typography variables |
+| Admin Styles | `static/css/admin/README.md` | Back‑office theming & modules |
+| Admin Product List | `static/css/admin/product-list/README.md` | Grid & editor styling + status mapping |
+| Add Product Styles | `static/css/admin/add-product/README.md` | Variant/image form layout |
+| Customer Storefront Styles | `static/css/customer/README.md` | Page group overview |
+| Auth / Landing / Product Pages | Individual `README.md` inside each customer subfolder | Page‑specific breakdown |
+| JavaScript Architecture | `static/js/README.md` | Module responsibilities & patterns |
+| Admin Product List Script | `static/js/product-list/README.md` | Server-integrated listing logic |
+| Add Product JS Modules | `static/js/add-product/README.md` | State, images, variants, toast system |
 
-### Development Workflow
-1. **Fork & Clone** - Create your feature branch
-2. **Environment Setup** - Follow installation instructions
-3. **Code Standards** - Maintain existing patterns and conventions
-4. **Testing** - Write tests for new features using JUnit 5
-5. **Documentation** - Update README and code comments
-6. **Pull Request** - Submit with detailed description
-
-### Code Quality Standards
-- **Java Conventions** - Follow Oracle Java coding standards
-- **Spring Boot Patterns** - Maintain MVC architecture principles
-- **Exception Handling** - Implement comprehensive error handling
-- **Security Best Practices** - Follow Spring Security guidelines
-- **Test Coverage** - Maintain high test coverage for critical paths
-
----
-
-## 🐛 Troubleshooting & Support
-
-### Common Issues & Solutions
-
-1. **Database Connection Failures**
-   ```bash
-   # Check Docker container status
-   docker-compose ps
-   
-   # Restart database
-   docker-compose down && docker-compose up -d
-   
-   # Verify connection settings in application.properties
-   ```
-
-2. **Authentication Issues**
-   ```bash
-   # Clear browser cache and cookies
-   # Check user credentials in database
-   # Verify BCrypt password encoding
-   ```
-
-3. **File Upload Problems**
-   ```bash
-   # Check file size limits in application.properties
-   # Verify upload directory permissions
-   # Review server logs for IOException details
-   ```
-
-4. **Test Execution Failures**
-   ```bash
-   # Run tests with verbose output
-   mvn test -X
-   
-   # Run specific test class
-   mvn test -Dtest=SignupPersistenceTest
-   ```
-
-### Support Resources
-- **GitHub Issues** - Report bugs and feature requests
-- **Documentation** - Comprehensive inline code documentation
-- **Logs** - Check application logs for detailed error information
-- **Community** - Engage with project contributors
+> Tip: When adding a new feature module, include a colocated README and link it here.
 
 ---
 
-## 📄 License & Attribution
+## ⚡ Quick Start (Updated) <a id="quick-start"></a>
+Choose one of the following workflows.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for complete details.
+### Option A: Docker + Spring Boot (recommended for first run)
+```bash
+# 1. Start MySQL
+docker compose up -d
 
-### Third-Party Dependencies
-- **Spring Framework** - Apache License 2.0
-- **Bootstrap** - MIT License
-- **MySQL Connector** - GPL License with commercial exception
-- **JUnit 5** - Eclipse Public License 2.0
+# 2. Build & run (skip tests on first warm start)
+mvn clean package -DskipTests
+mvn spring-boot:run
+```
+Access: http://localhost:9090
 
-### Acknowledgments
-- Built with modern Spring Boot ecosystem
-- Follows enterprise architecture patterns
-- Implements security best practices
-- Comprehensive testing framework integration
+### Option B: Windows (CMD) One-Liners
+```cmd
+REM Start DB
+docker compose up -d
+
+REM Build & run
+mvn clean compile
+mvn spring-boot:run
+```
+
+### Option C: Run Packaged Artifact
+```bash
+java -jar target/Javaweb32.war
+```
+(Embedded Tomcat will launch; WAR name follows `<finalName>` in `pom.xml`.)
+
+---
+
+## 🔐 Configuration & Secrets (Sanitized) <a id="configuration-secrets"></a>
+Replace hard‑coded sensitive values with environment variables or a `.env`/profile file. The earlier README snippet exposed a real password; this has been redacted.
+
+```properties
+# server
+server.port=9090
+
+# datasource
+spring.datasource.url=jdbc:mysql://127.0.0.1:3307/nike_store?useSSL=false
+spring.datasource.username=root
+spring.datasource.password=${DB_PASSWORD:CHANGE_ME}
+
+# JPA / Hibernate
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# views
+spring.mvc.view.prefix=/WEB-INF/views/
+spring.mvc.view.suffix=.jsp
+```
+
+### Environment Variable Injection Examples
+Windows CMD:
+```cmd
+set DB_PASSWORD=yourStrongPassword
+mvn spring-boot:run
+```
+PowerShell:
+```powershell
+$Env:DB_PASSWORD="yourStrongPassword"; mvn spring-boot:run
+```
+Linux/macOS:
+```bash
+export DB_PASSWORD=yourStrongPassword
+mvn spring-boot:run
+```
+
+### Recommended Next Hardening Steps
+- Move secrets to Docker secrets / Kubernetes secrets in production
+- Enforce HTTPS (reverse proxy: Nginx / Traefik) & HSTS headers
+- Configure Spring Security Content Security Policy (CSP)
+- Add rate limiting (gateway / filter) for auth endpoints
+
+---
+
+## 🗂 Project Structure (Excerpt) <a id="project-structure-excerpt"></a>
+```
+src/main/
+  java/vn/devpro/...              # Controllers, services, repositories, entities
+  resources/
+    application.properties        # Base config (do not store real secrets)
+    db/migration/                 # Flyway SQL migrations
+    static/
+      css/                        # See CSS architecture README
+      js/                         # Modular JS (see JS README)
+      images/                     # Brand & product assets
+      fonts/                      # Custom / web fonts
+    administrator/                # Admin-facing static resources (if separate)
+  webapp/WEB-INF/views/           # JSP templates
+```
+See per‑folder README files for deeper documentation.
+
+---
+
+## ♻ Build Profiles (Optional Enhancement Suggestion) <a id="build-profiles"></a>
+Add custom Maven profiles for different environments:
+```xml
+<profiles>
+  <profile>
+    <id>dev</id>
+    <properties>
+      <spring.profiles.active>dev</spring.profiles.active>
+    </properties>
+  </profile>
+  <profile>
+    <id>prod</id>
+    <properties>
+      <spring.profiles.active>prod</spring.profiles.active>
+    </properties>
+  </profile>
+</profiles>
+```
+Then run: `mvn spring-boot:run -Pdev`
+
+---
+
+## 🧪 Test Commands (Recap) <a id="test-commands"></a>
+```bash
+# Run all unit + integration tests
+mvn test
+
+# Run a single test class
+mvn -Dtest=SignupPersistenceTest test
+
+# Skip tests for faster packaging
+mvn clean package -DskipTests
+```
+Add more test slices (web, data) to keep suite fast & focused.
+
+---
+
+## 🖼 Front-End Asset Strategy (Summary) <a id="front-end-asset-strategy"></a>
+- CSS layers: tokens → domain (admin/customer) → page modules → responsive overrides
+- JS: small focused modules (PDP, cart, checkout, product admin) with graceful no‑op on pages lacking expected DOM
+- Accessibility baked in: keyboard nav (carousels, thumbnails, pagination), ARIA states, focus management
+- Future: migrate to ES Modules + bundler (Vite/Rollup) for tree‑shaking & HTTP/2 optimization
+
+---
+
+## 🚨 Security Notes <a id="security-notes"></a>
+| Concern | Current | Recommended Action |
+|---------|---------|-------------------|
+| Password storage | BCrypt | Tune strength cost based on perf benchmark |
+| CSRF | Enabled meta token usage | Add automated integration test for token validation |
+| Session fixation | Spring default mitigation | Add explicit session fixation strategy config |
+| Input validation | Service layer exceptions | Add Bean Validation annotations + controller advice binding |
+| Static asset caching | Not documented | Add cache headers via WebMvcConfigurer |
+
+---
+
+## 🛣 Roadmap (Planned Enhancements) <a id="roadmap"></a>
+- ES Module conversion & build pipeline
+- Dark mode + design token theming layer
+- Search indexing (Elasticsearch/OpenSearch) for advanced catalog search
+- Wishlist & recommendation engine
+- Webhook / event-driven order fulfillment integration
+- Lighthouse performance budget & automated CI audits
+
+---
+
+## ⚖ Trademark / License Notice <a id="trademark-license-notice"></a>
+This project is an educational / portfolio implementation inspired by Nike. **Nike and the Swoosh are trademarks of Nike, Inc.** Replace brand assets & naming for production or public distribution unless you have permission.
+
+> Consider adding an explicit LICENSE file (e.g. MIT) if intending to open-source.
+
+---
+
+## 🙌 Contributing (Updated Guidance) <a id="contributing"></a>
+1. Fork & branch: `feat/short-description` or `fix/issue-#`
+2. Follow existing code style; keep PRs scoped & test-covered
+3. Document new modules with a colocated README + add to Documentation Map
+4. Ensure no secrets present before committing
+5. Run full test suite & perform manual smoke test of critical paths (auth, cart, checkout)
+
+---
+
+## ✅ Change Log (Excerpt) <a id="change-log"></a>
+| Date | Change |
+|------|--------|
+| 2025-10-14 | Added comprehensive per-folder READMEs & updated root README (documentation map, security sanitization, roadmap) |
+
+---
+
+## 📄 License <a id="license"></a>
+MIT License (example)
+
+Copyright (c) 2025 YOUR_NAME
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 ---
 
