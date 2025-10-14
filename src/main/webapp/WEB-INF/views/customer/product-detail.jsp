@@ -510,8 +510,8 @@
                         <span id="delivery-header-desc" class="sr-only">Click to expand delivery information</span>
                         <div class="section-content" id="delivery" aria-labelledby="delivery-title">
                             <h4 id="delivery-title" class="sr-only">Delivery Information</h4>
-                            <p>Your order of S$75 or more gets free standard delivery.</p>
-                            
+                            <p>Đơn hàng từ 1.500.000 ₫ trở lên được miễn phí giao hàng tiêu chuẩn.</p>
+
                             <ul class="delivery-details" aria-label="Delivery options and timeframes">
                                 <li>Standard delivered 1-3 Business Days</li>
                                 <li>Express delivered 0-2 Business Days</li>
@@ -622,7 +622,7 @@
                                 <div class="product-info">
                                     <h3 class="product-title" id="rec-1-title">Nike Air Force 1 '07</h3>
                                     <p class="product-type" id="rec-1-desc">Men's Shoes</p>
-                                    <p class="product-price" aria-label="Price: 90 dollars">$90</p>
+                                    <p class="product-price" aria-label="Giá: 90 đồng">90 ₫</p>
                                 </div>
                             </div>
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-2-title" aria-describedby="rec-2-desc">
@@ -636,7 +636,7 @@
                                 <div class="product-info">
                                     <h3 class="product-title" id="rec-2-title">Air Jordan 1 Low</h3>
                                     <p class="product-type" id="rec-2-desc">Men's Shoes</p>
-                                    <p class="product-price" aria-label="Price: 110 dollars">$110</p>
+                                    <p class="product-price" aria-label="Giá: 110 đồng">110 ₫</p>
                                 </div>
                             </div>
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-3-title" aria-describedby="rec-3-desc">
@@ -650,7 +650,7 @@
                                 <div class="product-info">
                                     <h3 class="product-title" id="rec-3-title">Nike Air Max 90</h3>
                                     <p class="product-type" id="rec-3-desc">Men's Shoes</p>
-                                    <p class="product-price" aria-label="Price: 120 dollars">$120</p>
+                                    <p class="product-price" aria-label="Giá: 120 đồng">120 ₫</p>
                                 </div>
                             </div>
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-4-title" aria-describedby="rec-4-desc">
@@ -664,7 +664,7 @@
                                 <div class="product-info">
                                     <h3 class="product-title" id="rec-4-title">Nike Blazer Mid '77 Vintage</h3>
                                     <p class="product-type" id="rec-4-desc">Men's Shoes</p>
-                                    <p class="product-price" aria-label="Price: 100 dollars">$100</p>
+                                    <p class="product-price" aria-label="Giá: 100 đồng">100 ₫</p>
                                 </div>
                             </div>
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-5-title" aria-describedby="rec-5-desc">
@@ -678,7 +678,7 @@
                                 <div class="product-info">
                                     <h3 class="product-title" id="rec-5-title">Nike Air Max DN</h3>
                                     <p class="product-type" id="rec-5-desc">Men's Shoes</p>
-                                    <p class="product-price" aria-label="Price: 150 dollars">$150</p>
+                                    <p class="product-price" aria-label="Giá: 150 đồng">150 ₫</p>
                                 </div>
                             </div>
                             <div class="recommendation-card" role="listitem" aria-labelledby="rec-6-title" aria-describedby="rec-6-desc">
@@ -692,7 +692,7 @@
                                 <div class="product-info">
                                     <h3 class="product-title" id="rec-6-title">Nike Air Force 1 '07 LV8</h3>
                                     <p class="product-type" id="rec-6-desc">Men's Shoes</p>
-                                    <p class="product-price" aria-label="Price: 110 dollars">$110</p>
+                                    <p class="product-price" aria-label="Giá: 110 đồng">110 ₫</p>
                                 </div>
                             </div>
                         </div>

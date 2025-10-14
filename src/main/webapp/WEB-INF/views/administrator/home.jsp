@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -100,7 +99,7 @@
                             <div class="d-flex d-lg-flex d-md-block align-items-center">
                                 <div>
                                     <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                            class="set-doller">$</sup>18,306</h2>
+                                            class="set-doller">₫</sup>18,306</h2>
                                     <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Earnings of Month
                                     </h6>
                                 </div>
@@ -157,17 +156,17 @@
                                     <li>
                                         <i class="fas fa-circle text-primary font-10 mr-2"></i>
                                         <span class="text-muted">Direct Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">$2346</span>
+                                        <span class="text-dark float-right font-weight-medium">₫2346</span>
                                     </li>
                                     <li class="mt-3">
                                         <i class="fas fa-circle text-danger font-10 mr-2"></i>
                                         <span class="text-muted">Referral Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">$2108</span>
+                                        <span class="text-dark float-right font-weight-medium">₫2108</span>
                                     </li>
                                     <li class="mt-3">
                                         <i class="fas fa-circle text-cyan font-10 mr-2"></i>
                                         <span class="text-muted">Affiliate Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">$1204</span>
+                                        <span class="text-dark float-right font-weight-medium">₫1204</span>
                                     </li>
                                 </ul>
                             </div>
@@ -420,7 +419,7 @@
                                                     class="border-top-0 text-center font-weight-medium text-muted px-2 py-4">
                                                     35
                                                 </td>
-                                                <td class="font-weight-medium text-dark border-top-0 px-2 py-4">$96K
+                                                <td class="font-weight-medium text-dark border-top-0 px-2 py-4">₫96K
                                                 </td>
                                             </tr>
                                             <tr>
@@ -454,7 +453,7 @@
                                                         data-placement="top" title="Done"></i>
                                                 </td>
                                                 <td class="text-center text-muted font-weight-medium px-2 py-4">32</td>
-                                                <td class="font-weight-medium text-dark px-2 py-4">$85K</td>
+                                                <td class="font-weight-medium text-dark px-2 py-4">₫85K</td>
                                             </tr>
                                             <tr>
                                                 <td class="px-2 py-4">
@@ -489,7 +488,7 @@
                                                         data-placement="top" title="Done"></i>
                                                 </td>
                                                 <td class="text-center text-muted font-weight-medium px-2 py-4">29</td>
-                                                <td class="font-weight-medium text-dark px-2 py-4">$81K</td>
+                                                <td class="font-weight-medium text-dark px-2 py-4">₫81K</td>
                                             </tr>
                                             <tr>
                                                 <td class="px-2 py-4">
@@ -519,7 +518,7 @@
                                                         class="fa fa-circle text-danger font-12" data-toggle="tooltip"
                                                         data-placement="top" title="In Progress"></i></td>
                                                 <td class="text-center text-muted font-weight-medium px-2 py-4">23</td>
-                                                <td class="font-weight-medium text-dark px-2 py-4">$80K</td>
+                                                <td class="font-weight-medium text-dark px-2 py-4">₫80K</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -558,3 +557,4 @@
 </body>
 
 </html>
+

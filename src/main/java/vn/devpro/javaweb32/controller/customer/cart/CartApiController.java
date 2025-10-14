@@ -98,16 +98,12 @@ public class CartApiController {
         List<CartItem> cartItems = cartService.getCartItems(customer);
         int itemCount = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
         double subtotal = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
-        double shipping = subtotal > 0 ? 5.0 : 0.0; // business rule placeholder
-        double tax = subtotal * 0.08; // 8% tax
         double discount = 0.0; // future: apply promotions
-        double total = subtotal + shipping + tax - discount;
+        double total = subtotal - discount; // Removed shipping + tax at cart level
         return ResponseEntity.ok(Map.of(
                 "success", successFlag,
                 "itemCount", itemCount,
                 "subtotal", subtotal,
-                "shipping", shipping,
-                "tax", tax,
                 "discount", discount,
                 "total", total
         ));

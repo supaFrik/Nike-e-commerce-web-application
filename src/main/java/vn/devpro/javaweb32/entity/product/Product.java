@@ -49,6 +49,9 @@ public class Product extends BaseEntity {
     @Column(nullable = false)
     private ProductStatus productStatus;
 
+//    @Column(nullable = true)
+//    private BigDecimal discount;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     private List<ProductVariant> variants = new ArrayList<>();
@@ -246,5 +249,10 @@ public class Product extends BaseEntity {
             if (v != null && v.getStock() != null) { sum += v.getStock(); any = true; }
         }
         return any ? sum : null;
+    }
+
+    public BigDecimal getEffectivePrice() {
+        if (salePrice != null) return salePrice;
+        return price;
     }
 }

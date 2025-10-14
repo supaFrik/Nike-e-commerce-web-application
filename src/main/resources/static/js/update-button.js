@@ -75,14 +75,6 @@ function applyCartSummary(data) {
         const subtotalEl = document.getElementById('subtotalAmount');
         if (subtotalEl) subtotalEl.innerText = formatCurrency(data.subtotal);
     }
-    if (typeof data.shipping === 'number') {
-        const shippingEl = document.getElementById('shippingAmount');
-        if (shippingEl) shippingEl.innerText = formatCurrency(data.shipping);
-    }
-    if (typeof data.tax === 'number') {
-        const taxEl = document.getElementById('taxAmount');
-        if (taxEl) taxEl.innerText = formatCurrency(data.tax);
-    }
     if (typeof data.discount === 'number') {
         const discountRow = document.getElementById('discountRow');
         const discountEl = document.getElementById('discountAmount');

@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -14,41 +15,8 @@
     <jsp:include page="/WEB-INF/views/customer/imported/checkout.jsp" />
 </head>
 <body>
-    <!-- Checkout Progress -->
-    <div class="checkout-progress">
-        <div class="container">
-            <div class="progress-steps">
-                <div class="step completed">
-                    <a href="${env}/cart">
-                        <div class="step-icon">
-                            <span>1</span>
-                        </div>
-                        <span class="step-label">Cart</span>
-                    </a>
-                </div>
-                <div class="step active">
-                    <a href="${env}/checkout">
-                        <div class="step-icon"><span>2</span></div>
-                        <span class="step-label">Checkout</span>
-                    </a>
-                </div>
-                <div class="step ${orderAccessible ? '' : 'disabled'}">
-                    <c:choose>
-                        <c:when test='${orderAccessible}'>
-                            <a href="${env}/order">
-                                <div class="step-icon"><span>3</span></div>
-                                <span class="step-label">Order</span>
-                            </a>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="step-icon" style="opacity:.5;cursor:not-allowed"><span>3</span></div>
-                            <span class="step-label" style="opacity:.5;">Order</span>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Order Process -->
+    <jsp:include page="/WEB-INF/views/customer/layout/order-process.jsp" />
 
     <!-- Main Checkout Content -->
     <main class="checkout-main">
@@ -65,41 +33,46 @@
                             
                             <!-- Delivery Options -->
                             <div class="delivery-options">
-                                <div class="delivery-option selected">
-                                    <input type="radio" name="delivery" id="delivery-standard" checked>
-                                    <label for="delivery-standard">
-                                        <i class="fas fa-truck"></i>
-                                        <div class="delivery-info">
-                                            <span class="delivery-type">Standard Delivery</span>
-                                            <span class="delivery-time">5-7 business days</span>
-                                        </div>
-                                        <span class="delivery-price">$5.00</span>
-                                    </label>
-                                </div>
-                                
-                                <div class="delivery-option">
-                                    <input type="radio" name="delivery" id="delivery-express">
-                                    <label for="delivery-express">
-                                        <i class="fas fa-bolt"></i>
-                                        <div class="delivery-info">
-                                            <span class="delivery-type">Express Delivery</span>
-                                            <span class="delivery-time">2-3 business days</span>
-                                        </div>
-                                        <span class="delivery-price">$15.00</span>
-                                    </label>
-                                </div>
-                                
-                                <div class="delivery-option">
-                                    <input type="radio" name="delivery" id="pickup">
-                                    <label for="pickup">
-                                        <i class="fas fa-store"></i>
-                                        <div class="delivery-info">
-                                            <span class="delivery-type">Pick up</span>
-                                            <span class="delivery-time">Available today</span>
-                                        </div>
-                                        <span class="delivery-price">Free</span>
-                                    </label>
-                                </div>
+                                <c:choose>
+                                    <c:when test="${not empty shippingMethods}">
+                                        <c:forEach var="sm" items="${shippingMethods}">
+                                            <c:set var="checked" value="${shippingMethod == sm.name() ? 'checked' : ''}" />
+                                            <c:set var="cost" value="${sm.cost}" />
+                                            <c:set var="isFree" value="${cost == 0}" />
+                                            <div class="delivery-option ${checked eq 'checked' ? 'selected' : ''}">
+                                                <c:choose>
+                                                    <c:when test="${sm.name() == 'EXPRESS'}"><c:set var="iconClass" value="fa-bolt"/></c:when>
+                                                    <c:when test="${sm.name() == 'PICKUP'}"><c:set var="iconClass" value="fa-store"/></c:when>
+                                                    <c:otherwise><c:set var="iconClass" value="fa-truck"/></c:otherwise>
+                                                </c:choose>
+                                                <input type="radio" name="shippingMethod" id="delivery-${sm.name()}" value="${sm.name()}" data-cost="${cost}" ${checked}>
+                                                <label for="delivery-${sm.name()}">
+                                                    <i class="fas ${iconClass}"></i>
+                                                    <div class="delivery-info">
+                                                        <span class="delivery-type"><c:out value='${sm.displayName}'/></span>
+                                                        <span class="delivery-time">
+                                                            <c:choose>
+                                                                <c:when test="${sm.deliveryDaysMin == 0 && sm.deliveryDaysMax <= 1}">Available today</c:when>
+                                                                <c:otherwise>
+                                                                    <c:out value='${sm.deliveryDaysMin}'/>-<c:out value='${sm.deliveryDaysMax}'/> business days
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </span>
+                                                    </div>
+                                                    <span class="delivery-price">
+                                                        <c:choose>
+                                                            <c:when test="${isFree}">Miễn phí</c:when>
+                                                            <c:otherwise><fmt:formatNumber value="${cost}" type="currency" currencySymbol="₫"/></c:otherwise>
+                                                        </c:choose>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div style="padding:0.75rem;color:#c00;font-weight:600;">No shipping methods available.</div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
 
                             <!-- Shipping Form -->
@@ -165,7 +138,7 @@
                                 
                                 <div class="checkbox-group">
                                     <input type="checkbox" id="terms" name="terms" required>
-                                    <label for="terms">
+                                    <label for="terms" You must agree to the terms>
                                         I have read and agree to the <a href="${env}/terms" class="link">Terms and Conditions</a>
                                     </label>
                                 </div>
@@ -181,37 +154,42 @@
                         
                         <!-- Order Items -->
                         <div class="order-items">
-                            <div class="order-item">
-                                <div class="item-image">
-                                    <img src="${env}/customer/img/products/AIR+MAX+90+G.avif" alt="Nike Air Max 90" onclick="viewProduct('air-max-90')">
-                                </div>
-                                <div class="item-details">
-                                    <h3 class="item-name">
-                                        <a href="${env}/product-detail" class="product-link">Nike Air Max 90</a>
-                                    </h3>
-                                    <p class="item-category">Men's Shoes</p>
-                                    <p class="item-specs">White/Dusty Cactus/Hyper Pink</p>
-                                    <p class="item-size">Size: US M 8 / W 9.5</p>
-                                    <p class="item-quantity">Quantity: 1</p>
-                                </div>
-                                <div class="item-price">$120.00</div>
-                            </div>
-                            
-                            <div class="order-item">
-                                <div class="item-image">
-                                    <img src="${env}/customer/img/products/AIR+FORCE+1+'07.avif" alt="Nike Air Force 1" onclick="viewProduct('air-force-1')">
-                                </div>
-                                <div class="item-details">
-                                    <h3 class="item-name">
-                                        <a href="${env}/product-detail" class="product-link">Nike Air Force 1 '07</a>
-                                    </h3>
-                                    <p class="item-category">Men's Shoes</p>
-                                    <p class="item-specs">White/White</p>
-                                    <p class="item-size">Size: US M 9</p>
-                                    <p class="item-quantity">Quantity: 1</p>
-                                </div>
-                                <div class="item-price">$110.00</div>
-                            </div>
+                            <c:choose>
+                                <c:when test="${empty items}">
+                                    <div style="padding:1rem;color:#d00;font-weight:bold;">Your cart is empty. <a href="${env}/products">Go shopping</a>.</div>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach var="item" items="${items}">
+                                        <div class="order-item">
+                                            <div class="item-image">
+                                                <c:choose>
+                                                    <c:when test="${not empty item.product.imageUrl}">
+                                                        <img src="${env}${item.product.imageUrl}" alt="${item.product.name}" onclick="viewProduct('${item.product.id}')">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <img src="${env}/images/products/default-product.avif" alt="${item.product.name}" onclick="viewProduct('${item.product.id}')">
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </div>
+                                            <div class="item-details">
+                                                <h3 class="item-name">
+                                                    <a href="${env}/product-detail?id=${item.product.id}" class="product-link">${item.product.name}</a>
+                                                </h3>
+                                                <p class="item-category">
+                                                    Category: <c:out value="${item.product.category != null ? item.product.category.name : ''}"/>
+                                                </p>
+                                                <p class="item-specs">Color: ${item.color}</p>
+                                                <p class="item-size">Size: ${item.size}</p>
+                                                <p class="item-quantity">Quantity: ${item.quantity}</p>
+                                            </div>
+                                            <div class="item-price">
+                                                <c:set var="unitPrice" value="${item.product.salePrice != null ? item.product.salePrice : item.product.price}"/>
+                                                <fmt:formatNumber value="${unitPrice}" type="currency" currencySymbol="₫"/>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                         
                         <!-- Discount Code -->
@@ -224,26 +202,32 @@
                         
                         <!-- Order Totals -->
                         <div class="order-totals">
+                            <input type="hidden" id="subtotalValue" value="${subtotal}" />
+                            <input type="hidden" id="discountValue" value="${discount}" />
                             <div class="total-row">
                                 <span>Subtotal</span>
-                                <span>$230.00</span>
+                                <span id="subtotalDisplay"><fmt:formatNumber value="${subtotal}" type="currency" currencySymbol="₫"/></span>
                             </div>
                             <div class="total-row">
                                 <span>Shipping</span>
-                                <span>$5.00</span>
+                                <span id="shippingCostDisplay"><fmt:formatNumber value="${shippingCost}" type="currency" currencySymbol="₫"/></span>
                             </div>
                             <div class="total-row">
                                 <span>Discount</span>
-                                <span class="discount">-$0.00</span>
+                                <span class="discount" id="discountDisplay">-<fmt:formatNumber value="${discount}" type="currency" currencySymbol="₫"/></span>
                             </div>
                             <div class="total-row final-total">
                                 <span>Total</span>
-                                <span>$235.00</span>
+                                <span id="totalDisplay"><fmt:formatNumber value="${total}" type="currency" currencySymbol="₫"/></span>
                             </div>
                         </div>
                         
                         <!-- Payment Button -->
-                        <form action="${env}/checkout/complete" method="post" style="margin-top:1rem;">
+                        <form action="${env}/checkout/complete" method="post" style="margin-top:1rem;" id="completeCheckoutForm">
+                            <input type="hidden" name="shippingMethod" id="shippingMethodHidden" value="${shippingMethod}" />
+                            <c:if test="${not empty _csrf}">
+                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                            </c:if>
                             <button class="pay-now-btn" type="submit">
                                 <i class="fas fa-lock"></i>
                                 Complete Checkout
@@ -265,5 +249,7 @@
 
     <script src="${env}/customer/scripts/pages/main.js"></script>
     <script src="${env}/customer/scripts/pages/checkout.js"></script>
+    <script src="${env}/js/checkout-validation.js"></script>
+    <script src="${env}/js/checkout-shipping.js"></script>
 </body>
 </html>
