@@ -28,21 +28,23 @@
                         <span class="step-label">Cart</span>
                     </a>
                 </div>
-                <div class="step">
-                    <a href="${env}/checkout">
-                        <div class="step-icon">
-                            <span>2</span>
-                        </div>
-                        <span class="step-label">Checkout</span>
-                    </a>
+                <div class="step ${hasItems ? '' : 'disabled'}">
+                    <c:choose>
+                        <c:when test='${hasItems}'>
+                            <a href="${env}/checkout">
+                                <div class="step-icon"><span>2</span></div>
+                                <span class="step-label">Checkout</span>
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="step-icon" style="opacity:.5;cursor:not-allowed"><span>2</span></div>
+                            <span class="step-label" style="opacity:.5;">Checkout</span>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
-                <div class="step">
-                    <a href="${env}/order">
-                        <div class="step-icon">
-                            <span>3</span>
-                        </div>
-                        <span class="step-label">Order</span>
-                    </a>
+                <div class="step disabled">
+                    <div class="step-icon" style="opacity:.5;cursor:not-allowed"><span>3</span></div>
+                    <span class="step-label" style="opacity:.5;">Order</span>
                 </div>
             </div>
         </div>
@@ -78,7 +80,7 @@
                             <c:forEach var="cartItem" items="${cartItems}">
                                 <div class="cart-item" data-product-id="${cartItem.product.id}">
                                     <div class="item-image" onclick="viewProduct('${cartItem.product.id}')">
-                                        <img src="${env}/images/products/${cartItem.product.name}/${cartItem.color}/${cartItem.product.imageUrl}.avif" alt="${cartItem.product.name}">
+                                        <img src="${env}${cartItem.product.imageUrl}" alt="${cartItem.product.name}">
                                     </div>
                                     <div class="item-details">
                                         <div class="item-header">
@@ -94,15 +96,15 @@
                                         </div>
                                         <div class="item-actions">
                                             <div class="quantity-controls">
-                                                    <button type="button" name="quantity" value="${cartItem.quantity - 1}" class="quantity-btn"
-                                                    onclick="updateCart(${cartItem.product.id}, ${cartItem.quantity - 1}, '${cartItem.size}', '${cartItem.color}')">
+                                                    <button type="button" class="quantity-btn"
+                                                    onclick="changeQuantity(${cartItem.product.id}, -1, '${cartItem.size}', '${cartItem.color}')">
                                                         <i class="fas fa-minus"></i>
                                                     </button>
 
                                                     <input type="text" class="quantity-input" value="${cartItem.quantity}" id="qty-${cartItem.product.id}" readonly>
 
-                                                    <button type="button" name="quantity" value="${cartItem.quantity + 1}" class="quantity-btn"
-                                                    onclick="updateCart(${cartItem.product.id}, ${cartItem.quantity + 1}, '${cartItem.size}', '${cartItem.color}')">
+                                                    <button type="button" class="quantity-btn"
+                                                    onclick="changeQuantity(${cartItem.product.id}, 1, '${cartItem.size}', '${cartItem.color}')">
                                                         <i class="fas fa-plus"></i>
                                                     </button>
 

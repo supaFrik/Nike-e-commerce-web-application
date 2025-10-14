@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.controller.cart;
+package vn.devpro.javaweb32.controller.customer.cart;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -37,7 +37,7 @@ public class CartController {
         var cartItems = cartService.getCartItems(customer);
 
         double subtotal = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
-        double shipping = 5.0;
+        double shipping = subtotal > 0 ? 5.0 : 0.0;
         double tax = subtotal * 0.08;
         double total = subtotal + shipping + tax;
 
@@ -47,6 +47,8 @@ public class CartController {
         model.addAttribute("shipping", shipping);
         model.addAttribute("tax", tax);
         model.addAttribute("total", total);
+        model.addAttribute("hasItems", !cartItems.isEmpty());
+        model.addAttribute("orderAccessible", false);
 
         return "customer/cart";
     }

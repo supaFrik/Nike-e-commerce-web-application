@@ -26,12 +26,6 @@ public class CustomerHomeController extends BaseController {
     @Autowired
     private CategoryAdminService categoryService;
 
-    // Checkout page
-    @GetMapping("/checkout")
-    public String checkout() {
-        return "customer/checkout";
-    }
-
     // Home
     @GetMapping({"/", "/index"})
     public String home(Model model) {

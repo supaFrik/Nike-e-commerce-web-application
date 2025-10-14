@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.controller.cart;
+package vn.devpro.javaweb32.controller.customer.cart;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,16 +40,25 @@ public class CartApiController {
             }
 
             cartService.addProduct(customer, productId, req.getQuantity(), req.getSize(), req.getColor());
-            List<CartItem> cartItems = cartService.getCartItems(customer);
+            return buildCartSummary(customer, true);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(500).body(Map.of("error", "Internal server error"));
+        }
+    }
 
-            int itemCount = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
-            double subtotal = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
-
-            return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "itemCount", itemCount,
-                    "subtotal", subtotal
-            ));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateProductQuantity(@PathVariable("id") Long productId,
+                                                    @RequestBody AddToCartRequest req) {
+        try {
+            Customer customer = getCurrentCustomer();
+            if (customer == null) {
+                return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+            }
+            cartService.updateQuantity(customer, productId, req.getSize(), req.getColor(), req.getQuantity());
+            return buildCartSummary(customer, true);
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
         } catch (Exception ex) {
@@ -68,10 +77,7 @@ public class CartApiController {
                 return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
             }
             cartService.removeProduct(customer, productId, size, color);
-            List<CartItem> cartItems = cartService.getCartItems(customer);
-            int itemCount = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
-            double subtotal = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
-            return ResponseEntity.ok(Map.of("success", true, "itemCount", itemCount, "subtotal", subtotal));
+            return buildCartSummary(customer, true);
         } catch (Exception ex) {
             ex.printStackTrace();
             return ResponseEntity.status(500).body(Map.of("error", "Internal server error"));
@@ -86,5 +92,24 @@ public class CartApiController {
         }
         int itemCount = cartService.getCartItems(customer).stream().mapToInt(CartItem::getQuantity).sum();
         return ResponseEntity.ok(Map.of("itemCount", itemCount));
+    }
+
+    private ResponseEntity<?> buildCartSummary(Customer customer, boolean successFlag) {
+        List<CartItem> cartItems = cartService.getCartItems(customer);
+        int itemCount = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
+        double subtotal = cartItems.stream().mapToDouble(CartItem::getTotal).sum();
+        double shipping = subtotal > 0 ? 5.0 : 0.0; // business rule placeholder
+        double tax = subtotal * 0.08; // 8% tax
+        double discount = 0.0; // future: apply promotions
+        double total = subtotal + shipping + tax - discount;
+        return ResponseEntity.ok(Map.of(
+                "success", successFlag,
+                "itemCount", itemCount,
+                "subtotal", subtotal,
+                "shipping", shipping,
+                "tax", tax,
+                "discount", discount,
+                "total", total
+        ));
     }
 }

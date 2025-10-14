@@ -69,11 +69,24 @@ public class CartService {
 
     @Transactional
     public void updateQuantity(Customer customer, Long productId, String size, String color, int quantity) {
+        if (customer == null) throw new IllegalArgumentException("Customer is null");
+        if (quantity < 1) throw new IllegalArgumentException("Quantity must be >= 1");
         var opt = cartItemRepository.findByCustomerAndProduct_idAndSizeAndColor(customer, productId, size, color);
         if (opt.isPresent()) {
             CartItem cartItem = opt.get();
+            Product product = cartItem.getProduct();
+            boolean variantOk = product.getVariants().stream()
+                    .filter(v -> v != null)
+                    .anyMatch(v -> v.getSizeLabel() != null && v.getSizeLabel().equals(size)
+                            && v.getColor() != null && v.getColor().getColorName().equals(color)
+                            && v.getStock() != null && v.getStock() >= quantity);
+            if (!variantOk) {
+                throw new IllegalArgumentException("Requested quantity exceeds available stock for selected size/color");
+            }
             cartItem.setQuantity(quantity);
             cartItemRepository.save(cartItem);
+        } else {
+            throw new IllegalArgumentException("Cart item not found");
         }
     }
 }

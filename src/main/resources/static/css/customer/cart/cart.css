@@ -159,6 +159,7 @@
     padding: var(--size-spacing-xl);
     background: var(--color-bg-primary);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
+    border-radius: 10px;
 }
 
 .item-image {
@@ -167,6 +168,7 @@
     flex-shrink: 0;
     overflow: hidden;
     cursor: pointer;
+    border-radius: 10px;
     background: var(--color-bg-secondary);
 }
 
@@ -289,7 +291,7 @@ text-transform: capitalize;
     font-weight: var(--font-weight-medium);
     transition: color var(--transition-duration-fast) var(--transition-timing-function-ease);
     text-transform: uppercase;
-    font-size: var(--font-size-xxs);
+    font-size: var(--font-size-x);
     letter-spacing: 0.5px;
 }
 
@@ -302,6 +304,7 @@ text-transform: capitalize;
     background: var(--color-bg-primary);
     padding: 40px;
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
+    border-radius: 10px;
     height: fit-content;
     position: sticky;
     top: 100px;
@@ -333,6 +336,7 @@ text-transform: capitalize;
     padding: var(--size-spacing-s);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
     font-size: var(--font-size-xs);
+    border-radius: 10px;
     transition: border-color var(--transition-duration-fast) var(--transition-timing-function-ease);
 }
 
@@ -346,6 +350,7 @@ text-transform: capitalize;
     background: var(--color-text-primary);
     color: var(--color-bg-primary);
     border: var(--size-border-width-m) solid var(--color-text-primary);
+    border-radius: 10px;
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -394,6 +399,7 @@ text-transform: capitalize;
     background: var(--color-text-primary);
     color: var(--color-bg-primary);
     border: var(--size-border-width-m) solid var(--color-text-primary);
+    border-radius: 10px;
     font-size: var(--font-size-s);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -447,7 +453,7 @@ text-transform: capitalize;
     gap: 16px;
     padding: 20px;
     background: #f9f9f9;
-    border-radius: 0;
+    border-radius: 10px;
     border: 1px solid #e5e5e5;
 }
 
