@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.controller.product;
+package vn.devpro.javaweb32.controller.customer.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

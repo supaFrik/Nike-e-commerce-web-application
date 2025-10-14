@@ -10,6 +10,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin Products</title>
+  <link rel="icon" type="image/png" sizes="16x16" href="${env }/administrator/assets/images/favicon.png">
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="${env}/css/common/base.css" />
   <link rel="stylesheet" href="${env}/css/admin/product-list/list-product.css" />

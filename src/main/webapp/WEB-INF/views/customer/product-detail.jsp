@@ -478,9 +478,7 @@
                             }
                         }
 
-                        // Removed selectThumbnail function - thumbnail-scope.js handles this now
 
-                        // Initialize on DOM ready
                         document.addEventListener('DOMContentLoaded', function() {
                             SizeSelectionManager.init();
 

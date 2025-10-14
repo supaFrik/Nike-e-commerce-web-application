@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Product - Nike</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="${env }/administrator/assets/images/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <%@ include file="/WEB-INF/views/administrator/layout/product-add-components.jsp" %>
     <!-- Expose context path to JS -->
@@ -67,7 +68,7 @@
                         <div class="selection-item">
                             <h4>Size</h4>
                             <div class="size-options" id="sizeOptions">
-                                <!-- Sizes will be populated dynamically -->
+
                             </div>
                             <div id="stockSummary" style="margin-top:8px; font-size:12px; color:var(--color-text-secondary);"></div>
                             <div class="add-size-container">
@@ -104,16 +105,16 @@
                             <h4>Gender</h4>
                             <div class="gender-options">
                                 <div class="radio-option">
-                                    <input type="radio" name="gender" id="MEN" checked>
-                                    <label for="MEN">Men</label>
+                                    <input type="radio" name="gender" id="Men" checked>
+                                    <label for="Men">Men</label>
                                 </div>
                                 <div class="radio-option">
-                                    <input type="radio" name="gender" id="WOMEN">
-                                    <label for="WOMEN">Women</label>
+                                    <input type="radio" name="gender" id="Women">
+                                    <label for="Women">Women</label>
                                 </div>
                                 <div class="radio-option">
-                                    <input type="radio" name="gender" id="UNISEX">
-                                    <label for="UNISEX">Unisex</label>
+                                    <input type="radio" name="gender" id="Unisex">
+                                    <label for="Unisex">Unisex</label>
                                 </div>
                             </div>
                         </div>

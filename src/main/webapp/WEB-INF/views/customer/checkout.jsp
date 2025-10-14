@@ -27,20 +27,24 @@
                     </a>
                 </div>
                 <div class="step active">
-                    <a href="${env}/checkout">    
-                        <div class="step-icon">
-                            <span>2</span>
-                        </div>                    
+                    <a href="${env}/checkout">
+                        <div class="step-icon"><span>2</span></div>
                         <span class="step-label">Checkout</span>
                     </a>
                 </div>
-                <div class="step">
-                    <a href="${env}/order">
-                        <div class="step-icon">
-                            <span>3</span>
-                        </div>
-                        <span class="step-label">Order</span>
-                    </a>
+                <div class="step ${orderAccessible ? '' : 'disabled'}">
+                    <c:choose>
+                        <c:when test='${orderAccessible}'>
+                            <a href="${env}/order">
+                                <div class="step-icon"><span>3</span></div>
+                                <span class="step-label">Order</span>
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="step-icon" style="opacity:.5;cursor:not-allowed"><span>3</span></div>
+                            <span class="step-label" style="opacity:.5;">Order</span>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
@@ -239,11 +243,12 @@
                         </div>
                         
                         <!-- Payment Button -->
-                        <button class="pay-now-btn" onclick="proceedToPayment()">
-                            <i class="fas fa-lock"></i>
-                            Pay Now
-                        </button>
-                        
+                        <form action="${env}/checkout/complete" method="post" style="margin-top:1rem;">
+                            <button class="pay-now-btn" type="submit">
+                                <i class="fas fa-lock"></i>
+                                Complete Checkout
+                            </button>
+                        </form>
                         <!-- Security Info -->
                         <div class="security-info">
                             <i class="fas fa-shield-alt"></i>

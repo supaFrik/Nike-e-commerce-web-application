@@ -32,7 +32,7 @@ html,body{margin:0;padding:0;font-family:var(--font-family, system-ui);backgroun
 .layout{display:grid;grid-template-columns:1fr minmax(300px,380px);min-height:calc(100vh - 64px);}
 .product-panel{overflow: auto; padding:1.75rem 1rem;display:flex;flex-direction:column;gap:1.25rem;min-height:0;}
 .edit-panel{border-left:1px solid var(--ap-border);background:var(--ap-bg-panel);display:flex;}
-.edit-panel-inner{padding:1.5rem 1.5rem 4rem;display:flex;flex-direction:column;gap:1rem;width:100%;max-width:420px;margin:0 auto;}
+.edit-panel-inner{padding:1.5rem 1.5rem 4rem;display:flex;flex-direction:column;gap:1rem;width:100%;max-width:420px;margin:0 auto;overflow: auto}
 
 .panel-header h1{margin:0;font-size:1.25rem;font-weight:600;}
 .toolbar-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.35rem;}
@@ -41,8 +41,8 @@ html,body{margin:0;padding:0;font-family:var(--font-family, system-ui);backgroun
 .search-wrapper.pill:focus-within{border-color:var(--color-black);background:var(--color-white);}
 .search-wrapper .search-icon{color:var(--ap-text-dim);flex-shrink:0;}
 .search-wrapper input{background:transparent;border:none;outline:none;font:inherit;min-width:200px;padding:.25rem 0;}
-.btn.outline{background:var(--color-white);border:1px solid var(--color-black);color:var(--color-black);}
-.btn.outline:hover{background:var(--color-grey-100);}
+.btn.outline{background:var(--color-black);border:1px solid var(--color-black);color:var(--color-white);}
+.btn.outline:hover{background:var(--color-grey-500);}
 .add-btn{border-radius:999px;font-weight:500;}
 .add-btn .plus{font-size:1rem;margin-left:.25rem;line-height:1;}
 .sort-wrapper{position:relative;}
