@@ -55,6 +55,7 @@ public class ProductApiController {
             @RequestParam(value = "minPrice", required = false) java.math.BigDecimal minPrice,
             @RequestParam(value = "maxPrice", required = false) java.math.BigDecimal maxPrice,
             @RequestParam(value = "sort", required = false) String sort,
+            @RequestParam(value = "q", required = false) String q,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
             @RequestParam(value = "pageSize", required = false, defaultValue = "24") Integer pageSize
     ) {
@@ -65,6 +66,7 @@ public class ProductApiController {
         c.setMinPrice(minPrice);
         c.setMaxPrice(maxPrice);
         c.setSort(sort);
+        c.setQ(q);
         c.setPage(page);
         c.setPageSize(pageSize);
         var result = productSearchService.search(c);

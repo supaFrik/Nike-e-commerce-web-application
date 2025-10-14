@@ -142,6 +142,7 @@
                                             <p class="card-price" aria-label="Price: <fmt:formatNumber value='${product.price}' type='number' maxFractionDigits='0'/> Vietnamese Dong">
                                                 <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>₫
                                             </p>
+                                        </div>
                                 </c:forEach>
                             </div>
                         </div>

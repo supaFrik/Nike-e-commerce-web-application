@@ -1,5 +1,6 @@
 package vn.devpro.javaweb32.entity.order;
 
+import vn.devpro.javaweb32.common.base.BaseEntity;
 import vn.devpro.javaweb32.entity.customer.Customer;
 import vn.devpro.javaweb32.entity.order.enums.OrderStatus;
 import vn.devpro.javaweb32.entity.order.enums.ShippingMethod;
@@ -12,11 +13,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;

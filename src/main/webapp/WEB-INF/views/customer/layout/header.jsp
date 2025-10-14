@@ -91,10 +91,13 @@
                 <div class="nav-right">
                     <div class="search-container">
                         <div class="search-wrapper">
-                            <div class="search-input-wrapper">
-                                <input type="text" placeholder="Search" class="search-input" id="searchInput">
-                                <img src="${env}/images/icons/search-interface-symbol.png" alt="Search" class="search-icon" style="width: 20px;">
-                            </div>
+                            <!-- Updated search form -->
+                            <form id="globalSearchForm" class="search-input-wrapper" action="${env}/search" method="get" role="search">
+                                <input type="text" placeholder="Search" class="search-input" id="searchInput" name="q" aria-label="Search products" value="${fn:escapeXml(param.q)}">
+                                <button type="submit" class="search-icon-btn" aria-label="Submit search" style="background:none;border:none;padding:0;cursor:pointer">
+                                    <img src="${env}/images/icons/search-interface-symbol.png" alt="Search" class="search-icon" style="width: 20px;">
+                                </button>
+                            </form>
                         </div>
                     </div>
                     
@@ -137,7 +140,7 @@
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <path d="M16 10a4 4 0 0 1-8 0"></path>
                         </svg>
-                        <span class="cart-count" id="cartCount">${cartCount != null ? cartCount : 0}
+                        <span class="cart-count" id="cartCount">${cartCount != null ? cartCount : 0}</span>
                     </a>
                     <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                         <span></span>
@@ -228,3 +231,31 @@
         </div>
     </nav>
 </header>
+<script>
+(function(){
+  const form = document.getElementById('globalSearchForm');
+  if(!form) return;
+  const btn = form.querySelector('.search-icon-btn');
+  const input = document.getElementById('searchInput');
+
+  // Force submit on button click (in case CSS/JS elsewhere blocks it)
+  if(btn){
+    btn.addEventListener('click', function(){
+      // Let native submit happen first; fallback force after a tick
+      setTimeout(()=>{
+        if(!document.hidden) form.submit();
+      }, 50);
+    });
+  }
+
+  // Pressing Enter inside input should submit (fallback)
+  if(input){
+    input.addEventListener('keydown', function(e){
+      if(e.key === 'Enter') {
+        // Allow default; but fallback force
+        setTimeout(()=>{ if(!document.hidden) form.submit(); }, 50);
+      }
+    });
+  }
+})();
+</script>

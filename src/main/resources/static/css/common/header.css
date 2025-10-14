@@ -8,7 +8,6 @@
   top: 0;
   z-index: 1000;
   background-color: var(--color-bg-primary);
-  box-shadow: var(--shadow-10);
 }
   .header-link:hover, .header-link:focus {
     color: var(--color-brand-red) !important;
@@ -260,11 +259,6 @@ justify-content: center;
   outline: none;
   width: 200px;
   transition: all 0.1s ease;
-}
-.search-input:focus {
-  border-color: var(--color-black);
-  background: var(--color-white);
-  width: 220px;
 }
 .search-input::placeholder {
   color: var(--color-grey-500);
