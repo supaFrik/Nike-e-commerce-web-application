@@ -2,15 +2,17 @@
 function initializeApplication() {
     console.log('Initializing Product Management Application...');
     
-    // Initialize all modules in the correct order
     initializeState();
+    prefillEditProduct();
     initializeDropdown();
     initializeColors();
     initializeSizes();
     initializeImages();
     initializeForm();
     initializeEventListeners();
-    loadDraftIfAvailable();
+    if(!window.EDIT_PRODUCT || !window.EDIT_PRODUCT.id){
+        loadDraftIfAvailable();
+    }
 
     console.log('Application initialized successfully!');
 }
@@ -200,6 +202,77 @@ function loadDraftIfAvailable(){
         }
         console.log('Draft restored');
     } catch(e){ console.warn('Failed to load draft', e); }
+}
+
+function prefillEditProduct(){
+    if(!window.EDIT_PRODUCT || !window.EDIT_PRODUCT.id){ return; }
+    try {
+        console.log('[EditMode] Prefilling product data', window.EDIT_PRODUCT.id);
+        const p = window.EDIT_PRODUCT;
+        // Basic fields
+        const nameEl = document.getElementById('productName');
+        const descEl = document.getElementById('productDescription');
+        const priceEl = document.getElementById('productPrice');
+        if(nameEl) nameEl.value = p.name || '';
+        if(descEl) descEl.value = p.description || '';
+        if(priceEl && p.price != null){
+            if(window.PriceFormatter){ window.PriceFormatter.setRawValue(p.price); }
+            else { priceEl.value = p.price; }
+        }
+        if(p.type){
+            const radio = document.getElementById(p.type.toUpperCase());
+            if(radio) radio.checked = true;
+        }
+        if(p.categoryId){
+            const hid = document.getElementById('categoryIdHidden');
+            if(hid) hid.value = p.categoryId;
+            const opt = document.querySelector(`#dropdown-options .dropdown-option[data-id='${p.categoryId}']`);
+            if(opt){
+                const span = document.getElementById('selected-category');
+                if(span) span.textContent = opt.textContent.trim();
+                if(window.AppState) window.AppState.setSelectedCategory(opt.textContent.trim());
+            }
+        }
+        // Colors, sizes, images
+        if(Array.isArray(p.colors) && p.colors.length){
+            window.AppState.availableColors = [];
+            window.AppState.colorImageData = {};
+            window.AppState.colorSizeData = {};
+            window.AppState.defaultImageData = {};
+            window.AppState.colorSizeStockData = {};
+            p.colors.forEach((cObj)=>{
+                if(!cObj || !cObj.name) return;
+                window.AppState.availableColors.push(cObj.name);
+                const sizes = Array.isArray(cObj.sizes) && cObj.sizes.length? cObj.sizes : ['40'];
+                window.AppState.colorSizeData[cObj.name] = sizes;
+                // stocks
+                const stockMap = {};
+                if(Array.isArray(cObj.sizeStocks)){
+                    sizes.forEach((sz, idx)=>{ stockMap[sz] = (cObj.sizeStocks[idx] != null ? cObj.sizeStocks[idx] : 0); });
+                } else {
+                    sizes.forEach(sz=> stockMap[sz] = 0);
+                }
+                window.AppState.colorSizeStockData[cObj.name] = stockMap;
+                // images
+                const imgs = (cObj.images || []).map((src, idx)=> ({
+                    src: src,
+                    name: 'img_'+idx,
+                    id: Date.now() + Math.random() + idx,
+                    color: cObj.name
+                }));
+                window.AppState.colorImageData[cObj.name] = imgs;
+                // default image
+                let defIdx = 0;
+                if(typeof cObj.defaultImageIndex === 'number' && cObj.defaultImageIndex >=0 && cObj.defaultImageIndex < imgs.length){ defIdx = cObj.defaultImageIndex; }
+                if(imgs[defIdx]) window.AppState.defaultImageData[cObj.name] = imgs[defIdx].id;
+            });
+            window.AppState.setCurrentColor(window.AppState.availableColors[0]);
+        }
+        // Refresh modules
+        if(window.ColorManager) window.ColorManager.updateOptions && window.ColorManager.updateOptions();
+        if(window.SizeManager) window.SizeManager.updateOptions && window.SizeManager.updateOptions();
+        if(window.ImageManager) window.ImageManager.updateDisplay && window.ImageManager.updateDisplay();
+    } catch(err){ console.error('[EditMode] Prefill failed', err); }
 }
 
 window.App = {

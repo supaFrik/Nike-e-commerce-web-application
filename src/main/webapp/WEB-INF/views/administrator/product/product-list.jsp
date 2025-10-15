@@ -10,7 +10,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin Products</title>
-  <link rel="icon" type="image/png" sizes="16x16" href="${env }/administrator/assets/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="${env }/images/icons/nike-icon-webpage.png">
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="${env}/css/common/base.css" />
   <link rel="stylesheet" href="${env}/css/admin/product-list/list-product.css" />
@@ -83,7 +83,7 @@
         <div class="edit-panel-header">
           <div class="title-line">
             <h2 id="edit-heading">Edit Products</h2>
-            <a href="#" class="see-full" aria-label="Open full view of product editor">See full view →</a>
+            <a id="fullEditLink" href="#" class="see-full disabled" aria-label="Open full view of product editor" aria-disabled="true">See full view →</a>
           </div>
           <button id="closeEdit" class="icon-btn" aria-label="Close edit panel">&times;</button>
         </div>

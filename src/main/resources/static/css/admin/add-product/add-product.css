@@ -593,6 +593,10 @@
     margin-top: 32px;
 }
 
+#editCategorySelect {
+text-transform: capitalize;
+}
+
 .custom-dropdown {
     position: relative;
     width: 100%;

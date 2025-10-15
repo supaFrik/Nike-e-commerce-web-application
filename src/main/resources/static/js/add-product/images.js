@@ -113,7 +113,7 @@ function updateImageDisplay() {
 
             const removeBtn = document.createElement('button');
             removeBtn.className = 'thumbnail-remove';
-            removeBtn.innerHTML = '×';
+            removeBtn.innerHTML = '\u00d7';
             removeBtn.title = `Remove image from ${window.AppState.currentColor}`;
             removeBtn.onclick = (e) => {
                 e.stopPropagation();
@@ -123,7 +123,7 @@ function updateImageDisplay() {
             const defaultBtn = document.createElement('button');
             const isDefault = isDefaultImage(image.id);
             defaultBtn.className = `thumbnail-default ${isDefault ? 'is-default' : ''}`;
-            defaultBtn.innerHTML = isDefault ? '★ Default' : 'Set Default';
+            defaultBtn.innerHTML = isDefault ? '\u2605 Default' : 'Set Default';
             defaultBtn.title = isDefault ? 'This is the default image' : 'Set as default image';
             defaultBtn.onclick = (e) => {
                 e.stopPropagation();
@@ -225,8 +225,13 @@ function preventDefaults(e) {
 function initializeImageHandlers() {
     const uploadArea = document.getElementById('uploadArea');
     const imageUpload = document.getElementById('imageUpload');
+    const addMoreBtn = document.getElementById('addMoreImagesBtn');
 
     if (!uploadArea || !imageUpload) return;
+
+    // Click to open file dialog
+    uploadArea.addEventListener('click', () => imageUpload.click());
+    if(addMoreBtn){ addMoreBtn.addEventListener('click', () => imageUpload.click()); }
 
     // Image upload change event
     imageUpload.addEventListener('change', function(e) {

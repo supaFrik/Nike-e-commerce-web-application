@@ -32,7 +32,10 @@ html,body{margin:0;padding:0;font-family:var(--font-family, system-ui);backgroun
 .layout{display:grid;grid-template-columns:1fr minmax(300px,380px);min-height:calc(100vh - 64px);}
 .product-panel{overflow: auto; padding:1.75rem 1rem;display:flex;flex-direction:column;gap:1.25rem;min-height:0;}
 .edit-panel{border-left:1px solid var(--ap-border);background:var(--ap-bg-panel);display:flex;}
-.edit-panel-inner{padding:1.5rem 1.5rem 4rem;display:flex;flex-direction:column;gap:1rem;width:100%;max-width:420px;margin:0 auto;overflow: auto}
+.edit-panel-inner{padding:1.5rem 1.5rem 4rem;display:flex;flex-direction:column;gap:1rem;width:100%;max-width:420px;margin:0 auto;overflow: auto;
+  height:100%;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  max-height:calc(100vh - 64px);
+}
 
 .panel-header h1{margin:0;font-size:1.25rem;font-weight:600;}
 .toolbar-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:.35rem;}
@@ -120,6 +123,7 @@ html,body{margin:0;padding:0;font-family:var(--font-family, system-ui);backgroun
 .field.boxed span{font-size:.65rem;text-transform:capitalize;letter-spacing:.4px;color:var(--ap-text-dim);}
 .field.boxed input,.field.boxed textarea,.field.boxed select{padding:.4rem 0 0;background:transparent;border:none;outline:none;}
 .field.boxed textarea{min-height:112px;}
+#editCategorySelect{text-transform: capitalize;}
 .placeholder{font-size:.75rem;color:var(--ap-text-dim);}
 .sticky-actions{position:sticky;bottom:0;display:flex;justify-content:space-between;gap:.75rem;padding:.75rem .25rem;background:linear-gradient(to top, rgba(255,255,255,0.95), rgba(255,255,255,0.65));backdrop-filter:blur(4px);margin-top:1.5rem;}
 .icon-btn{background:none;border:none;font-size:1.4rem;line-height:1;cursor:pointer;color:var(--color-black);padding:.25rem;border-radius:var(--ap-radius-s);}
@@ -147,6 +151,8 @@ html,body{margin:0;padding:0;font-family:var(--font-family, system-ui);backgroun
   .edit-panel{position:fixed;top:0;right:0;bottom:0;transform:translateX(100%);width:min(420px,90%);box-shadow:-2px 0 12px rgba(0,0,0,.08);transition:var(--ap-transition);z-index:50;background:var(--ap-bg-panel);}
 
   .edit-panel.open{transform:translateX(0);}
+  /* Ensure inner still scrolls fully on mobile */
+  .edit-panel-inner{max-height:100vh;}
 }
 
 @media (max-width:640px){

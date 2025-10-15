@@ -1,4 +1,4 @@
-package vn.devpro.javaweb32.service.order.dto;
+package vn.devpro.javaweb32.dto.customer.order;
 
 import vn.devpro.javaweb32.entity.cart.CartItem;
 import vn.devpro.javaweb32.entity.order.enums.ShippingMethod;

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
-import vn.devpro.javaweb32.entity.cart.CartItem;
 import vn.devpro.javaweb32.entity.customer.Credential;
 import vn.devpro.javaweb32.entity.customer.Customer;
 import vn.devpro.javaweb32.entity.order.Order;
@@ -16,10 +15,9 @@ import vn.devpro.javaweb32.entity.order.enums.ShippingMethod;
 import vn.devpro.javaweb32.repository.CredentialRepository;
 import vn.devpro.javaweb32.service.customer.CartService;
 import vn.devpro.javaweb32.service.order.OrderService;
-import vn.devpro.javaweb32.service.order.dto.OrderSummary;
+import vn.devpro.javaweb32.dto.customer.order.OrderSummary;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 @Controller
 @RequestMapping

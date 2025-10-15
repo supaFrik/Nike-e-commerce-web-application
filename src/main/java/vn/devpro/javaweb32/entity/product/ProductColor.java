@@ -5,8 +5,7 @@ import vn.devpro.javaweb32.common.base.BaseEntity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_colors",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "color_name"}))
+@Table(name = "product_colors")
 public class ProductColor extends BaseEntity {
 
     @Column(name = "color_name", length = 100, nullable = false)

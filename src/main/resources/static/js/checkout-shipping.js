@@ -1,7 +1,7 @@
 (function(){
     function initShippingMethodModule(){
         const radios = document.querySelectorAll('input[name="shippingMethod"]');
-        if(!radios.length) return; // nothing to do
+        if(!radios.length) return;
         const shippingHidden = document.getElementById('shippingMethodHidden');
         const subtotalInput = document.getElementById('subtotalValue');
         const discountInput = document.getElementById('discountValue');
@@ -31,10 +31,8 @@
         }
 
         radios.forEach(r => r.addEventListener('change', recalc));
-        // Make whole label clickable / id already associates, but ensure we recalc early
         document.querySelectorAll('.delivery-option label').forEach(lbl => {
             lbl.addEventListener('click', () => {
-                // Delay to allow default radio change if triggered by native click
                 setTimeout(recalc, 0);
             });
         });

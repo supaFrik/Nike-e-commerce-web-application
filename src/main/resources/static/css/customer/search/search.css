@@ -107,12 +107,12 @@
         right: 0; bottom: 43%;
         background: transparent;
         border: none;
-        font-size: 2rem; l
+        font-size: 2rem;
         line-height: 1;
         cursor: pointer;
         padding: .25rem .5rem;
         color:#333;
-        z-index: 100
+        z-index: 100;
         }
         .search-close-btn:hover, .search-close-btn:focus {
         color:#000;
@@ -390,3 +390,39 @@
         .search-page .product-grid:hover::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.4); }
         /* Ensure dropdown appears above scrolling grid */
         .search-page .sort-dropdown { z-index:300; }
+
+        .ml-auto {
+    margin-left: auto;
+}
+.no-products {
+    padding: 2rem;
+    font-weight: 600;
+}
+.sale-price {
+    color: red;
+    font-weight: 600;
+}
+.old-price {
+    text-decoration: line-through;
+    color: #666;
+    margin-left: 6px;
+}
+.pagination {
+    margin: 2rem 0;
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
+.page-link {
+    padding: .6rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    color: inherit;
+    background: none;
+}
+.page-link.active {
+    background: #111;
+    color: #fff;
+    font-weight: 600;
+}
