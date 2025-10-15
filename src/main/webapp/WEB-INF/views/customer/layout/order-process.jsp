@@ -17,7 +17,6 @@
     </c:otherwise>
 </c:choose>
 
-<!-- Compute CSS classes -->
 <c:set var="cartClass" value="${step == 1 ? 'active' : (step > 1 ? 'completed' : '')}" />
 <c:set var="checkoutClass" value="${step == 2 ? 'active' : (step > 2 ? 'completed' : (hasItems ? '' : 'disabled'))}" />
 <c:set var="orderClass" value="${step == 3 ? (orderAccessible ? 'active' : 'disabled') : (step > 3 ? 'completed' : (orderAccessible ? '' : 'disabled'))}" />

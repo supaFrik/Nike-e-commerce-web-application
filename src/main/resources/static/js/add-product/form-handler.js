@@ -64,41 +64,34 @@ function submitToBackend(formData){
     const csrfHeader = headerMeta ? headerMeta.getAttribute('content') : null;
 
     const headers = { 'Content-Type': 'application/json' };
-    if(csrfToken && csrfHeader){
-        headers[csrfHeader] = csrfToken;
-    }
+    if(csrfToken && csrfHeader){ headers[csrfHeader] = csrfToken; }
 
-    fetch(ctx + '/admin/api/products', {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify(formData)
-    }).then(async res => {
-        const data = await res.json().catch(()=>({}));
-        if(!res.ok){
-            throw new Error(data.error || data.message || 'Server error');
-        }
-        // SUCCESS --------------------------------------------------
-        try { localStorage.removeItem('productDraft'); } catch(e) {  }
-        // Reset state
-        if(window.FormHandler && typeof window.FormHandler.reset === 'function') {
-            window.FormHandler.reset();
-        } else if(window.AppState && typeof window.AppState.reset === 'function') {
-            window.AppState.reset();
-        }
-        window.Toast && window.Toast.show('Product created successfully');
-        const urlParams = new URLSearchParams(window.location.search);
-        const stayMode = urlParams.has('stay') || window.location.hash === '#stay';
-        if(stayMode){
-            return;
-        }
-        setTimeout(()=>{ window.location.href = ctx + (data.redirectUrl || '/admin/product/list'); }, 600);
-    }).catch(err => {
-        console.error('Create product failed', err);
-        window.Toast && window.Toast.show('Create failed: '+ err.message);
-    });
+    const isEdit = !!(window.EDIT_PRODUCT && window.EDIT_PRODUCT.id);
+    const endpoint = ctx + '/admin/api/products' + (isEdit ? ('/' + window.EDIT_PRODUCT.id + '/full') : '');
+    const method = isEdit ? 'PUT' : 'POST';
+
+    fetch(endpoint, { method, headers, body: JSON.stringify(formData) })
+        .then(async res => {
+            const data = await res.json().catch(()=>({}));
+            if(!res.ok){ throw new Error(data.error || data.message || 'Server error'); }
+            try { if(!isEdit){ localStorage.removeItem('productDraft'); } } catch(e) { }
+            if(window.FormHandler && typeof window.FormHandler.reset === 'function' && !isEdit) {
+                window.FormHandler.reset();
+            } else if(!isEdit && window.AppState && typeof window.AppState.reset === 'function') {
+                window.AppState.reset();
+            }
+            window.Toast && window.Toast.show(isEdit ? 'Product updated successfully' : 'Product created successfully');
+            const urlParams = new URLSearchParams(window.location.search);
+            const stayMode = urlParams.has('stay') || window.location.hash === '#stay';
+            if(stayMode && !isEdit){ return; }
+            setTimeout(()=>{ window.location.href = ctx + '/admin/product/list'; }, 600);
+        })
+        .catch(err => {
+            console.error(isEdit? 'Update product failed' : 'Create product failed', err);
+            window.Toast && window.Toast.show((isEdit? 'Update' : 'Create') + ' failed: '+ err.message);
+        });
 }
 
-// Collect all form data
 function collectFormData() {
     const priceField = document.getElementById('productPrice');
     const priceValue = sanitizePriceInput(priceField ? (priceField.dataset.raw || priceField.value) : null) || 0;
@@ -196,7 +189,8 @@ window.addEventListener('DOMContentLoaded', () => {
         if(!trimmed || trimmed.length < 3){ hideConflict(); return; }
         try {
             const ctx = (window.APP_CTX || '').replace(/\/$/, '');
-            const resp = await fetch(ctx + '/admin/api/products/check-name?name=' + encodeURIComponent(trimmed));
+            const exclude = (window.EDIT_PRODUCT && window.EDIT_PRODUCT.id) ? ('&excludeId=' + window.EDIT_PRODUCT.id) : '';
+            const resp = await fetch(ctx + '/admin/api/products/check-name?name=' + encodeURIComponent(trimmed) + exclude);
             if(!resp.ok) return; // silent
             const data = await resp.json();
             if(!data) return;

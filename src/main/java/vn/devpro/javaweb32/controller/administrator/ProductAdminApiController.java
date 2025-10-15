@@ -68,13 +68,23 @@ public class ProductAdminApiController implements Jw32Contant {
             product = productService.saveOrUpdate(product);
 
             // color & variants
+            Map<String,Integer> colorSlugCounts = new HashMap<>();
+            List<ProductColor> createdColors = new ArrayList<>();
             if (request.getColors() != null) {
                 for (ProductCreateRequest.ColorData c : request.getColors()) {
                     if (c == null) continue;
                     ProductColor pc = new ProductColor();
                     pc.setColorName(c.getName());
                     pc.setProduct(product);
+                    // ensure unique folder/base for duplicate names
+                    String baseSlug = simpleSlug(c.getName());
+                    int count = colorSlugCounts.getOrDefault(baseSlug, 0);
+                    colorSlugCounts.put(baseSlug, count + 1);
+                    String uniqueSlug = count == 0 ? baseSlug : baseSlug + "-" + (count + 1);
+                    pc.setFolderPath(uniqueSlug);
+                    pc.setBaseImage(simpleSlug(product.getName()) + "-" + uniqueSlug);
                     product.getColors().add(pc);
+                    createdColors.add(pc);
                     List<String> sizes = c.getSizes();
                     if (sizes != null && !sizes.isEmpty()) {
                         List<Integer> sizeStocks = c.getSizeStocks();
@@ -100,14 +110,13 @@ public class ProductAdminApiController implements Jw32Contant {
             }
             product = productService.saveOrUpdate(product);
 
-            Map<String, ProductColor> colorMap = new HashMap<>();
-            for (ProductColor pc : product.getColors()) { colorMap.put(pc.getColorName(), pc); }
-
             ProductImage chosenMainImage = null;
             if (request.getColors() != null) {
-                for (ProductCreateRequest.ColorData c : request.getColors()) {
-                    if (c.getImages() == null) continue;
-                    ProductColor pc = colorMap.get(c.getName());
+                for (int cIdx = 0; cIdx < request.getColors().size(); cIdx++) {
+                    ProductCreateRequest.ColorData c = request.getColors().get(cIdx);
+                    if (c == null || c.getImages() == null) continue;
+                    if (cIdx >= createdColors.size()) continue;
+                    ProductColor pc = createdColors.get(cIdx);
                     int idx = 0;
                     Integer defaultIdx = c.getDefaultImageIndex();
                     for (String dataUrl : c.getImages()) {
@@ -225,6 +234,19 @@ public class ProductAdminApiController implements Jw32Contant {
                 BigDecimal sale = toBigDecimal(body.get("salePrice"));
                 if (sale != null && sale.doubleValue() > 0) p.setSalePrice(sale);
             }
+            // Allow updating product type (gender)
+            if (body.containsKey("type")) {
+                String t = asString(body.get("type"));
+                if (t != null) {
+                    t = t.trim().toUpperCase();
+                    if (!t.isBlank()) {
+                        if (!t.equals("MEN") && !t.equals("WOMEN") && !t.equals("UNISEX")) {
+                            t = "UNISEX"; // fallback
+                        }
+                        p.setType(t);
+                    }
+                }
+            }
             if (body.containsKey("categoryId")) {
                 Long catId = toLong(body.get("categoryId"));
                 if (catId != null) {
@@ -261,6 +283,116 @@ public class ProductAdminApiController implements Jw32Contant {
             return ResponseEntity.ok(summary(p));
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        }
+    }
+
+    @PutMapping(value = "/{id}/full", consumes = "application/json", produces = "application/json")
+    @Transactional
+    public ResponseEntity<?> fullUpdateProduct(@PathVariable("id") Long id, @RequestBody ProductCreateRequest request) {
+        Product product = productService.getById(id);
+        if (product == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Product not found"));
+        try {
+            validate(request);
+            if(isSameColorStructure(product, request)) {
+                applySimpleFields(product, request);
+                product.setUpdateDate(new Date());
+                productService.saveOrUpdate(product);
+                return ResponseEntity.ok(Map.of("id", product.getId(), "updated", true, "skippedStructure", true));
+            }
+            applySimpleFields(product, request);
+            if (product.getColors() != null) product.getColors().clear(); else product.setColors(new ArrayList<>());
+            if (product.getVariants() != null) product.getVariants().clear(); else product.setVariants(new ArrayList<>());
+            if (product.getImages() != null) product.getImages().clear(); else product.setImages(new ArrayList<>());
+            product = productService.saveOrUpdate(product);
+
+            // Rebuild colors & variants
+            Map<String,Integer> colorSlugCounts = new HashMap<>();
+            List<ProductColor> createdColors = new ArrayList<>();
+            if (request.getColors() != null) {
+                for (ProductCreateRequest.ColorData c : request.getColors()) {
+                    if (c == null) continue;
+                    ProductColor pc = new ProductColor();
+                    pc.setColorName(c.getName());
+                    pc.setProduct(product);
+                    String baseSlug = simpleSlug(c.getName());
+                    int count = colorSlugCounts.getOrDefault(baseSlug, 0);
+                    colorSlugCounts.put(baseSlug, count + 1);
+                    String uniqueSlug = count == 0 ? baseSlug : baseSlug + "-" + (count + 1);
+                    pc.setFolderPath(uniqueSlug);
+                    pc.setBaseImage(simpleSlug(product.getName()) + "-" + uniqueSlug);
+                    product.getColors().add(pc);
+                    createdColors.add(pc);
+                    List<String> sizes = c.getSizes();
+                    if (sizes != null && !sizes.isEmpty()) {
+                        List<Integer> sizeStocks = c.getSizeStocks();
+                        for (int i = 0; i < sizes.size(); i++) {
+                            String rawSize = sizes.get(i);
+                            if (rawSize == null || rawSize.isBlank()) continue;
+                            ProductVariant pv = new ProductVariant();
+                            pv.setProduct(product);
+                            pv.setColor(pc);
+                            pv.setSizeLabel(rawSize.trim());
+                            Integer stock = null;
+                            if (sizeStocks != null && i < sizeStocks.size()) stock = sizeStocks.get(i);
+                            if (stock == null) stock = c.getDefaultStock();
+                            if (stock == null) stock = request.getDefaultStock();
+                            if (stock == null) stock = 0;
+                            pv.setStock(stock);
+                            product.getVariants().add(pv);
+                        }
+                    }
+                }
+            }
+            product = productService.saveOrUpdate(product);
+
+            ProductImage chosenMainImage = null;
+            if (request.getColors() != null) {
+                for (int cIdx = 0; cIdx < request.getColors().size(); cIdx++) {
+                    ProductCreateRequest.ColorData c = request.getColors().get(cIdx);
+                    if (c == null || c.getImages() == null) continue;
+                    if (cIdx >= createdColors.size()) continue;
+                    ProductColor pc = createdColors.get(cIdx);
+                    int idx = 0;
+                    Integer defaultIdx = c.getDefaultImageIndex();
+                    for (String dataUrl : c.getImages()) {
+                        String relativePath;
+                        if (dataUrl != null && dataUrl.startsWith("data:")) {
+                            relativePath = saveBase64Image(dataUrl, product, pc, idx);
+                        } else {
+                            if (dataUrl == null) { idx++; continue; }
+                            if (dataUrl.startsWith("http")) {
+                                int pos = dataUrl.indexOf("/images/");
+                                relativePath = (pos >=0 ? dataUrl.substring(pos) : dataUrl);
+                            } else {
+                                relativePath = dataUrl;
+                            }
+                        }
+                        ProductImage img = new ProductImage();
+                        img.setPath(relativePath);
+                        img.setProduct(product);
+                        img.setColor(pc);
+                        img.setStatus("ACTIVE");
+                        product.getImages().add(img);
+                        if (defaultIdx != null && defaultIdx == idx && chosenMainImage == null) {
+                            chosenMainImage = img;
+                        }
+                        idx++;
+                    }
+                }
+            }
+            if (chosenMainImage == null && !product.getImages().isEmpty()) {
+                chosenMainImage = product.getImages().get(0);
+            }
+            if (chosenMainImage != null) {
+                product.setMainImage(chosenMainImage);
+            }
+            product = productService.saveOrUpdate(product);
+            return ResponseEntity.ok(Map.of("id", product.getId(), "updated", true));
+        } catch (IllegalArgumentException ex) {
+            return bad(ex.getMessage());
+        } catch (IOException io) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Failed to store images", "message", io.getMessage()));
         }
     }
 
@@ -378,4 +510,39 @@ public class ProductAdminApiController implements Jw32Contant {
     private Long toLong(Object o){ try { return o==null? null : Long.valueOf(o.toString()); } catch(Exception e){ return null; } }
     private Integer toInt(Object o){ try { return o==null? null : Integer.valueOf(o.toString()); } catch(Exception e){ return null; } }
     private BigDecimal toBigDecimal(Object o){ try { return o==null? null : new BigDecimal(o.toString()); } catch(Exception e){ return null; } }
+    private String simpleSlug(String in) {
+        if (in == null) return "n-a";
+        return Normalizer.normalize(in, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}+", "")
+                .toLowerCase(Locale.ROOT)
+                .replaceAll("[^a-z0-9]+","-")
+                .replaceAll("^-+|-+$", "");
+    }
+
+    private void applySimpleFields(Product product, ProductCreateRequest request){
+        product.setName(request.getName());
+        String desc = request.getDescription();
+        if (desc != null && desc.length() > MAX_DESCRIPTION_LEN) desc = desc.substring(0, MAX_DESCRIPTION_LEN);
+        product.setDescription(desc);
+        product.setPrice(request.getPrice());
+        product.setSalePrice(request.getSalePrice() != null ? request.getSalePrice() : request.getPrice());
+        product.setType(request.getType() != null ? request.getType() : "UNISEX");
+        product.setSeo(request.getSeo());
+        product.setStatus("ACTIVE");
+        product.setProductStatus(ProductStatus.ACTIVE);
+        if (request.getCategoryId() != null) {
+            var cat = categoryService.getById(request.getCategoryId());
+            if (cat != null) product.setCategory(cat);
+        }
+    }
+
+    private boolean isSameColorStructure(Product product, ProductCreateRequest req){
+        if (req.getColors() == null) return product.getColors()==null || product.getColors().isEmpty();
+        if (product.getColors() == null) return false;
+        Map<String,Integer> existing = new HashMap<>();
+        for(ProductColor pc: product.getColors()){ existing.merge(pc.getColorName()==null?"":pc.getColorName(),1,Integer::sum); }
+        Map<String,Integer> incoming = new HashMap<>();
+        for(var c : req.getColors()){ if(c==null) continue; incoming.merge(c.getName()==null?"":c.getName(),1,Integer::sum); }
+        return existing.equals(incoming);
+    }
 }

@@ -1,5 +1,6 @@
 package vn.devpro.javaweb32.service.order;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.devpro.javaweb32.entity.cart.CartItem;
@@ -10,8 +11,9 @@ import vn.devpro.javaweb32.entity.order.enums.ShippingMethod;
 import vn.devpro.javaweb32.repository.CartItemRepository;
 import vn.devpro.javaweb32.repository.OrderItemRepository;
 import vn.devpro.javaweb32.repository.OrderRepository;
-import vn.devpro.javaweb32.service.order.dto.OrderSummary;
+import vn.devpro.javaweb32.dto.customer.order.OrderSummary;
 
+import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -72,5 +74,14 @@ public class OrderService {
         return saved;
     }
 
-    public Order findById(Long id) { return orderRepository.findById(id).orElse(null); }
+    public Order findById(Long id) {
+        Order order = orderRepository.findByIdWithCustomerAndAddresses(id).orElseThrow(() -> new EntityNotFoundException("Order not found: " + id));
+
+        Order orderWithItems = orderRepository.findByIdWithItems(id).orElseThrow(() -> new EntityNotFoundException("Order items not found for order: " + id));
+
+        order.setItems(orderWithItems.getItems());
+
+        return order;
+    }
+
 }

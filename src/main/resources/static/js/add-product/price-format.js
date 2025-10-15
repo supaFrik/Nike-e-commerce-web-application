@@ -1,5 +1,5 @@
 (function(){
-    const nf = new Intl.NumberFormat('vi-VN'); // plain grouping formatter
+    const nf = new Intl.NumberFormat('vi-VN');
 
     function formatVND(value){
         if(value == null || value === '') return '';
@@ -30,7 +30,6 @@
     function attachPriceHandlers(){
         const input = document.getElementById('productPrice');
         if(!input) return;
-        // Initialize dataset raw if absent
         if(!input.dataset.raw && input.value){
             const digits = extractDigits(input.value);
             if(digits){ input.dataset.raw = ''+parseInt(digits,10); }
@@ -39,7 +38,6 @@
 
         input.addEventListener('focus', () => {
             revertToRaw(input);
-            // Place cursor at end
             setTimeout(()=>{ try { const len = input.value.length; input.setSelectionRange(len,len);}catch(e){} },0);
         });
 
@@ -58,11 +56,9 @@
                 return;
             }
             input.dataset.raw = ''+parseInt(digits,10);
-            // Show raw while typing for easier editing
             input.value = digits;
         });
 
-        // Optional: handle paste for cleanliness
         input.addEventListener('paste', (e)=>{
             e.preventDefault();
             const text = (e.clipboardData || window.clipboardData).getData('text');

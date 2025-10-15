@@ -215,6 +215,13 @@ public class ProductAdminController extends BaseController implements Jw32Contan
         }
         ProductDto dto = mapProductToDto(product);
         model.addAttribute("productDto", dto);
+        model.addAttribute("product", product);
+        prepareModelLists(model);
+        return "administrator/product/product-edit";
+    }
+
+    @GetMapping("/product-edit")
+    public String blankProductEdit(Model model) {
         prepareModelLists(model);
         return "administrator/product/product-edit";
     }

@@ -17,6 +17,15 @@ public class Customer extends BaseEntity {
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Credential credential;
 
+    @Transient
+    public Address getAddress() {
+        if(addresses==null || addresses.isEmpty()) return null;
+        for(Address address:addresses) {
+            if(address.isPrimaryAddress()) return address;
+        }
+        return addresses.get(0);
+    }
+
     public Customer() {
     }
 
