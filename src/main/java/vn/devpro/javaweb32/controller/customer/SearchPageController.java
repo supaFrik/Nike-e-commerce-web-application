@@ -1,6 +1,5 @@
 package vn.devpro.javaweb32.controller.customer;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +12,16 @@ import vn.devpro.javaweb32.service.administrator.CategoryAdminService;
 @Controller
 public class SearchPageController extends BaseController {
 
-    @Autowired
-    private ProductSearchService productSearchService;
-    @Autowired
-    private CategoryAdminService categoryAdminService;
+    private final ProductSearchService productSearchService;
+    private final CategoryAdminService categoryAdminService;
+
+    public SearchPageController(ProductSearchService productSearchService, CategoryAdminService categoryAdminService) {
+        this.productSearchService = productSearchService;
+        this.categoryAdminService = categoryAdminService;
+    }
+
+    private static final int DEFAULT_PAGE_SIZE = 24;
+    private static final int MAX_PAGE_SIZE = 200;
 
     @GetMapping("/search")
     public String searchPage(
@@ -39,8 +44,8 @@ public class SearchPageController extends BaseController {
         c.setMinPrice(minPrice);
         c.setMaxPrice(maxPrice);
         c.setSort(sort);
-        c.setPage(page);
-        c.setPageSize(pageSize);
+        c.setPage(normalizePage(page));
+        c.setPageSize(normalizePageSize(pageSize, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE));
 
         var result = productSearchService.search(c);
 

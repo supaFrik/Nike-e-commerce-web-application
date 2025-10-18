@@ -27,7 +27,7 @@ public class AuthService {
     }
 
     @Transactional
-    public Customer register(String username, String email, String rawPassword) {
+    public Customer register(String username, String email, String rawPassword, String confirmPassword) {
         if (isBlank(username)) {
             throw new IllegalArgumentException("Username is required");
         }
@@ -36,6 +36,9 @@ public class AuthService {
         }
         if (isBlank(rawPassword)) {
             throw new IllegalArgumentException("Password is required");
+        }
+        if (!rawPassword.equals(confirmPassword)) {
+            throw new IllegalArgumentException("Passwords do not match");
         }
         if (!isStrongPassword(rawPassword)) {
             throw new IllegalArgumentException("Password must be at least 8 chars and include uppercase, lowercase, and a number");
@@ -49,26 +52,22 @@ public class AuthService {
             throw new IllegalArgumentException("Email already exists");
         }
         if (customerRepository.existsByUsername(normalizedUsername)) {
-            throw new IllegalArgumentException("Username is taken");
+            throw new IllegalArgumentException("Username already exists");
         }
-
-        Customer customer = new Customer();
-        customer.setUsername(normalizedUsername);
 
         Credential cred = new Credential();
         cred.setEmail(normalizedEmail);
         cred.setPasswordHash(passwordEncoder.encode(rawPassword));
-        cred.setEnabled(true);
-        cred.setLocked(false);
-        cred.setCustomer(customer);
 
+        Customer customer = new Customer();
+        customer.setUsername(normalizedUsername);
         customer.setCredential(cred);
+        cred.setCustomer(customer);
 
         try {
             return customerRepository.save(customer);
-        } catch (DataIntegrityViolationException dive) {
-            // Fallback in race conditions (unique constraints at DB layer)
-            throw new IllegalArgumentException("Email or Username already exists");
+        } catch (DataIntegrityViolationException ex) {
+            throw new IllegalArgumentException("Failed to register user. Please try again.");
         }
     }
 

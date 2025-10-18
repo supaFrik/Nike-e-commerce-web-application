@@ -36,7 +36,6 @@ public class SignupForm implements Serializable {
         this.email = email;
     }
 
-    // Getters / Setters
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
@@ -49,7 +48,6 @@ public class SignupForm implements Serializable {
     public String getConfirmPassword() { return confirmPassword; }
     public void setConfirmPassword(String confirmPassword) { this.confirmPassword = confirmPassword; }
 
-    // Kiểm tra confirm password khớp (được gọi bởi Validator khi dùng @Valid)
     @AssertTrue(message = "Mật khẩu xác nhận không khớp")
     public boolean isPasswordsMatching() {
         if (password == null) return confirmPassword == null;

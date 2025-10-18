@@ -59,7 +59,7 @@
                 <span class="sort-chevron" aria-hidden="true"></span>
             </button>
             <div class="sort-dropdown" id="sortMenu" role="menu" aria-label="Sort products">
-                <button class="sort-option ${sort=='newest' || empty sort ? 'active' : ''}" data-sort="newest" role="menuitem" type="button">Newest</button>
+                <button class="sort-option ${sort=='newest' or empty sort ? 'active' : ''}" data-sort="newest" role="menuitem" type="button">Newest</button>
                 <button class="sort-option ${sort=='price-low' ? 'active' : ''}" data-sort="price-low" role="menuitem" type="button">Price: Low-High</button>
                 <button class="sort-option ${sort=='price-high' ? 'active' : ''}" data-sort="price-high" role="menuitem" type="button">Price: High-Low</button>
                 <button class="sort-option ${sort=='featured' ? 'active' : ''}" data-sort="featured" role="menuitem" type="button">Featured</button>

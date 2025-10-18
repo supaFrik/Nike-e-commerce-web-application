@@ -46,6 +46,14 @@ public class AuthController {
                            BindingResult bindingResult,
                            RedirectAttributes ra) {
 
+        if (!bindingResult.hasFieldErrors("password") && !bindingResult.hasFieldErrors("confirmPassword")) {
+            String pwd = signupForm.getPassword();
+            String cPwd = signupForm.getConfirmPassword();
+            if (pwd != null && cPwd != null && !pwd.equals(cPwd)) {
+                bindingResult.rejectValue("confirmPassword", "password.confirm.notmatch", "Passwords do not match");
+            }
+        }
+
         // Kiểm tra trùng username/email trước khi gọi service
         if (!bindingResult.hasErrors()) {
             String username = trimOrNull(signupForm.getUsername());
@@ -67,7 +75,7 @@ public class AuthController {
 
         // Thực hiện đăng ký
         try {
-            authService.register(signupForm.getUsername(), signupForm.getEmail(), signupForm.getPassword());
+            authService.register(signupForm.getUsername(), signupForm.getEmail(), signupForm.getPassword(), signupForm.getConfirmPassword());
             ra.addFlashAttribute("signupSuccess", "Signup Successfully!");
         } catch (IllegalArgumentException ex) {
             mapRegistrationException(ex.getMessage(), bindingResult);

@@ -18,10 +18,10 @@ import vn.devpro.javaweb32.service.administrator.CategoryAdminService;
 @Controller
 public class CustomerHomeController extends BaseController {
 
-    private static final String RUNNING_CATEGORY_NAME = "running"; // slug/name used to resolve running products
+    private static final String RUNNING_CATEGORY_NAME = "running";
 
     @Autowired
-    private CustomerProductService productService; // renamed to existing service
+    private CustomerProductService productService;
 
     @Autowired
     private CategoryAdminService categoryService;

@@ -695,7 +695,7 @@ body {
 }
 
 .contact-item:hover {
-    background: #FF6A00;
+    background: var(--color-grey-200);
     color: var(--color-white);
 }
 
@@ -731,8 +731,8 @@ body {
 }
 
 .tag:hover {
-    background: #FF6A00;
-    border-color: #FF6A00;
+    background: var(--color-grey-200);
+    border-color: var(--color-grey-200);
     color: var(--color-white);
 }
 
