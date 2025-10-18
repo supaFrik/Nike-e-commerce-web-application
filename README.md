@@ -321,7 +321,7 @@ public void validateRegistration(RegistrationRequest req) {
    ```bash
    # Start MySQL container
    docker-compose up -d
-   
+
    # Verify database is running
    docker-compose ps
    ```
@@ -330,10 +330,10 @@ public void validateRegistration(RegistrationRequest req) {
    ```bash
    # Clean and compile
    mvn clean compile
-   
+
    # Run tests
    mvn test
-   
+
    # Package application
    mvn package -DskipTests
    ```
@@ -342,7 +342,7 @@ public void validateRegistration(RegistrationRequest req) {
    ```bash
    # Development mode
    mvn spring-boot:run
-   
+
    # Or run packaged JAR
    java -jar target/Nike-Ecommerce-Application.jar
    ```
@@ -402,32 +402,68 @@ spring.security.enabled=true
 logging.level.org.springframework.security=DEBUG
 ```
 
----
-
+<!-- Inserted API endpoints section -->
 ## 📱 API Endpoints <a id="api-endpoints"></a>
 
-### Customer Endpoints
-- `GET /` - Landing page with featured products
-- `GET /products` - Product catalog with filtering
-- `GET /product/{id}` - Detailed product view
-- `POST /api/cart/add` - Add item to cart (AJAX)
-- `GET /cart` - Shopping cart view
-- `POST /auth/register` - User registration
-- `POST /auth/login` - User authentication
-- `GET /profile` - User profile management
+Below is a consolidated, up-to-date list of HTTP endpoints discovered in the codebase (method, path, description, auth requirement):
 
-### Admin Endpoints
-- `GET /admin` - Admin dashboard
-- `GET /admin/product/list` - Product management interface
-- `POST /admin/product/add-save` - Create new product
-- `GET /admin/product/edit/{id}` - Edit product form
-- `POST /admin/product/edit-save` - Update product
-- `GET /admin/product/delete/{id}` - Delete product
+Authentication
+- GET  /auth — Render sign in / sign up page (public)
+- POST /signup or /auth/signup — Register new user (public)
+- POST /login — Spring Security login processing (public)
+- POST /logout — Logout (invalidates session) (public)
+- GET  /api/auth/check-duplicate?email={email}&username={username} — Check duplicates via AJAX (public)
 
-### REST API
-- `GET /api/products` - JSON product catalog
-- `POST /api/cart/add` - Add to cart (JSON response)
-- `GET /api/cart/items` - Cart contents (JSON)
+Public Product APIs
+- GET /api/products — Return product catalog (public)
+- GET /api/products/{id}/sizes?color={color} — Sizes available for product color (public)
+- GET /api/products/search?[category=&sale=&size=&minPrice=&maxPrice=&sort=&q=&page=&pageSize=] — Product search (public)
+
+Customer Product APIs
+- GET  /api/customer/products — List products (Customer DTO; may require auth)
+- GET  /api/customer/products/{id} — Product details (Customer DTO; may require auth)
+- GET  /api/customer/products/featured — Featured products (may require auth)
+- GET  /api/customer/products/category/{categoryId} — Products by category (may require auth)
+- POST /api/customer/products/{productId}/favourite?userId={userId} — Toggle favourite (likely auth)
+
+Cart JSON API (requires authentication)
+- POST   /api/cart/add/{id}        — Add item to cart (body: AddToCartRequest {quantity,size,color})
+- PUT    /api/cart/update/{id}     — Update cart item quantity (body: AddToCartRequest)
+- DELETE /api/cart/remove/{id}?size={size}&color={color} — Remove item from cart
+- GET    /api/cart/count           — Return itemCount in current user's cart
+
+Cart & Checkout (page views)
+- GET  /cart — Render cart page (requires auth)
+- GET  /checkout — Render checkout page (requires auth)
+- POST /checkout/complete — Complete checkout, create order (requires auth)
+
+Orders (page views)
+- GET /order — Redirect to last order or checkout (requires auth)
+- GET /order/{id} — Render order detail (requires auth)
+
+Admin UI (ROLE_ADMIN required)
+- GET  /admin/home — Admin dashboard
+- GET  /admin/product/list (and /admin/product/view) — Admin product listing
+- GET  /admin/product/add — Add product page
+- POST /admin/product/add-save — Save new product (form)
+- GET  /admin/product/edit/{productId} — Edit product page
+- POST /admin/product/edit-save — Save edited product
+- GET  /admin/category/list, /admin/category/add, /admin/category/edit/{id}, /admin/category/delete/{id}, /admin/category/activate/{id}
+
+Admin JSON API (ROLE_ADMIN required)
+- POST   /admin/api/products — Create product (JSON)
+- GET    /admin/api/products — List / search products (JSON, paged)
+- GET    /admin/api/products/check-name?name={name}&excludeId={id} — Name conflict check
+- PUT    /admin/api/products/{id} — Partial update (JSON)
+- PUT    /admin/api/products/{id}/full — Full update (JSON)
+- DELETE /admin/api/products/{id} — Delete product (JSON)
+
+Notes
+- Public: static assets, '/', '/auth', and `/api/products/**` are permitted publicly by `SecurityConfig`.
+- Authenticated: `/api/cart/**`, cart/checkout/order pages, and profile pages require authentication.
+- Admin: `/admin/**` and `/admin/api/**` require `ROLE_ADMIN` per `SecurityConfig`.
+
+If you'd like, I can generate an OpenAPI (Swagger) YAML from these controllers so you get machine-readable API docs and a Swagger UI integrated into the project.
 
 ---
 
@@ -543,7 +579,7 @@ mvn spring-boot:run
 ```
 Access: http://localhost:9090
 
-### Option B: Windows (CMD) One-Liners
+### Option B: Windows (CMD) One-liners
 ```cmd
 REM Start DB
 docker compose up -d
@@ -728,3 +764,4 @@ This project is an educational / portfolio implementation inspired by Nike. **Ni
 <p align="center">
   <strong>Ready for Production • Scalable • Secure • Well-Tested</strong>
 </p>
+

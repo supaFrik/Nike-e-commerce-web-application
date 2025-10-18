@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -55,7 +56,7 @@
                     <div class="password-container">
                         <input type="password" name="password" class="form-input" id="signInPassword" placeholder="Password" required autocomplete="current-password">
                         <button type="button" class="password-toggle" onclick="togglePassword('signInPassword')" aria-label="Toggle password visibility" aria-pressed="false">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="cursor: pointer; transition: transform 0.2s ease;">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
@@ -108,6 +109,8 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                 <c:set var="usernameHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['username']}" />
                 <c:set var="emailHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['email']}" />
+                <c:set var="passwordHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['password']}" />
+                <c:set var="confirmPasswordHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['confirmPassword'] or not empty org.springframework.validation.BindingResult.signupForm.globalErrors}" />
                 <div class="form-group">
                     <label class="form-label" for="signUpName">Your name</label>
                     <input type="text" name="username" class="form-input" id="signUpName" placeholder="Your name"
@@ -147,13 +150,27 @@
                             </script>
                         </c:if>
                         <button type="button" class="password-toggle" onclick="togglePassword('signUpPassword')" aria-label="Toggle password visibility" aria-pressed="false">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="cursor: pointer; transition: transform 0.2s ease;">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
                         </button>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="form-label" for="signUpConfirmPassword">Confirm Password</label>
+                    <div class="password-container">
+                        <input type="password" name="confirmPassword" class="form-input" id="signUpConfirmPassword" placeholder="Confirm Password" required autocomplete="new-password" aria-describedby="signUpConfirmPasswordError">
+                        <button type="button" class="password-toggle" onclick="togglePassword('signUpConfirmPassword')" aria-label="Toggle confirm password visibility" aria-pressed="false">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="cursor: pointer; transition: transform 0.2s ease;">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="signUpConfirmPasswordError" class="error-message" role="alert" aria-live="assertive" style="display:none; color:#d32f2f; margin-top:4px;"></div>
+                </div>
+
                 <button type="submit" class="btn-primary">Sign Up</button>
                 <div class="auth-divider" role="separator" aria-label="Alternative sign up options">
                     <span class="auth-divider-text">or sign up with</span>
@@ -190,7 +207,7 @@
                 </div>
             </form>
 
-            <c:if test="${usernameHasError || emailHasError}">
+            <c:if test="${usernameHasError or emailHasError or passwordHasError or confirmPasswordHasError}">
                 <script>
                     document.addEventListener('DOMContentLoaded', function(){
                         if(typeof toggleToSignUp === 'function'){ toggleToSignUp(); }
@@ -211,29 +228,17 @@
         </div>
     </div>
 
-    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+    <!-- Toast container + styles -->
+    <div id="serverLoginError" style="display:none">${fn:escapeXml(loginError)}</div>
+    <div id="toast" aria-live="polite" aria-atomic="true"></div>
+
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get("error") === "true") {
-            showToast("Invalid username or password. Please try again.");
-        }
-        const hasSignupError = '${signupError}' !== '';
-        if (hasSignupError) {
-            if (typeof toggleToSignUp === 'function') { toggleToSignUp(); }
-        }
-        const hasSignupSuccess = '${signupSuccess}' !== '';
-        if (hasSignupSuccess) {
-            showToast('${signupSuccess}');
-        }
-      });
-      function showToast(message) {
-          if(!message) return;
-          const toast = document.getElementById("toast");
-          toast.textContent = message;
-          toast.classList.add("active");
-          setTimeout(() => { toast.classList.remove("active"); }, 3500);
-      }
+      window.__AUTH_INIT = {
+        serverLoginError: `${fn:escapeXml(loginError)}` || '',
+        signupError: `${fn:escapeXml(signupError)}` || '',
+        signupSuccess: `${fn:escapeXml(signupSuccess)}` || '',
+        search: window.location ? window.location.search : ''
+      };
     </script>
     <script src="${env}/js/auth.js"></script>
 </body>

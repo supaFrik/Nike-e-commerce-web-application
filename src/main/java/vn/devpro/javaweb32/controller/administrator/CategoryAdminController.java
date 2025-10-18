@@ -18,12 +18,10 @@ public class CategoryAdminController extends BaseController {
 
     private final CategoryAdminService categoryService;
 
-    // View templates
     private static final String VIEW_LIST = "administrator/category/category-list";
     private static final String VIEW_ADD = "administrator/category/category-add";
     private static final String VIEW_EDIT = "administrator/category/category-edit";
 
-    // Redirect targets
     private static final String REDIRECT_LIST = "redirect:/admin/category/list";
     private static final String REDIRECT_ADD = "redirect:/admin/category/add";
 
@@ -85,12 +83,15 @@ public class CategoryAdminController extends BaseController {
 
     @PostMapping("/add-save")
     public String addSave(@ModelAttribute("category") Category category, RedirectAttributes ra) {
-        if (isBlank(category.getName())) {
+        String name = category.getName();
+        if (isBlank(name)) {
             flashError(ra, "Category name is required");
             flashCategory(ra, category);
             return REDIRECT_ADD;
         }
-        if (categoryService.existsByName(category.getName())) {
+        name = name.trim();
+        category.setName(name);
+        if (categoryService.existsByName(name)) {
             flashError(ra, "Category name already exists");
             flashCategory(ra, category);
             return REDIRECT_ADD;
@@ -129,11 +130,14 @@ public class CategoryAdminController extends BaseController {
             ra.addAttribute("error", "Category not found");
             return REDIRECT_LIST;
         }
-        if (isBlank(category.getName())) {
+        String name = category.getName();
+        if (isBlank(name)) {
             flashError(ra, "Category name is required");
             flashCategory(ra, category);
             return redirectEdit(category.getId());
         }
+        name = name.trim();
+        category.setName(name);
         if (nameExistsForOther(category)) {
             flashError(ra, "Category name already exists");
             flashCategory(ra, category);
@@ -172,4 +176,3 @@ public class CategoryAdminController extends BaseController {
         return REDIRECT_LIST;
     }
 }
-

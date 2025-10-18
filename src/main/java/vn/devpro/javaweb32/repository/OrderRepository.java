@@ -16,6 +16,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("select distinct o from Order o " +
             "join fetch o.customer c " +
+            "left join fetch c.credential cred " +
             "left join fetch c.addresses " +
             "where o.id = :id")
     Optional<Order> findByIdWithCustomerAndAddresses(@Param("id") Long id);
@@ -28,4 +29,3 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             """)
     Optional<Order> findByIdWithItems(@Param("id") Long id);
 }
-

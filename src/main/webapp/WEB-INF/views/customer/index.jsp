@@ -174,7 +174,7 @@
                                                  <a aria-label="${product.name}" href="${env}/product-detail?id=${product.id}"
                                                  class="product-card__img-link-overlay" data-testid="product-card-img-link-overlay"
                                                  aria-describedby="product-${status.index + 1}-desc">
-                                                    <img src="${env}/images/products/${product.images[0].url}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                    <img src="${env}${product.images[0].url}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                 </a>
                                                 </c:when>
                                                 <c:otherwise>
@@ -185,7 +185,7 @@
                                         </div>
                                         <div class="product-info">
                                             <h3 class="product-title" id="running-${status.index + 1}-title">${product.name}</h3>
-                                            <p class="product-type" id="running-${status.index + 1}-desc">${product.description}</p>
+                                            <p class="product-type" id="running-${status.index + 1}-desc">${product.type}</p>
                                             <p class="product-price" aria-label="Price: <fmt:formatNumber value='${product.price}' type='number' maxFractionDigits='0'/> Vietnamese Dong">
                                                 <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>₫
                                             </p>

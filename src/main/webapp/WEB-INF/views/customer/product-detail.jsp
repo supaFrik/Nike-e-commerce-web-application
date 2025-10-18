@@ -284,21 +284,17 @@
                                     return;
                                 }
 
-                                // Clear previous selection
                                 this.clearSizeSelection();
 
-                                // Mark as selected
                                 sizeElement.classList.add('selected');
                                 sizeElement.setAttribute('aria-checked', 'true');
                                 sizeElement.setAttribute('tabindex', '0');
 
-                                // Update other elements
                                 var allSizes = this.sizeContainer.querySelectorAll('.size-option:not(.selected)');
                                 allSizes.forEach(function(option) {
                                     option.setAttribute('tabindex', '-1');
                                 });
 
-                                // Store selected size data
                                 this.selectedSize = {
                                     size: sizeElement.getAttribute('data-size'),
                                     price: parseFloat(sizeElement.getAttribute('data-price')),
@@ -306,13 +302,10 @@
                                     variantId: sizeElement.getAttribute('data-variant-id')
                                 };
 
-                                // Update price display
                                 this.updatePriceDisplay(this.selectedSize.price);
 
-                                // Enable add to cart button
                                 this.updateAddToCartButton(true);
 
-                                // Announce to screen readers
                                 this.announceSelection(this.selectedSize.size);
                             },
 
@@ -452,7 +445,6 @@
                                 thumbnailItem.className = 'thumbnail-item' + (i === 1 ? ' active' : '');
                                 thumbnailItem.setAttribute('data-index', (i - 1).toString());
                                 thumbnailItem.setAttribute('role', 'listitem');
-                                // Removed onclick handler - let thumbnail-scope.js handle this
                                 thumbnailItem.style.display = 'none';
 
                                 var img = document.createElement('img');
@@ -717,3 +709,4 @@
     </script>
 </body>
 </html>
+

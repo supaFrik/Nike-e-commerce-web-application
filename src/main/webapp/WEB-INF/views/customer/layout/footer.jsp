@@ -1,4 +1,7 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!-- Footer -->
 <footer class="footer">
@@ -36,20 +39,54 @@
                 
                 <!-- Contact Form -->
                 
-                <div class="footer-section contact-section">
+                <div class="footer-section contact-section" id="footer-contact">
                     <h4>Contact Us</h4>
-                    <form class="contact-form" id="contactForm">
+                    <form:form modelAttribute="contactForm" action="${env}/contact" method="POST" class="contact-form" id="contactForm">
+                        <c:if test="${not empty _csrf}">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                        </c:if>
                         <div class="form-group">
-                            <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
+                            <form:input path="name" type="text" id="name" name="name" placeholder="Your Name (optional)" />
+                            <form:errors path="name" cssClass="error-message" />
                         </div>
                         <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Email Address" required>
+                            <form:input path="email" type="email" id="email" name="email" placeholder="Email (optional, for reply)" />
+                            <form:errors path="email" cssClass="error-message" />
                         </div>
                         <div class="form-group">
-                            <textarea id="message" name="message" placeholder="Your Message" rows="3" required></textarea>
+                            <form:textarea path="message" id="message" name="message" placeholder="Your Message" rows="3" required="required"></form:textarea>
+                            <form:errors path="message" cssClass="error-message" />
                         </div>
                         <button type="submit" class="contact-submit-btn">Send Message</button>
-                    </form>
+                        <!-- Capture BindingResult (if flashed) safely using bracket notation -->
+                        <c:set var="contactErrors" value="${requestScope['org.springframework.validation.BindingResult.contactForm']}" />
+                        <c:if test="${not empty contactErrors and contactErrors.errorCount > 0}">
+                            <p class="error-message" style="color:#c00;font-weight:600;">Please fix the errors above.</p>
+                        </c:if>
+                        <c:if test="${not empty successMessage}">
+                            <p style="display:none;" class="success-message">${successMessage}</p>
+                        </c:if>
+                    </form:form>
+                    <!-- Toast container -->
+                    <div id="contactToast" class="contact-toast" style="display:none;position:fixed;bottom:1.5rem;right:1.5rem;background:#111;color:#fff;padding:1rem 1.25rem;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:.95rem;z-index:1000;opacity:0;transform:translateY(20px);transition:opacity .3s ease,transform .3s ease;">
+                        <span id="contactToastMsg"></span>
+                        <button type="button" id="contactToastClose" style="background:none;border:none;color:#fff;margin-left:1rem;font-size:1rem;cursor:pointer;">×</button>
+                    </div>
+                    <script>
+                        (function(){
+                            var msgEl = document.querySelector('#footer-contact .success-message');
+                            if(msgEl){
+                                var toast = document.getElementById('contactToast');
+                                var txt = document.getElementById('contactToastMsg');
+                                txt.textContent = msgEl.textContent.trim();
+                                toast.style.display='flex';
+                                requestAnimationFrame(function(){toast.style.opacity='1';toast.style.transform='translateY(0)';});
+                                var hide=function(){toast.style.opacity='0';toast.style.transform='translateY(20px)';setTimeout(function(){toast.style.display='none';},300);};
+                                document.getElementById('contactToastClose').addEventListener('click', hide);
+                                setTimeout(hide, 4000);
+                            }
+                        })();
+                    </script>
                 </div>
                 
                 <!-- Social  -->

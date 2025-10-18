@@ -18,63 +18,62 @@ function showToast(message) {
         toast = document.createElement('div');
         toast.id = 'toast';
         toast.className = 'toast';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
         toast.innerHTML = `
-            <i class="fas fa-exclamation-circle"></i>
+            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
             <p class="toast-text"></p>
-            <i class="fas fa-close" id="close-toast"></i>
+            <button class="toast-close" id="close-toast" aria-label="Dismiss notification">&times;</button>
         `;
         document.body.appendChild(toast);
 
-        // Add CSS only once
         if (!document.getElementById('toast-style')) {
             const style = document.createElement('style');
             style.id = 'toast-style';
             style.textContent = `
                 .toast {
                   position: fixed;
-                  bottom: 25px;
-                  right: 25px;
-                  width: 375px;
-                  background: #FFF;
-                  padding: 25px;
+                  bottom: 1.25rem;
+                  right: 1.25rem;
+                  background: #111;
+                  color: #fff;
+                  padding: 1rem 1.25rem;
+                  border-radius: 8px;
+                  box-shadow: 0 6px 28px rgba(0,0,0,.35);
+                  font-size: .95rem;
+                  z-index: 1000;
+                  opacity: 0;
+                  visibility: hidden;
+                  transform: translateY(20px) scale(.995);
+                  transition: opacity .38s cubic-bezier(.2,.9,.2,1), transform .38s cubic-bezier(.2,.9,.2,1), visibility 0s linear .38s;
+                  pointer-events: none;
                   display: flex;
                   align-items: center;
-                  justify-content: space-between;
-                  border-radius: 12px;
-                  border-left: 3px solid black;
-                  overflow: hidden;
-                  transform: translateY(calc(100% + 25px));
-                  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.35);
-                  z-index: 9999;
+                  gap: 8px;
                 }
                 .toast.active {
-                  transform: translateY(0);
+                  opacity: 1;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  visibility: visible;
+                  transform: translateY(0) scale(1);
+                  transition: opacity .38s cubic-bezier(.2,.9,.2,1), transform .38s cubic-bezier(.2,.9,.2,1), visibility 0s linear 0s;
+                  pointer-events: auto;
                 }
-                .toast i:first-child {
-                  color: black;
-                  font-size: 20px;
-                }
-                .toast-text {
-                  margin: 0;
-                  font-size: .8125rem;
-                  text-transform: uppercase;
-                  padding:0 6px;
-                }
-                .toast i:last-child {
-                  color: #ccc;
-                  cursor: pointer;
-                  transition: 350ms;
-                }
-                .toast i:last-child:hover {
-                  color: #333;
-                }
+                .toast i:first-child { color: #fff; font-size: 18px; margin-right: 8px; }
+                .toast .toast-text { margin: 0; padding: 0 6px; text-transform: none; color: #fff; line-height:1.2 }
+                .toast .toast-close { background: transparent; border: none; color: #ccc; cursor: pointer; transition: color .2s; margin-left: 6px; font-size: 18px; }
+                .toast .toast-close:hover, .toast .toast-close:focus { color: #fff; outline: none; }
             `;
             document.head.appendChild(style);
         }
 
-        toast.querySelector('#close-toast').addEventListener('click', () => {
-            toast.classList.remove('active');
-        });
+        const closeBtn = toast.querySelector('#close-toast');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => { toast.classList.remove('active'); });
+            closeBtn.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toast.classList.remove('active'); } });
+        }
     }
     toast.querySelector('.toast-text').textContent = message;
     toast.classList.add('active');
@@ -83,13 +82,10 @@ function showToast(message) {
     }, 5000);
 }
 
-// Add to cart logic - Updated to work with refactored size selection
 function addToCart(productId) {
-  // Get selected size from the SizeSelectionManager if it exists
   let selectedSize = null;
   let selectedColor = null;
 
-  // Check if SizeSelectionManager exists (from refactored system)
   if (typeof SizeSelectionManager !== 'undefined' && SizeSelectionManager.getSelectedSize) {
     const sizeData = SizeSelectionManager.getSelectedSize();
     if (sizeData) {
@@ -169,7 +165,6 @@ function addToCart(productId) {
     console.warn('CSRF meta tags not found - this may cause authentication issues');
   }
 
-  // Show loading state
   const addToCartBtn = document.querySelector('.add-to-cart');
   const originalText = addToCartBtn ? addToCartBtn.textContent : '';
   if (addToCartBtn) {
@@ -193,13 +188,10 @@ function addToCart(productId) {
     console.log('Response status:', res.status, res.statusText);
     console.log('Response headers:', Object.fromEntries(res.headers.entries()));
 
-    // Get content type to check what we're actually receiving
     const contentType = res.headers.get('content-type');
     console.log('Content-Type:', contentType);
 
-    // Check if response is ok first
     if (!res.ok) {
-      // Handle specific error status codes
       if (res.status === 403) {
         return Promise.reject({
           error: 'Access denied. Please make sure you are logged in and try again.'
@@ -214,11 +206,9 @@ function addToCart(productId) {
         });
       }
 
-      // Try to parse as JSON, but handle HTML error pages
       if (contentType && contentType.includes('application/json')) {
         return res.json().then(err => Promise.reject(err));
       } else {
-        // It's likely an HTML error page
         return res.text().then(html => {
           console.error('Received HTML response instead of JSON:', html.substring(0, 500) + '...');
           return Promise.reject({
@@ -232,7 +222,6 @@ function addToCart(productId) {
     if (contentType && contentType.includes('application/json')) {
       return res.json();
     } else if (contentType && (contentType.includes('text/html') || contentType.includes('text/plain'))) {
-      // We got HTML instead of JSON - this indicates a server-side issue
       return res.text().then(html => {
         console.error('Expected JSON but received HTML/text response:', html.substring(0, 500) + '...');
         return Promise.reject({

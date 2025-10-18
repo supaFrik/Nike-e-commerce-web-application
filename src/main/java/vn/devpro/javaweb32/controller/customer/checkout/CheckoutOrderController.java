@@ -16,8 +16,12 @@ import vn.devpro.javaweb32.repository.CredentialRepository;
 import vn.devpro.javaweb32.service.customer.CartService;
 import vn.devpro.javaweb32.service.order.OrderService;
 import vn.devpro.javaweb32.dto.customer.order.OrderSummary;
+import org.springframework.transaction.annotation.Transactional;
+import vn.devpro.javaweb32.repository.CustomerRepository;
+import vn.devpro.javaweb32.entity.customer.Address;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping
@@ -28,11 +32,13 @@ public class CheckoutOrderController {
     private final CartService cartService;
     private final CredentialRepository credentialRepository;
     private final OrderService orderService;
+    private final CustomerRepository customerRepository;
 
-    public CheckoutOrderController(CartService cartService, CredentialRepository credentialRepository, OrderService orderService) {
+    public CheckoutOrderController(CartService cartService, CredentialRepository credentialRepository, OrderService orderService, CustomerRepository customerRepository) {
         this.cartService = cartService;
         this.credentialRepository = credentialRepository;
         this.orderService = orderService;
+        this.customerRepository = customerRepository;
     }
 
     private Customer getCurrentCustomer() {
@@ -59,6 +65,7 @@ public class CheckoutOrderController {
         } catch (IllegalStateException ex) {
             return "redirect:/cart?empty";
         }
+        model.addAttribute("customer", customer);
         model.addAttribute("orderAccessible", false);
         model.addAttribute("hasItems", true);
         model.addAttribute("items", summary.getItems());
@@ -73,9 +80,64 @@ public class CheckoutOrderController {
     }
 
     @PostMapping("/checkout/complete")
-    public String completeCheckout(HttpSession session, @RequestParam(name = "shippingMethod", required = false) String shippingMethodRaw) {
+    @Transactional
+    public String completeCheckout(HttpSession session,
+                                   @RequestParam(name = "shippingMethod", required = false) String shippingMethodRaw,
+                                   @RequestParam(name = "firstName", required = false) String firstName,
+                                   @RequestParam(name = "lastName", required = false) String lastName,
+                                   @RequestParam(name = "email", required = false) String email,
+                                   @RequestParam(name = "phone", required = false) String phone,
+                                   @RequestParam(name = "address", required = false) String line1,
+                                   @RequestParam(name = "address2", required = false) String line2,
+                                   @RequestParam(name = "city", required = false) String city,
+                                   @RequestParam(name = "state", required = false) String province,
+                                   @RequestParam(name = "zipCode", required = false) String postalCode,
+                                   @RequestParam(name = "country", required = false) String country) {
         Customer customer = getCurrentCustomer();
         if (customer == null) return "redirect:/auth";
+        if (shippingMethodRaw == null) shippingMethodRaw = ShippingMethod.STANDARD.name();
+        boolean credentialUpdated = false;
+        if (email != null && !email.isBlank() && customer.getCredential() != null) {
+            String newEmail = email.trim().toLowerCase();
+            if (!newEmail.equalsIgnoreCase(customer.getCredential().getEmail())) {
+                boolean exists = credentialRepository.findByEmail(newEmail).isPresent();
+                if (!exists) {
+                    customer.getCredential().setEmail(newEmail);
+                    credentialUpdated = true;
+                }
+            }
+        }
+        if (customerRepository != null) {
+            boolean hasAddressData = line1 != null || line2 != null || city != null || province != null || postalCode != null || country != null || phone != null;
+            if (hasAddressData) {
+                Address addr = customer.getAddress();
+                if (addr == null) {
+                    addr = new Address();
+                    addr.setPrimaryAddress(true);
+                    addr.setCustomer(customer);
+                    if (customer.getAddresses() == null) {
+                        customer.setAddresses(new ArrayList<>());
+                    }
+                    customer.getAddresses().add(addr);
+                }
+                if (firstName != null || lastName != null) {
+                    String recipient = (firstName == null ? "" : firstName.trim()) + (lastName == null ? "" : (" "+ lastName.trim()));
+                    recipient = recipient.trim();
+                    if (!recipient.isEmpty()) addr.setRecipientName(recipient);
+                }
+                if (line1 != null && !line1.isBlank()) addr.setLine1(line1.trim());
+                if (line2 != null && !line2.isBlank()) addr.setLine2(line2.trim());
+                if (city != null && !city.isBlank()) addr.setCity(city.trim());
+                if (province != null && !province.isBlank()) addr.setProvince(province.trim());
+                if (country != null && !country.isBlank()) addr.setCountry(country.trim());
+                if (postalCode != null && !postalCode.isBlank()) addr.setPostalCode(postalCode.trim());
+                if (phone != null && !phone.isBlank()) addr.setPhone(phone.trim());
+                customerRepository.save(customer);
+                credentialUpdated = false;
+            } else if (credentialUpdated) {
+                credentialRepository.save(customer.getCredential());
+            }
+        }
         ShippingMethod method = ShippingMethod.safeValueOf(shippingMethodRaw);
         Order order;
         try {
@@ -98,9 +160,10 @@ public class CheckoutOrderController {
     }
 
     @GetMapping("/order/{id}")
-    public String orderById(@PathVariable("id") Long id, HttpSession session, Model model) {
+    public String orderById(@PathVariable("id") String idRaw, HttpSession session, Model model) {
         Customer customer = getCurrentCustomer();
         if (customer == null) return "redirect:/auth";
+        Long id = parseLongSafe(idRaw);
         if (id == null) return "redirect:/checkout";
         Order orderEntity = orderService.findById(id);
         if (orderEntity == null || !orderEntity.getCustomer().getId().equals(customer.getId())) {
@@ -112,5 +175,21 @@ public class CheckoutOrderController {
         model.addAttribute("currentStep", 3);
         model.addAttribute("order", orderEntity);
         return "customer/order";
+    }
+
+    private Long parseLongSafe(String raw) {
+        if (raw == null) return null;
+        String s = raw.trim();
+        if (s.isEmpty()) return null;
+        while (s.startsWith("+")) {
+            s = s.substring(1);
+        }
+        if (s.isEmpty()) return null;
+        if (!s.matches("-?\\d+")) return null;
+        try {
+            return Long.valueOf(s);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 }

@@ -30,7 +30,6 @@
                         <!-- Shipping Information -->
                         <div class="section-card">
                             <h2 class="section-title">Shipping Information</h2>
-                            
                             <!-- Delivery Options -->
                             <div class="delivery-options">
                                 <c:choose>
@@ -76,72 +75,79 @@
                             </div>
 
                             <!-- Shipping Form -->
-                            <form class="shipping-form">
+                            <form class="shipping-form" id="completeCheckoutForm" action="${env}/checkout/complete" method="post">
+                                <input type="hidden" name="shippingMethod" id="shippingMethodHidden" value="${shippingMethod}" />
+                                <c:if test="${not empty _csrf}">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                </c:if>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="firstName">First name <span class="required">*</span></label>
-                                        <input type="text" id="firstName" name="firstName" required>
+                                        <input type="text" id="firstName" name="firstName" value="${customer.address != null && customer.address.recipientName != null ? fn:split(customer.address.recipientName,' ')[0] : customer.username}" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="lastName">Last name <span class="required">*</span></label>
-                                        <input type="text" id="lastName" name="lastName" required>
+                                        <input type="text" id="lastName" name="lastName" value="${customer.address != null && customer.address.recipientName != null && fn:length(fn:split(customer.address.recipientName,' '))>1 ? fn:split(customer.address.recipientName,' ')[fn:length(fn:split(customer.address.recipientName,' '))-1] : ''}" required>
                                     </div>
                                 </div>
-                                
                                 <div class="form-group">
                                     <label for="email">Email address <span class="required">*</span></label>
-                                    <input type="email" id="email" name="email" required>
+                                    <input type="email" id="email" name="email" value="${customer.credential != null ? customer.credential.email : ''}" required>
                                 </div>
-                                
                                 <div class="form-group">
                                     <label for="phone">Phone number <span class="required">*</span></label>
                                     <div class="phone-input">
-                                        <select class="country-code">
+                                        <select class="country-code" id="countryCodeSelect">
+                                            <option value="+84" ${customer.address != null && customer.address.phone != null && customer.address.phone.startsWith('+84') ? 'selected' : ''}>🇻🇳 +84</option>
                                             <option value="+1">🇺🇸 +1</option>
-                                            <option value="+84">🇻🇳 +84</option>
                                             <option value="+44">🇬🇧 +44</option>
                                         </select>
-                                        <input type="tel" id="phone" name="phone" placeholder="Enter phone number" required>
+                                        <input type="tel" id="phone" name="phone" placeholder="Enter phone number" value="${customer.address != null ? customer.address.phone : ''}" required>
                                     </div>
                                 </div>
-                                
                                 <div class="form-group">
                                     <label for="country">Country <span class="required">*</span></label>
                                     <select id="country" name="country" required>
+                                        <c:set var="countryVal" value="${customer.address != null ? customer.address.country : ''}" />
                                         <option value="">Choose country</option>
-                                        <option value="US">United States</option>
-                                        <option value="VN">Vietnam</option>
-                                        <option value="UK">United Kingdom</option>
-                                        <option value="CA">Canada</option>
+                                        <option value="Vietnam" ${countryVal == 'Vietnam' ? 'selected' : ''}>Vietnam</option>
+                                        <option value="United States" ${countryVal == 'United States' ? 'selected' : ''}>United States</option>
+                                        <option value="United Kingdom" ${countryVal == 'United Kingdom' ? 'selected' : ''}>United Kingdom</option>
+                                        <option value="Canada" ${countryVal == 'Canada' ? 'selected' : ''}>Canada</option>
                                     </select>
                                 </div>
-                                
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="city">City <span class="required">*</span></label>
-                                        <input type="text" id="city" name="city" required>
+                                        <input type="text" id="city" name="city" value="${customer.address != null ? customer.address.city : ''}" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="state">State</label>
-                                        <input type="text" id="state" name="state">
+                                        <label for="state">State/Province</label>
+                                        <input type="text" id="state" name="state" value="${customer.address != null ? customer.address.province : ''}">
                                     </div>
                                     <div class="form-group">
-                                        <label for="zipCode">ZIP Code</label>
-                                        <input type="text" id="zipCode" name="zipCode">
+                                        <label for="zipCode">ZIP / Postal Code</label>
+                                        <input type="text" id="zipCode" name="zipCode" value="${customer.address != null ? customer.address.postalCode : ''}">
                                     </div>
                                 </div>
-                                
                                 <div class="form-group">
                                     <label for="address">Street Address <span class="required">*</span></label>
-                                    <input type="text" id="address" name="address" placeholder="Enter your address" required>
+                                    <input type="text" id="address" name="address" placeholder="Address line 1" value="${customer.address != null ? customer.address.line1 : ''}" required>
                                 </div>
-                                
+                                <div class="form-group">
+                                    <label for="address2">Address line 2</label>
+                                    <input type="text" id="address2" name="address2" placeholder="Apartment, suite, etc." value="${customer.address != null ? customer.address.line2 : ''}">
+                                </div>
                                 <div class="checkbox-group">
                                     <input type="checkbox" id="terms" name="terms" required>
-                                    <label for="terms" You must agree to the terms>
+                                    <label for="terms">
                                         I have read and agree to the <a href="${env}/terms" class="link">Terms and Conditions</a>
                                     </label>
                                 </div>
+                                <button class="pay-now-btn" type="submit" id="completeCheckoutBtn">
+                                    <i class="fas fa-lock"></i>
+                                    Complete Checkout
+                                </button>
                             </form>
                         </div>
                     </div>
@@ -223,16 +229,6 @@
                         </div>
                         
                         <!-- Payment Button -->
-                        <form action="${env}/checkout/complete" method="post" style="margin-top:1rem;" id="completeCheckoutForm">
-                            <input type="hidden" name="shippingMethod" id="shippingMethodHidden" value="${shippingMethod}" />
-                            <c:if test="${not empty _csrf}">
-                                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                            </c:if>
-                            <button class="pay-now-btn" type="submit">
-                                <i class="fas fa-lock"></i>
-                                Complete Checkout
-                            </button>
-                        </form>
                         <!-- Security Info -->
                         <div class="security-info">
                             <i class="fas fa-shield-alt"></i>
@@ -251,5 +247,13 @@
     <script src="${env}/customer/scripts/pages/checkout.js"></script>
     <script src="${env}/js/checkout-validation.js"></script>
     <script src="${env}/js/checkout-shipping.js"></script>
+    <script>
+        // Update hidden shipping method and handle form submission consolidation
+        document.querySelectorAll('input[name="shippingMethod"]').forEach(r => {
+            r.addEventListener('change', function(){
+                document.getElementById('shippingMethodHidden').value = this.value;
+            });
+        });
+    </script>
 </body>
 </html>
