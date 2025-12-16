@@ -18,7 +18,7 @@ public class ProductSearch {
 
     // Constructors
     public ProductSearch() {
-        this.status = "In Order";
+        this.status = "ACTIVE"; // Use enum name, not display name
         this.categoryId = 0;
         this.currentPage = 1;
         this.itemOnPage = 10;

@@ -1,6 +1,5 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!-- Footer -->
@@ -8,60 +7,60 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>Find A Store</h4>
+                    <h4>Tìm cửa hàng</h4>
                     <ul>
-                        <li><a href="#">Store Locator</a></li>
-                        <li><a href="#">Nike App</a></li>
+                        <li><a href="#">Bộ định vị cửa hàng</a></li>
+                        <li><a href="#">Ứng dụng Nike</a></li>
                         <li><a href="#">Nike Run Club</a></li>
                         <li><a href="#">Nike Training Club</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>Get Help</h4>
+                    <h4>Hỗ trợ</h4>
                     <ul>
-                        <li><a href="#">Order Status</a></li>
-                        <li><a href="#">Delivery</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Size Guide</a></li>
+                        <li><a href="#">Trạng thái đơn hàng</a></li>
+                        <li><a href="#">Giao hàng</a></li>
+                        <li><a href="#">Đổi trả</a></li>
+                        <li><a href="#">Hướng dẫn kích thước</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-section">
-                    <h4>About Nike</h4>
+                    <h4>Về Nike</h4>
                     <ul>
-                        <li><a href="#">News</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Investors</a></li>
-                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Tin tức</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                        <li><a href="#">Nhà đầu tư</a></li>
+                        <li><a href="#">Bền vững</a></li>
                     </ul>
                 </div>
                 
                 <!-- Contact Form -->
                 
                 <div class="footer-section contact-section" id="footer-contact">
-                    <h4>Contact Us</h4>
+                    <h4>Liên hệ chúng tôi</h4>
                     <form:form modelAttribute="contactForm" action="${env}/contact" method="POST" class="contact-form" id="contactForm">
                         <c:if test="${not empty _csrf}">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                         </c:if>
                         <div class="form-group">
-                            <form:input path="name" type="text" id="name" name="name" placeholder="Your Name (optional)" />
+                            <form:input path="name" type="text" id="name" name="name" placeholder="Tên của bạn (không bắt buộc)" />
                             <form:errors path="name" cssClass="error-message" />
                         </div>
                         <div class="form-group">
-                            <form:input path="email" type="email" id="email" name="email" placeholder="Email (optional, for reply)" />
+                            <form:input path="email" type="email" id="email" name="email" placeholder="Email (không bắt buộc, để phản hồi)" />
                             <form:errors path="email" cssClass="error-message" />
                         </div>
                         <div class="form-group">
-                            <form:textarea path="message" id="message" name="message" placeholder="Your Message" rows="3" required="required"></form:textarea>
+                            <form:textarea path="message" id="message" name="message" placeholder="Tin nhắn của bạn" rows="3" required="required"></form:textarea>
                             <form:errors path="message" cssClass="error-message" />
                         </div>
-                        <button type="submit" class="contact-submit-btn">Send Message</button>
+                        <button type="submit" class="contact-submit-btn">Gửi tin nhắn</button>
                         <!-- Capture BindingResult (if flashed) safely using bracket notation -->
                         <c:set var="contactErrors" value="${requestScope['org.springframework.validation.BindingResult.contactForm']}" />
                         <c:if test="${not empty contactErrors and contactErrors.errorCount > 0}">
-                            <p class="error-message" style="color:#c00;font-weight:600;">Please fix the errors above.</p>
+                            <p class="error-message" style="color:#c00;font-weight:600;">Vui lòng sửa các lỗi bên trên.</p>
                         </c:if>
                         <c:if test="${not empty successMessage}">
                             <p style="display:none;" class="success-message">${successMessage}</p>
@@ -103,11 +102,11 @@
             
             <div class="footer-bottom">
                 <div class="footer-bottom-left">
-                    <p>&copy; 2024 Nike, Inc. All Rights Reserved</p>
+                    <p>&copy; 2024 Nike, Inc. Tất cả quyền được bảo lưu.</p>
                     <div class="footer-links">
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Use</a>
-                        <a href="#">CA Supply Chains Act</a>
+                        <a href="#">Chính sách bảo mật</a>
+                        <a href="#">Điều khoản sử dụng</a>
+                        <a href="#">Đạo luật chuỗi cung ứng CA</a>
                     </div>
                 </div>
             </div>

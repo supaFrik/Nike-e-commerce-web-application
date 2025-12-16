@@ -1,0 +1,166 @@
+/* Order page specific styles aligned to base.css tokens */
+
+/* Sticky header glass effect */
+.page-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: rgba(255,255,255,1);
+  box-shadow: var(--shadow-10);
+}
+
+/* Statistic cards */
+.revenue-card {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 768px) {
+    .revenue-card {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 425px) {
+    .revenue-card {
+        grid-template-columns: 1fr;
+    }
+}
+.stat-card {
+  box-shadow: var(--shadow-10);
+  transition: box-shadow var(--transition-duration-fast) var(--transition-timing-function-ease);
+  background: var(--color-white);
+  border-radius: var(--size-border-radius-m);
+}
+.stat-card:hover {
+  box-shadow: var(--shadow-20);
+}
+.stat-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--size-border-radius-m);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.stat-card-icon--revenue { background-color: var(--color-blue-50); }
+.stat-card-icon--customers { background-color: var(--color-green-50); }
+.stat-card-icon--transactions { background-color: var(--color-purple-50); }
+.stat-card-icon--products { background-color: var(--color-orange-50); }
+
+/* Trend text colors */
+.text-trend-up { color: var(--color-success); }
+.text-trend-down { color: var(--color-critical); }
+
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: var(--font-size-xxs);
+  font-weight: var(--font-weight-medium);
+  border-radius: 9999px;
+  position: relative;
+  padding-left: 20px; /* room for dot */
+}
+.badge::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor; /* default fallback */
+}
+.badge--completed {
+    background-color: #d1fae5;
+    color: #10b981;
+}
+.badge--completed::before {
+  background-color: #10b981;
+}
+.badge--process {
+    background-color: #dbeafe;
+    color: #1d4ed8;
+}
+.badge--process::before {
+  background-color: #1d4ed8;
+}
+.badge--delivery {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+.badge--delivery::before {
+  background-color: #b45309;
+}
+
+/* Filter tabs */
+.filter-tabs {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.tabs {
+  display: flex;
+  gap: var(--size-spacing-s);
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+.tabs__item {
+  padding: 8px 16px;
+  border-radius: var(--size-border-radius-m);
+  font-size: var(--font-size-xs);
+}
+.tabs__item--active {
+  background: var(--color-bg-always-dark);
+  color: var(--color-text-primary-inverse);
+}
+.tabs__item--muted {
+  background: var(--color-grey-100);
+  color: var(--color-text-primary);
+}
+
+/* Modern Tab Buttons */
+.tab-button {
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.tab-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+.tab-button:hover {
+  color: #111827;
+}
+.tab-button.active {
+  color: #111827;
+  font-weight: 600;
+}
+.tab-button.active::after {
+  background: #111827;
+}
+.tab-button.add-tab {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #6b7280;
+}
+.tab-button.add-tab:hover {
+  color: #3b82f6;
+}
+.tab-button.add-tab i {
+  font-size: 18px;
+}
+
+/* Card CTA at sidebar */
+.sidebar-cta {
+  background: linear-gradient(90deg, var(--color-blue-500), var(--color-blue-600));
+  color: var(--color-text-primary-inverse);
+}

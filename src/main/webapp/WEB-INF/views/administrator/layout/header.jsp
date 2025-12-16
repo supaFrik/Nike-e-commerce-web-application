@@ -65,10 +65,8 @@
                                         <div class="btn btn-danger rounded-circle btn-circle"><i
                                                 data-feather="airplay" class="text-white"></i></div>
                                         <div class="w-75 d-inline-block v-middle pl-2">
-                                            <h6 class="message-title mb-0 mt-1">Luanch Admin</h6>
-                                            <span class="font-12 text-nowrap d-block text-muted">Just see
-                                                the my new
-                                                admin!</span>
+                                            <h6 class="message-title mb-0 mt-1">Khởi chạy Admin</h6>
+                                            <span class="font-12 text-nowrap d-block text-muted">Xem admin mới của tôi!</span>
                                             <span class="font-12 text-nowrap d-block text-muted">9:30 AM</span>
                                         </div>
                                     </a>
@@ -78,10 +76,8 @@
                                         <span class="btn btn-success text-white rounded-circle btn-circle"><i
                                                 data-feather="calendar" class="text-white"></i></span>
                                         <div class="w-75 d-inline-block v-middle pl-2">
-                                            <h6 class="message-title mb-0 mt-1">Event today</h6>
-                                            <span
-                                                class="font-12 text-nowrap d-block text-muted text-truncate">Just
-                                                a reminder that you have event</span>
+                                            <h6 class="message-title mb-0 mt-1">Sự kiện hôm nay</h6>
+                                            <span class="font-12 text-nowrap d-block text-muted text-truncate">Nhắc nhở: bạn có sự kiện</span>
                                             <span class="font-12 text-nowrap d-block text-muted">9:10 AM</span>
                                         </div>
                                     </a>
@@ -91,11 +87,8 @@
                                         <span class="btn btn-info rounded-circle btn-circle"><i
                                                 data-feather="settings" class="text-white"></i></span>
                                         <div class="w-75 d-inline-block v-middle pl-2">
-                                            <h6 class="message-title mb-0 mt-1">Settings</h6>
-                                            <span
-                                                class="font-12 text-nowrap d-block text-muted text-truncate">You
-                                                can customize this template
-                                                as you want</span>
+                                            <h6 class="message-title mb-0 mt-1">Cài đặt</h6>
+                                            <span class="font-12 text-nowrap d-block text-muted text-truncate">Bạn có thể tùy chỉnh mẫu này theo ý muốn</span>
                                             <span class="font-12 text-nowrap d-block text-muted">9:08 AM</span>
                                         </div>
                                     </a>
@@ -105,9 +98,8 @@
                                         <span class="btn btn-primary rounded-circle btn-circle"><i
                                                 data-feather="box" class="text-white"></i></span>
                                         <div class="w-75 d-inline-block v-middle pl-2">
-                                            <h6 class="message-title mb-0 mt-1">Pavan kumar</h6> <span
-                                                class="font-12 text-nowrap d-block text-muted">Just
-                                                see the my admin!</span>
+                                            <h6 class="message-title mb-0 mt-1">Pavan kumar</h6>
+                                            <span class="font-12 text-nowrap d-block text-muted">Xem admin của tôi!</span>
                                             <span class="font-12 text-nowrap d-block text-muted">9:02 AM</span>
                                         </div>
                                     </a>
@@ -115,7 +107,7 @@
                             </li>
                             <li>
                                 <a class="nav-link pt-3 text-center text-dark" href="javascript:void(0);">
-                                    <strong>Check all notifications</strong>
+                                    <strong>Xem tất cả thông báo</strong>
                                     <i class="fa fa-angle-right"></i>
                                 </a>
                             </li>
@@ -164,7 +156,7 @@
                         <form>
                             <div class="customize-input">
                                 <input class="form-control custom-shadow custom-radius border-0 bg-white"
-                                    type="search" placeholder="Search" aria-label="Search">
+                                    type="search" placeholder="Tìm kiếm" aria-label="Search">
                                 <i class="form-control-icon" data-feather="search"></i>
                             </div>
                         </form>
@@ -179,31 +171,30 @@
                         aria-haspopup="true" aria-expanded="false">
                         <img src="${env }/administrator/assets/images/users/profile-pic.jpg" alt="user" class="rounded-circle"
                             width="40">
-                        <span class="ml-2 d-none d-lg-inline-block"><span>Hello,</span> <span
+                        <span class="ml-2 d-none d-lg-inline-block"><span>Xin chào,</span> <span
                                 class="text-dark">${loginedUser.name }</span> <i data-feather="chevron-down"
                                 class="svg-icon"></i></span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                         <a class="dropdown-item" href="javascript:void(0)"><i data-feather="user"
                                 class="svg-icon mr-2 ml-1"></i>
-                            My Profile</a>
+                            Hồ sơ của tôi</a>
                         <a class="dropdown-item" href="javascript:void(0)"><i data-feather="credit-card"
                                 class="svg-icon mr-2 ml-1"></i>
-                            My Balance</a>
+                            Số dư của tôi</a>
                         <a class="dropdown-item" href="javascript:void(0)"><i data-feather="mail"
                                 class="svg-icon mr-2 ml-1"></i>
-                            Inbox</a>
+                            Hộp thư</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)"><i data-feather="settings"
                                 class="svg-icon mr-2 ml-1"></i>
-                            Account Setting</a>
+                            Cài đặt tài khoản</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="${env }/logout"><i data-feather="power"
                                 class="svg-icon mr-2 ml-1"></i>
-                            Logout</a>
+                            Đăng xuất</a>
                         <div class="dropdown-divider"></div>
-                        <div class="pl-4 p-3"><a href="javascript:void(0)" class="btn btn-sm btn-info">View
-                                Profile</a></div>
+                        <div class="pl-4 p-3"><a href="javascript:void(0)" class="btn btn-sm btn-info">Xem hồ sơ</a></div>
                     </div>
                 </li>
                 <!-- ============================================================== -->
@@ -213,3 +204,14 @@
         </div>
     </nav>
 </header>
+<nav aria-label="Global">
+    <ul class="nav">
+        <li><a href="${env}/admin">Bảng điều khiển</a></li>
+        <li><a href="${env}/admin/orders">Đơn hàng</a></li>
+        <li><a href="${env}/admin/customers">Khách hàng</a></li>
+        <li><a href="${env}/admin/coupons">Mã giảm giá</a></li>
+        <li><a href="${env}/admin/categories">Danh mục</a></li>
+        <li><a href="${env}/admin/transactions">Giao dịch</a></li>
+        <li><a href="${env}/admin/brands">Thương hiệu</a></li>
+    </ul>
+</nav>

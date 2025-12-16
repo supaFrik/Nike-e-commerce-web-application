@@ -47,7 +47,6 @@ public class AuthService {
         String normalizedEmail = email.trim().toLowerCase();
         String normalizedUsername = username.trim();
 
-        // Fast exists checks to avoid hitting DB twice later
         if (credentialRepository.existsByEmail(normalizedEmail)) {
             throw new IllegalArgumentException("Email already exists");
         }

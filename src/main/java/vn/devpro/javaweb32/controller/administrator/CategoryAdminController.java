@@ -20,7 +20,6 @@ public class CategoryAdminController extends BaseController {
 
     private static final String VIEW_LIST = "administrator/category/category-list";
     private static final String VIEW_ADD = "administrator/category/category-add";
-    private static final String VIEW_EDIT = "administrator/category/category-edit";
 
     private static final String REDIRECT_LIST = "redirect:/admin/category/list";
     private static final String REDIRECT_ADD = "redirect:/admin/category/add";
@@ -58,76 +57,93 @@ public class CategoryAdminController extends BaseController {
     /* -------------------------------------------------- LIST -------------------------------------------------- */
     @GetMapping({"/list", "/"})
     public String list(@RequestParam(value = "showAll", required = false, defaultValue = "false") boolean showAll,
-                        @RequestParam(value = "message", required = false) String message,
-                        @RequestParam(value = "error", required = false) String error,
                         Model model) {
         List<Category> categories = showAll ? categoryService.findAll() : categoryService.findActiveOrdered();
         model.addAttribute("categories", categories);
         model.addAttribute("showAll", showAll);
-        if (message != null) model.addAttribute("message", message);
-        if (error != null) model.addAttribute("error", error);
         return VIEW_LIST;
     }
 
     /* -------------------------------------------------- ADD -------------------------------------------------- */
     @GetMapping("/add")
-    public String add(Model model, @RequestParam(value = "error", required = false) String error) {
-        if (!model.containsAttribute("category")) { // preserve previously entered data on redirect
+    public String add(Model model) {
+        if (!model.containsAttribute("category")) {
             Category category = new Category();
             category.setCreateDate(new Date());
             model.addAttribute("category", category);
         }
-        if (error != null) model.addAttribute("error", error);
         return VIEW_ADD;
     }
 
-    @PostMapping("/add-save")
-    public String addSave(@ModelAttribute("category") Category category, RedirectAttributes ra) {
+    /* -------------------------------------------------- SAVE (create or update) -------------------------------------------------- */
+    @PostMapping("/save")
+    public String save(@ModelAttribute("category") Category category, RedirectAttributes ra) {
+        if (category == null) {
+            ra.addFlashAttribute("error", "Invalid category data");
+            return REDIRECT_LIST;
+        }
         String name = category.getName();
         if (isBlank(name)) {
             flashError(ra, "Category name is required");
             flashCategory(ra, category);
-            return REDIRECT_ADD;
+            if (category.getId() == null) return REDIRECT_ADD;
+            return redirectEdit(category.getId());
         }
         name = name.trim();
         category.setName(name);
-        if (categoryService.existsByName(name)) {
+        // If creating
+        if (category.getId() == null) {
+            if (categoryService.existsByName(name)) {
+                flashError(ra, "Category name already exists");
+                flashCategory(ra, category);
+                return REDIRECT_ADD;
+            }
+            category.setStatus(CategoryAdminService.STATUS_ACTIVE);
+            categoryService.create(category);
+            ra.addFlashAttribute("message", "Category created successfully");
+            return REDIRECT_LIST;
+        }
+        // Updating existing
+        Category existingDb = categoryService.getById(category.getId());
+        if (existingDb == null) {
+            ra.addFlashAttribute("error", "Category not found");
+            return REDIRECT_LIST;
+        }
+        if (nameExistsForOther(category)) {
             flashError(ra, "Category name already exists");
             flashCategory(ra, category);
-            return REDIRECT_ADD;
+            return redirectEdit(category.getId());
         }
-        category.setStatus(CategoryAdminService.STATUS_ACTIVE);
-        categoryService.create(category);
-        ra.addAttribute("message", "Category created successfully");
+        copyEditableFields(category, existingDb);
+        categoryService.update(existingDb);
+        ra.addFlashAttribute("message", "Category updated successfully");
         return REDIRECT_LIST;
     }
 
     /* -------------------------------------------------- EDIT -------------------------------------------------- */
     @GetMapping("/edit/{categoryId}")
     public String viewEdit(@PathVariable("categoryId") Long categoryId,
-                           @RequestParam(value = "error", required = false) String error,
                            Model model, RedirectAttributes ra) {
         Category category = categoryService.getById(categoryId);
         if (category == null) {
-            ra.addAttribute("error", "Category not found");
+            ra.addFlashAttribute("error", "Category not found");
             return REDIRECT_LIST;
         }
         if (!model.containsAttribute("category")) {
             model.addAttribute("category", category);
         }
-        if (error != null) model.addAttribute("error", error);
-        return VIEW_EDIT;
+        return VIEW_ADD;
     }
 
     @PostMapping("/edit-save")
     public String editSave(@ModelAttribute("category") Category category, RedirectAttributes ra) {
         if (category.getId() == null) {
-            ra.addAttribute("error", "Missing category ID");
+            ra.addFlashAttribute("error", "Missing category ID");
             return REDIRECT_LIST;
         }
         Category existingDb = categoryService.getById(category.getId());
         if (existingDb == null) {
-            ra.addAttribute("error", "Category not found");
+            ra.addFlashAttribute("error", "Category not found");
             return REDIRECT_LIST;
         }
         String name = category.getName();
@@ -145,20 +161,19 @@ public class CategoryAdminController extends BaseController {
         }
         copyEditableFields(category, existingDb);
         categoryService.update(existingDb);
-        ra.addAttribute("message", "Category updated successfully");
+        ra.addFlashAttribute("message", "Category updated successfully");
         return REDIRECT_LIST;
     }
 
     /* -------------------------------------------------- DELETE (SOFT) -------------------------------------------------- */
     @GetMapping("/delete/{categoryId}")
     public String delete(@PathVariable("categoryId") Long categoryId, RedirectAttributes ra) {
-        Category category = categoryService.getById(categoryId);
-        if (category == null) {
-            ra.addAttribute("error", "Category not found");
+        if (categoryService.getById(categoryId) == null) {
+            ra.addFlashAttribute("error", "Category not found");
             return REDIRECT_LIST;
         }
         categoryService.softDelete(categoryId);
-        ra.addAttribute("message", "Category deleted (inactivated) successfully");
+        ra.addFlashAttribute("message", "Category deleted successfully");
         return REDIRECT_LIST;
     }
 
@@ -167,12 +182,12 @@ public class CategoryAdminController extends BaseController {
     public String activate(@PathVariable("categoryId") Long categoryId, RedirectAttributes ra) {
         Category category = categoryService.getById(categoryId);
         if (category == null) {
-            ra.addAttribute("error", "Category not found");
+            ra.addFlashAttribute("error", "Category not found");
             return REDIRECT_LIST;
         }
         category.setStatus(CategoryAdminService.STATUS_ACTIVE);
         categoryService.update(category);
-        ra.addAttribute("message", "Category activated successfully");
+        ra.addFlashAttribute("message", "Category activated successfully");
         return REDIRECT_LIST;
     }
 }

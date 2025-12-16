@@ -19,7 +19,9 @@ Admin styles focus on product management UIs, data grids, editing panels, and fo
 `common/variables.css` defines the `--ap-*` names mapping to global tokens. This lets admin UI adjust independently (e.g., theming or contrast tweaks) without touching global root tokens.
 
 ## Recommended Import Order
+
 ```html
+
 <link rel="stylesheet" href="/static/css/common/base.css">      <!-- global tokens -->
 <link rel="stylesheet" href="/static/css/admin/common/variables.css"> <!-- admin aliases -->
 <link rel="stylesheet" href="/static/css/admin/product-list/list-product.css"> <!-- page module -->

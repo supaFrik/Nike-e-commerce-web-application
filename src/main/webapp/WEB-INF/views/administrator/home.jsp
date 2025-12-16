@@ -1,560 +1,696 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="${env }/administrator/assets/images/favicon.png">
-    <title>${title }</title>
-    <!-- variables -->
-    <jsp:include page="/WEB-INF/views/common/variables.jsp"></jsp:include>
-     
-     <!-- Custome css resource file -->
-    <jsp:include page="/WEB-INF/views/administrator/layout/css.jsp"></jsp:include>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicon icon-->
+    <link rel="shortcut icon" type="image/png" href="https://via.placeholder.com/32x32?text=Logo" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+    <!-- Core Css -->
+    <link rel="stylesheet" href="${env}/css/admin/common/theme.css" />
+    <!-- Swiper CSS for alternative carousel -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <title>Nike Admin - Bảng điều khiển</title>
 </head>
 
-<body>
-    
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-        data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-        <jsp:include page="/WEB-INF/views/administrator/layout/header.jsp"></jsp:include>
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <jsp:include page="/WEB-INF/views/administrator/layout/left-slide-bar.jsp"></jsp:include>
-        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
-        <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <div class="page-breadcrumb">
-                <div class="row">
-                    <div class="col-7 align-self-center">
-                        <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Good Morning Jason!</h3>
-                        <div class="d-flex align-items-center">
-                            <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb m-0 p-0">
-                                    <li class="breadcrumb-item"><a href="${classpath }/admin/home">Dashboard</a>
-                                    </li>
-                                </ol>
-                            </nav>
-                        </div>
-                    </div>
-                    <div class="col-5 align-self-center">
-                        <div class="customize-input float-right">
-                            <select class="custom-select custom-select-set form-control bg-white border-0 custom-shadow custom-radius">
-                                <option selected>Aug 19</option>
-                                <option value="1">July 19</option>
-                                <option value="2">Jun 19</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                <!-- *************************************************************** -->
-                <!-- Start First Cards -->
-                <!-- *************************************************************** -->
-                <div class="card-group">
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <div class="d-inline-flex align-items-center">
-                                        <h2 class="text-dark mb-1 font-weight-medium">236</h2>
-                                        <span
-                                            class="badge bg-primary font-12 text-white font-weight-medium badge-pill ml-2 d-lg-block d-md-none">+18.33%</span>
+<body class="bg-info/5">
+    <main>
+        <!--start the project-->
+        <div id="main-wrapper" class="flex">
+            <aside id="application-sidebar-brand"
+                class="hs-overlay hs-overlay-open:translate-x-0 -translate-x-full transform hidden xl:block xl:translate-x-0 xl:end-auto xl:bottom-0 fixed top-0 with-vertical h-screen z-[999] flex-shrink-0 border-r-[1px] w-[270px] border-gray-400/20 bg-white left-sidebar transition-all duration-300">
+                <jsp:include page="/WEB-INF/views/administrator/_fragments/sidebar.jsp" />
+            </aside>
+            <div class="w-full page-wrapper">
+                <!-- ========== HEADER ========== -->
+                <jsp:include page="/WEB-INF/views/administrator/_fragments/header.jsp" />
+                <!-- ========== END HEADER ========== -->
+
+                <!-- Main Content -->
+                <main class="h-full overflow-y-auto max-w-full pt-4">
+                    <div class="container full-container py-5 flex flex-col gap-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-6 gap-x-0 lg:gap-y-0 gap-y-6">
+                            <div class="col-span-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="sm:flex block justify-between mb-5">
+                                            <h4 class="text-dark text-lg font-semibold sm:mb-0 mb-2">
+                                                Tổng quan bán hàng
+                                            </h4>
+                                            <select name="period" id="period"
+                                                class="border-gray-400/20 text-gray-500 rounded-md text-sm border-[1px] focus:ring-0 sm:w-auto w-full">
+                                                <option value="mar">Tháng 3, 2025</option>
+                                                <option value="apr">Tháng 4, 2025</option>
+                                                <option value="may">Tháng 5, 2025</option>
+                                                <option value="jun">Tháng 6, 2025</option>
+                                            </select>
+                                        </div>
+                                        <div id="chart"></div>
                                     </div>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Clients</h6>
                                 </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="user-plus"></i></span>
+                            </div>
+
+                            <div class="flex flex-col gap-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="text-dark text-lg font-semibold mb-5">
+                                            Phân tích theo năm
+                                        </h4>
+                                        <div class="flex gap-6 items-center justify-between">
+                                            <div class="flex flex-col gap-4">
+                                                <h3 class="text-[21px] font-semibold text-dark">
+                                                    $36,358
+                                                </h3>
+                                                <div class="flex items-center gap-1">
+                                                    <span
+                                                        class="flex items-center justify-center w-5 h-5 rounded-full bg-success/20">
+                                                        <i class="ti ti-arrow-up-left text-success"></i>
+                                                    </span>
+                                                    <p class="text-dark text-sm font-normal">+9%</p>
+                                                    <p class="text-gray-500 text-sm font-normal text-nowrap">
+                                                        năm trước
+                                                    </p>
+                                                </div>
+                                                <div class="flex gap-3">
+                                                    <div class="flex gap-2 items-center">
+                                                        <span class="w-2 h-2 rounded-full bg-primary"></span>
+                                                        <p class="text-gray-500 font-normal text-xs">
+                                                            2024
+                                                        </p>
+                                                    </div>
+                                                    <div class="flex gap-2 items-center">
+                                                        <span class="w-2 h-2 rounded-full bg-gray-500/20"></span>
+                                                        <p class="text-gray-500 font-normal text-xs">
+                                                            2025
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center">
+                                                <div id="breakup"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="flex gap-6 items-center justify-between">
+                                            <div class="flex flex-col gap-5">
+                                                <h4 class="text-dark text-lg font-semibold">
+                                                    Thu nhập hàng tháng
+                                                </h4>
+                                                <div class="flex flex-col gap-[18px]">
+                                                    <h3 class="text-[21px] font-semibold text-dark">
+                                                        $6,820
+                                                    </h3>
+                                                    <div class="flex items-center gap-1">
+                                                        <span
+                                                            class="flex items-center justify-center w-5 h-5 rounded-full bg-error/20">
+                                                            <i class="ti ti-arrow-down-right text-error"></i>
+                                                        </span>
+                                                        <p class="text-dark text-sm font-normal">+9%</p>
+                                                        <p class="text-gray-500 text-sm font-normal">
+                                                            năm trước
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div
+                                                class="w-11 h-11 flex justify-center items-center rounded-full bg-info text-white self-start">
+                                                <i class="ti ti-currency-dollar text-xl"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="earning"></div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium"><sup
-                                            class="set-doller">₫</sup>18,306</h2>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Earnings of Month
+                        <div class="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-6 gap-x-0 lg:gap-y-0 gap-y-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="text-dark text-lg font-semibold mb-6">
+                                        Giao dịch gần đây
+                                    </h4>
+                                    <ul class="timeline-widget relative">
+                                        <li class="timeline-item flex relative overflow-hidden min-h-[70px]">
+                                            <div
+                                                class="timeline-time text-dark text-sm min-w-[90px] py-[6px] pr-4 text-end">
+                                                9:30 am
+                                            </div>
+                                            <div class="timeline-badge-wrap flex flex-col items-center">
+                                                <div
+                                                    class="timeline-badge w-3 h-3 rounded-full shrink-0 bg-transparent border-2 border-primary my-[10px]">
+                                                </div>
+                                                <div class="timeline-badge-border block h-full w-[1px] bg-gray-100">
+                                                </div>
+                                            </div>
+                                            <div class="timeline-desc py-[6px] px-4">
+                                                <p class="text-dark text-sm font-normal">
+                                                    Thanh toán nhận từ John Doe là $385.90
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="timeline-item flex relative overflow-hidden min-h-[70px]">
+                                            <div
+                                                class="timeline-time text-dark min-w-[90px] py-[6px] text-sm pr-4 text-end">
+                                                10:00 am
+                                            </div>
+                                            <div class="timeline-badge-wrap flex flex-col items-center">
+                                                <div
+                                                    class="timeline-badge w-3 h-3 rounded-full shrink-0 bg-transparent border-2 border-secondary my-[10px]">
+                                                </div>
+                                                <div class="timeline-badge-border block h-full w-[1px] bg-gray-100">
+                                                </div>
+                                            </div>
+                                            <div class="timeline-desc py-[6px] px-4 text-sm">
+                                                <p class="text-dark font-semibold">
+                                                    Ghi nhận đơn hàng mới
+                                                </p>
+                                                <a href="javascript:void('')" class="text-primary">#ML-3467</a>
+                                            </div>
+                                        </li>
+
+                                        <li class="timeline-item flex relative overflow-hidden min-h-[70px]">
+                                            <div
+                                                class="timeline-time text-dark min-w-[90px] text-sm py-[6px] pr-4 text-end">
+                                                12:00 am
+                                            </div>
+                                            <div class="timeline-badge-wrap flex flex-col items-center">
+                                                <div
+                                                    class="timeline-badge w-3 h-3 rounded-full shrink-0 bg-transparent border-2 border-success my-[10px]">
+                                                </div>
+                                                <div class="timeline-badge-border block h-full w-[1px] bg-gray-100">
+                                                </div>
+                                            </div>
+                                            <div class="timeline-desc py-[6px] px-4">
+                                                <p class="text-dark text-sm font-normal">
+                                                    Thanh toán là $64.95 cho Michael
+                                                </p>
+                                            </div>
+                                        </li>
+
+                                        <li class="timeline-item flex relative overflow-hidden min-h-[70px]">
+                                            <div
+                                                class="timeline-time text-dark min-w-[90px] text-sm py-[6px] pr-4 text-end">
+                                                9:30 am
+                                            </div>
+                                            <div class="timeline-badge-wrap flex flex-col items-center">
+                                                <div
+                                                    class="timeline-badge w-3 h-3 rounded-full shrink-0 bg-transparent border-2 border-warning my-[10px]">
+                                                </div>
+                                                <div class="timeline-badge-border block h-full w-[1px] bg-gray-100">
+                                                </div>
+                                            </div>
+                                            <div class="timeline-desc py-[6px] px-4 text-sm">
+                                                <p class="text-dark font-semibold">
+                                                    Ghi nhận đơn hàng mới
+                                                </p>
+                                                <a href="javascript:void('')" class="text-primary">#ML-3467</a>
+                                            </div>
+                                        </li>
+
+                                        <li class="timeline-item flex relative overflow-hidden min-h-[70px]">
+                                            <div
+                                                class="timeline-time text-dark text-sm min-w-[90px] py-[6px] pr-4 text-end">
+                                                9:30 am
+                                            </div>
+                                            <div class="timeline-badge-wrap flex flex-col items-center">
+                                                <div
+                                                    class="timeline-badge w-3 h-3 rounded-full shrink-0 bg-transparent border-2 border-error my-[10px]">
+                                                </div>
+                                                <div class="timeline-badge-border block h-full w-[1px] bg-gray-100">
+                                                </div>
+                                            </div>
+                                            <div class="timeline-desc py-[6px] px-4">
+                                                <p class="text-dark text-sm font-semibold">
+                                                    Ghi nhận sản phẩm mới
+                                                </p>
+                                            </div>
+                                        </li>
+                                        <li class="timeline-item flex relative overflow-hidden">
+                                            <div
+                                                class="timeline-time text-dark text-sm min-w-[90px] py-[6px] pr-4 text-end">
+                                                12:00 am
+                                            </div>
+                                            <div class="timeline-badge-wrap flex flex-col items-center">
+                                                <div
+                                                    class="timeline-badge w-3 h-3 rounded-full shrink-0 bg-transparent border-2 border-success my-[10px]">
+                                                </div>
+                                                <div class="timeline-badge-border block h-full w-[1px] bg-gray-100">
+                                                </div>
+                                            </div>
+                                            <div class="timeline-desc py-[6px] px-4">
+                                                <p class="text-dark text-sm font-normal">
+                                                    Thanh toán hoàn tất
+                                                </p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="sm:flex block justify-between mb-5">
+                                            <div>
+                                                <h4 class="text-dark text-lg font-semibold sm:mb-0 mb-2">
+                                                    Nhân viên xuất sắc
+                                                </h4>
+                                                <p class="text-gray-500 text-sm">Nhân viên xuất sắc</p>
+                                            </div>
+                                            <div>
+                                                <select name="period2" id="period2"
+                                                    class="border-gray-400/20 text-gray-500 rounded-md text-sm border-[1px] focus:ring-0 sm:w-auto w-full">
+                                                    <option value="mar">Tháng 3, 2025</option>
+                                                    <option value="apr">Tháng 4, 2025</option>
+                                                    <option value="may">Tháng 5, 2025</option>
+                                                    <option value="jun">Tháng 6, 2025</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="relative overflow-x-auto">
+                                            <!-- table -->
+                                            <table class="text-left w-full whitespace-nowrap text-sm my-2.5">
+                                                <thead class="text-gray-700">
+                                                    <tr class="font-semibold text-dark">
+                                                        <th scope="col" class="p-4">Người được giao</th>
+                                                        <th scope="col" class="p-4">Dự án</th>
+                                                        <th scope="col" class="p-4">Độ ưu tiên</th>
+                                                        <th scope="col" class="p-4">Ngân sách</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="border-b border-gray-400/10">
+                                                        <td class="p-4">
+                                                            <div class="flex gap-3 items-center">
+                                                                <img class="object-cover w-9 h-9 rounded-full"
+                                                                    src="${env}/" alt aria-hidden="true" />
+                                                                <div>
+                                                                    <h3 class="font-semibold text-dark">
+                                                                        Sunil Joshi
+                                                                    </h3>
+                                                                    <span class="font-normal text-gray-500 text-xs">Web
+                                                                        Designer</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span class="font-normal text-gray-500">Elite
+                                                                Admin</span>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span
+                                                                class="inline-flex items-center py-[3px] px-[10px] rounded-md font-medium bg-primary text-white">Thấp</span>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span class="font-semibold text-base text-dark">$3.9</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="border-b border-gray-400/10">
+                                                        <td class="p-4">
+                                                            <div class="flex gap-3 items-center">
+                                                                <img class="object-cover w-9 h-9 rounded-full"
+                                                                    src="${env}/static/images/profile/user-2.png" alt
+                                                                    aria-hidden="true" />
+                                                                <div>
+                                                                    <h3 class="font-semibold text-dark">
+                                                                        Andrew McDownland
+                                                                    </h3>
+                                                                    <span
+                                                                        class="font-normal text-gray-500 text-xs">Project
+                                                                        Manager</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span class="font-normal text-gray-500">Real
+                                                                Homes WP Theme</span>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span
+                                                                class="inline-flex items-center py-[3px] px-[10px] rounded-md font-medium text-white bg-info">Trung
+                                                                bình</span>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span
+                                                                class="font-semibold text-base text-dark">$24.5k</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="border-b border-gray-400/10">
+                                                        <td class="p-4">
+                                                            <div class="flex gap-3 items-center">
+                                                                <img class="object-cover w-9 h-9 rounded-full"
+                                                                    src="${env}/static/images/profile/user-3.png" alt
+                                                                    aria-hidden="true" />
+                                                                <div>
+                                                                    <h3 class="font-semibold text-dark">
+                                                                        Christopher Jamil
+                                                                    </h3>
+                                                                    <span
+                                                                        class="font-normal text-xs text-gray-500">Project
+                                                                        Manager</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span class="font-normal text-gray-500">MedicalPro
+                                                                WP Theme</span>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span
+                                                                class="inline-flex items-center py-[3px] px-[10px] rounded-md font-medium text-white bg-error">Cao</span>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span
+                                                                class="font-semibold text-base text-dark">$12.8k</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="p-4">
+                                                            <div class="flex gap-3 items-center">
+                                                                <img class="object-cover w-9 h-9 rounded-full"
+                                                                    src="${env}/static/images/profile/user-4.png" alt
+                                                                    aria-hidden="true" />
+                                                                <div>
+                                                                    <h3 class="font-semibold text-dark">
+                                                                        Nirav Joshi
+                                                                    </h3>
+                                                                    <span
+                                                                        class="font-normal text-xs text-gray-500">Frontend
+                                                                        Engineer</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span class="font-normal text-sm text-gray-500">Hosting
+                                                                Press HTML</span>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span
+                                                                class="inline-flex items-center py-[3px] px-[10px] rounded-md font-medium text-white bg-success">Quan
+                                                                trọng</span>
+                                                        </td>
+                                                        <td class="p-4">
+                                                            <span class="font-semibold text-base text-dark">$2.4k</span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best-selling Products Carousel Section -->
+                        <div class="grid grid-cols-1 xl:grid-cols-4 lg:grid-cols-2 gap-6">
+                            <div class="card overflow-hidden">
+                                <div class="relative">
+                                    <a href="javascript:void(0)">
+                                        <img src="./assets/images/products/product-1.jpg" alt="product_img"
+                                            class="w-full" />
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                        class="bg-primary w-8 h-8 flex justify-center items-center text-white rounded-full absolute bottom-0 right-0 mr-4 -mb-3">
+                                        <i class="ti ti-basket text-base"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="text-base font-semibold text-dark mb-1">
+                                        Boat Headphone
                                     </h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="dollar-sign"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card border-right">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <div class="d-inline-flex align-items-center">
-                                        <h2 class="text-dark mb-1 font-weight-medium">1538</h2>
-                                        <span
-                                            class="badge bg-danger font-12 text-white font-weight-medium badge-pill ml-2 d-md-none d-lg-block">-18.33%</span>
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">New Projects</h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="file-plus"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex d-lg-flex d-md-block align-items-center">
-                                <div>
-                                    <h2 class="text-dark mb-1 font-weight-medium">864</h2>
-                                    <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Projects</h6>
-                                </div>
-                                <div class="ml-auto mt-md-3 mt-lg-0">
-                                    <span class="opacity-7 text-muted"><i data-feather="globe"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- *************************************************************** -->
-                <!-- End First Cards -->
-                <!-- *************************************************************** -->
-                <!-- *************************************************************** -->
-                <!-- Start Sales Charts Section -->
-                <!-- *************************************************************** -->
-                <div class="row">
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Total Sales</h4>
-                                <div id="campaign-v2" class="mt-2" style="height:283px; width:100%;"></div>
-                                <ul class="list-style-none mb-0">
-                                    <li>
-                                        <i class="fas fa-circle text-primary font-10 mr-2"></i>
-                                        <span class="text-muted">Direct Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">₫2346</span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-danger font-10 mr-2"></i>
-                                        <span class="text-muted">Referral Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">₫2108</span>
-                                    </li>
-                                    <li class="mt-3">
-                                        <i class="fas fa-circle text-cyan font-10 mr-2"></i>
-                                        <span class="text-muted">Affiliate Sales</span>
-                                        <span class="text-dark float-right font-weight-medium">₫1204</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Net Income</h4>
-                                <div class="net-income mt-4 position-relative" style="height:294px;"></div>
-                                <ul class="list-inline text-center mt-5 mb-2">
-                                    <li class="list-inline-item text-muted font-italic">Sales for this month</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Earning by Location</h4>
-                                <div class="" style="height:180px">
-                                    <div id="visitbylocate" style="height:100%"></div>
-                                </div>
-                                <div class="row mb-3 align-items-center mt-1 mt-5">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">India</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="flex justify-between">
+                                        <div class="flex gap-2 items-center">
+                                            <h6 class="text-base text-dark font-semibold">$50</h6>
+                                            <span class="text-gray-500 text-sm">
+                                                <del>$65</del>
+                                            </span>
                                         </div>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">28%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">UK</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 74%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">21%</span>
-                                    </div>
-                                </div>
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">USA</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-cyan" role="progressbar" style="width: 60%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">18%</span>
-                                    </div>
-                                </div>
-                                <div class="row align-items-center">
-                                    <div class="col-4 text-right">
-                                        <span class="text-muted font-14">China</span>
-                                    </div>
-                                    <div class="col-5">
-                                        <div class="progress" style="height: 5px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 50%"
-                                                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-3 text-right">
-                                        <span class="mb-0 font-14 text-dark font-weight-medium">12%</span>
+                                        <ul class="list-none flex gap-1">
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- *************************************************************** -->
-                <!-- End Sales Charts Section -->
-                <!-- *************************************************************** -->
-                <!-- *************************************************************** -->
-                <!-- Start Location and Earnings Charts Section -->
-                <!-- *************************************************************** -->
-                <div class="row">
-                    <div class="col-md-6 col-lg-8">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-start">
-                                    <h4 class="card-title mb-0">Earning Statistics</h4>
-                                    <div class="ml-auto">
-                                        <div class="dropdown sub-dropdown">
-                                            <button class="btn btn-link text-muted dropdown-toggle" type="button"
-                                                id="dd1" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd1">
-                                                <a class="dropdown-item" href="#">Insert</a>
-                                                <a class="dropdown-item" href="#">Update</a>
-                                                <a class="dropdown-item" href="#">Delete</a>
-                                            </div>
+                            <div class="card overflow-hidden">
+                                <div class="relative">
+                                    <a href="javascript:void(0)">
+                                        <img src="./assets/images/products/product-2.jpg" alt="product_img"
+                                            class="w-full" />
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                        class="bg-primary w-8 h-8 flex justify-center items-center text-white rounded-full absolute bottom-0 right-0 mr-4 -mb-3">
+                                        <i class="ti ti-basket text-base"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="text-base font-semibold text-dark mb-1">
+                                        MacBook Air Pro
+                                    </h6>
+                                    <div class="flex justify-between">
+                                        <div class="flex gap-2 items-center">
+                                            <h6 class="text-base text-dark font-semibold">$650</h6>
+                                            <span class="text-gray-500 text-sm">
+                                                <del>$900</del>
+                                            </span>
                                         </div>
+                                        <ul class="list-none flex gap-1">
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div class="pl-4 mb-5">
-                                    <div class="stats ct-charts position-relative" style="height: 315px;"></div>
-                                </div>
-                                <ul class="list-inline text-center mt-4 mb-0">
-                                    <li class="list-inline-item text-muted font-italic">Earnings for this month</li>
-                                </ul>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Recent Activity</h4>
-                                <div class="mt-4 activity">
-                                    <div class="d-flex align-items-start border-left-line pb-3">
-                                        <div>
-                                            <a href="javascript:void(0)" class="btn btn-info btn-circle mb-2 btn-item">
-                                                <i data-feather="shopping-cart"></i>
-                                            </a>
+                            <div class="card overflow-hidden">
+                                <div class="relative">
+                                    <a href="javascript:void(0)">
+                                        <img src="./assets/images/products/product-3.jpg" alt="product_img"
+                                            class="w-full" />
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                        class="bg-primary w-8 h-8 flex justify-center items-center text-white rounded-full absolute bottom-0 right-0 mr-4 -mb-3">
+                                        <i class="ti ti-basket text-base"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="text-base font-semibold text-dark mb-1">
+                                        Red Valvet Dress
+                                    </h6>
+                                    <div class="flex justify-between">
+                                        <div class="flex gap-2 items-center">
+                                            <h6 class="text-base text-dark font-semibold">$150</h6>
+                                            <span class="text-gray-500 text-sm">
+                                                <del>$200</del>
+                                            </span>
                                         </div>
-                                        <div class="ml-3 mt-2">
-                                            <h5 class="text-dark font-weight-medium mb-2">New Product Sold!</h5>
-                                            <p class="font-14 mb-2 text-muted">John Musa just purchased <br> Cannon 5M
-                                                Camera.
-                                            </p>
-                                            <span class="font-weight-light font-14 text-muted">10 Minutes Ago</span>
-                                        </div>
+                                        <ul class="list-none flex gap-1">
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    <div class="d-flex align-items-start border-left-line pb-3">
-                                        <div>
-                                            <a href="javascript:void(0)"
-                                                class="btn btn-danger btn-circle mb-2 btn-item">
-                                                <i data-feather="message-square"></i>
-                                            </a>
+                                </div>
+                            </div>
+                            <div class="card overflow-hidden">
+                                <div class="relative">
+                                    <a href="javascript:void(0)">
+                                        <img src="./assets/images/products/product-4.jpg" alt="product_img"
+                                            class="w-full" />
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                        class="bg-primary w-8 h-8 flex justify-center items-center text-white rounded-full absolute bottom-0 right-0 mr-4 -mb-3">
+                                        <i class="ti ti-basket text-base"></i>
+                                    </a>
+                                </div>
+                                <div class="card-body">
+                                    <h6 class="text-base font-semibold text-dark mb-1">
+                                        Cute Soft Teddybear
+                                    </h6>
+                                    <div class="flex justify-between">
+                                        <div class="flex gap-2 items-center">
+                                            <h6 class="text-base text-dark font-semibold">$285</h6>
+                                            <span class="text-gray-500 text-sm">
+                                                <del>$345</del>
+                                            </span>
                                         </div>
-                                        <div class="ml-3 mt-2">
-                                            <h5 class="text-dark font-weight-medium mb-2">New Support Ticket</h5>
-                                            <p class="font-14 mb-2 text-muted">Richardson just create support <br>
-                                                ticket</p>
-                                            <span class="font-weight-light font-14 text-muted">25 Minutes Ago</span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-start border-left-line">
-                                        <div>
-                                            <a href="javascript:void(0)" class="btn btn-cyan btn-circle mb-2 btn-item">
-                                                <i data-feather="bell"></i>
-                                            </a>
-                                        </div>
-                                        <div class="ml-3 mt-2">
-                                            <h5 class="text-dark font-weight-medium mb-2">Notification Pending Order!
-                                            </h5>
-                                            <p class="font-14 mb-2 text-muted">One Pending order from Ryne <br> Doe</p>
-                                            <span class="font-weight-light font-14 mb-1 d-block text-muted">2 Hours
-                                                Ago</span>
-                                            <a href="javascript:void(0)" class="font-14 border-bottom pb-1 border-info">Load More</a>
-                                        </div>
+                                        <ul class="list-none flex gap-1">
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)">
+                                                    <i class="ti ti-star text-yellow-500 text-sm"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- *************************************************************** -->
-                <!-- End Location and Earnings Charts Section -->
-                <!-- *************************************************************** -->
-                <!-- *************************************************************** -->
-                <!-- Start Top Leader Table -->
-                <!-- *************************************************************** -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center mb-4">
-                                    <h4 class="card-title">Top Leaders</h4>
-                                    <div class="ml-auto">
-                                        <div class="dropdown sub-dropdown">
-                                            <button class="btn btn-link text-muted dropdown-toggle" type="button"
-                                                id="dd1" data-toggle="dropdown" aria-haspopup="true"
-                                                aria-expanded="false">
-                                                <i data-feather="more-vertical"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dd1">
-                                                <a class="dropdown-item" href="#">Insert</a>
-                                                <a class="dropdown-item" href="#">Update</a>
-                                                <a class="dropdown-item" href="#">Delete</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table no-wrap v-middle mb-0">
-                                        <thead>
-                                            <tr class="border-0">
-                                                <th class="border-0 font-14 font-weight-medium text-muted">Team Lead
-                                                </th>
-                                                <th class="border-0 font-14 font-weight-medium text-muted px-2">Project
-                                                </th>
-                                                <th class="border-0 font-14 font-weight-medium text-muted">Team</th>
-                                                <th class="border-0 font-14 font-weight-medium text-muted text-center">
-                                                    Status
-                                                </th>
-                                                <th class="border-0 font-14 font-weight-medium text-muted text-center">
-                                                    Weeks
-                                                </th>
-                                                <th class="border-0 font-14 font-weight-medium text-muted">Budget</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td class="border-top-0 px-2 py-4">
-                                                    <div class="d-flex no-block align-items-center">
-                                                        <div class="mr-3"><img
-                                                                src="assets/images/users/widget-table-pic1.jpg"
-                                                                alt="user" class="rounded-circle" width="45"
-                                                                height="45" /></div>
-                                                        <div class="">
-                                                            <h5 class="text-dark mb-0 font-16 font-weight-medium">Hanna
-                                                                Gover</h5>
-                                                            <span class="text-muted font-14">hgover@gmail.com</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="border-top-0 text-muted px-2 py-4 font-14">Elite Admin</td>
-                                                <td class="border-top-0 px-2 py-4">
-                                                    <div class="popover-icon">
-                                                        <a class="btn btn-primary rounded-circle btn-circle font-12"
-                                                            href="javascript:void(0)">DS</a>
-                                                        <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
-                                                            href="javascript:void(0)">SS</a>
-                                                        <a class="btn btn-cyan rounded-circle btn-circle font-12 popover-item"
-                                                            href="javascript:void(0)">RP</a>
-                                                        <a class="btn btn-success text-white rounded-circle btn-circle font-20"
-                                                            href="javascript:void(0)">+</a>
-                                                    </div>
-                                                </td>
-                                                <td class="border-top-0 text-center px-2 py-4"><i
-                                                        class="fa fa-circle text-primary font-12" data-toggle="tooltip"
-                                                        data-placement="top" title="In Testing"></i></td>
-                                                <td
-                                                    class="border-top-0 text-center font-weight-medium text-muted px-2 py-4">
-                                                    35
-                                                </td>
-                                                <td class="font-weight-medium text-dark border-top-0 px-2 py-4">₫96K
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-2 py-4">
-                                                    <div class="d-flex no-block align-items-center">
-                                                        <div class="mr-3"><img
-                                                                src="assets/images/users/widget-table-pic2.jpg"
-                                                                alt="user" class="rounded-circle" width="45"
-                                                                height="45" /></div>
-                                                        <div class="">
-                                                            <h5 class="text-dark mb-0 font-16 font-weight-medium">Daniel
-                                                                Kristeen
-                                                            </h5>
-                                                            <span class="text-muted font-14">Kristeen@gmail.com</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-muted px-2 py-4 font-14">Real Homes WP Theme</td>
-                                                <td class="px-2 py-4">
-                                                    <div class="popover-icon">
-                                                        <a class="btn btn-primary rounded-circle btn-circle font-12"
-                                                            href="javascript:void(0)">DS</a>
-                                                        <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
-                                                            href="javascript:void(0)">SS</a>
-                                                        <a class="btn btn-success text-white rounded-circle btn-circle font-20"
-                                                            href="javascript:void(0)">+</a>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center px-2 py-4"><i
-                                                        class="fa fa-circle text-success font-12" data-toggle="tooltip"
-                                                        data-placement="top" title="Done"></i>
-                                                </td>
-                                                <td class="text-center text-muted font-weight-medium px-2 py-4">32</td>
-                                                <td class="font-weight-medium text-dark px-2 py-4">₫85K</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-2 py-4">
-                                                    <div class="d-flex no-block align-items-center">
-                                                        <div class="mr-3"><img
-                                                                src="assets/images/users/widget-table-pic3.jpg"
-                                                                alt="user" class="rounded-circle" width="45"
-                                                                height="45" /></div>
-                                                        <div class="">
-                                                            <h5 class="text-dark mb-0 font-16 font-weight-medium">Julian
-                                                                Josephs
-                                                            </h5>
-                                                            <span class="text-muted font-14">Josephs@gmail.com</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-muted px-2 py-4 font-14">MedicalPro WP Theme</td>
-                                                <td class="px-2 py-4">
-                                                    <div class="popover-icon">
-                                                        <a class="btn btn-primary rounded-circle btn-circle font-12"
-                                                            href="javascript:void(0)">DS</a>
-                                                        <a class="btn btn-danger rounded-circle btn-circle font-12 popover-item"
-                                                            href="javascript:void(0)">SS</a>
-                                                        <a class="btn btn-cyan rounded-circle btn-circle font-12 popover-item"
-                                                            href="javascript:void(0)">RP</a>
-                                                        <a class="btn btn-success text-white rounded-circle btn-circle font-20"
-                                                            href="javascript:void(0)">+</a>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center px-2 py-4"><i
-                                                        class="fa fa-circle text-primary font-12" data-toggle="tooltip"
-                                                        data-placement="top" title="Done"></i>
-                                                </td>
-                                                <td class="text-center text-muted font-weight-medium px-2 py-4">29</td>
-                                                <td class="font-weight-medium text-dark px-2 py-4">₫81K</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-2 py-4">
-                                                    <div class="d-flex no-block align-items-center">
-                                                        <div class="mr-3"><img
-                                                                src="assets/images/users/widget-table-pic4.jpg"
-                                                                alt="user" class="rounded-circle" width="45"
-                                                                height="45" /></div>
-                                                        <div class="">
-                                                            <h5 class="text-dark mb-0 font-16 font-weight-medium">Jan
-                                                                Petrovic
-                                                            </h5>
-                                                            <span class="text-muted font-14">hgover@gmail.com</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-muted px-2 py-4 font-14">Hosting Press HTML</td>
-                                                <td class="px-2 py-4">
-                                                    <div class="popover-icon">
-                                                        <a class="btn btn-primary rounded-circle btn-circle font-12"
-                                                            href="javascript:void(0)">DS</a>
-                                                        <a class="btn btn-success text-white font-20 rounded-circle btn-circle"
-                                                            href="javascript:void(0)">+</a>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center px-2 py-4"><i
-                                                        class="fa fa-circle text-danger font-12" data-toggle="tooltip"
-                                                        data-placement="top" title="In Progress"></i></td>
-                                                <td class="text-center text-muted font-weight-medium px-2 py-4">23</td>
-                                                <td class="font-weight-medium text-dark px-2 py-4">₫80K</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- *************************************************************** -->
-                <!-- End Top Leader Table -->
-                <!-- *************************************************************** -->
             </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <jsp:include page="/WEB-INF/views/administrator/layout/footer.jsp"></jsp:include>
-            <!-- ============================================================== -->
-            <!-- End footer -->
-            <!-- ============================================================== -->
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
-        <!-- ============================================================== -->
+    </main>
+    <!-- Main Content End -->
     </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-    <jsp:include page="/WEB-INF/views/administrator/layout/js.jsp"></jsp:include>
+    </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simplebar@5.3.8/dist/simplebar.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/preline@1.9.0/dist/preline.js"></script>
+    <script src="${env}/js/admin/sidebarmenu.js"></script>
+    <script src="${env}/js/admin/pages/dashboard.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="${env}/js/admin/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var swiper = new Swiper('.centered-slide-carousel', {
+                centeredSlides: true,
+                loop: true,
+                spaceBetween: 24,
+                slideToClickedSlide: true,
+                pagination: {
+                    el: '.centered-slide-carousel .swiper-pagination',
+                    clickable: true,
+                },
+                breakpoints: {
+                    1920: {
+                        slidesPerView: 4,
+                        spaceBetween: 24
+                    },
+                    1024: {
+                        slidesPerView: 2,
+                        spaceBetween: 16
+                    },
+                    640: {
+                        slidesPerView: 1,
+                        spaceBetween: 0
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- Swiper minimal styles override -->
+    <style>
+        .swiper-wrapper {
+            width: 100%;
+            height: max-content !important;
+            padding-bottom: 24px !important;
+            -webkit-transition-timing-function: linear !important;
+            transition-timing-function: linear !important;
+            position: relative;
+        }
+
+        .swiper-pagination-bullet {
+            background: #4F46E5;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: #4F46E5 !important;
+        }
+    </style>
 </body>
 
 </html>
-
