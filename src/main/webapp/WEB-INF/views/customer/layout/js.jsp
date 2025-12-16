@@ -2,16 +2,17 @@
 
 <!-- Base JavaScript Files -->
 
-<!-- Header -->
-<script src="${env}/js/mobile-nav.js"></script>
+<!-- Common utilities -->
+<script src="${env}/js/common/mobile-nav.js"></script>
 
-<!-- Landing Page -->
-<script src="${env}/js/carousel.js"></script>
+<!-- Customer components -->
+<script src="${env}/js/customer/components/carousel.js"></script>
 
-<!-- Authentication -->
-<script src="${env}/js/auth.js"></script>
+<!-- Customer pages -->
+<script src="${env}/js/customer/pages/auth.js"></script>
 
-<!-- Product List -->
-<script src="${env}/js/sort-btn.js"></script>
+<!-- Customer components -->
+<script src="${env}/js/customer/components/sort-btn.js"></script>
 
 <!-- Product Detail -->
+<script src="${env}/js/customer/pages/checkout-payment.js"></script>

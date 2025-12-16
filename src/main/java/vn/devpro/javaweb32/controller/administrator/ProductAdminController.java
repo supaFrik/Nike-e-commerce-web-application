@@ -51,30 +51,19 @@ public class ProductAdminController extends BaseController {
     // Helpers
     // -------------------------
     private String resolveStatus(String statusParam) {
-        if (statusParam == null || statusParam.isEmpty()) return ProductStatus.ACTIVE.name();
+        if (statusParam == null || statusParam.isEmpty()) {
+            return ProductStatus.ACTIVE.name();
+        }
         try {
-            return switch (Integer.parseInt(statusParam)) {
-                case 0 -> ProductStatus.ACTIVE.name();
-                case 1 -> ProductStatus.FEW_LEFT.name();
-                case 2 -> ProductStatus.OUT_OF_STOCK.name();
-                case 3 -> ProductStatus.DISCONTINUED.name();
-                default -> ProductStatus.ACTIVE.name();
-            };
-        } catch (NumberFormatException ex) {
-            try { return ProductStatus.valueOf(statusParam.toUpperCase().replace(' ', '_')).name(); }
-            catch (IllegalArgumentException iae) { return ProductStatus.ACTIVE.name(); }
+            return ProductStatus.valueOf(statusParam.toUpperCase().replace(' ', '_')).name();
+        } catch (IllegalArgumentException e) {
+            return ProductStatus.ACTIVE.name();
         }
     }
 
     private String toUiStatus(ProductStatus status) {
         if (status == null) return "Active";
-        return switch (status) {
-            case ACTIVE -> "Active";
-            case DRAFT -> "Draft";
-            case FEW_LEFT -> "Few Left";
-            case OUT_OF_STOCK -> "Out Of Stock";
-            case DISCONTINUED -> "Discontinued";
-        };
+        return status.getDisplayName();
     }
 
     private void prepareModelLists(Model model) {
@@ -129,13 +118,18 @@ public class ProductAdminController extends BaseController {
         if (search == null) search = new ProductSearch();
         if (statusParam != null) search.setStatus(resolveStatus(statusParam));
         else if (search.getStatus() == null) search.setStatus(ProductStatus.ACTIVE.name());
+
         search.setItemOnPage(DEFAULT_PAGE_SIZE);
+
         List<Product> products = productService.search(search);
-        if (products == null) products = new ArrayList<>();
-        search.setTotalItems(products.size());
+
+        int totalItems = productService.countProducts(search);
+        search.setTotalItems(totalItems);
+
+        model.addAttribute("categories", categoryService.findAllActive());
         model.addAttribute("products", products);
         model.addAttribute("searchModel", search);
-        model.addAttribute("categories", categoryService.findAllActive());
+
         return "administrator/product/product-list";
     }
 
@@ -204,8 +198,8 @@ public class ProductAdminController extends BaseController {
     // ------------------------- DELETE -------------------------
     @GetMapping("/delete/{productId}")
     public String deleteProduct(@PathVariable("productId") Long productId, RedirectAttributes redirectAttributes) {
-        try { productService.deleteById(productId); }
-        catch (Exception ex) { redirectAttributes.addFlashAttribute("error", "Lỗi khi xóa sản phẩm: " + ex.getMessage()); }
+        productService.deleteById(productId);
+        redirectAttributes.addFlashAttribute("success", "Product deleted successfully");
         return "redirect:/admin/product/list";
     }
 }

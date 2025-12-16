@@ -1,7 +1,5 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <link rel="icon" href="${env}/images/nike-favicon.ico">
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <link rel="stylesheet" href="${env}/css/common/base.css">
 <link rel="stylesheet" href="${env}/css/common/main.css">

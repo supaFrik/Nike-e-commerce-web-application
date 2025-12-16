@@ -1,11 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Results</title>
+    <title>Kết quả tìm kiếm</title>
     <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
     <link rel="stylesheet" href="${env}/css/customer/search/search.css">
     <link rel="stylesheet" href="${env}/css/common/base.css">
@@ -15,11 +17,11 @@
     <!-- Search Header -->
     <div class="search-header">
         <!-- Close (X) Button -->
-        <button type="button" class="search-close-btn" id="closeSearchBtn" aria-label="Close search and go back" title="Close">&times;</button>
+        <button type="button" class="search-close-btn" id="closeSearchBtn" aria-label="Đóng tìm kiếm và quay lại" title="Đóng">&times;</button>
         <div class="search-info">
             <div class="search-input-wrapper">
                 <form action="${env}/search" method="get" id="searchForm">
-                    <input type="text" class="search-input" id="liveSearchInput" name="q" placeholder="Search for products..." value="${fn:escapeXml(query)}" autocomplete="off" />
+                    <input type="text" class="search-input" id="liveSearchInput" name="q" placeholder="Tìm kiếm sản phẩm..." value="${fn:escapeXml(query)}" autocomplete="off" />
                     <c:if test="${not empty category}">
                         <input type="hidden" name="category" value="${category}" />
                     </c:if>
@@ -32,8 +34,8 @@
             </div>
             <p class="search-results-count" id="resultsCount">
                 <c:choose>
-                    <c:when test="${searchResult.total == 0}">No results</c:when>
-                    <c:otherwise>Showing ${searchResult.total} result<c:if test="${searchResult.total > 1}">s</c:if></c:otherwise>
+                    <c:when test="${searchResult.total == 0}">Không có kết quả</c:when>
+                    <c:otherwise>Hiển thị ${searchResult.total} kết quả</c:otherwise>
                 </c:choose>
             </p>
         </div>
@@ -43,7 +45,7 @@
     <div class="category-filter-row">
         <div class="category-scroll">
             <ul class="category-list">
-                <li class="category-item"><a href="${env}/search?q=${fn:escapeXml(query)}" class="category-link ${empty category ? 'active' : ''}">All</a></li>
+                <li class="category-item"><a href="${env}/search?q=${fn:escapeXml(query)}" class="category-link ${empty category ? 'active' : ''}">Tất cả</a></li>
                 <c:forEach var="cat" items="${categories}">
                     <c:set var="catName" value="${cat.name}" />
                     <li class="category-item">
@@ -55,14 +57,14 @@
         </div>
         <div class="sort-wrapper ml-auto">
             <button type="button" class="sort-btn" id="sortToggleBtn" aria-haspopup="true" aria-expanded="false">
-                Sort By
+                Sắp xếp
                 <span class="sort-chevron" aria-hidden="true"></span>
             </button>
-            <div class="sort-dropdown" id="sortMenu" role="menu" aria-label="Sort products">
-                <button class="sort-option ${sort=='newest' or empty sort ? 'active' : ''}" data-sort="newest" role="menuitem" type="button">Newest</button>
-                <button class="sort-option ${sort=='price-low' ? 'active' : ''}" data-sort="price-low" role="menuitem" type="button">Price: Low-High</button>
-                <button class="sort-option ${sort=='price-high' ? 'active' : ''}" data-sort="price-high" role="menuitem" type="button">Price: High-Low</button>
-                <button class="sort-option ${sort=='featured' ? 'active' : ''}" data-sort="featured" role="menuitem" type="button">Featured</button>
+            <div class="sort-dropdown" id="sortMenu" role="menu" aria-label="Sắp xếp sản phẩm">
+                <button class="sort-option ${sort=='newest' or empty sort ? 'active' : ''}" data-sort="newest" role="menuitem" type="button">Mới nhất</button>
+                <button class="sort-option ${sort=='price-low' ? 'active' : ''}" data-sort="price-low" role="menuitem" type="button">Giá: Thấp -> Cao</button>
+                <button class="sort-option ${sort=='price-high' ? 'active' : ''}" data-sort="price-high" role="menuitem" type="button">Giá: Cao -> Thấp</button>
+                <button class="sort-option ${sort=='featured' ? 'active' : ''}" data-sort="featured" role="menuitem" type="button">Nổi bật</button>
             </div>
             <form id="sortHiddenForm" action="${env}/search" method="get" style="display:none;">
                 <input type="hidden" name="q" value="${fn:escapeXml(query)}" />
@@ -78,7 +80,7 @@
     <div class="product-grid" id="productGrid">
         <c:choose>
             <c:when test="${empty products}">
-                <div class="no-products">No products found matching your search.</div>
+                <div class="no-products">Không tìm thấy sản phẩm phù hợp với tìm kiếm của bạn.</div>
             </c:when>
             <c:otherwise>
                 <c:forEach var="p" items="${products}">
@@ -110,7 +112,7 @@
                         </div>
                         <div class="product-info">
                             <c:if test="${p.hasSale}">
-                                <p class="product-badge">Sale</p>
+                                <p class="product-badge">Giảm giá</p>
                             </c:if>
                             <h3 class="product-name">${p.name}</h3>
                             <p class="product-category">${p.categoryName}</p>
@@ -148,6 +150,10 @@
     </c:if>
 </div>
 
-<script src="${env}/js/customer/search.js"></script>
+<script>
+    window.__env = '${env}';
+</script>
+
+<script src="${env}/js/customer/pages/search.js"></script>
 </body>
 </html>

@@ -5,9 +5,6 @@
 <link rel="stylesheet" href="${env}/css/admin/add-product/add-product.css">
 <link rel="stylesheet" href="${env}/css/admin/edit-product/edit-product.css">
 <script>window.APP_CTX='${env}';</script>
-<script src="${env}/js/add-product/state.js"></script>
-<script src="${env}/js/add-product/dropdown.js"></script>
-<script src="${env}/js/add-product/price-format.js"></script>
-<script src="${env}/js/add-product/toast.js"></script>
-<script src="${env}/js/edit-product/edit-product.js"></script>
+<%-- Admin edit product page script --%>
+<script src="${env}/js/admin/pages/edit-product.js"></script>
 

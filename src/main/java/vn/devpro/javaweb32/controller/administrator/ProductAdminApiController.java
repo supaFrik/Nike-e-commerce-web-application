@@ -10,7 +10,6 @@ import vn.devpro.javaweb32.common.constant.Jw32Contant;
 import vn.devpro.javaweb32.dto.administrator.ProductCreateRequest;
 import vn.devpro.javaweb32.entity.product.Product;
 import vn.devpro.javaweb32.service.administrator.AdminProductService;
-import vn.devpro.javaweb32.service.administrator.CategoryAdminService;
 
 import java.util.*;
 
@@ -21,12 +20,9 @@ public class ProductAdminApiController implements Jw32Contant {
     private static final Logger log = LoggerFactory.getLogger(ProductAdminApiController.class);
 
     private final AdminProductService productService;
-    private final CategoryAdminService categoryService;
 
-    public ProductAdminApiController(AdminProductService productService,
-                                     CategoryAdminService categoryService) {
+    public ProductAdminApiController(AdminProductService productService) {
         this.productService = productService;
-        this.categoryService = categoryService;
     }
 
     /* ============================= CREATE ============================= */
@@ -53,11 +49,11 @@ public class ProductAdminApiController implements Jw32Contant {
     public ResponseEntity<?> checkName(@RequestParam(name = "name", required = false) String name,
                                        @RequestParam(name = "excludeId", required = false) Long excludeId) {
         if (name == null || name.isBlank()) {
-            return ResponseEntity.ok(Map.of(
-                    "conflict", false,
-                    "suggestion", null,
-                    "normalized", null
-            ));
+            Map<String, Object> response = new HashMap<>();
+            response.put("conflict", false);
+            response.put("suggestion", null);
+            response.put("normalized", null);
+            return ResponseEntity.ok(response);
         }
         boolean conflict = productService.existsNameConflict(name, excludeId);
         String suggestion = conflict ? productService.generateNameSuggestion(name, excludeId) : name;
@@ -80,19 +76,25 @@ public class ProductAdminApiController implements Jw32Contant {
             var paged = productService.searchPaged(keyword, categoryId, page, size, sort);
             List<Map<String,Object>> items = new ArrayList<>();
             for (Product p : paged.items) {
-                try { items.add(productService.buildSummary(p)); }
-                catch (Exception inner) {
-                    log.warn("Failed to summarize product id={}: {}", p != null ? p.getId() : null, inner.toString());
-                    items.add(Map.of("id", p!=null?p.getId():null, "error","summary-failed"));
+                try {
+                    items.add(productService.buildSummary(p));
+                } catch (Exception inner) {
+                    log.warn("Failed to summarize product id={}: {}", p.getId(), inner.getMessage());
+                    Map<String, Object> errorItem = new HashMap<>();
+                    errorItem.put("id", p.getId());
+                    errorItem.put("error", "summary-failed");
+                    items.add(errorItem);
                 }
             }
-            return ResponseEntity.ok(new LinkedHashMap<String,Object>() {{
-                put("page", paged.page);
-                put("pageSize", paged.pageSize);
-                put("totalItems", paged.totalItems);
-                put("totalPages", paged.totalPages);
-                put("items", items);
-            }});
+
+            Map<String, Object> response = new LinkedHashMap<>();
+            response.put("page", paged.page);
+            response.put("pageSize", paged.pageSize);
+            response.put("totalItems", paged.totalItems);
+            response.put("totalPages", paged.totalPages);
+            response.put("items", items);
+
+            return ResponseEntity.ok(response);
         } catch (Exception ex) {
             log.error("/admin/api/products list failed", ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -109,8 +111,10 @@ public class ProductAdminApiController implements Jw32Contant {
             Product updated = productService.partialUpdateProduct(id, body);
             return ResponseEntity.ok(productService.buildSummary(updated));
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(ex.getMessage().contains("not found")? HttpStatus.NOT_FOUND: HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", ex.getMessage()));
+            HttpStatus status = ex.getMessage().toLowerCase().contains("not found")
+                    ? HttpStatus.NOT_FOUND
+                    : HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(status).body(Map.of("error", ex.getMessage()));
         } catch (Exception ex) {
             log.error("Partial update failed id={}", id, ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -127,12 +131,14 @@ public class ProductAdminApiController implements Jw32Contant {
             Product product = productService.fullUpdateProduct(id, request, FOLDER_UPLOAD);
             return ResponseEntity.ok(Map.of("id", product.getId(), "updated", true));
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(ex.getMessage().contains("not found")? HttpStatus.NOT_FOUND: HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", ex.getMessage()));
-        } catch (Exception io) {
-            log.error("Full update failed id={}", id, io);
+            HttpStatus status = ex.getMessage().toLowerCase().contains("not found")
+                    ? HttpStatus.NOT_FOUND
+                    : HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(status).body(Map.of("error", ex.getMessage()));
+        } catch (Exception ex) {
+            log.error("Full update failed id={}", id, ex);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Failed to store images", "message", io.getMessage()));
+                    .body(Map.of("error", "Update failed", "message", ex.getMessage()));
         }
     }
 

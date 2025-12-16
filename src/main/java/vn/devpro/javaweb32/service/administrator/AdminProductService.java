@@ -13,8 +13,8 @@ import vn.devpro.javaweb32.dto.administrator.ProductSearch;
 import vn.devpro.javaweb32.dto.administrator.ProductCreateRequest;
 import vn.devpro.javaweb32.entity.product.ProductImage;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.nio.file.*;
 import java.text.Normalizer;
 import java.util.*;
@@ -29,13 +29,28 @@ public class AdminProductService extends BaseService<Product> {
     @Override
     public Class<Product> clazz() { return Product.class; }
 
-    @SuppressWarnings("unchecked")
     public List<Product> search(ProductSearch productSearch) {
         String sql = "SELECT * FROM products p WHERE 1=1";
-        if (productSearch.getStatus() != null && !productSearch.getStatus().equals("In Order")) {
-            String status = productSearch.getStatus().replace("'", "''");
-            sql += " AND p.status='" + status + "'";
+
+        if (productSearch.getStatus() != null && !productSearch.getStatus().isEmpty()) {
+            String statusValue = productSearch.getStatus();
+
+            try {
+                ProductStatus enumStatus = ProductStatus.fromDisplayName(statusValue);
+                statusValue = enumStatus.name();
+            } catch (Exception e) {
+                try {
+                    ProductStatus.valueOf(statusValue);
+                } catch (IllegalArgumentException ex) {
+                    statusValue = null;
+                }
+            }
+
+            if (statusValue != null) {
+                sql += " AND p.product_status='" + statusValue.replace("'", "''") + "'";
+            }
         }
+
         if (productSearch.getCategoryId() != null && productSearch.getCategoryId() != 0) {
             sql += " AND p.category_id=" + productSearch.getCategoryId();
         }
@@ -48,7 +63,61 @@ public class AdminProductService extends BaseService<Product> {
         if (beginDate != null && endDate != null) {
             sql += " AND p.create_date BETWEEN '" + beginDate + "' AND '" + endDate + "'";
         }
-        return executeNativeSql(sql);
+        sql += " LIMIT " + productSearch.getItemOnPage()
+                + " OFFSET " + productSearch.getOffset();
+
+        System.out.println("=== PRODUCT SEARCH DEBUG ===");
+        System.out.println("Search Status: " + productSearch.getStatus());
+        System.out.println("SQL Query: " + sql);
+
+        List<Product> results = executeNativeSql(sql);
+
+        System.out.println("Results count: " + results.size());
+        System.out.println("============================");
+
+        return results;
+    }
+
+    public int countProducts(ProductSearch productSearch) {
+        String sql = "SELECT COUNT(*) FROM products p WHERE 1=1";
+
+        // Convert display name to enum name if needed
+        if (productSearch.getStatus() != null && !productSearch.getStatus().isEmpty()) {
+            String statusValue = productSearch.getStatus();
+
+            // If it's a display name (like "In Order"), convert to enum name (like "ACTIVE")
+            try {
+                ProductStatus enumStatus = ProductStatus.fromDisplayName(statusValue);
+                statusValue = enumStatus.name();
+            } catch (Exception e) {
+                // If conversion fails, try to use it as enum name directly
+                try {
+                    ProductStatus.valueOf(statusValue);
+                } catch (IllegalArgumentException ex) {
+                    // Invalid status, skip filter
+                    statusValue = null;
+                }
+            }
+
+            if (statusValue != null) {
+                sql += " AND p.product_status='" + statusValue.replace("'", "''") + "'";
+            }
+        }
+
+        if (productSearch.getCategoryId() != null && productSearch.getCategoryId() != 0) {
+            sql += " AND p.category_id=" + productSearch.getCategoryId();
+        }
+        if (productSearch.getKeyword() != null && !productSearch.getKeyword().isEmpty()) {
+            String keyword = productSearch.getKeyword().toLowerCase().replace("'", "''");
+            sql += " AND (LOWER(p.name) LIKE '%" + keyword + "%' OR LOWER(p.description) LIKE '%" + keyword + "%')";
+        }
+        Date beginDate = productSearch.getBeginDate();
+        Date endDate = productSearch.getEndDate();
+        if (beginDate != null && endDate != null) {
+            sql += " AND p.create_date BETWEEN '" + beginDate + "' AND '" + endDate + "'";
+        }
+        BigInteger count = (BigInteger) em().createNativeQuery(sql).getSingleResult();
+        return count.intValue();
     }
 
     @Transactional
@@ -124,46 +193,6 @@ public class AdminProductService extends BaseService<Product> {
         return saveOrUpdate(product);
     }
 
-    public ProductSearch buildSearchModel(HttpServletRequest request) {
-        ProductSearch ps = new ProductSearch();
-        String statusParam = request.getParameter("status");
-        if (statusParam == null || statusParam.isEmpty()) {
-            ps.setStatus("In Order");
-
-        } else { ps.setStatus(mapStatusIntToString(statusParam)); }
-        String categoryParam = request.getParameter("categoryId");
-
-        if (categoryParam != null && !categoryParam.isEmpty()) {
-            ps.setCategoryId(Integer.parseInt(categoryParam));
-
-        } else { ps.setCategoryId(0); }
-
-        String keyword = request.getParameter("keyword");
-        if (keyword != null && !keyword.isEmpty()) ps.setKeyword(keyword.trim());
-        String currentPageParam = request.getParameter("currentPage");
-
-        if (currentPageParam != null && !currentPageParam.isEmpty()) {
-            ps.setCurrentPage(Integer.parseInt(currentPageParam));
-
-        } else { ps.setCurrentPage(1); }
-
-        return ps;
-    }
-
-    private String mapStatusIntToString(String statusParam) {
-        try {
-            int statusInt = Integer.parseInt(statusParam);
-            switch (statusInt) {
-                case 0: return "In Order";
-                case 1: return "Bestseller";
-                case 2: return "Out Of Stock";
-                case 3: return "On Sale";
-                case 4: return "Limited";
-                case 5: return "Just In";
-                default: return "In Order";
-            }
-        } catch (NumberFormatException e) { return statusParam; }
-    }
 
     private ProductStatus mapStatusToEnum(String status) {
         if (status == null) return ProductStatus.ACTIVE;
@@ -187,10 +216,9 @@ public class AdminProductService extends BaseService<Product> {
                     id = ((Number) row[0]).longValue();
                 }
                 if (id != null && excludeId != null && id.equals(excludeId)) continue;
-                return true; // exact (normalized) duplicate exists
+                return true;
             }
         } catch (Exception ex) {
-            System.err.println("Name conflict exact check failed: " + ex.getMessage());
         }
         return false;
     }
@@ -433,7 +461,7 @@ public class AdminProductService extends BaseService<Product> {
             ProductCreateRequest.ColorData c = request.getColors().get(cIdx);
             if (c == null || c.getImages() == null) continue;
             if (cIdx >= createdColors.size()) continue;
-            ProductColor pc = null;
+            ProductColor pc;
             if (product.getColors() != null && cIdx < product.getColors().size()) {
                 pc = product.getColors().get(cIdx);
             } else {
@@ -535,23 +563,22 @@ public class AdminProductService extends BaseService<Product> {
             default -> ".avif";
         };
         String productDirRaw = (product.getName() == null ? "product" : product.getName().trim());
-        String productDir = productDirRaw;
         String folderPath = (color.getFolderPath() != null ? color.getFolderPath() : (color.getColorName() == null ? "default" : color.getColorName()));
         String baseImageRaw = (color.getBaseImage() != null ? color.getBaseImage() : (productDirRaw + "-" + folderPath));
         String baseImage = sanitize(baseImageRaw);
         String fname = baseImage + "-" + (index + 1) + ext;
-        Path targetDir = Paths.get(uploadRoot).resolve(productDir).resolve(folderPath);
+        Path targetDir = Paths.get(uploadRoot).resolve(productDirRaw).resolve(folderPath);
         Files.createDirectories(targetDir);
         byte[] bytes = Base64.getDecoder().decode(base64);
         Files.write(targetDir.resolve(fname), bytes, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         try {
-            String encProduct = java.net.URLEncoder.encode(productDir, java.nio.charset.StandardCharsets.UTF_8.toString()).replace("+", "%20");
-            String encFolder = java.net.URLEncoder.encode(folderPath, java.nio.charset.StandardCharsets.UTF_8.toString()).replace("+", "%20");
-            String encFname = java.net.URLEncoder.encode(fname, java.nio.charset.StandardCharsets.UTF_8.toString()).replace("+", "%20");
+            String encProduct = java.net.URLEncoder.encode(productDirRaw, java.nio.charset.StandardCharsets.UTF_8).replace("+", "%20");
+            String encFolder = java.net.URLEncoder.encode(folderPath, java.nio.charset.StandardCharsets.UTF_8).replace("+", "%20");
+            String encFname = java.net.URLEncoder.encode(fname, java.nio.charset.StandardCharsets.UTF_8).replace("+", "%20");
             return "/images/products/" + encProduct + "/" + encFolder + "/" + encFname;
         } catch (Exception e) {
             // fallback: return raw path (shouldn't happen)
-            return "/images/products/" + productDir + "/" + folderPath + "/" + fname;
+            return "/images/products/" + productDirRaw + "/" + folderPath + "/" + fname;
         }
     }
 

@@ -1,6 +1,6 @@
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!-- directive của JSTL -->
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
@@ -47,7 +47,7 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-7 align-self-center">
-                        <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">List Category</h2>
+                        <h2 class="page-title text-truncate text-dark font-weight-medium mb-1">Danh sách danh mục</h2>
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                                         <div class="card card-hover">
                                             <div class="p-2 bg-primary text-center">
                                                 <h1 class="font-light text-white">2,064</h1>
-                                                <h6 class="text-white">Total Tickets</h6>
+                                                <h6 class="text-white">Tổng số</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -88,7 +88,7 @@
                                         <div class="card card-hover">
                                             <div class="p-2 bg-cyan text-center">
                                                 <h1 class="font-light text-white">1,738</h1>
-                                                <h6 class="text-white">Responded</h6>
+                                                <h6 class="text-white">Đã phản hồi</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -97,7 +97,7 @@
                                         <div class="card card-hover">
                                             <div class="p-2 bg-success text-center">
                                                 <h1 class="font-light text-white">1100</h1>
-                                                <h6 class="text-white">Resolve</h6>
+                                                <h6 class="text-white">Đã giải quyết</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -106,26 +106,27 @@
                                         <div class="card card-hover">
                                             <div class="p-2 bg-danger text-center">
                                                 <h1 class="font-light text-white">964</h1>
-                                                <h6 class="text-white">Pending</h6>
+                                                <h6 class="text-white">Đang chờ</h6>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- Column -->
                                 </div>
+                                <div class="d-flex justify-content-end mb-3">
+                                    <a href="${env}/admin/category/add" class="btn btn-success">Thêm danh mục</a>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table table-striped table-bordered no-wrap">
                                         <thead>
                                             <tr>
-                                            	<th scope="col">No.</th>
+                                            	<th scope="col">STT</th>
                                                 <th scope="col">Id</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Create by</th>
-                                                <th scope="col">Update by</th>
-                                                <th scope="col">Create date</th>
-                                                <th scope="col">Update date</th>
-                                                <th scope="col">Status</th>
-                                                <th scope="col">Description</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col">Tên</th>
+                                                <th scope="col">Ngày tạo</th>
+                                                <th scope="col">Ngày cập nhật</th>
+                                                <th scope="col">Trạng thái</th>
+                                                <th scope="col">Mô tả</th>
+                                                <th scope="col">Hành động</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -139,39 +140,39 @@
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${empty category.status || fn:toLowerCase(category.status) eq 'active'}">
-                                                            <span class="badge badge-success">Active</span>
+                                                            <span class="badge badge-success">Hoạt động</span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="badge badge-secondary">Inactive</span>
+                                                            <span class="badge badge-secondary">Không hoạt động</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
                                                 <td>
-                                                    <a href="${env}/admin/category/edit/${category.id}" class="btn btn-sm btn-primary">Edit</a>
+                                                    <a href="${env}/admin/category/edit/${category.id}" class="btn btn-sm btn-primary">Sửa</a>
                                                     <c:choose>
                                                         <c:when test="${empty category.status || fn:toLowerCase(category.status) eq 'active'}">
-                                                            <a href="${env}/admin/category/delete/${category.id}" class="btn btn-sm btn-danger" onclick="return confirm('Inactivate this category?');">Delete</a>
+                                                            <a href="${env}/admin/category/delete/${category.id}" class="btn btn-sm btn-danger" onclick="return confirm('Vô hiệu hóa danh mục này?');">Xóa</a>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <a href="${env}/admin/category/activate/${category.id}" class="btn btn-sm btn-success">Activate</a>
+                                                            <a href="${env}/admin/category/activate/${category.id}" class="btn btn-sm btn-success">Kích hoạt</a>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
                                             </tr>
                                         </c:forEach>
                                         <c:if test="${empty categories}">
-                                            <tr><td colspan="7" class="text-center">No categories found.</td></tr>
+                                            <tr><td colspan="7" class="text-center">Không tìm thấy danh mục.</td></tr>
                                         </c:if>
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                            <th>No.</th>
+                                            <th>STT</th>
                                             <th>Id</th>
-                                            <th>Name</th>
-                                            <th>Create date</th>
-                                            <th>Update date</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
+                                            <th>Tên</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Ngày cập nhật</th>
+                                            <th>Trạng thái</th>
+                                            <th>Hành động</th>
                                         </tr>
                                         </tfoot>
                                     </table>

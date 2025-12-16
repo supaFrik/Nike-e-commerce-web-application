@@ -1,6 +1,4 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
-
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -16,15 +14,15 @@
                 </div>
                 <div class="header-top-right">
                     <div class="header-links">
-                        <a href="#" class="header-link">Find a Store</a>
+                        <a href="#" class="header-link">Tìm cửa hàng</a>
                         <span class="separator">|</span>
-                        <a href="#" class="header-link">Help</a>
+                        <a href="#" class="header-link">Trợ giúp</a>
                         <span class="separator">|</span>
                         <c:choose>
                             <c:when test="${not empty currentCustomer}">
                                 <!-- Greeting + link to profile -->
                                 <a href="${env}/profile" class="header-link" aria-label="Profile">
-                                    Hi, <c:out value="${currentCustomer.username}" />
+                                    Xin Chào, <c:out value="${currentCustomer.username}" />
                                     <span class="profile-icon" aria-hidden="true">
                                         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -39,15 +37,15 @@
                                 <form id="logoutForm" action="${env}/logout" method="post" style="display:inline;">
                                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                     <button type="submit" class="header-link" style="background:none;border:none;padding:0;cursor:pointer;font-size:16px">
-                                        Sign out
+                                        Đăng xuất
                                     </button>
                                 </form>
                             </c:when>
 
                             <c:otherwise>
-                              <a href="${env}/auth" class="header-link">Join Us</a>
+                              <a href="${env}/auth" class="header-link">Tham gia</a>
                                                             <span class="separator">|</span>
-                              <a href="${env}/auth" class="header-link">Sign In</a>
+                              <a href="${env}/auth" class="header-link">Đăng nhập</a>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -68,19 +66,19 @@
                 <div class="nav-center">
                     <ul class="nav-menu">
                         <li class="nav-item">
-                            <a href="${env}/products" class="nav-link">New & Featured</a>
+                            <a href="${env}/products" class="nav-link">Mới & Nổi bật</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?category=men" class="nav-link">Men</a>
+                            <a href="${env}/products?category=men" class="nav-link">Nam</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?category=women" class="nav-link">Women</a>
+                            <a href="${env}/products?category=women" class="nav-link">Nữ</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?category=kids" class="nav-link">Kids</a>
+                            <a href="${env}/products?category=kids" class="nav-link">Trẻ em</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?sale=true" class="nav-link">Sale</a>
+                            <a href="${env}/products?sale=true" class="nav-link">Giảm giá</a>
                         </li>
                         <li class="nav-item">
                             <a href="${env}/products?category=snkrs" class="nav-link">SNKRS</a>
@@ -93,7 +91,7 @@
                         <div class="search-wrapper">
                             <!-- Updated search form -->
                             <form id="globalSearchForm" class="search-input-wrapper" action="${env}/search" method="get" role="search">
-                                <input type="text" placeholder="Search" class="search-input" id="searchInput" name="q" aria-label="Search products" value="${fn:escapeXml(param.q)}">
+                                <input type="text" placeholder="Tìm kiếm" class="search-input" id="searchInput" name="q" aria-label="Search products" value="${fn:escapeXml(param.q)}">
                                 <button type="submit" class="search-icon-btn" aria-label="Submit search" style="background:none;border:none;padding:0;cursor:pointer">
                                     <img src="${env}/images/icons/search-interface-symbol.png" alt="Search" class="search-icon" style="width: 20px;">
                                 </button>
@@ -160,19 +158,19 @@
                 
                 <ul class="mobile-nav-menu">
                     <li class="mobile-nav-item">
-                        <a href="${env}/products" class="mobile-nav-link">New & Featured</a>
+                        <a href="${env}/products" class="mobile-nav-link">Mới & Nổi bật</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?category=men" class="mobile-nav-link">Men</a>
+                        <a href="${env}/products?category=men" class="mobile-nav-link">Nam</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?category=women" class="mobile-nav-link">Women</a>
+                        <a href="${env}/products?category=women" class="mobile-nav-link">Nữ</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?category=kids" class="mobile-nav-link">Kids</a>
+                        <a href="${env}/products?category=kids" class="mobile-nav-link">Trẻ em</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?sale=true" class="mobile-nav-link">Sale</a>
+                        <a href="${env}/products?sale=true" class="mobile-nav-link">Giảm giá</a>
                     </li>
                     <li class="mobile-nav-item">
                         <a href="${env}/products?category=snkrs" class="mobile-nav-link">SNKRS</a>
@@ -190,12 +188,12 @@
                 <!-- Nike Member Section -->
                 <div class="mobile-member-section">
                     <p class="mobile-member-text">
-                        Become a Nike Member for the best products, inspiration and stories in sport. 
-                        <a href="#" style="color: #111; text-decoration: underline;">Learn more</a>
+                        Trở thành thành viên Nike để nhận những sản phẩm, cảm hứng và câu chuyện tốt nhất trong thể thao.
+                        <a href="#" style="color: #111; text-decoration: underline;">Tìm hiểu thêm</a>
                     </p>
                     <div class="mobile-member-actions">
-                        <a href="#" class="mobile-member-btn primary">Join Us</a>
-                        <a href="${env}/auth" class="mobile-member-btn secondary">Sign In</a>
+                        <a href="#" class="mobile-member-btn primary">Tham gia</a>
+                        <a href="${env}/auth" class="mobile-member-btn secondary">Đăng nhập</a>
                     </div>
                 </div>
                 
@@ -205,25 +203,25 @@
                             <svg viewBox="0 0 24 24" fill="none">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                             </svg>
-                            Help
+                            Trợ giúp
                         </a>
                         <a href="${env}/checkout" class="mobile-menu-link">
                             <svg viewBox="0 0 24 24" fill="none">
                                 <path d="M19 7h-3V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1zM10 5h4v2h-4V5zm8 15a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v11z"/>
                             </svg>
-                            Bag
+                            Giỏ hàng
                         </a>
                         <a href="#" class="mobile-menu-link">
                             <svg viewBox="0 0 24 24" fill="none">
                                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
                             </svg>
-                            Orders
+                            Đơn hàng
                         </a>
                         <a href="#" class="mobile-menu-link">
                             <svg viewBox="0 0 24 24" fill="none">
                                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                             </svg>
-                            Find a Store
+                            Tìm cửa hàng
                         </a>
                     </div>
                 </div>
