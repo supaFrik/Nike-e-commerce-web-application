@@ -1,0 +1,144 @@
+@startuml
+title Nike Feature Diagram - Payment
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "shared" {
+  abstract class BaseEntity <<MappedSuperclass>> {
+    -id: Long
+    -createDate: LocalDateTime
+    -updateDate: LocalDateTime
+  }
+}
+
+package "checkout.order" {
+  class Order <<Entity>> {
+    -subtotal: BigDecimal
+    -shippingCost: BigDecimal
+    -discount: BigDecimal
+    -total: BigDecimal
+    -orderStatus: OrderStatus
+  }
+
+  interface OrderRepository <<Repository>>
+
+  enum OrderStatus {
+    PENDING_PAYMENT
+    PAID
+    PAYMENT_FAILED
+    PROCESSING
+    SHIPPING
+    DELIVERED
+    CANCELLED
+  }
+}
+
+package "payment.enums" {
+  enum PaymentProvider {
+    VNPAY
+  }
+
+  enum PaymentStatus {
+    INIT
+    PENDING
+    SUCCESS
+    FAILED
+    CANCELLED
+    EXPIRED
+  }
+}
+
+package "payment.domain" {
+  class PaymentTransaction <<Entity>> {
+    -provider: PaymentProvider
+    -txnRef: String
+    -amount: BigDecimal
+    -status: PaymentStatus
+    -responseCode: String
+    -transactionStatus: String
+    -transactionNo: String
+    -bankCode: String
+    -payDate: LocalDateTime
+    -expireDate: LocalDateTime
+    -ipAddress: String
+    -ipnProcessed: boolean
+    -rawRequestPayload: String
+    -rawResponsePayload: String
+    -failureReason: String
+  }
+}
+
+package "payment" {
+  class VNPayProperties <<ConfigurationProperties>> {
+    -tmnCode: String
+    -hashSecret: String
+    -payUrl: String
+    -returnUrl: String
+    -ipnUrl: String
+    -apiUrl: String
+  }
+
+  interface PaymentTransactionRepository <<Repository>>
+
+  class VNPayPaymentService <<Service>>
+  class VNPaySignatureService <<Service>>
+  class VNPayPaymentController <<RestController>>
+
+  class VNPayCreatePaymentResponse <<Response>> {
+    -orderId: Long
+    -txnRef: String
+    -paymentUrl: String
+  }
+
+  class VNPayIpnResponse <<Response>> {
+    -RspCode: String
+    -Message: String
+  }
+
+  class VNPayReturnResponse <<Response>> {
+    -orderId: Long
+    -txnRef: String
+    -signatureValid: boolean
+    -responseCode: String
+    -transactionStatus: String
+    -suggestedPaymentStatus: PaymentStatus
+  }
+}
+
+BaseEntity <|-- Order
+BaseEntity <|-- PaymentTransaction
+
+PaymentTransaction "0..*" --> "1" Order : order
+
+OrderRepository ..> Order
+PaymentTransactionRepository ..> PaymentTransaction
+
+VNPayPaymentService --> VNPayProperties
+VNPayPaymentService --> VNPaySignatureService
+VNPayPaymentService --> PaymentTransactionRepository
+VNPayPaymentService --> OrderRepository
+VNPayPaymentService ..> VNPayCreatePaymentResponse
+VNPayPaymentService ..> VNPayIpnResponse
+VNPayPaymentService ..> VNPayReturnResponse
+VNPayPaymentService ..> PaymentStatus
+VNPayPaymentService ..> PaymentProvider
+
+VNPayPaymentController --> VNPayPaymentService
+VNPayPaymentController ..> VNPayCreatePaymentResponse
+VNPayPaymentController ..> VNPayIpnResponse
+VNPayPaymentController ..> VNPayReturnResponse
+
+VNPayReturnResponse ..> PaymentStatus
+Order ..> OrderStatus
+PaymentTransaction ..> PaymentProvider
+PaymentTransaction ..> PaymentStatus
+
+note bottom of VNPayPaymentService
+IPN flow is declared but not implemented yet.
+end note
+
+@enduml

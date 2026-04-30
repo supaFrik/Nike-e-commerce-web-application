@@ -1,0 +1,144 @@
+@startuml
+title Nike Feature Diagram - Identity
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "shared" {
+  abstract class BaseEntity <<MappedSuperclass>> {
+    -id: Long
+    -createDate: LocalDateTime
+    -updateDate: LocalDateTime
+  }
+
+  class SecurityConfig <<Configuration>>
+  class GlobalControllerAdvice <<ControllerAdvice>>
+}
+
+package "identity.user.enums" {
+  enum Role {
+    USER
+    ADMIN
+  }
+}
+
+package "identity.user.domain" {
+  interface UserDetails
+
+  class User <<Entity>> {
+    -username: String
+    -email: String
+    -password: String
+    -role: Role
+    -locked: Boolean
+    -enabled: Boolean
+  }
+
+  class Address <<Entity>> {
+    -id: Long
+    -recipientName: String
+    -line1: String
+    -line2: String
+    -city: String
+    -province: String
+    -country: String
+    -postalCode: String
+    -phone: String
+    -primaryAddress: boolean
+  }
+
+  class Contact <<Entity>> {
+    -name: String
+    -email: String
+    -message: String
+  }
+
+  class CustomUserPrincipal {
+    -id: Long
+    -email: String
+    -password: String
+    -authorities: Collection
+  }
+}
+
+package "identity.user.repository" {
+  interface UserRepository <<Repository>>
+  interface AddressRepository <<Repository>>
+}
+
+package "identity.user.request" {
+  interface CurrentUserProvider
+
+  class ContactForm <<Request>> {
+    -name: String
+    -email: String
+    -message: String
+  }
+
+  class UserCreateRequest <<Request>> {
+    -email: String
+    -password: String
+  }
+}
+
+package "identity.user.service" {
+  class SecurityCurrentUserProvider <<Component>>
+}
+
+package "identity.auth" {
+  class AuthController <<Controller>>
+  class SignUpService <<Service>>
+
+  class LoginRequest <<Request>> {
+    -username: String
+    -password: String
+    -email: String
+  }
+
+  class SignupForm <<Request>> {
+    -username: String
+    -email: String
+    -password: String
+    -confirmPassword: String
+  }
+}
+
+BaseEntity <|-- User
+BaseEntity <|-- Contact
+UserDetails <|.. User
+UserDetails <|.. CustomUserPrincipal
+CurrentUserProvider <|.. SecurityCurrentUserProvider
+
+User "1" o-- "0..*" Address : addresses
+Address "0..*" --> "1" User : user
+User "1" o-- "0..*" Contact : contacts
+Contact "0..*" --> "0..1" User : user
+
+UserRepository ..> User
+AddressRepository ..> Address
+
+SecurityCurrentUserProvider ..> User
+SecurityCurrentUserProvider ..> CustomUserPrincipal
+
+AuthController --> UserRepository
+AuthController ..> SignupForm
+AuthController ..> User
+AuthController ..> Role
+
+SecurityConfig --> UserRepository
+GlobalControllerAdvice --> CurrentUserProvider
+GlobalControllerAdvice ..> ContactForm
+
+note bottom of Address
+Address does not extend BaseEntity.
+It keeps a standalone id mapping.
+end note
+
+note bottom of SignUpService
+Class exists but is empty in current code.
+end note
+
+@enduml

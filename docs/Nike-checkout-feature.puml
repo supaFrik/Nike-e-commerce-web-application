@@ -1,0 +1,243 @@
+@startuml
+title Nike Feature Diagram - Checkout / Order
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "shared" {
+  abstract class BaseEntity <<MappedSuperclass>> {
+    -id: Long
+    -createDate: LocalDateTime
+    -updateDate: LocalDateTime
+  }
+
+  class GlobalExceptionHandler <<RestControllerAdvice>>
+  class ErrorResponse <<record>>
+}
+
+package "identity" {
+  class User <<Entity>> {
+    -username: String
+    -email: String
+  }
+
+  class Address <<Entity>> {
+    -id: Long
+    -recipientName: String
+    -line1: String
+    -line2: String
+    -city: String
+    -province: String
+    -country: String
+    -postalCode: String
+    -phone: String
+    -primaryAddress: boolean
+  }
+
+  interface UserRepository <<Repository>>
+  interface AddressRepository <<Repository>>
+  interface CurrentUserProvider
+}
+
+package "catalog" {
+  class Product <<Entity>> {
+    -name: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+  }
+
+  class ProductColor <<Entity>> {
+    -colorName: String
+  }
+
+  class ProductVariant <<Entity>> {
+    -sku: String
+    -size: String
+    -stock: Integer
+    -active: Boolean
+  }
+
+  interface ProductVariantRepository <<Repository>>
+}
+
+package "checkout.cart" {
+  class CartItem <<Entity>> {
+    -quantity: Integer
+  }
+
+  interface CartItemRepository <<Repository>>
+  class CartService <<Service>>
+  class CartSummaryResponse <<Response>>
+}
+
+package "checkout.order.enums" {
+  enum OrderStatus {
+    PENDING_PAYMENT
+    PAID
+    PAYMENT_FAILED
+    PROCESSING
+    SHIPPING
+    DELIVERED
+    CANCELLED
+  }
+
+  enum ShippingMethod {
+    STANDARD
+    EXPRESS
+    PICKUP
+  }
+}
+
+package "checkout.order.domain" {
+  class Order <<Entity>> {
+    -orderStatus: OrderStatus
+    -shippingMethod: ShippingMethod
+    -shippingRecipientName: String
+    -shippingPhone: String
+    -shippingLine1: String
+    -shippingLine2: String
+    -shippingCity: String
+    -shippingProvince: String
+    -shippingPostalCode: String
+    -shippingCountry: String
+    -subtotal: BigDecimal
+    -shippingCost: BigDecimal
+    -discount: BigDecimal
+    -total: BigDecimal
+  }
+
+  class OrderItem <<Entity>> {
+    -productId: Long
+    -variantId: Long
+    -sku: String
+    -productName: String
+    -size: String
+    -color: String
+    -unitPrice: BigDecimal
+    -quantity: Integer
+    -lineTotal: BigDecimal
+  }
+}
+
+package "checkout.order.repository" {
+  interface OrderRepository <<Repository>>
+  interface OrderItemRepository <<Repository>>
+}
+
+package "checkout.order.dto" {
+  class OrderItemSnapshotDto <<DTO>> {
+    -productId: Long
+    -variantId: Long
+    -sku: String
+    -productName: String
+    -size: String
+    -color: String
+    -unitPrice: BigDecimal
+    -quantity: Integer
+    -lineTotal: BigDecimal
+  }
+
+  class PlaceOrderRequest <<Request>> {
+    -shippingMethod: String
+    -note: String
+    -addressId: Long
+    -recipientName: String
+    -phone: String
+    -line1: String
+    -line2: String
+    -city: String
+    -province: String
+    -postalCode: String
+    -country: String
+  }
+
+  class PlaceOrderResponse <<Response>> {
+    -orderId: Long
+    -itemCount: Integer
+    -subtotal: BigDecimal
+    -shippingCost: BigDecimal
+    -discount: BigDecimal
+    -total: BigDecimal
+    -orderStatus: OrderStatus
+    -items: List
+  }
+}
+
+package "checkout.order" {
+  class CheckoutService <<Service>>
+  class CheckoutController <<RestController>>
+  class CheckoutPageController <<Controller>>
+  class AddressNotFoundException <<Exception>>
+  class InvalidCheckoutRequestException <<Exception>>
+  class ShippingMethodNotFoundException <<Exception>>
+  class UnauthenticatedUserAuthentication <<Exception>>
+}
+
+BaseEntity <|-- User
+BaseEntity <|-- CartItem
+BaseEntity <|-- Order
+BaseEntity <|-- OrderItem
+BaseEntity <|-- Product
+BaseEntity <|-- ProductColor
+BaseEntity <|-- ProductVariant
+
+RuntimeException <|-- AddressNotFoundException
+RuntimeException <|-- InvalidCheckoutRequestException
+RuntimeException <|-- ShippingMethodNotFoundException
+RuntimeException <|-- UnauthenticatedUserAuthentication
+
+CartItem "0..*" --> "1" User : user
+CartItem "0..*" --> "1" ProductVariant : variant
+ProductVariant "0..*" --> "1" ProductColor : color
+ProductColor "0..*" --> "1" Product : product
+User "1" o-- "0..*" Order : orders
+Order "0..*" --> "1" User : user
+Order "1" o-- "0..*" OrderItem : items
+OrderItem "0..*" --> "1" Order : order
+Address "0..*" --> "1" User : user
+
+CartItemRepository ..> CartItem
+ProductVariantRepository ..> ProductVariant
+OrderRepository ..> Order
+OrderItemRepository ..> OrderItem
+UserRepository ..> User
+AddressRepository ..> Address
+
+CheckoutService --> CartItemRepository
+CheckoutService --> ProductVariantRepository
+CheckoutService --> OrderRepository
+CheckoutService --> UserRepository
+CheckoutService --> CurrentUserProvider
+CheckoutService --> AddressRepository
+CheckoutService ..> PlaceOrderRequest
+CheckoutService ..> PlaceOrderResponse
+CheckoutService ..> OrderItemSnapshotDto
+CheckoutService ..> InvalidCheckoutRequestException
+CheckoutService ..> UnauthenticatedUserAuthentication
+
+CheckoutController --> CheckoutService
+CheckoutController ..> PlaceOrderRequest
+CheckoutController ..> PlaceOrderResponse
+
+CheckoutPageController --> CartService
+CheckoutPageController --> CurrentUserProvider
+CheckoutPageController --> UserRepository
+CheckoutPageController ..> CartSummaryResponse
+CheckoutPageController ..> User
+CheckoutPageController ..> Address
+CheckoutPageController ..> ShippingMethod
+
+GlobalExceptionHandler ..> ErrorResponse
+GlobalExceptionHandler ..> InvalidCheckoutRequestException
+
+PlaceOrderResponse "1" o-- "0..*" OrderItemSnapshotDto
+
+note bottom of AddressNotFoundException
+Exists in code but current CheckoutService
+throws InvalidCheckoutRequestException instead.
+end note
+
+@enduml

@@ -116,7 +116,7 @@
 }
 
 @media (max-width: 768px) {
-    .featured-section {
+    .featured {
         padding: 40px 16px;
     }
     
@@ -135,7 +135,7 @@
 }
 
 @media (max-width: 480px) {
-    .featured-section {
+    .featured {
         padding: 30px 12px;
     }
     
@@ -162,7 +162,7 @@
 }
 
 @media (max-width: 768px) {
-    .shop-by-sport {
+    .shop-by-sport-section {
         padding: 40px 16px;
     }
     
@@ -171,18 +171,18 @@
         gap: 16px;
     }
     
-    .sport-section-title {
+    .shop-by-sport-header .section-title {
         font-size: var(--font-size-l);
         margin-bottom: 20px;
     }
 }
 
 @media (max-width: 480px) {
-    .shop-by-sport {
+    .shop-by-sport-section {
         padding: 30px 12px;
     }
     
-    .sport-section-title {
+    .shop-by-sport-header .section-title {
         font-size: var(--font-size-m);
         margin-bottom: 15px;
     }
@@ -201,7 +201,7 @@
 }
 
 @media (max-width: 768px) {
-    .shop-running {
+    .shop-running-section {
         padding: 40px 16px;
     }
     
@@ -210,18 +210,18 @@
         gap: 16px;
     }
     
-    .running-section-title {
+    .shop-running-section .section-title {
         font-size: var(--font-size-l);
         margin-bottom: 20px;
     }
 }
 
 @media (max-width: 480px) {
-    .shop-running {
+    .shop-running-section {
         padding: 30px 12px;
     }
     
-    .running-section-title {
+    .shop-running-section .section-title {
         font-size: var(--font-size-m);
         margin-bottom: 15px;
     }
@@ -236,7 +236,7 @@
 }
 
 @media (max-width: 768px) {
-    .shop-icons {
+    .shop-icons-section {
         padding: 40px 16px;
     }
     
@@ -245,14 +245,14 @@
         gap: 12px;
     }
     
-    .icons-section-title {
+    .shop-icons-section .section-title {
         font-size: var(--font-size-l);
         margin-bottom: 20px;
     }
 }
 
 @media (max-width: 480px) {
-    .shop-icons {
+    .shop-icons-section {
         padding: 30px 12px;
     }
     
@@ -261,7 +261,7 @@
         gap: 10px;
     }
     
-    .icons-section-title {
+    .shop-icons-section .section-title {
         font-size: var(--font-size-m);
         margin-bottom: 15px;
     }
@@ -278,7 +278,7 @@
         right: -100%;
     }
     
-    .cart-sidebar.open {
+    .cart-sidebar.active {
         right: 0;
     }
     

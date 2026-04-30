@@ -1,0 +1,764 @@
+:root {
+  --nike-black: #0b0b0b;
+  --nike-ink: #141414;
+  --nike-red: #d81f26;
+  --nike-red-soft: rgba(216, 31, 38, 0.10);
+  --nike-surface: #ffffff;
+  --nike-surface-alt: #f6f6f6;
+  --nike-line: rgba(17, 17, 17, 0.10);
+  --nike-line-strong: rgba(17, 17, 17, 0.18);
+  --nike-shadow: 0 24px 80px rgba(15, 15, 15, 0.10);
+  --nike-shadow-soft: 0 12px 30px rgba(15, 15, 15, 0.06);
+  --nike-radius-xl: 28px;
+  --nike-radius-lg: 20px;
+  --nike-radius-md: 16px;
+  --nike-radius-sm: 12px;
+}
+
+html, body {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(216, 31, 38, 0.05), transparent 30%),
+    linear-gradient(180deg, #fafafa 0%, #ffffff 42%, #f7f7f7 100%);
+  color: #111;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, "Plus Jakarta Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.nike-admin-app {
+  display: grid;
+  grid-template-columns: 292px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.nike-admin-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 22px 18px 18px;
+  color: #fff;
+  background:
+    radial-gradient(circle at top right, rgba(216, 31, 38, 0.12), transparent 34%),
+    linear-gradient(180deg, #0a0a0a 0%, #151515 45%, #0d0d0d 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  overflow: auto;
+}
+
+.nike-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 10px 22px;
+}
+
+.nike-brand img {
+  width: 52px;
+  height: 52px;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #fff;
+  padding: 7px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22);
+}
+
+.nike-brand-mark {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.nike-brand-sub {
+  margin-top: 4px;
+  font-size: 0.70rem;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.nike-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nike-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nike-nav-label {
+  padding: 0 12px 2px;
+  font-size: 0.68rem;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.nike-nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 14px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #fff;
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.nike-nav-link strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.nike-nav-link small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.nike-nav-link:hover {
+  transform: translateX(2px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.nike-nav-link.active {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.03));
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.nike-shell-footer {
+  margin-top: auto;
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nike-shell-footer strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.nike-shell-footer p {
+  margin: 0;
+  line-height: 1.55;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.nike-content {
+  min-width: 0;
+}
+
+.nike-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 28px;
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--nike-line);
+}
+
+.nike-breadcrumb {
+  margin-bottom: 7px;
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: #757575;
+}
+
+.nike-topbar h1 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2vw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.nike-topbar-subtitle {
+  margin: 8px 0 0;
+  color: #5f5f5f;
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.nike-topbar .actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nike-btn,
+.nike-chip,
+.nike-input,
+.nike-select,
+.nike-textarea,
+.nike-card {
+  border-radius: var(--nike-radius-md);
+}
+
+.nike-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid transparent;
+  background: #fff;
+  color: #111;
+  font-size: 0.92rem;
+  font-weight: 700;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+  box-shadow: var(--nike-shadow-soft);
+}
+
+.nike-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--nike-shadow);
+}
+
+.nike-btn.black {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.nike-btn.red {
+  background: var(--nike-red);
+  color: #fff;
+  border-color: var(--nike-red);
+}
+
+.nike-btn.ghost {
+  background: #fff;
+  border-color: var(--nike-line-strong);
+}
+
+.nike-main {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.nike-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--nike-radius-xl);
+  background:
+    radial-gradient(circle at top right, rgba(216, 31, 38, 0.20), transparent 28%),
+    linear-gradient(135deg, #0f0f10 0%, #171717 52%, #ffffff 52%, #ffffff 100%);
+  color: #fff;
+  box-shadow: var(--nike-shadow);
+}
+
+.nike-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(240px, 0.9fr);
+  gap: 24px;
+  padding: 28px;
+}
+
+.nike-hero h2,
+.nike-section-title {
+  margin: 0;
+  letter-spacing: -0.03em;
+}
+
+.nike-hero h2 {
+  font-size: clamp(1.8rem, 2.8vw, 3rem);
+}
+
+.nike-hero p {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.6;
+}
+
+.nike-hero-panel {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(8px);
+}
+
+.nike-kicker {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.nike-hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.nike-mini-stat {
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nike-mini-stat strong {
+  display: block;
+  font-size: 1.35rem;
+  margin-top: 6px;
+}
+
+.nike-mini-stat span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+}
+
+.nike-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nike-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nike-section-head h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.nike-section-head p {
+  margin: 7px 0 0;
+  color: #656565;
+}
+
+.nike-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.nike-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.nike-card {
+  background: var(--nike-surface);
+  border: 1px solid var(--nike-line);
+  box-shadow: var(--nike-shadow-soft);
+}
+
+.nike-card.pad {
+  padding: 20px;
+}
+
+.nike-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.nike-card-head h4,
+.nike-card-head h5 {
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.nike-card-head p {
+  margin: 6px 0 0;
+  color: #666;
+}
+
+.nike-stat {
+  padding: 18px;
+  border-radius: var(--nike-radius-lg);
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfb 100%);
+  border: 1px solid var(--nike-line);
+  box-shadow: var(--nike-shadow-soft);
+}
+
+.nike-stat strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.65rem;
+  letter-spacing: -0.03em;
+}
+
+.nike-stat span {
+  color: #666;
+  font-size: 0.88rem;
+}
+
+.help {
+  margin-top: 8px;
+  color: #6a6a6a;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.nike-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--nike-line);
+  background: #fff;
+}
+
+.nike-pill.black {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.nike-pill.red {
+  background: rgba(216,31,38,.10);
+  color: var(--nike-red);
+  border-color: rgba(216,31,38,.18);
+}
+
+.nike-pill.soft {
+  background: #f6f6f6;
+  color: #444;
+}
+
+.nike-input,
+.nike-select,
+.nike-textarea {
+  width: 100%;
+  border: 1px solid var(--nike-line-strong);
+  background: #fff;
+  color: #111;
+  padding: 13px 14px;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.nike-input:focus,
+.nike-select:focus,
+.nike-textarea:focus {
+  border-color: rgba(216, 31, 38, 0.45);
+  box-shadow: 0 0 0 4px rgba(216, 31, 38, 0.08);
+}
+
+.nike-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nike-field label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #2a2a2a;
+}
+
+.nike-field .help {
+  font-size: 0.8rem;
+  color: #777;
+  line-height: 1.45;
+}
+
+.nike-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--nike-radius-lg);
+  border: 1px solid var(--nike-line);
+  background: #fff;
+  box-shadow: var(--nike-shadow-soft);
+}
+
+.nike-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.nike-table thead th {
+  text-align: left;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #6d6d6d;
+  background: #fafafa;
+  border-bottom: 1px solid var(--nike-line);
+  padding: 14px 16px;
+}
+
+.nike-table tbody td {
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.06);
+  vertical-align: middle;
+}
+
+.nike-table tbody tr:hover {
+  background: #fcfcfc;
+}
+
+.nike-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nike-badge.success { background: rgba(34,197,94,.10); color: #15803d; }
+.nike-badge.warn { background: rgba(245,158,11,.12); color: #b45309; }
+.nike-badge.danger { background: rgba(220,38,38,.10); color: #b91c1c; }
+.nike-badge.neutral { background: rgba(17,17,17,.06); color: #444; }
+
+.nike-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.nike-toolbar .left,
+.nike-toolbar .right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.nike-separator {
+  height: 1px;
+  background: var(--nike-line);
+}
+
+.nike-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.nike-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--nike-line-strong);
+  background: #fff;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.nike-chip.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.nike-panel-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.9fr);
+  gap: 20px;
+}
+
+.nike-panel {
+  padding: 20px;
+  border-radius: var(--nike-radius-lg);
+  border: 1px solid var(--nike-line);
+  background: #fff;
+  box-shadow: var(--nike-shadow-soft);
+}
+
+.nike-panel.sticky {
+  position: sticky;
+  top: 92px;
+}
+
+.nike-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.nike-product-card {
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid var(--nike-line);
+  background: #fff;
+  box-shadow: var(--nike-shadow-soft);
+}
+
+.nike-product-thumb {
+  height: 180px;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(216,31,38,.22), transparent 24%),
+    linear-gradient(135deg, #111 0%, #1b1b1b 50%, #f4f4f4 50%, #f4f4f4 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 16px;
+  color: #fff;
+}
+
+.nike-product-thumb .label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.nike-product-body {
+  padding: 16px;
+}
+
+.nike-product-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.nike-product-meta {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.84rem;
+  color: #666;
+}
+
+.nike-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.nike-form-grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.nike-form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1200px) {
+  .nike-hero-inner,
+  .nike-panel-grid,
+  .nike-grid-4,
+  .nike-grid-2,
+  .nike-form-grid.three {
+    grid-template-columns: 1fr 1fr;
+  }
+  .nike-panel.sticky {
+    position: static;
+  }
+}
+
+@media (max-width: 1100px) {
+  .nike-admin-app {
+    grid-template-columns: 1fr;
+  }
+  .nike-admin-sidebar {
+    position: relative;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nike-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .nike-shell-footer {
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 840px) {
+  .nike-topbar,
+  .nike-main {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  .nike-hero-inner,
+  .nike-grid-4,
+  .nike-grid-2,
+  .nike-panel-grid,
+  .nike-form-grid,
+  .nike-form-grid.three {
+    grid-template-columns: 1fr;
+  }
+  .nike-nav {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .nike-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .nike-topbar .actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .nike-btn {
+    width: 100%;
+  }
+}
