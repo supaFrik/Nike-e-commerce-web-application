@@ -125,7 +125,7 @@ Known challenges and next improvements:
 ### 1. Clone the project
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/supaFrik/Nike-e-commerce-web-application
 cd "Nike Ecommerce Web Application"
 ```
 
