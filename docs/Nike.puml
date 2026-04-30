@@ -1,0 +1,829 @@
+@startuml
+title Nike Ecommerce Web Application - Current Class Diagram
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "vn.demo.nike" {
+  class NikeApplication <<SpringBootApplication>>
+}
+
+package "shared" {
+  abstract class BaseEntity <<MappedSuperclass>> {
+    -id: Long
+    -createDate: LocalDateTime
+    -updateDate: LocalDateTime
+  }
+
+  class SecurityConfig <<Configuration>>
+  class GlobalControllerAdvice <<ControllerAdvice>>
+  class GlobalExceptionHandler <<RestControllerAdvice>>
+  class ErrorResponse <<record>> {
+    +status: int
+    +message: String
+    +timestamp: long
+  }
+}
+
+package "features.home.api" {
+  class HomeController <<Controller>>
+}
+
+package "features.admin.api" {
+  class AdminPageController <<Controller>>
+}
+
+package "features.catalog.category" {
+  class Category <<Entity>> {
+    -name: String
+  }
+
+  interface CategoryRepository <<Repository>> {
+    +findAllByOrderByNameAsc()
+  }
+
+  class CategoryService <<Service>>
+
+  class CategoryView <<DTO>> {
+    -id: Long
+    -name: String
+  }
+
+  class CategoryNotFoundException <<Exception>>
+}
+
+package "features.catalog.product.domain.enums" {
+  enum ProductStatus {
+    ACTIVE
+    DRAFT
+    FEW_LEFT
+    OUT_OF_STOCK
+    DISCONTINUED
+  }
+
+  enum InventoryStatus {
+    IN_ORDER
+    FEW_LEFT
+    OUT_OF_STOCK
+    DISCONTINUED
+  }
+
+  enum ProductBadge {
+    BESTSELLER
+    NEW_ARRIVAL
+    LIMITED_EDITION
+    TRENDING
+  }
+}
+
+package "features.catalog.product.domain" {
+  class Product <<Entity>> {
+    -name: String
+    -description: String
+    -type: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+    -productStatus: ProductStatus
+  }
+
+  class ProductColor <<Entity>> {
+    -colorName: String
+    -hexCode: String
+    -displayOrder: Integer
+  }
+
+  class ProductImage <<Entity>> {
+    -path: String
+    -title: String
+    -altText: String
+    -isMainForColor: Boolean
+    -orderIndex: Integer
+  }
+
+  class ProductVariant <<Entity>> {
+    -sku: String
+    -size: String
+    -stock: Integer
+    -active: Boolean
+    -inventoryStatus: InventoryStatus
+  }
+}
+
+package "features.catalog.product.repository" {
+  interface ProductRepository <<Repository>> {
+    +findByCategory_Id(id)
+    +findByCategory_Id(id, sort)
+    +findProductList(categoryId, pageable)
+  }
+
+  interface ProductVariantRepository <<Repository>> {
+    +findByIdForUpdate(id)
+  }
+}
+
+package "features.catalog.product.request" {
+  class ProductCreateRequest <<Request>> {
+    -name: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+    -description: String
+    -type: String
+    -categoryId: Long
+    -productStatus: ProductStatus
+    -colors: List
+  }
+
+  class ProductColorCreateRequest <<Request>> {
+    -colorName: String
+    -hexCode: String
+    -displayOrder: Integer
+    -images: List
+    -variants: List
+  }
+
+  class ProductImageCreateRequest <<Request>> {
+    -imgUrl: String
+    -title: String
+    -altText: String
+    -isMainForColor: Boolean
+    -orderIndex: Integer
+  }
+
+  class ProductVariantCreateRequest <<Request>> {
+    -sku: String
+    -size: String
+    -stock: Integer
+    -active: Boolean
+  }
+
+  class ProductDetailResponse <<Response>> {
+    -id: Long
+    -name: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+    -description: String
+    -categoryName: String
+    -productStatus: String
+    -colors: List
+  }
+
+  class ProductColorDetailResponse <<Response>> {
+    -id: Long
+    -colorName: String
+    -hexCode: String
+    -displayOrder: Integer
+    -images: List
+    -variants: List
+  }
+
+  class ProductImageDetailResponse <<Response>> {
+    -id: Long
+    -path: String
+    -title: String
+    -altText: String
+    -isMainForColor: Boolean
+    -orderIndex: Integer
+  }
+
+  class ProductVariantDetailResponse <<Response>> {
+    -id: Long
+    -sku: String
+    -size: String
+    -stock: Integer
+    -active: Boolean
+  }
+
+  class ProductListItemView <<Projection>> {
+    -id: Long
+    -name: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+    -hasSale: boolean
+    -status: ProductStatus
+    -type: String
+    -categoryName: String
+    -heroImg: String
+    -colorCount: int
+  }
+
+  class ProductSummaryResponse <<Response>> {
+    -id: Long
+    -name: String
+    -price: BigDecimal
+    -categoryName: String
+    -thumbnailUrl: String
+  }
+}
+
+package "features.catalog.product.service" {
+  class ProductService <<Service>>
+  class ProductListService <<Service>>
+  class ProductDetailPageService <<Service>>
+}
+
+package "features.catalog.product.api" {
+  class ProductListController <<Controller>>
+  class ProductDetailController <<Controller>>
+}
+
+package "features.catalog.product.exception" {
+  class ProductNotFoundException <<Exception>>
+  class InvalidProductStatusException <<Exception>>
+}
+
+package "features.admin.product" {
+  class AdminProductController <<RestController>>
+  class AdminProductService <<Service>>
+  class InvalidProductColorException <<Exception>>
+  class InvalidSalePriceException <<Exception>>
+  class InvalidSizeException <<Exception>>
+}
+
+package "features.identity.user.domain.enums" {
+  enum Role {
+    USER
+    ADMIN
+  }
+}
+
+package "features.identity.user.domain" {
+  interface UserDetails
+
+  class User <<Entity>> {
+    -username: String
+    -email: String
+    -password: String
+    -role: Role
+    -locked: Boolean
+    -enabled: Boolean
+  }
+
+  class Address <<Entity>> {
+    -id: Long
+    -recipientName: String
+    -line1: String
+    -line2: String
+    -city: String
+    -province: String
+    -country: String
+    -postalCode: String
+    -phone: String
+    -primaryAddress: boolean
+  }
+
+  class Contact <<Entity>> {
+    -name: String
+    -email: String
+    -message: String
+  }
+
+  class CustomUserPrincipal {
+    -id: Long
+    -email: String
+    -password: String
+    -authorities: Collection
+  }
+}
+
+package "features.identity.user.repository" {
+  interface UserRepository <<Repository>> {
+    +findByEmail(username)
+    +existsByEmail(email)
+  }
+
+  interface AddressRepository <<Repository>> {
+    +findByIdAndUser_Id(id, userId)
+    +findByUser_IdAndPrimaryAddressTrue(userId)
+  }
+}
+
+package "features.identity.user.request" {
+  interface CurrentUserProvider
+
+  class ContactForm <<Request>> {
+    -name: String
+    -email: String
+    -message: String
+  }
+
+  class UserCreateRequest <<Request>> {
+    -email: String
+    -password: String
+  }
+}
+
+package "features.identity.user.service" {
+  class SecurityCurrentUserProvider <<Component>>
+}
+
+package "features.identity.auth" {
+  class AuthController <<Controller>>
+  class SignUpService <<Service>>
+
+  class LoginRequest <<Request>> {
+    -username: String
+    -password: String
+    -email: String
+  }
+
+  class SignupForm <<Request>> {
+    -username: String
+    -email: String
+    -password: String
+    -confirmPassword: String
+  }
+}
+
+package "features.checkout.cart" {
+  class CartItem <<Entity>> {
+    -quantity: Integer
+  }
+
+  interface CartItemRepository <<Repository>> {
+    +findByUser_Id(userId)
+    +findByIdAndUser_Id(cartItemId, userId)
+    +findByUser_IdAndVariant_Id(userId, variantId)
+    +sumQuantityByUser_Id(userId)
+  }
+
+  class CartService <<Service>>
+  class CartController <<RestController>>
+  class CartPageController <<Controller>>
+
+  class AddToCartRequest <<Request>> {
+    -variantId: Long
+    -quantity: Integer
+  }
+
+  class UpdateCartItemQuantityRequest <<Request>> {
+    -quantity: Integer
+  }
+
+  class AddToCartResponse <<Response>> {
+    -success: boolean
+    -message: String
+    -itemCount: int
+  }
+
+  class CartCountResponse <<Response>> {
+    -itemCount: int
+  }
+
+  class CartItemViewResponse <<Response>> {
+    -cartItemId: Long
+    -productId: Long
+    -productName: String
+    -categoryName: String
+    -imageUrl: String
+    -colorName: String
+    -size: String
+    -unitPrice: BigDecimal
+    -quantity: Integer
+    -lineTotal: BigDecimal
+    -stock: Integer
+    -active: Boolean
+  }
+
+  class CartSummaryResponse <<Response>> {
+    -items: List
+    -itemCount: int
+    -subtotal: BigDecimal
+    -discount: BigDecimal
+    -total: BigDecimal
+  }
+
+  class CartItemNotFoundException <<Exception>>
+  class InactiveVariantException <<Exception>>
+  class InsufficientStockException <<Exception>>
+  class InvalidCartQuantityException <<Exception>>
+  class UnauthenticatedUserException <<Exception>>
+  class VariantNotFoundException <<Exception>>
+}
+
+package "features.checkout.order.domain.enums" {
+  enum OrderStatus {
+    PENDING_PAYMENT
+    PAID
+    PAYMENT_FAILED
+    PROCESSING
+    SHIPPING
+    DELIVERED
+    CANCELLED
+  }
+
+  enum ShippingMethod {
+    STANDARD
+    EXPRESS
+    PICKUP
+  }
+}
+
+package "features.checkout.order.domain" {
+  class Order <<Entity>> {
+    -orderStatus: OrderStatus
+    -shippingMethod: ShippingMethod
+    -shippingRecipientName: String
+    -shippingPhone: String
+    -shippingLine1: String
+    -shippingLine2: String
+    -shippingCity: String
+    -shippingProvince: String
+    -shippingPostalCode: String
+    -shippingCountry: String
+    -subtotal: BigDecimal
+    -shippingCost: BigDecimal
+    -discount: BigDecimal
+    -total: BigDecimal
+  }
+
+  class OrderItem <<Entity>> {
+    -productId: Long
+    -variantId: Long
+    -sku: String
+    -productName: String
+    -size: String
+    -color: String
+    -unitPrice: BigDecimal
+    -quantity: Integer
+    -lineTotal: BigDecimal
+  }
+}
+
+package "features.checkout.order.repository" {
+  interface OrderRepository <<Repository>> {
+    +findByUser_IdOrderByCreateDateDesc(userId)
+    +findByIdAndUser_Id(orderId, userId)
+  }
+
+  interface OrderItemRepository <<Repository>>
+}
+
+package "features.checkout.order.dto" {
+  class OrderItemSnapshotDto <<DTO>> {
+    -productId: Long
+    -variantId: Long
+    -sku: String
+    -productName: String
+    -size: String
+    -color: String
+    -unitPrice: BigDecimal
+    -quantity: Integer
+    -lineTotal: BigDecimal
+  }
+
+  class PlaceOrderRequest <<Request>> {
+    -shippingMethod: String
+    -note: String
+    -addressId: Long
+    -recipientName: String
+    -phone: String
+    -line1: String
+    -line2: String
+    -city: String
+    -province: String
+    -postalCode: String
+    -country: String
+  }
+
+  class PlaceOrderResponse <<Response>> {
+    -orderId: Long
+    -itemCount: Integer
+    -subtotal: BigDecimal
+    -shippingCost: BigDecimal
+    -discount: BigDecimal
+    -total: BigDecimal
+    -orderStatus: OrderStatus
+    -items: List
+  }
+}
+
+package "features.checkout.order" {
+  class CheckoutService <<Service>>
+  class CheckoutController <<RestController>>
+  class CheckoutPageController <<Controller>>
+  class AddressNotFoundException <<Exception>>
+  class InvalidCheckoutRequestException <<Exception>>
+  class ShippingMethodNotFoundException <<Exception>>
+  class UnauthenticatedUserAuthentication <<Exception>>
+}
+
+package "features.payment.domain.enums" {
+  enum PaymentProvider {
+    VNPAY
+  }
+
+  enum PaymentStatus {
+    INIT
+    PENDING
+    SUCCESS
+    FAILED
+    CANCELLED
+    EXPIRED
+  }
+}
+
+package "features.payment.domain" {
+  class PaymentTransaction <<Entity>> {
+    -provider: PaymentProvider
+    -txnRef: String
+    -amount: BigDecimal
+    -status: PaymentStatus
+    -responseCode: String
+    -transactionStatus: String
+    -transactionNo: String
+    -bankCode: String
+    -payDate: LocalDateTime
+    -expireDate: LocalDateTime
+    -ipAddress: String
+    -ipnProcessed: boolean
+    -rawRequestPayload: String
+    -rawResponsePayload: String
+    -failureReason: String
+  }
+}
+
+package "features.payment" {
+  class VNPayProperties <<ConfigurationProperties>> {
+    -tmnCode: String
+    -hashSecret: String
+    -payUrl: String
+    -returnUrl: String
+    -ipnUrl: String
+    -apiUrl: String
+  }
+
+  interface PaymentTransactionRepository <<Repository>> {
+    +findByTxnRef(txnRef)
+  }
+
+  class VNPayPaymentService <<Service>>
+  class VNPaySignatureService <<Service>>
+  class VNPayPaymentController <<RestController>>
+
+  class VNPayCreatePaymentResponse <<Response>> {
+    -orderId: Long
+    -txnRef: String
+    -paymentUrl: String
+  }
+
+  class VNPayIpnResponse <<Response>> {
+    -RspCode: String
+    -Message: String
+  }
+
+  class VNPayReturnResponse <<Response>> {
+    -orderId: Long
+    -txnRef: String
+    -signatureValid: boolean
+    -responseCode: String
+    -transactionStatus: String
+    -suggestedPaymentStatus: PaymentStatus
+  }
+}
+
+' Inheritance and implementation
+BaseEntity <|-- Category
+BaseEntity <|-- Product
+BaseEntity <|-- ProductColor
+BaseEntity <|-- ProductImage
+BaseEntity <|-- ProductVariant
+BaseEntity <|-- User
+BaseEntity <|-- Contact
+BaseEntity <|-- CartItem
+BaseEntity <|-- Order
+BaseEntity <|-- OrderItem
+BaseEntity <|-- PaymentTransaction
+
+UserDetails <|.. User
+UserDetails <|.. CustomUserPrincipal
+CurrentUserProvider <|.. SecurityCurrentUserProvider
+
+RuntimeException <|-- CategoryNotFoundException
+RuntimeException <|-- ProductNotFoundException
+RuntimeException <|-- InvalidProductStatusException
+RuntimeException <|-- InvalidProductColorException
+RuntimeException <|-- InvalidSalePriceException
+RuntimeException <|-- InvalidSizeException
+RuntimeException <|-- CartItemNotFoundException
+RuntimeException <|-- InactiveVariantException
+RuntimeException <|-- InsufficientStockException
+RuntimeException <|-- InvalidCartQuantityException
+RuntimeException <|-- UnauthenticatedUserException
+RuntimeException <|-- VariantNotFoundException
+RuntimeException <|-- AddressNotFoundException
+RuntimeException <|-- InvalidCheckoutRequestException
+RuntimeException <|-- ShippingMethodNotFoundException
+RuntimeException <|-- UnauthenticatedUserAuthentication
+
+' Entity relationships
+Category "1" o-- "0..*" Product : products
+Product "0..*" --> "1" Category : category
+Product "1" o-- "0..*" ProductColor : colors
+ProductColor "0..*" --> "1" Product : product
+ProductColor "1" o-- "0..*" ProductImage : images
+ProductImage "0..*" --> "1" ProductColor : color
+ProductColor "1" o-- "0..*" ProductVariant : variants
+ProductVariant "0..*" --> "1" ProductColor : color
+Product "0..*" --> "0..1" User : createdBy
+Product "0..*" --> "0..1" User : updatedBy
+
+User "1" o-- "0..*" Address : addresses
+Address "0..*" --> "1" User : user
+User "1" o-- "0..*" Contact : contacts
+Contact "0..*" --> "0..1" User : user
+User "1" o-- "0..*" CartItem : cartItems
+CartItem "0..*" --> "1" User : user
+CartItem "0..*" --> "1" ProductVariant : variant
+User "1" o-- "0..*" Order : orders
+Order "0..*" --> "1" User : user
+Order "1" o-- "0..*" OrderItem : items
+OrderItem "0..*" --> "1" Order : order
+PaymentTransaction "0..*" --> "1" Order : order
+
+' Repository dependencies
+CategoryRepository ..> Category
+ProductRepository ..> Product
+ProductRepository ..> ProductListItemView
+ProductVariantRepository ..> ProductVariant
+UserRepository ..> User
+AddressRepository ..> Address
+CartItemRepository ..> CartItem
+OrderRepository ..> Order
+OrderItemRepository ..> OrderItem
+PaymentTransactionRepository ..> PaymentTransaction
+
+' Service dependencies
+CategoryService --> CategoryRepository
+CategoryService ..> CategoryView
+CategoryService ..> CategoryNotFoundException
+
+ProductService --> ProductRepository
+ProductService ..> ProductSummaryResponse
+ProductService ..> ProductDetailResponse
+ProductService ..> ProductColorDetailResponse
+ProductService ..> ProductImageDetailResponse
+ProductService ..> ProductVariantDetailResponse
+ProductService ..> ProductNotFoundException
+
+ProductListService --> ProductRepository
+ProductListService ..> ProductListItemView
+
+ProductDetailPageService --> ProductRepository
+ProductDetailPageService ..> ProductDetailResponse
+ProductDetailPageService ..> ProductColorDetailResponse
+ProductDetailPageService ..> ProductImageDetailResponse
+ProductDetailPageService ..> ProductVariantDetailResponse
+ProductDetailPageService ..> ProductNotFoundException
+
+AdminProductService --> ProductRepository
+AdminProductService --> CategoryRepository
+AdminProductService ..> ProductCreateRequest
+AdminProductService ..> ProductDetailResponse
+AdminProductService ..> ProductColorCreateRequest
+AdminProductService ..> ProductImageCreateRequest
+AdminProductService ..> ProductVariantCreateRequest
+AdminProductService ..> InvalidProductColorException
+AdminProductService ..> InvalidSalePriceException
+AdminProductService ..> InvalidSizeException
+AdminProductService ..> CategoryNotFoundException
+
+CartService --> CartItemRepository
+CartService --> ProductVariantRepository
+CartService --> CurrentUserProvider
+CartService --> UserRepository
+CartService ..> AddToCartRequest
+CartService ..> UpdateCartItemQuantityRequest
+CartService ..> AddToCartResponse
+CartService ..> CartCountResponse
+CartService ..> CartItemViewResponse
+CartService ..> CartSummaryResponse
+CartService ..> InvalidCartQuantityException
+CartService ..> UnauthenticatedUserException
+CartService ..> VariantNotFoundException
+CartService ..> InactiveVariantException
+CartService ..> InsufficientStockException
+CartService ..> CartItemNotFoundException
+
+CheckoutService --> CartItemRepository
+CheckoutService --> ProductVariantRepository
+CheckoutService --> OrderRepository
+CheckoutService --> UserRepository
+CheckoutService --> CurrentUserProvider
+CheckoutService --> AddressRepository
+CheckoutService ..> PlaceOrderRequest
+CheckoutService ..> PlaceOrderResponse
+CheckoutService ..> OrderItemSnapshotDto
+CheckoutService ..> InvalidCheckoutRequestException
+CheckoutService ..> UnauthenticatedUserAuthentication
+
+VNPayPaymentService --> VNPayProperties
+VNPayPaymentService --> VNPaySignatureService
+VNPayPaymentService --> PaymentTransactionRepository
+VNPayPaymentService --> OrderRepository
+VNPayPaymentService ..> VNPayCreatePaymentResponse
+VNPayPaymentService ..> VNPayIpnResponse
+VNPayPaymentService ..> VNPayReturnResponse
+VNPayPaymentService ..> PaymentTransaction
+VNPayPaymentService ..> PaymentStatus
+VNPayPaymentService ..> PaymentProvider
+
+SecurityCurrentUserProvider ..> CustomUserPrincipal
+SecurityCurrentUserProvider ..> User
+
+' Controller dependencies
+ProductListController --> ProductListService
+ProductListController --> CategoryService
+ProductListController ..> ProductListItemView
+ProductListController ..> CategoryView
+
+ProductDetailController --> ProductDetailPageService
+ProductDetailController ..> ProductDetailResponse
+
+AdminProductController --> AdminProductService
+AdminProductController ..> ProductCreateRequest
+AdminProductController ..> ProductDetailResponse
+
+AuthController --> UserRepository
+AuthController ..> SignupForm
+AuthController ..> User
+AuthController ..> Role
+
+CartController --> CartService
+CartController ..> AddToCartRequest
+CartController ..> UpdateCartItemQuantityRequest
+CartController ..> AddToCartResponse
+CartController ..> CartCountResponse
+CartController ..> CartSummaryResponse
+
+CartPageController --> CartService
+CartPageController ..> CartSummaryResponse
+
+CheckoutController --> CheckoutService
+CheckoutController ..> PlaceOrderRequest
+CheckoutController ..> PlaceOrderResponse
+
+CheckoutPageController --> CartService
+CheckoutPageController --> CurrentUserProvider
+CheckoutPageController --> UserRepository
+CheckoutPageController ..> CartSummaryResponse
+CheckoutPageController ..> User
+CheckoutPageController ..> Address
+CheckoutPageController ..> ShippingMethod
+
+VNPayPaymentController --> VNPayPaymentService
+VNPayPaymentController ..> VNPayCreatePaymentResponse
+VNPayPaymentController ..> VNPayReturnResponse
+VNPayPaymentController ..> VNPayIpnResponse
+
+GlobalControllerAdvice --> CurrentUserProvider
+GlobalControllerAdvice --> CartItemRepository
+GlobalControllerAdvice ..> ContactForm
+
+SecurityConfig --> UserRepository
+
+GlobalExceptionHandler ..> ErrorResponse
+GlobalExceptionHandler ..> CategoryNotFoundException
+GlobalExceptionHandler ..> ProductNotFoundException
+GlobalExceptionHandler ..> InvalidProductStatusException
+GlobalExceptionHandler ..> InvalidProductColorException
+GlobalExceptionHandler ..> InvalidSalePriceException
+GlobalExceptionHandler ..> InvalidSizeException
+GlobalExceptionHandler ..> InvalidCartQuantityException
+GlobalExceptionHandler ..> InactiveVariantException
+GlobalExceptionHandler ..> InsufficientStockException
+GlobalExceptionHandler ..> CartItemNotFoundException
+GlobalExceptionHandler ..> VariantNotFoundException
+GlobalExceptionHandler ..> UnauthenticatedUserException
+GlobalExceptionHandler ..> InvalidCheckoutRequestException
+
+' DTO nesting relationships
+ProductCreateRequest "1" o-- "1..*" ProductColorCreateRequest
+ProductColorCreateRequest "1" o-- "1..*" ProductImageCreateRequest
+ProductColorCreateRequest "1" o-- "1..*" ProductVariantCreateRequest
+
+ProductDetailResponse "1" o-- "0..*" ProductColorDetailResponse
+ProductColorDetailResponse "1" o-- "0..*" ProductImageDetailResponse
+ProductColorDetailResponse "1" o-- "0..*" ProductVariantDetailResponse
+
+CartSummaryResponse "1" o-- "0..*" CartItemViewResponse
+PlaceOrderResponse "1" o-- "0..*" OrderItemSnapshotDto
+VNPayReturnResponse ..> PaymentStatus
+
+note bottom of Address
+Address currently owns its own id
+and does not extend BaseEntity.
+end note
+
+note bottom of ProductBadge
+Enum exists in code but is not used
+by current domain mappings/services.
+end note
+
+note bottom of SignUpService
+Class exists but is currently empty.
+end note
+
+@enduml

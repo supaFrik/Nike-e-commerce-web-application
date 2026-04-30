@@ -1,5 +1,5 @@
 (function(){
-  const baseEnv = (window.__env || '');
+  const baseEnv = (window.APP_CTX || '');
   const toggleBtn = document.getElementById('sortToggleBtn');
   const menu = document.getElementById('sortMenu');
   const hiddenInput = document.getElementById('sortHiddenInput');

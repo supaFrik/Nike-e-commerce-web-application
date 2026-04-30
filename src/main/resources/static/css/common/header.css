@@ -64,6 +64,18 @@ justify-content: center;
   font-size: var(--font-size-s);
 }
 
+.header-switch-link {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: var(--font-size-xs);
+  line-height: 1;
+}
+
+.header-switch-link:hover,
+.header-switch-link:focus {
+  border-color: var(--color-text-primary, #111);
+}
+
 /* Navigation */
 .navbar {
   background: var(--color-white);

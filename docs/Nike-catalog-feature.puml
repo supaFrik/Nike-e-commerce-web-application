@@ -1,0 +1,295 @@
+@startuml
+title Nike Feature Diagram - Catalog
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "shared" {
+  abstract class BaseEntity <<MappedSuperclass>> {
+    -id: Long
+    -createDate: LocalDateTime
+    -updateDate: LocalDateTime
+  }
+}
+
+package "catalog.category" {
+  class Category <<Entity>> {
+    -name: String
+  }
+
+  interface CategoryRepository <<Repository>>
+  class CategoryService <<Service>>
+  class CategoryView <<DTO>> {
+    -id: Long
+    -name: String
+  }
+  class CategoryNotFoundException <<Exception>>
+}
+
+package "catalog.product.enums" {
+  enum ProductStatus {
+    ACTIVE
+    DRAFT
+    FEW_LEFT
+    OUT_OF_STOCK
+    DISCONTINUED
+  }
+
+  enum InventoryStatus {
+    IN_ORDER
+    FEW_LEFT
+    OUT_OF_STOCK
+    DISCONTINUED
+  }
+
+  enum ProductBadge {
+    BESTSELLER
+    NEW_ARRIVAL
+    LIMITED_EDITION
+    TRENDING
+  }
+}
+
+package "catalog.product.domain" {
+  class Product <<Entity>> {
+    -name: String
+    -description: String
+    -type: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+    -productStatus: ProductStatus
+  }
+
+  class ProductColor <<Entity>> {
+    -colorName: String
+    -hexCode: String
+    -displayOrder: Integer
+  }
+
+  class ProductImage <<Entity>> {
+    -path: String
+    -title: String
+    -altText: String
+    -isMainForColor: Boolean
+    -orderIndex: Integer
+  }
+
+  class ProductVariant <<Entity>> {
+    -sku: String
+    -size: String
+    -stock: Integer
+    -active: Boolean
+    -inventoryStatus: InventoryStatus
+  }
+}
+
+package "catalog.product.repository" {
+  interface ProductRepository <<Repository>>
+  interface ProductVariantRepository <<Repository>>
+}
+
+package "catalog.product.dto" {
+  class ProductCreateRequest <<Request>> {
+    -name: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+    -description: String
+    -type: String
+    -categoryId: Long
+    -productStatus: ProductStatus
+  }
+
+  class ProductColorCreateRequest <<Request>> {
+    -colorName: String
+    -hexCode: String
+    -displayOrder: Integer
+  }
+
+  class ProductImageCreateRequest <<Request>> {
+    -imgUrl: String
+    -title: String
+    -altText: String
+    -isMainForColor: Boolean
+    -orderIndex: Integer
+  }
+
+  class ProductVariantCreateRequest <<Request>> {
+    -sku: String
+    -size: String
+    -stock: Integer
+    -active: Boolean
+  }
+
+  class ProductDetailResponse <<Response>> {
+    -id: Long
+    -name: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+    -description: String
+    -categoryName: String
+    -productStatus: String
+  }
+
+  class ProductColorDetailResponse <<Response>> {
+    -id: Long
+    -colorName: String
+    -hexCode: String
+    -displayOrder: Integer
+  }
+
+  class ProductImageDetailResponse <<Response>> {
+    -id: Long
+    -path: String
+    -title: String
+    -altText: String
+    -isMainForColor: Boolean
+    -orderIndex: Integer
+  }
+
+  class ProductVariantDetailResponse <<Response>> {
+    -id: Long
+    -sku: String
+    -size: String
+    -stock: Integer
+    -active: Boolean
+  }
+
+  class ProductListItemView <<Projection>> {
+    -id: Long
+    -name: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+    -hasSale: boolean
+    -status: ProductStatus
+    -type: String
+    -categoryName: String
+    -heroImg: String
+    -colorCount: int
+  }
+
+  class ProductSummaryResponse <<Response>> {
+    -id: Long
+    -name: String
+    -price: BigDecimal
+    -categoryName: String
+    -thumbnailUrl: String
+  }
+}
+
+package "catalog.product.service" {
+  class ProductService <<Service>>
+  class ProductListService <<Service>>
+  class ProductDetailPageService <<Service>>
+}
+
+package "catalog.product.api" {
+  class ProductListController <<Controller>>
+  class ProductDetailController <<Controller>>
+}
+
+package "admin.product" {
+  class AdminProductController <<RestController>>
+  class AdminProductService <<Service>>
+  class InvalidProductColorException <<Exception>>
+  class InvalidSalePriceException <<Exception>>
+  class InvalidSizeException <<Exception>>
+}
+
+package "identity.user" {
+  class User <<Entity>> {
+    -username: String
+    -email: String
+    -role: Role
+  }
+
+  enum Role {
+    USER
+    ADMIN
+  }
+}
+
+package "catalog.product.exception" {
+  class ProductNotFoundException <<Exception>>
+  class InvalidProductStatusException <<Exception>>
+}
+
+BaseEntity <|-- Category
+BaseEntity <|-- Product
+BaseEntity <|-- ProductColor
+BaseEntity <|-- ProductImage
+BaseEntity <|-- ProductVariant
+
+Category "1" o-- "0..*" Product : products
+Product "0..*" --> "1" Category : category
+Product "1" o-- "0..*" ProductColor : colors
+ProductColor "1" o-- "0..*" ProductImage : images
+ProductColor "1" o-- "0..*" ProductVariant : variants
+ProductColor "0..*" --> "1" Product : product
+ProductImage "0..*" --> "1" ProductColor : color
+ProductVariant "0..*" --> "1" ProductColor : color
+Product "0..*" --> "0..1" User : createdBy
+Product "0..*" --> "0..1" User : updatedBy
+
+CategoryRepository ..> Category
+ProductRepository ..> Product
+ProductRepository ..> ProductListItemView
+ProductVariantRepository ..> ProductVariant
+
+CategoryService --> CategoryRepository
+CategoryService ..> CategoryView
+CategoryService ..> CategoryNotFoundException
+
+ProductService --> ProductRepository
+ProductService ..> ProductSummaryResponse
+ProductService ..> ProductDetailResponse
+ProductService ..> ProductColorDetailResponse
+ProductService ..> ProductImageDetailResponse
+ProductService ..> ProductVariantDetailResponse
+ProductService ..> ProductNotFoundException
+
+ProductListService --> ProductRepository
+ProductListService ..> ProductListItemView
+
+ProductDetailPageService --> ProductRepository
+ProductDetailPageService ..> ProductDetailResponse
+ProductDetailPageService ..> ProductColorDetailResponse
+ProductDetailPageService ..> ProductImageDetailResponse
+ProductDetailPageService ..> ProductVariantDetailResponse
+ProductDetailPageService ..> ProductNotFoundException
+
+ProductListController --> ProductListService
+ProductListController --> CategoryService
+ProductDetailController --> ProductDetailPageService
+
+AdminProductController --> AdminProductService
+AdminProductController ..> ProductCreateRequest
+AdminProductController ..> ProductDetailResponse
+
+AdminProductService --> ProductRepository
+AdminProductService --> CategoryRepository
+AdminProductService ..> ProductCreateRequest
+AdminProductService ..> ProductColorCreateRequest
+AdminProductService ..> ProductImageCreateRequest
+AdminProductService ..> ProductVariantCreateRequest
+AdminProductService ..> ProductDetailResponse
+AdminProductService ..> InvalidProductColorException
+AdminProductService ..> InvalidSalePriceException
+AdminProductService ..> InvalidSizeException
+AdminProductService ..> CategoryNotFoundException
+
+ProductCreateRequest "1" o-- "1..*" ProductColorCreateRequest
+ProductColorCreateRequest "1" o-- "1..*" ProductImageCreateRequest
+ProductColorCreateRequest "1" o-- "1..*" ProductVariantCreateRequest
+ProductDetailResponse "1" o-- "0..*" ProductColorDetailResponse
+ProductColorDetailResponse "1" o-- "0..*" ProductImageDetailResponse
+ProductColorDetailResponse "1" o-- "0..*" ProductVariantDetailResponse
+
+note bottom of ProductBadge
+Present in code but not wired into
+current entity mappings or services.
+end note
+
+@enduml

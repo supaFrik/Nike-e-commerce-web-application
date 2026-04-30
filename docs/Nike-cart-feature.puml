@@ -1,0 +1,190 @@
+@startuml
+title Nike Feature Diagram - Cart
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "shared" {
+  abstract class BaseEntity <<MappedSuperclass>> {
+    -id: Long
+    -createDate: LocalDateTime
+    -updateDate: LocalDateTime
+  }
+
+  class GlobalControllerAdvice <<ControllerAdvice>>
+  class GlobalExceptionHandler <<RestControllerAdvice>>
+  class ErrorResponse <<record>>
+}
+
+package "identity" {
+  class User <<Entity>> {
+    -username: String
+    -email: String
+  }
+
+  interface UserRepository <<Repository>>
+  interface CurrentUserProvider
+}
+
+package "catalog" {
+  class Product <<Entity>> {
+    -name: String
+    -price: BigDecimal
+    -salePrice: BigDecimal
+  }
+
+  class Category <<Entity>> {
+    -name: String
+  }
+
+  class ProductColor <<Entity>> {
+    -colorName: String
+  }
+
+  class ProductImage <<Entity>> {
+    -path: String
+    -isMainForColor: Boolean
+    -orderIndex: Integer
+  }
+
+  class ProductVariant <<Entity>> {
+    -sku: String
+    -size: String
+    -stock: Integer
+    -active: Boolean
+  }
+
+  interface ProductVariantRepository <<Repository>>
+}
+
+package "checkout.cart" {
+  class CartItem <<Entity>> {
+    -quantity: Integer
+  }
+
+  interface CartItemRepository <<Repository>>
+
+  class CartService <<Service>>
+  class CartController <<RestController>>
+  class CartPageController <<Controller>>
+
+  class AddToCartRequest <<Request>> {
+    -variantId: Long
+    -quantity: Integer
+  }
+
+  class UpdateCartItemQuantityRequest <<Request>> {
+    -quantity: Integer
+  }
+
+  class AddToCartResponse <<Response>> {
+    -success: boolean
+    -message: String
+    -itemCount: int
+  }
+
+  class CartCountResponse <<Response>> {
+    -itemCount: int
+  }
+
+  class CartItemViewResponse <<Response>> {
+    -cartItemId: Long
+    -productId: Long
+    -productName: String
+    -categoryName: String
+    -imageUrl: String
+    -colorName: String
+    -size: String
+    -unitPrice: BigDecimal
+    -quantity: Integer
+    -lineTotal: BigDecimal
+    -stock: Integer
+    -active: Boolean
+  }
+
+  class CartSummaryResponse <<Response>> {
+    -items: List
+    -itemCount: int
+    -subtotal: BigDecimal
+    -discount: BigDecimal
+    -total: BigDecimal
+  }
+
+  class CartItemNotFoundException <<Exception>>
+  class InactiveVariantException <<Exception>>
+  class InsufficientStockException <<Exception>>
+  class InvalidCartQuantityException <<Exception>>
+  class UnauthenticatedUserException <<Exception>>
+  class VariantNotFoundException <<Exception>>
+}
+
+BaseEntity <|-- Product
+BaseEntity <|-- ProductColor
+BaseEntity <|-- ProductImage
+BaseEntity <|-- ProductVariant
+BaseEntity <|-- User
+BaseEntity <|-- CartItem
+
+RuntimeException <|-- CartItemNotFoundException
+RuntimeException <|-- InactiveVariantException
+RuntimeException <|-- InsufficientStockException
+RuntimeException <|-- InvalidCartQuantityException
+RuntimeException <|-- UnauthenticatedUserException
+RuntimeException <|-- VariantNotFoundException
+
+User "1" o-- "0..*" CartItem : cartItems
+CartItem "0..*" --> "1" User : user
+CartItem "0..*" --> "1" ProductVariant : variant
+ProductVariant "0..*" --> "1" ProductColor : color
+ProductColor "0..*" --> "1" Product : product
+Product "0..*" --> "1" Category : category
+ProductColor "1" o-- "0..*" ProductImage : images
+
+CartItemRepository ..> CartItem
+ProductVariantRepository ..> ProductVariant
+UserRepository ..> User
+
+CartService --> CartItemRepository
+CartService --> ProductVariantRepository
+CartService --> CurrentUserProvider
+CartService --> UserRepository
+CartService ..> AddToCartRequest
+CartService ..> UpdateCartItemQuantityRequest
+CartService ..> AddToCartResponse
+CartService ..> CartCountResponse
+CartService ..> CartItemViewResponse
+CartService ..> CartSummaryResponse
+CartService ..> InvalidCartQuantityException
+CartService ..> UnauthenticatedUserException
+CartService ..> VariantNotFoundException
+CartService ..> InactiveVariantException
+CartService ..> InsufficientStockException
+CartService ..> CartItemNotFoundException
+
+CartController --> CartService
+CartController ..> AddToCartRequest
+CartController ..> UpdateCartItemQuantityRequest
+CartController ..> AddToCartResponse
+CartController ..> CartCountResponse
+CartController ..> CartSummaryResponse
+
+CartPageController --> CartService
+CartPageController ..> CartSummaryResponse
+
+GlobalControllerAdvice --> CurrentUserProvider
+GlobalControllerAdvice --> CartItemRepository
+
+GlobalExceptionHandler ..> ErrorResponse
+GlobalExceptionHandler ..> CartItemNotFoundException
+GlobalExceptionHandler ..> InactiveVariantException
+GlobalExceptionHandler ..> InsufficientStockException
+GlobalExceptionHandler ..> InvalidCartQuantityException
+GlobalExceptionHandler ..> UnauthenticatedUserException
+GlobalExceptionHandler ..> VariantNotFoundException
+
+CartSummaryResponse "1" o-- "0..*" CartItemViewResponse
+
+@enduml

@@ -1,0 +1,117 @@
+@startuml
+title Nike Feature Diagram - Shared / Cross-cutting
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+hide empty methods
+
+package "shared.domain" {
+  abstract class BaseEntity <<MappedSuperclass>> {
+    -id: Long
+    -createDate: LocalDateTime
+    -updateDate: LocalDateTime
+  }
+}
+
+package "shared.dto" {
+  class ErrorResponse <<record>> {
+    +status: int
+    +message: String
+    +timestamp: long
+  }
+}
+
+package "shared.config" {
+  class SecurityConfig <<Configuration>>
+}
+
+package "shared.controller" {
+  class GlobalControllerAdvice <<ControllerAdvice>>
+}
+
+package "shared.exception" {
+  class GlobalExceptionHandler <<RestControllerAdvice>>
+}
+
+package "identity.user" {
+  class User <<Entity>> {
+    -username: String
+    -email: String
+    -password: String
+    -role: Role
+  }
+
+  enum Role {
+    USER
+    ADMIN
+  }
+
+  interface UserRepository <<Repository>>
+  interface CurrentUserProvider
+  class ContactForm <<Request>>
+}
+
+package "checkout.cart" {
+  interface CartItemRepository <<Repository>>
+}
+
+package "catalog" {
+  class CategoryNotFoundException <<Exception>>
+  class ProductNotFoundException <<Exception>>
+  class InvalidProductStatusException <<Exception>>
+  class InvalidProductColorException <<Exception>>
+  class InvalidSalePriceException <<Exception>>
+  class InvalidSizeException <<Exception>>
+}
+
+package "checkout" {
+  class CartItemNotFoundException <<Exception>>
+  class InactiveVariantException <<Exception>>
+  class InsufficientStockException <<Exception>>
+  class InvalidCartQuantityException <<Exception>>
+  class UnauthenticatedUserException <<Exception>>
+  class VariantNotFoundException <<Exception>>
+  class InvalidCheckoutRequestException <<Exception>>
+}
+
+BaseEntity <|-- User
+
+RuntimeException <|-- CategoryNotFoundException
+RuntimeException <|-- ProductNotFoundException
+RuntimeException <|-- InvalidProductStatusException
+RuntimeException <|-- InvalidProductColorException
+RuntimeException <|-- InvalidSalePriceException
+RuntimeException <|-- InvalidSizeException
+RuntimeException <|-- CartItemNotFoundException
+RuntimeException <|-- InactiveVariantException
+RuntimeException <|-- InsufficientStockException
+RuntimeException <|-- InvalidCartQuantityException
+RuntimeException <|-- UnauthenticatedUserException
+RuntimeException <|-- VariantNotFoundException
+RuntimeException <|-- InvalidCheckoutRequestException
+
+SecurityConfig --> UserRepository
+SecurityConfig ..> User
+
+GlobalControllerAdvice --> CurrentUserProvider
+GlobalControllerAdvice --> CartItemRepository
+GlobalControllerAdvice ..> ContactForm
+
+GlobalExceptionHandler ..> ErrorResponse
+GlobalExceptionHandler ..> CategoryNotFoundException
+GlobalExceptionHandler ..> ProductNotFoundException
+GlobalExceptionHandler ..> InvalidProductStatusException
+GlobalExceptionHandler ..> InvalidProductColorException
+GlobalExceptionHandler ..> InvalidSalePriceException
+GlobalExceptionHandler ..> InvalidSizeException
+GlobalExceptionHandler ..> CartItemNotFoundException
+GlobalExceptionHandler ..> InactiveVariantException
+GlobalExceptionHandler ..> InsufficientStockException
+GlobalExceptionHandler ..> InvalidCartQuantityException
+GlobalExceptionHandler ..> UnauthenticatedUserException
+GlobalExceptionHandler ..> VariantNotFoundException
+GlobalExceptionHandler ..> InvalidCheckoutRequestException
+
+@enduml
