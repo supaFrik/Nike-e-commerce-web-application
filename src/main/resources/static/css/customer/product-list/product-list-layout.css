@@ -28,6 +28,14 @@ a:hover {
     margin-left: 60px;
 }
 
+.product-listing.filters-collapsed {
+    grid-template-columns: 1fr;
+}
+
+.product-listing.filters-collapsed .sidebar {
+    display: none;
+}
+
 /* Product Layout */
 .product-layout {
     display: flex;
@@ -79,4 +87,10 @@ a:hover {
 
 .disable_content {
     display: none;
+}
+
+.filter-empty-state {
+    padding: 2rem 0;
+    color: var(--color-text-primary);
+    font-weight: 500;
 }

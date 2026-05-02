@@ -1,5 +1,6 @@
 package vn.demo.nike.features.catalog.product.repository;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import vn.demo.nike.features.catalog.product.domain.Product;
 import vn.demo.nike.features.catalog.product.request.ProductListItemView;
+import vn.demo.nike.features.catalog.search.dto.SearchProductProjection;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,4 +51,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     WHERE (:categoryId IS NULL OR c.id = :categoryId)
 """)
     List<ProductListItemView> findProductList(@Param("categoryId") Long categoryId, Pageable pageable);
+
 }

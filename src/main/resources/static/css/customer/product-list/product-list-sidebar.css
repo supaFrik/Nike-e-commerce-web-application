@@ -115,6 +115,36 @@ text-transform: capitalize;
     width: 20px;
 }
 
+.filter-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 0 4px;
+}
+
+.filter-panel[hidden] {
+    display: none;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-text-primary);
+    font-size: 14px;
+}
+
+.filter-option input {
+    margin: 0;
+}
+
+.filter-note {
+    margin: 0;
+    color: var(--color-grey-600);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
 /* Smooth Scrolling for Categories */
 .categories__content-responsive {
     scroll-behavior: smooth;
