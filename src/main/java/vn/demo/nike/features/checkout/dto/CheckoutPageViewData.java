@@ -2,7 +2,7 @@ package vn.demo.nike.features.checkout.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import vn.demo.nike.features.cart.response.CartSummaryResponse;
+import vn.demo.nike.features.catalog.cart.response.CartSummaryResponse;
 import vn.demo.nike.features.order.domain.Order;
 import vn.demo.nike.features.order.domain.enums.ShippingMethod;
 

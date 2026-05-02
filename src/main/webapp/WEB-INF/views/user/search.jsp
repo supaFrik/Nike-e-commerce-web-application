@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kết quả tìm kiếm</title>
-    <jsp:include page="/WEB-INF/views/customer/layout/css.jsp" />
+    <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
     <link rel="stylesheet" href="${env}/css/customer/search/search.css">
     <link rel="stylesheet" href="${env}/css/common/base.css">
 </head>
@@ -88,23 +89,15 @@
                     <a class="product-card" href="${env}/product-detail?id=${p.id}">
                         <div class="product-image-wrapper">
                             <c:choose>
-                                <c:when test="${not empty p.images and p.images[0] ne null and not empty p.images[0].url}">
-                                    <c:set var="imgUrl" value="${p.images[0].url}" />
-                                    <c:if test="${fn:startsWith(imgUrl,'//')}">
-                                        <c:set var="imgUrl" value="${fn:substring(imgUrl, 1, fn:length(imgUrl))}" />
-                                    </c:if>
+                                <c:when test="${not empty p.imageUrl}">
                                     <c:choose>
-                                        <c:when test="${fn:startsWith(imgUrl,'/images/products/')}">
-                                            <c:set var="resolvedImg" value="${imgUrl}" />
-                                        </c:when>
-                                        <c:when test="${fn:startsWith(imgUrl,'images/products/')}">
-                                            <c:set var="resolvedImg" value="/${imgUrl}" />
+                                        <c:when test="${fn:startsWith(p.imageUrl, '/')}">
+                                            <img src="${env}${p.imageUrl}" alt="${p.name}" class="product-image" />
                                         </c:when>
                                         <c:otherwise>
-                                            <c:set var="resolvedImg" value="/images/products/${imgUrl}" />
+                                            <img src="${env}/uploads/products/${p.imageUrl}" alt="${p.name}" class="product-image" />
                                         </c:otherwise>
                                     </c:choose>
-                                    <img src="${env}${resolvedImg}" alt="${p.name}" class="product-image" />
                                 </c:when>
                                 <c:otherwise>
                                     <img src="${env}/images/products/default-product.avif" alt="${p.name}" class="product-image" />

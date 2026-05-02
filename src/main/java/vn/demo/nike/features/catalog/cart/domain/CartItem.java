@@ -1,4 +1,4 @@
-package vn.demo.nike.features.cart.domain;
+package vn.demo.nike.features.catalog.cart.domain;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package vn.demo.nike.features.cart.response;
+package vn.demo.nike.features.catalog.cart.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

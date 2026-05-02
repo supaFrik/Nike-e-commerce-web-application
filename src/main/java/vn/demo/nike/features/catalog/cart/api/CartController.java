@@ -1,14 +1,14 @@
-package vn.demo.nike.features.cart.api;
+package vn.demo.nike.features.catalog.cart.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.demo.nike.features.cart.request.AddToCartRequest;
-import vn.demo.nike.features.cart.request.UpdateCartItemQuantityRequest;
-import vn.demo.nike.features.cart.response.AddToCartResponse;
-import vn.demo.nike.features.cart.response.CartCountResponse;
-import vn.demo.nike.features.cart.response.CartSummaryResponse;
-import vn.demo.nike.features.cart.service.CartService;
+import vn.demo.nike.features.catalog.cart.request.AddToCartRequest;
+import vn.demo.nike.features.catalog.cart.request.UpdateCartItemQuantityRequest;
+import vn.demo.nike.features.catalog.cart.response.AddToCartResponse;
+import vn.demo.nike.features.catalog.cart.response.CartCountResponse;
+import vn.demo.nike.features.catalog.cart.response.CartSummaryResponse;
+import vn.demo.nike.features.catalog.cart.service.CartService;
 
 @RestController
 @RequestMapping("/api/cart")

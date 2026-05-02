@@ -311,6 +311,7 @@
 
     <!--  JS-->
     <jsp:include page="/WEB-INF/views/user/layout/js.jsp" />
+    <script src="${env}/js/customer/components/carousel.js" defer></script>
 </body>
 </html>
 

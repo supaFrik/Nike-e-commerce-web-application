@@ -1,4 +1,4 @@
-package vn.demo.nike.features.cart.exception;
+package vn.demo.nike.features.catalog.cart.exception;
 
 public class UnauthenticatedUserException extends RuntimeException {
     public UnauthenticatedUserException() {

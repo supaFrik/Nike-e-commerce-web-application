@@ -61,7 +61,7 @@
                             <h2 id="filters-title" class="sr-only">Filter Products</h2>
                             <div class="filter-group" role="group" aria-label="Product filtering options">
                                 <div class="filters-group__wrapper">
-                                    <div class="filters-group__close">
+                                    <div class="filters-group__close" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by gender" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="gender-filter-desc">
@@ -79,8 +79,11 @@
                                             </div>
                                             <span id="gender-filter-desc" class="sr-only">Click to expand gender filter options</span>
                                         </span>
+                                        <div class="filter-panel" data-filter-panel hidden>
+                                            <p class="filter-note">Danh mục hiện đang được điều hướng bằng menu bên trái.</p>
+                                        </div>
                                     </div>
-                                    <div class="filters-group__close">
+                                    <div class="filters-group__close" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by price range" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="price-filter-desc">
@@ -98,8 +101,26 @@
                                             </div>
                                             <span id="price-filter-desc" class="sr-only">Click to expand price filter options</span>
                                         </span>
+                                        <div class="filter-panel" data-filter-panel hidden>
+                                            <label class="filter-option">
+                                                <input type="radio" name="priceRange" value="all" checked>
+                                                <span>Tất cả mức giá</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="radio" name="priceRange" value="under-2000000">
+                                                <span>Dưới 2.000.000đ</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="radio" name="priceRange" value="2000000-4000000">
+                                                <span>2.000.000đ - 4.000.000đ</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="radio" name="priceRange" value="above-4000000">
+                                                <span>Trên 4.000.000đ</span>
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div class="filters-group__close">
+                                    <div class="filters-group__close" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by shoe size" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="size-filter-desc">
@@ -120,8 +141,11 @@
                                             </div>
                                             <span id="size-filter-desc" class="sr-only">Click to expand size filter options</span>
                                         </span>
+                                        <div class="filter-panel" data-filter-panel hidden>
+                                            <p class="filter-note">Trang danh sách hiện chưa có dữ liệu size để lọc phía client.</p>
+                                        </div>
                                     </div>
-                                    <div class="filters-group__close">
+                                    <div class="filters-group__close" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by shoe height" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="height-filter-desc">
@@ -142,8 +166,11 @@
                                             </div>
                                             <span id="height-filter-desc" class="sr-only">Click to expand shoe height filter options</span>
                                         </span>
+                                        <div class="filter-panel" data-filter-panel hidden>
+                                            <p class="filter-note">Bộ lọc chiều cao giày sẽ cần thêm dữ liệu domain trước khi bật.</p>
+                                        </div>
                                     </div>
-                                    <div class="filters-group__close">
+                                    <div class="filters-group__close" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by collections" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="collections-filter-desc">
@@ -164,8 +191,14 @@
                                             </div>
                                             <span id="collections-filter-desc" class="sr-only">Click to expand collections filter options</span>
                                         </span>
+                                        <div class="filter-panel" data-filter-panel hidden>
+                                            <label class="filter-option">
+                                                <input type="checkbox" id="saleOnlyFilter">
+                                                <span>Chỉ hiện sản phẩm đang giảm giá</span>
+                                            </label>
+                                        </div>
                                     </div>
-                                    <div class="filters-group__close">
+                                    <div class="filters-group__close" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by shoe width" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="width-filter-desc">
@@ -186,6 +219,9 @@
                                             </div>
                                             <span id="width-filter-desc" class="sr-only">Click to expand width filter options</span>
                                         </span>
+                                        <div class="filter-panel" data-filter-panel hidden>
+                                            <p class="filter-note">Bộ lọc chiều rộng giày chưa có dữ liệu để áp dụng.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -198,13 +234,15 @@
                 <div class="product-header" role="region" aria-labelledby="page-title">
                     <div class="product-title-section">
                         <h1 class="product-title" id="page-title">
-                            <c:choose>
-                                <c:when test="${not empty selectedCategoryName}">
-                                    <c:out value="${selectedCategoryName}"/>
-                                </c:when>
-                                <c:otherwise>All Shoes</c:otherwise>
-                            </c:choose>
-                            <c:out value=" ${totalProducts}"/>
+                            <span id="page-title-label">
+                                <c:choose>
+                                    <c:when test="${not empty selectedCategoryName}">
+                                        <c:out value="${selectedCategoryName}"/>
+                                    </c:when>
+                                    <c:otherwise>All Shoes</c:otherwise>
+                                </c:choose>
+                            </span>
+                            <span id="page-title-count"><c:out value=" ${totalProducts}"/></span>
                         </h1>
                     </div>
                     <div class="header-controls" role="group" aria-label="Page controls">
@@ -214,9 +252,9 @@
                             Filters
                         </button>
                         <span id="mobile-filter-desc" class="sr-only">Open filter sidebar to narrow product selection</span>
-                        <button class="hide-filters-btn" aria-label="Toggle filter visibility"
+                        <button class="hide-filters-btn" type="button" aria-label="Toggle filter visibility"
                                 aria-describedby="hide-filters-desc">
-                            Hide Filters
+                            <span class="hide-filters-label">Hide Filters</span>
                             <svg aria-hidden="true" class="icon-filter-ds" focusable="false" viewBox="0 0 24 24" role="img" width="24px" height="24px" fill="none">
     <path stroke="currentColor" stroke-width="1.5" d="M21 8.25H10m-5.25 0H3"></path>
     <path stroke="currentColor" stroke-width="1.5" d="M7.5 6v0a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" clip-rule="evenodd"></path>
@@ -260,6 +298,9 @@
                             <c:otherwise>
                                 <c:forEach var="product" items="${products}" varStatus="status">
                                     <div class="product-card product-grid__card" data-testid="product-card"
+                                         data-product-card="true"
+                                         data-price="${product.hasSale ? product.salePrice : product.price}"
+                                         data-has-sale="${product.hasSale}"
                                          role="article" aria-labelledby="product-${status.index + 1}-title">
                                         <div class="product-card__body" data-testid="product-card__body">
                                             <figure>
@@ -331,6 +372,9 @@
                                 </c:forEach>
                             </c:otherwise>
                         </c:choose>
+                    </div>
+                    <div id="client-filter-empty" class="filter-empty-state" hidden>
+                        Không có sản phẩm nào phù hợp với bộ lọc hiện tại.
                     </div>
                 </section>
             </div>
@@ -519,5 +563,6 @@
 
     <!-- JavaScript -->
     <jsp:include page="/WEB-INF/views/user/layout/js.jsp" />
+    <script src="${env}/js/customer/pages/product-list-filters.js" defer></script>
 </body>
 </html>

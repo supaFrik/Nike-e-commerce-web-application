@@ -41,38 +41,4 @@ public class ProductListService {
             default -> Sort.by("createDate").descending();
         };
     }
-
-//    private String resolveThumbnail(Product product) {
-//        if (product.getColors() == null || product.getColors().isEmpty()) {
-//            return null;
-//        }
-//
-//        return product.getColors().stream()
-//                .sorted(Comparator.comparing(
-//                        ProductColor::getDisplayOrder,
-//                        Comparator.nullsLast(Integer::compareTo)
-//                ))
-//                .map(color -> {
-//                    if (color.getImages() == null || color.getImages().isEmpty()) {
-//                        return null;
-//                    }
-//
-//                    // Main image
-//                    return color.getImages().stream()
-//                            .filter(img -> Boolean.TRUE.equals(img.getIsMainForColor()))
-//                            .findFirst()
-//                            .map(ProductImage::getPath)
-//
-//                            // Fallback to first image
-//                            .orElseGet(() ->
-//                                    color.getImages().stream()
-//                                            .findFirst()
-//                                            .map(ProductImage::getPath)
-//                                            .orElse(null)
-//                            );
-//                })
-//                .filter(Objects::nonNull)
-//                .findFirst()
-//                .orElse(null);
-//    }
 }

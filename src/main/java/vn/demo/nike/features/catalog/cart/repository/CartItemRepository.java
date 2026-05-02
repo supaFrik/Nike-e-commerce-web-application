@@ -1,9 +1,9 @@
-package vn.demo.nike.features.cart.repository;
+package vn.demo.nike.features.catalog.cart.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import vn.demo.nike.features.cart.domain.CartItem;
+import vn.demo.nike.features.catalog.cart.domain.CartItem;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,8 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     Optional<CartItem> findByIdAndUser_Id(Long cartItemId, Long userId);
 
     Optional<CartItem> findByUser_IdAndVariant_Id(Long userId, Long variantId);
+
+
 
     @Query("""
   SELECT COALESCE(SUM(c.quantity), 0)

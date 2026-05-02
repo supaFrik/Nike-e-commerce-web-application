@@ -1,4 +1,4 @@
-package vn.demo.nike.features.cart.request;
+package vn.demo.nike.features.catalog.cart.request;
 
 public class UpdateCartItemQuantityRequest {
     private Integer quantity;

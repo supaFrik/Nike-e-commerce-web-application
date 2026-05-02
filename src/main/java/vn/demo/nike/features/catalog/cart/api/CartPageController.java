@@ -1,10 +1,10 @@
-package vn.demo.nike.features.cart.api;
+package vn.demo.nike.features.catalog.cart.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import vn.demo.nike.features.cart.service.CartService;
+import vn.demo.nike.features.catalog.cart.service.CartService;
 
 @Controller
 @RequiredArgsConstructor

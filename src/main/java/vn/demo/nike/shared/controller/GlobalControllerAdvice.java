@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import vn.demo.nike.features.identity.user.request.CurrentUserProvider;
 import vn.demo.nike.features.identity.user.request.ContactForm;
-import vn.demo.nike.features.cart.repository.CartItemRepository;
+import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
 
 @ControllerAdvice
 @RequiredArgsConstructor
