@@ -16,6 +16,8 @@ public interface PaymentTransactionRepository extends JpaRepository<PaymentTrans
        from PaymentTransaction pt
        where pt.txnRef = :txnRef
        """)
+    Optional<PaymentTransaction> findByTxnRefForUpdate(String txnRef);
+
     Optional<PaymentTransaction> findByTxnRef(String txnRef);
 
     List<PaymentTransaction> findByOrder_IdOrderByCreateDateDesc(long order_Id);

@@ -161,9 +161,6 @@
                             </c:if>
                         </div>
 
-                        <c:if test="${not empty product.description}">
-                            <p class="product-description product-description-top">${product.description}</p>
-                        </c:if>
                     </div>
 
                     <div class="selection-stack">
@@ -281,6 +278,12 @@
                         This product is excluded from site promotions and discounts.
                     </div>
 
+                    <c:if test="${not empty product.description}">
+                        <div class="product-description-block">
+                            <p class="product-description">${product.description}</p>
+                        </div>
+                    </c:if>
+
                     <div class="product-summary">
                         <ul class="product-bullets">
                             <li>
@@ -297,10 +300,25 @@
                     </div>
 
                     <div class="product-accordion-list">
-                        <button type="button" class="product-accordion-row">
+                        <button type="button"
+                                class="product-accordion-row"
+                                id="delivery-returns-toggle"
+                                aria-expanded="false"
+                                aria-controls="delivery-returns-panel">
                             <span>Free Delivery and Returns</span>
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
+                        <div class="product-accordion-panel"
+                             id="delivery-returns-panel"
+                             role="region"
+                             aria-labelledby="delivery-returns-toggle"
+                             hidden>
+                            <p>Your order of 5.000.000₫ or more gets free standard delivery.</p>
+                            <p>Standard delivered 4-5 Business Days</p>
+                            <p>Express delivered 2-4 Business Days</p>
+                            <p>Orders are processed and delivered Monday-Friday (excluding public holidays)</p>
+                            <p>Nike Members enjoy free returns.</p>
+                        </div>
                         <button type="button" class="product-accordion-row">
                             <span>Reviews (24)</span>
                             <span class="accordion-review-meta">

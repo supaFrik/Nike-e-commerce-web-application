@@ -21,6 +21,7 @@ import vn.demo.nike.features.admin.product.exception.InvalidSalePriceException;
 import vn.demo.nike.features.admin.product.exception.InvalidUploadedImageException;
 import vn.demo.nike.features.admin.product.exception.ProductColorNotFoundException;
 import vn.demo.nike.features.admin.product.exception.ProductNotFoundException;
+import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
 import vn.demo.nike.features.catalog.category.domain.Category;
 import vn.demo.nike.features.catalog.category.exception.CategoryNotFoundException;
 import vn.demo.nike.features.catalog.category.repository.CategoryRepository;
@@ -51,6 +52,7 @@ public class AdminProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductImageStorageService productImageStorageService;
+    private final CartItemRepository cartItemRepository;
 
     @Transactional
     public AdminCreatedProductResponse createProduct(AdminProductCreateRequest request,
@@ -76,11 +78,16 @@ public class AdminProductService {
         Product product = findProduct(productId);
         Map<String, MultipartFile> uploadedFiles = buildFileMap(files, fileClientKeys);
         Map<Long, ProductImage> existingImages = indexExistingImages(product);
+        List<Long> existingVariantIds = collectVariantIds(product);
 
         validateCreateOrUpdateRequest(request, uploadedFiles, existingImages);
 
         Category category = findCategory(request.getCategoryId());
         List<String> pathsToDelete = collectPathsToDelete(product, request, existingImages);
+
+        if (!existingVariantIds.isEmpty()) {
+            cartItemRepository.deleteByVariant_IdIn(existingVariantIds);
+        }
 
         applyProductFields(product, request, category);
         product.getColors().clear();
@@ -95,6 +102,11 @@ public class AdminProductService {
     public void deleteProduct(Long productId) {
         Product product = findProduct(productId);
         List<String> pathsToDelete = collectAllImagePaths(product);
+        List<Long> variantIds = collectVariantIds(product);
+
+        if (!variantIds.isEmpty()) {
+            cartItemRepository.deleteByVariant_IdIn(variantIds);
+        }
         productRepository.delete(product);
         scheduleDeleteAfterCommit(pathsToDelete);
     }
@@ -381,6 +393,14 @@ public class AdminProductService {
                 .map(ProductImage::getPath)
                 .filter(Objects::nonNull)
                 .toList();
+    }
+
+    private List<Long> collectVariantIds(Product product) {
+        return product.getColors().stream()
+                .flatMap(color -> color.getVariants().stream())
+                .map(ProductVariant::getId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private void scheduleDeleteAfterCommit(Collection<String> pathsToDelete) {

@@ -24,8 +24,6 @@
   const cardBrands = document.getElementById("card-brands");
   const bankCodeInput = document.getElementById("bank-code");
   const paymentLanguageInput = document.getElementById("payment-language");
-  const modal = document.getElementById("vnpay-modal");
-  const vnpayConfirm = document.getElementById("vnpay-confirm");
   const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
   const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
   const formatter = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
@@ -93,6 +91,10 @@
     vnpayFields?.classList.toggle("hidden", mode !== "vnpay");
     cardBrands?.classList.add("hidden");
     if (primarySubmit) {
+      if (mode === "vnpay") {
+        primarySubmit.textContent = "Thanh toán bằng VNPay";
+        return;
+      }
       primarySubmit.textContent = mode === "vnpay" ? "Thanh toán bằng VNPay QR" : "Hoàn tất thanh toán";
     }
   }
@@ -111,14 +113,6 @@
     }
     errorBox.textContent = "";
     errorBox.style.display = "none";
-  }
-
-  function showModal() {
-    modal?.classList.remove("hidden");
-  }
-
-  function hideModal() {
-    modal?.classList.add("hidden");
   }
 
   function validateShippingForm() {
@@ -157,6 +151,7 @@
       throw new Error("VNPay payment URL khong hop le.");
     }
 
+    console.info("[checkout] VNPay initiate redirect", { orderId, paymentUrl: data.paymentUrl });
     window.location.href = data.paymentUrl;
   }
 
@@ -216,7 +211,9 @@
           showError("Checkout thành công nhưng không nhận được mã đơn hàng.");
           return;
         }
-        window.location.href = `${ctx}/orders/${data.orderId}`;
+        const targetUrl = `${ctx}/orders/${data.orderId}`;
+        console.info("[checkout] COD success redirect", { orderId: data.orderId, targetUrl });
+        window.location.href = targetUrl;
         return;
       }
 
@@ -226,6 +223,7 @@
       }
 
       if (data.paymentUrl) {
+        console.info("[checkout] VNPay checkout redirect", { orderId: data.orderId, paymentUrl: data.paymentUrl });
         window.location.href = data.paymentUrl;
         return;
       }
@@ -247,15 +245,6 @@
     input?.addEventListener("input", updateSelectedAddressSummary);
   });
   primarySubmit?.addEventListener("click", placeOrder);
-  vnpayConfirm?.addEventListener("click", function () {
-    hideModal();
-    placeOrder();
-  });
-  modal?.addEventListener("click", function (event) {
-    if (event.target === modal || event.target.classList.contains("modal-backdrop") || event.target.closest('[data-modal-hide="vnpay-modal"]')) {
-      hideModal();
-    }
-  });
 
   updateShippingSummary();
   updateSelectedAddressSummary();

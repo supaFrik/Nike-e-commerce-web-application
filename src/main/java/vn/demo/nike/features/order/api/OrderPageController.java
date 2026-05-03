@@ -1,6 +1,7 @@
 package vn.demo.nike.features.order.api;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import vn.demo.nike.features.identity.user.request.CurrentUserProvider;
 import vn.demo.nike.features.order.service.OrderPageViewService;
 
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/orders")
 public class OrderPageController {
@@ -19,7 +21,9 @@ public class OrderPageController {
     @GetMapping("/{id}")
     public String viewOrder(@PathVariable Long id, Model model) {
         Long currentUserId = currentUserProvider.getCurrentUserId();
+        log.info("Order page request orderId={}, currentUserId={}", id, currentUserId);
         if (currentUserId == null) {
+            log.warn("Order page redirecting to login because currentUserId is null for orderId={}", id);
             return "redirect:/login";
         }
 

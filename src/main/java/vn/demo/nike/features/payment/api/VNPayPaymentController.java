@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.demo.nike.features.payment.domain.enums.PaymentStatus;
 import vn.demo.nike.features.payment.dto.VNPayCreatePaymentResponse;
 import vn.demo.nike.features.payment.dto.VNPayIpnResponse;
 import vn.demo.nike.features.payment.dto.VNPayReturnResponse;
@@ -29,8 +30,13 @@ public class VNPayPaymentController {
     public ResponseEntity<Void> handleReturn(@RequestParam Map<String, String> params) {
         VNPayReturnResponse response = vnPayPaymentService.handleReturn(params);
         Long orderId = response.getOrderId();
-        String redirectUrl = orderId != null
+        boolean paymentSuccess = orderId != null
+                && response.isSignatureValid()
+                && response.getSuggestedPaymentStatus() == PaymentStatus.SUCCESS;
+        String redirectUrl = paymentSuccess
                 ? "/orders/" + orderId
+                : orderId != null
+                ? "/checkout?orderId=" + orderId
                 : "/cart";
 
         return ResponseEntity.status(HttpStatus.FOUND)

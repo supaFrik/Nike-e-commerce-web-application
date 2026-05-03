@@ -210,6 +210,16 @@
       setActiveImage(window.productDetailState.selectedImageIndex + 1);
     });
 
+    const deliveryToggle = document.getElementById("delivery-returns-toggle");
+    const deliveryPanel = document.getElementById("delivery-returns-panel");
+    if (deliveryToggle && deliveryPanel) {
+      deliveryToggle.addEventListener("click", () => {
+        const expanded = deliveryToggle.getAttribute("aria-expanded") === "true";
+        deliveryToggle.setAttribute("aria-expanded", expanded ? "false" : "true");
+        deliveryPanel.hidden = expanded;
+      });
+    }
+
     bindThumbnailEvents();
     bindVariantEvents();
     updateImageCount(window.productDetailState.colors[0] ? window.productDetailState.colors[0].images : []);

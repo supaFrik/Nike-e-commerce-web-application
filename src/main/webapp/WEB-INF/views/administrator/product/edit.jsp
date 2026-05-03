@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <c:set var="adminSidebarSubtitle" value="Product editing shell" />
 <c:set var="adminSidebarFooterTitle" value="Edit with restraint" />
 <c:set var="adminSidebarFooterCopy" value="Protect structure, pricing clarity, and visual consistency while adjusting the live assortment." />
