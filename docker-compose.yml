@@ -1,16 +1,49 @@
-version: '3.8'
 services:
   mysql-db:
     image: mysql:8.0
-    container_name: nike-db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: trinhquocviet2005
-      MYSQL_DATABASE: nike_store
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-nike_store}
+      MYSQL_USER: ${MYSQL_USER:-nike_app}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
     ports:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
+      PORT: ${APP_PORT:-8080}
+      DB_URL: jdbc:mysql://mysql-db:3306/${MYSQL_DATABASE:-nike_store}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      DB_USERNAME: ${MYSQL_USER:-nike_app}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      PRODUCT_IMAGE_STORAGE_ROOT: /data/uploads/products
+      VNPAY_TMN_CODE: ${VNPAY_TMN_CODE:-}
+      VNPAY_HASH_SECRET: ${VNPAY_HASH_SECRET:-}
+      VNPAY_PAY_URL: ${VNPAY_PAY_URL:-https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
+      VNPAY_RETURN_URL: ${VNPAY_RETURN_URL:-http://localhost:8080/api/payments/vnpay/return}
+      VNPAY_IPN_URL: ${VNPAY_IPN_URL:-http://localhost:8080/api/payments/vnpay/ipn}
+      VNPAY_API_URL: ${VNPAY_API_URL:-https://sandbox.vnpayment.vn/merchant_webapi/api/transaction}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    volumes:
+      - product_uploads:/data
+
 volumes:
   mysql_data:
+  product_uploads:

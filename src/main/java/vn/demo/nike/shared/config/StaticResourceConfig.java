@@ -28,6 +28,10 @@ public class StaticResourceConfig implements WebMvcConfigurer {
                 .toUri()
                 .toString();
 
+        if (!location.endsWith("/")) {
+            location = location + "/";
+        }
+
         registry.addResourceHandler("/uploads/products/**")
                 .addResourceLocations(location);
     }
