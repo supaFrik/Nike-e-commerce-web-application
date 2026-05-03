@@ -18,7 +18,6 @@ public class OrderItem extends BaseEntity {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    // Snapshot identifiers
     @Column(name = "product_id", nullable = false)
     private Long productId;
 
@@ -28,7 +27,6 @@ public class OrderItem extends BaseEntity {
     @Column(name = "sku", length = 100)
     private String sku;
 
-    // Snapshot display data
     @Column(name = "product_name", nullable = false)
     private String productName;
 
@@ -38,7 +36,6 @@ public class OrderItem extends BaseEntity {
     @Column(name = "color", length = 50)
     private String color;
 
-    // Pricing snapshot
     @Column(name = "unit_price", precision = 15, scale = 2, nullable = false)
     private BigDecimal unitPrice;
 

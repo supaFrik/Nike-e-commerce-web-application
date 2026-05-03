@@ -11,7 +11,7 @@
     <title>Add Category</title>
     <jsp:include page="/WEB-INF/views/administrator/layout/css.jsp" />
 </head>
-<body data-page="category-list">
+<body data-page="category-add">
 <div class="admin-shell">
     <jsp:include page="/WEB-INF/views/administrator/layout/sidebar.jsp" />
     <main class="admin-main">
@@ -24,7 +24,7 @@
                 </div>
                 <div class="action-row">
                     <a class="btn btn-light" href="${env}/admin/category/list">Cancel</a>
-                    <button class="btn btn-dark" type="button">Save category</button>
+                    <button class="btn btn-dark" id="saveCategoryButton" type="button">Save category</button>
                 </div>
             </div>
         </header>
@@ -34,9 +34,10 @@
                     <div class="panel-header">
                         <div>
                             <h3>Category details</h3>
-                            <p>Keep the structure lean enough that operators can understand it immediately.</p>
+                            <p>Keep the structure lean enough that operators can understand it immediately. Only the category name is persisted right now.</p>
                         </div>
                     </div>
+                    <div id="categoryFormMessage" class="error-message" role="alert" aria-live="assertive" style="display:none; margin-bottom:16px;"></div>
                     <div class="field-grid">
                         <div class="field-span-6"><label for="catName">Category name</label><input class="input" id="catName" type="text" placeholder="Running"></div>
                         <div class="field-span-6"><label for="catSlug">Slug</label><input class="input" id="catSlug" type="text" placeholder="running"></div>
@@ -56,6 +57,7 @@
                         <div class="list-item"><h4>Use precise labels</h4><p>Names should map to clear product intent instead of vague merchandising language.</p></div>
                         <div class="list-item"><h4>Avoid overlap</h4><p>If two categories compete for the same products, the taxonomy is already losing clarity.</p></div>
                         <div class="list-item"><h4>Keep visibility explicit</h4><p>Status should immediately tell operators whether the category is live, draft, or hidden.</p></div>
+                        <div class="list-item"><h4>Reality check</h4><p>Slug, description, status, and badge are preview-only fields until the category domain supports them.</p></div>
                     </div>
                 </aside>
             </section>

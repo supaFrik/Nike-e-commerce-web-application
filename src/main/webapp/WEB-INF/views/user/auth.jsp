@@ -18,6 +18,7 @@
     <c:set var="passwordHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['password']}" />
     <c:set var="confirmPasswordHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['confirmPassword'] or not empty org.springframework.validation.BindingResult.signupForm.globalErrors}" />
     <c:set var="signUpPasswordErrorMessage" value="${passwordHasError ? org.springframework.validation.BindingResult.signupForm.fieldErrors['password'][0].defaultMessage : ''}" />
+    <c:set var="loginBadgeMessage" value="${not empty loginError ? loginError : (not empty param.error ? 'Invalid email or password' : (not empty param.expired ? 'Your session expired. Please sign in again.' : ''))}" />
 
     <div id="appRuntime" hidden data-app-ctx="${env}" data-csrf-token="${_csrf.token}" data-csrf-header="${_csrf.headerName}"></div>
     <div
@@ -53,9 +54,9 @@
             <c:set var="_csrf" value="${_csrf}" />
             <form class="auth-form form-toggle active" id="signInForm" method="post" action="${pageContext.request.contextPath}/login">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                <c:if test="${not empty param.error}">
+                <c:if test="${not empty loginBadgeMessage}">
                     <div class="error-message" role="alert" aria-live="assertive">
-                        Invalid username or password. Please try again.
+                        ${loginBadgeMessage}
                         <a href="${env}/forgot-password" class="forgot-link" aria-describedby="forgot-password-desc">Quên mật khẩu?</a>
                     </div>
                 </c:if>

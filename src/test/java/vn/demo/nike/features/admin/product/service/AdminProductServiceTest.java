@@ -12,6 +12,7 @@ import vn.demo.nike.features.admin.product.dto.AdminProductCreateRequest;
 import vn.demo.nike.features.admin.product.dto.AdminProductFormResponse;
 import vn.demo.nike.features.admin.product.dto.AdminProductImageRequest;
 import vn.demo.nike.features.admin.product.dto.AdminProductVariantRequest;
+import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
 import vn.demo.nike.features.catalog.category.domain.Category;
 import vn.demo.nike.features.catalog.category.repository.CategoryRepository;
 import vn.demo.nike.features.catalog.product.domain.Product;
@@ -44,6 +45,9 @@ class AdminProductServiceTest {
 
     @Mock
     private ProductImageStorageService productImageStorageService;
+
+    @Mock
+    private CartItemRepository cartItemRepository;
 
     @InjectMocks
     private AdminProductService adminProductService;
