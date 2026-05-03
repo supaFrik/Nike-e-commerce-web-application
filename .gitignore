@@ -40,6 +40,8 @@ build/
 
 application-local.properties
 application-*.local.properties
+**/application-local.properties
+**/application-*.local.properties
 
 uploads/
 docker-data/
