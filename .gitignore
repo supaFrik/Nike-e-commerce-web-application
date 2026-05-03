@@ -35,6 +35,14 @@ build/
 .vscode/
 
 .env
+.env.*
+!.env.example
+
+application-local.properties
+application-*.local.properties
+
+uploads/
+docker-data/
 
 ### Mac OS ###
 .DS_Store
