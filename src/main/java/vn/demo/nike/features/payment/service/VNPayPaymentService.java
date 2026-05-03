@@ -178,7 +178,7 @@ public class VNPayPaymentService {
         }
 
         PaymentTransaction transaction = paymentTransactionRepository
-                .findByTxnRef(txnRef)
+                .findByTxnRefForUpdate(txnRef)
                 .orElse(null);
 
         if (transaction == null) {

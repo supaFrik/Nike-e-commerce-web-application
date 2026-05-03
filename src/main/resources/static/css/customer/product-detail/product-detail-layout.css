@@ -16,9 +16,10 @@
   min-width: 0;
 }
 
-.product-info {
+.product-images {
   position: sticky;
   top: 96px;
+  align-self: start;
 }
 
 .product-info-card {
@@ -189,6 +190,10 @@
   }
 
   .product-info {
+    position: static;
+  }
+
+  .product-images {
     position: static;
   }
 }

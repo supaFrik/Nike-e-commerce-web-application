@@ -47,7 +47,7 @@
 
 .main-image {
   position: relative;
-  min-height: 778px;
+  min-height: 578px;
   padding: 28px;
   border-radius: 12px;
   background: #f5f5f5;
@@ -117,7 +117,7 @@
 
 @media (max-width: 1200px) {
   .main-image {
-    min-height: 700px;
+    min-height: 520px;
   }
 }
 

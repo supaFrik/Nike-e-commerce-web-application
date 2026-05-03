@@ -3,6 +3,10 @@ package vn.demo.nike.features.order.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import vn.demo.nike.features.catalog.product.domain.Product;
+import vn.demo.nike.features.catalog.product.domain.ProductColor;
+import vn.demo.nike.features.catalog.product.domain.ProductImage;
+import vn.demo.nike.features.catalog.product.repository.ProductRepository;
 import vn.demo.nike.features.order.domain.Order;
 import vn.demo.nike.features.order.domain.OrderItem;
 import vn.demo.nike.features.order.domain.enums.OrderStatus;
@@ -13,10 +17,12 @@ import vn.demo.nike.features.payment.domain.PaymentTransaction;
 import vn.demo.nike.features.payment.domain.enums.PaymentMethod;
 import vn.demo.nike.features.payment.domain.enums.PaymentStatus;
 import vn.demo.nike.features.payment.repository.PaymentTransactionRepository;
+import vn.demo.nike.shared.util.ProductImageUrlResolver;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,9 +30,10 @@ import java.util.Locale;
 @RequiredArgsConstructor
 @Transactional
 public class OrderPageViewService {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private final OrderRepository orderRepository;
     private final PaymentTransactionRepository paymentTransactionRepository;
+    private final ProductRepository productRepository;
 
     public OrderPageView getOrderPage(Long orderId, Long userId) {
         validateInput(orderId, userId);
@@ -165,7 +172,7 @@ public class OrderPageViewService {
 
     private OrderItemView toOrderItemView(OrderItem orderItem) {
         return OrderItemView.builder()
-                .imageUrl(null)
+                .imageUrl(resolveOrderItemImage(orderItem))
                 .productName(orderItem.getProductName())
                 .productUrl(null)
                 .sku(orderItem.getSku())
@@ -211,10 +218,80 @@ public class OrderPageViewService {
                 .online(online)
                 .providerLabel(online ? "VNPay" : null)
                 .transactionNo(paymentTransaction != null ? paymentTransaction.getTransactionNo() : null)
-                .paymentTimeLabel(formatDateTime(paymentTransaction != null ? paymentTransaction.getPayDate() : null))
+                .paymentTimeLabel(formatDateTime(resolvePaymentTime(paymentTransaction)))
                 .txnRef(paymentTransaction != null ? paymentTransaction.getTxnRef() : null)
                 .description(online ? buildPaymentSummary(order, paymentTransaction) : "Thanh toán khi nhận hàng")
                 .build();
+    }
+
+    private String resolveOrderItemImage(OrderItem orderItem) {
+        if (orderItem.getProductId() == null) {
+            return null;
+        }
+
+        Product product = productRepository.findById(orderItem.getProductId()).orElse(null);
+        if (product == null || product.getColors() == null || product.getColors().isEmpty()) {
+            return null;
+        }
+
+        String requestedColor = normalize(orderItem.getColor());
+        if (requestedColor != null) {
+            String matchedColorImage = product.getColors().stream()
+                    .filter(color -> requestedColor.equalsIgnoreCase(normalize(color.getColorName())))
+                    .findFirst()
+                    .map(this::resolveColorImage)
+                    .orElse(null);
+            if (matchedColorImage != null) {
+                return matchedColorImage;
+            }
+        }
+
+        return product.getColors().stream()
+                .map(this::resolveColorImage)
+                .filter(value -> value != null && !value.isBlank())
+                .findFirst()
+                .orElse(null);
+    }
+
+    private String resolveColorImage(ProductColor color) {
+        List<ProductImage> images = safeImages(color);
+        if (images.isEmpty()) {
+            return null;
+        }
+
+        return images.stream()
+                .filter(image -> Boolean.TRUE.equals(image.getIsMainForColor()))
+                .sorted(Comparator.comparing(ProductImage::getOrderIndex, Comparator.nullsLast(Integer::compareTo)))
+                .map(ProductImage::getPath)
+                .map(ProductImageUrlResolver::toPublicUrl)
+                .findFirst()
+                .orElseGet(() -> images.stream()
+                        .sorted(Comparator.comparing(ProductImage::getOrderIndex, Comparator.nullsLast(Integer::compareTo)))
+                        .map(ProductImage::getPath)
+                        .map(ProductImageUrlResolver::toPublicUrl)
+                        .findFirst()
+                        .orElse(null));
+    }
+
+    private List<ProductImage> safeImages(ProductColor color) {
+        return color.getImages() == null ? List.of() : color.getImages();
+    }
+
+    private LocalDateTime resolvePaymentTime(PaymentTransaction paymentTransaction) {
+        if (paymentTransaction == null) {
+            return null;
+        }
+        return paymentTransaction.getPayDate() != null
+                ? paymentTransaction.getPayDate()
+                : paymentTransaction.getCreateDate();
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     private OrderPricingView buildPricing(Order order) {

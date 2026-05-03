@@ -529,7 +529,6 @@ body.topbar-condensed .eyebrow {
 }
 
 .panel {
-  border-radius: 20px;
   padding: 24px;
 }
 
@@ -777,7 +776,6 @@ body.topbar-condensed .eyebrow {
 .textarea {
   width: 100%;
   border: 1px solid #cacacb;
-  border-radius: 8px;
   background: #f5f5f5;
   color: var(--text);
   padding: 14px 16px;
@@ -967,7 +965,6 @@ body.topbar-condensed .eyebrow {
 .product-title {
   margin: 0;
   font-size: 1.03rem;
-  font-weight: 800;
   letter-spacing: -0.03em;
 }
 
@@ -1103,7 +1100,6 @@ body.topbar-condensed .eyebrow {
 
 .upload-dropzone {
   padding: 22px;
-  border-radius: 20px;
   border: 1px dashed #cacacb;
   background: #f5f5f5;
   text-align: center;
@@ -1475,7 +1471,6 @@ body.topbar-condensed .eyebrow {
 
 .empty-state {
   padding: 30px;
-  border-radius: 20px;
   background: #f5f5f5;
   border: 1px dashed #cacacb;
   text-align: center;
