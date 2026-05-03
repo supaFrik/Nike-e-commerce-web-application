@@ -19,13 +19,9 @@
 
 <!-- Hero Section -->
 <section class="hero" aria-label="Hero banner section">
-    <div class="video-container">
-        <video autoplay loop muted playsinline class="video-placeholder"
-               aria-label="Nike promotional video about Mars Yard sneakers"
-               aria-describedby="hero-description">
-            <source src="${env}/videos/stairs-nike-1080p-h264.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+    <div class="hero-media" aria-describedby="hero-description">
+        <img src="${env}/images/nike-hero-wallpaper.jpg"
+             alt="Nike global brand advertising wallpaper">
     </div>
 </section>
 

@@ -563,6 +563,7 @@
 
     <!-- JavaScript -->
     <jsp:include page="/WEB-INF/views/user/layout/js.jsp" />
+    <script src="${env}/js/customer/components/carousel.js" defer></script>
     <script src="${env}/js/customer/pages/product-list-filters.js" defer></script>
 </body>
 </html>

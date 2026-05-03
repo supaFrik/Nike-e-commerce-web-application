@@ -5,7 +5,7 @@
 [![MySQL 8](https://img.shields.io/badge/MySQL-8.0-4479A1)](https://www.mysql.com/)
 [![Maven](https://img.shields.io/badge/Maven-3.6%2B-C71A36)](https://maven.apache.org/)
 [![JSP](https://img.shields.io/badge/View-JSP%20%2B%20JSTL-blue)](https://jakarta.ee/specifications/tags/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](#license)
+[![License](https://img.shields.io/badge/License-Not%20specified-lightgrey.svg)](#license)
 
 Nike E-commerce is a full-stack web application for a Nike-style online store, built with Spring Boot, MySQL, JPA, JSP, and Spring Security. It includes a customer storefront, cart and checkout flows, and an admin back office for catalog and inventory management.
 
@@ -30,11 +30,12 @@ Current engineering focus:
 - Package-by-feature organization
 - DTO-based boundaries instead of exposing entities directly
 - Admin product add/edit flows wired to real backend data
-- Removing mock data and inline JavaScript from JSP pages
+- Cloud-ready deployment with Docker, env-based configuration, and persistent product image storage
+- Basic observability through Spring Boot Actuator and Prometheus metrics
 
 Known challenges and next improvements:
 - `checkout.jsp` still contains one remaining inline script block that should be extracted
-- Local development config currently contains hard-coded secrets and should be externalized
+- Production database migration workflow is not finalized yet
 - Test coverage is still not broad enough for a production-grade commerce system
 
 ## Table of Contents
@@ -88,8 +89,11 @@ Known challenges and next improvements:
 - MySQL 8
 - JSP + JSTL
 - Maven
+- Docker / Docker Compose
+- Spring Boot Actuator
+- Micrometer Prometheus Registry
 - JUnit 5 / Spring Boot Test
-- Docker Compose for local MySQL
+- Railway-ready runtime configuration via environment variables
 
 ## Project Structure
 
@@ -100,7 +104,7 @@ Known challenges and next improvements:
 |   +-- main/
 |   |   +-- java/vn/demo/nike/
 |   |   |   +-- features/        # Package-by-feature modules
-|   |   |   \-- config/          # Spring and application configuration
+|   |   |   \-- shared/          # Shared config, DTOs, exceptions, utilities
 |   |   +-- resources/
 |   |   |   +-- static/          # CSS, JS, images
 |   |   |   \-- application*.properties
@@ -108,7 +112,7 @@ Known challenges and next improvements:
 |   |       +-- administrator/   # Admin JSP pages
 |   |       \-- user/            # Customer JSP pages
 |   \-- test/                    # Service and page data tests
-+-- uploads/                     # Local product image storage
++-- uploads/                     # Default local product image storage
 +-- docker-compose.yml
 +-- pom.xml
 \-- README.md
@@ -134,7 +138,7 @@ cd "Nike Ecommerce Web Application"
 Using Docker Compose:
 
 ```bash
-docker compose up -d
+docker compose up -d mysql-db
 ```
 
 Default local database container:
@@ -144,19 +148,31 @@ Default local database container:
 
 ### 3. Configure environment
 
-The project runs with `spring.profiles.active=dev` by default.
+Set `SPRING_PROFILES_ACTIVE` explicitly for the environment you are running:
+- `dev` for local Maven runs
+- `docker` for `docker compose`
+- `prod` for deployed environments such as Railway
 
 Recommended approach:
-- Use `application-prod.properties` style environment variables for real credentials
+- Use environment variables for credentials, storage paths, and payment configuration
 - Do not commit real passwords or payment secrets
 
-Suggested variables for safer local setup:
+Suggested variables for local `dev` setup:
 
 ```powershell
-$env:DB_URL="jdbc:mysql://localhost:3307/nike_store?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
-$env:DB_USERNAME="root"
-$env:DB_PASSWORD="your_password"
+$env:SPRING_PROFILES_ACTIVE="dev"
+$env:MYSQL_URL="jdbc:mysql://localhost:3307/nike_store?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+$env:MYSQLUSER="root"
+$env:MYSQLPASSWORD="your_password"
+$env:VNPAY_TMN_CODE=""
+$env:VNPAY_HASH_SECRET=""
+$env:VNPAY_PAY_URL="https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+$env:VNPAY_RETURN_URL="http://localhost:9090/api/payments/vnpay/return"
+$env:VNPAY_IPN_URL="http://localhost:9090/api/payments/vnpay/ipn"
+$env:VNPAY_API_URL="https://sandbox.vnpayment.vn/merchant_webapi/api/transaction"
 ```
+
+For Docker-based local runs, copy `.env.example` to `.env` and fill in the values before running `docker compose up -d`.
 
 ### 4. Build the project
 
@@ -172,7 +188,8 @@ mvn spring-boot:run
 
 Application URLs:
 - Customer site: `http://localhost:9090`
-- Admin area: `http://localhost:9090/admin/home`
+- Admin area: `http://localhost:9090/admin`
+- Actuator health endpoint in `dev`: `http://localhost:9090/actuator/health`
 
 ### 6. Package artifact
 
@@ -196,7 +213,7 @@ Packaged artifact name:
 ### Admin flow
 
 1. Sign in with an account that has admin role
-2. Open `http://localhost:9090/admin/home`
+2. Open `http://localhost:9090/admin`
 3. Go to product inventory
 4. Create or edit product data
 5. Manage:
@@ -220,6 +237,7 @@ Useful project docs in [`docs/`](docs):
 
 - [`docs/admin-product-add-edit-flow.md`](docs/admin-product-add-edit-flow.md): admin product add/edit backend and frontend flow
 - `docs/domain-model-and-database-map.md`: domain and database notes
+- `docs/project-feature-inventory.md`: current feature inventory and status notes
 - `docs/*.puml`: feature and architecture diagrams
 
 ## Tests
@@ -230,10 +248,10 @@ Run all tests:
 mvn test
 ```
 
-Run targeted service tests:
+Run targeted tests:
 
 ```bash
-mvn -Dtest=AdminProductServiceTest,AdminPageDataServiceTest test
+mvn -Dtest=AdminProductServiceTest,AdminPageDataServiceTest,AdminCategoryServiceTest,OrderPageViewServiceTest,VNPayPaymentControllerTest test
 ```
 
 Useful verification commands:
@@ -244,7 +262,7 @@ mvn clean package -DskipTests
 ```
 
 Current note:
-- Some service-level tests exist for admin product and admin page data
+- Existing tests cover admin product/category services, admin page data, order page view logic, and VNPAY controller behavior
 - The project still needs broader test coverage for checkout, payment, security, and edge-case inventory flows
 
 ## Contributing
@@ -283,9 +301,9 @@ Example:
 
 ## License
 
-This repository should include an explicit license file.
+This repository does not currently include an explicit license file.
 
-Suggested default:
+If you plan to publish or reuse it, add one deliberately:
 - `MIT` if you want permissive reuse
 - `GPL-3.0` if you want derivative work to remain open
 

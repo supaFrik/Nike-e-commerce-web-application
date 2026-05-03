@@ -250,8 +250,10 @@ document.addEventListener("DOMContentLoaded", () => {
     toast.className = "toast active";
     toast.setAttribute("role", "status");
     toast.setAttribute("aria-live", "polite");
-    toast.style.borderLeft = `3px solid ${options.type === "success" ? "#2e7d32" : options.type === "info" ? "#1976d2" : "#d32f2f"}`;
-    toast.innerHTML = `<i aria-hidden="true">${options.type === "success" ? "✓" : options.type === "info" ? "i" : "!"}</i><div class="toast-text"></div><button class="toast-close" type="button" aria-label="Dismiss notification">&times;</button>`;
+    const type = options.type === "success" ? "success" : options.type === "info" ? "info" : "error";
+    toast.dataset.toastType = type;
+    toast.style.borderLeft = `3px solid ${type === "success" ? "#2e7d32" : type === "info" ? "#1976d2" : "#d32f2f"}`;
+    toast.innerHTML = `<span class="toast-icon" aria-hidden="true">${type === "success" ? "✓" : type === "info" ? "i" : "!"}</span><div class="toast-text"></div><button class="toast-close" type="button" aria-label="Dismiss notification">&times;</button>`;
     toast.querySelector(".toast-text").textContent = message;
     container.appendChild(toast);
 

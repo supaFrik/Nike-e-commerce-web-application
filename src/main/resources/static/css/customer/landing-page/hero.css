@@ -4,9 +4,16 @@
   width: 100%;
   height: 90vh;
 }
-.video-placeholder {
+.hero-media {
   width: 100%;
   height: 90vh;
+  overflow: hidden;
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
   object-fit: cover;
 }
 .hero-banner-container {
@@ -19,8 +26,8 @@
 }
 @font-face {
     font-family: 'hildera';
-    src: url('/fonts/hildera-webfont.woff2') format('woff2'),
-         url('/fonts/hildera-webfont.woff') format('woff');
+    src: url('../../../fonts/hildera-webfont.woff2') format('woff2'),
+         url('../../../fonts/hildera-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
