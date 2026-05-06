@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.demo.nike.features.identity.auth.request.SignupForm;
-import vn.demo.nike.features.identity.user.domain.User;
-import vn.demo.nike.features.identity.user.domain.enums.Role;
+import vn.demo.nike.features.identity.user.entity.User;
+import vn.demo.nike.features.identity.user.enums.Role;
 import vn.demo.nike.features.identity.user.repository.UserRepository;
 
 @Controller

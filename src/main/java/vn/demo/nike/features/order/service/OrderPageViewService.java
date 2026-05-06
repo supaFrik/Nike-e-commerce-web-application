@@ -3,21 +3,21 @@ package vn.demo.nike.features.order.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vn.demo.nike.features.catalog.product.domain.Product;
-import vn.demo.nike.features.catalog.product.domain.ProductColor;
-import vn.demo.nike.features.catalog.product.domain.ProductImage;
+import vn.demo.nike.features.catalog.product.entity.Product;
+import vn.demo.nike.features.catalog.product.entity.ProductColor;
+import vn.demo.nike.features.catalog.product.entity.ProductImage;
 import vn.demo.nike.features.catalog.product.repository.ProductRepository;
-import vn.demo.nike.features.order.domain.Order;
-import vn.demo.nike.features.order.domain.OrderItem;
-import vn.demo.nike.features.order.domain.enums.OrderStatus;
+import vn.demo.nike.features.order.entity.Order;
+import vn.demo.nike.features.order.entity.OrderItem;
+import vn.demo.nike.features.order.enums.OrderStatus;
 import vn.demo.nike.features.order.dto.*;
 import vn.demo.nike.features.order.exception.OrderIdAndUserIdNotFoundException;
 import vn.demo.nike.features.order.repository.OrderRepository;
-import vn.demo.nike.features.payment.domain.PaymentTransaction;
-import vn.demo.nike.features.payment.domain.enums.PaymentMethod;
-import vn.demo.nike.features.payment.domain.enums.PaymentStatus;
+import vn.demo.nike.features.payment.entity.PaymentTransaction;
+import vn.demo.nike.features.payment.enums.PaymentMethod;
+import vn.demo.nike.features.payment.enums.PaymentStatus;
 import vn.demo.nike.features.payment.repository.PaymentTransactionRepository;
-import vn.demo.nike.shared.util.ProductImageUrlResolver;
+import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -263,12 +263,12 @@ public class OrderPageViewService {
                 .filter(image -> Boolean.TRUE.equals(image.getIsMainForColor()))
                 .sorted(Comparator.comparing(ProductImage::getOrderIndex, Comparator.nullsLast(Integer::compareTo)))
                 .map(ProductImage::getPath)
-                .map(ProductImageUrlResolver::toPublicUrl)
+                .map(ProductImageUrlResolverUtil::toPublicUrl)
                 .findFirst()
                 .orElseGet(() -> images.stream()
                         .sorted(Comparator.comparing(ProductImage::getOrderIndex, Comparator.nullsLast(Integer::compareTo)))
                         .map(ProductImage::getPath)
-                        .map(ProductImageUrlResolver::toPublicUrl)
+                        .map(ProductImageUrlResolverUtil::toPublicUrl)
                         .findFirst()
                         .orElse(null));
     }

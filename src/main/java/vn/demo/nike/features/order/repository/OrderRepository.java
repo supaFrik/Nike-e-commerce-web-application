@@ -2,7 +2,7 @@ package vn.demo.nike.features.order.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import vn.demo.nike.features.order.domain.Order;
+import vn.demo.nike.features.order.entity.Order;
 
 import java.util.Optional;
 

@@ -4,20 +4,20 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import vn.demo.nike.features.admin.page.dto.AdminCategoryListItemResponse;
-import vn.demo.nike.features.admin.page.dto.AdminDashboardResponse;
-import vn.demo.nike.features.admin.page.dto.AdminOrderListItemResponse;
-import vn.demo.nike.features.admin.page.dto.AdminProductInventoryItemResponse;
-import vn.demo.nike.features.catalog.category.domain.Category;
+import vn.demo.nike.features.admin.page.dto.response.AdminCategoryListItemResponse;
+import vn.demo.nike.features.admin.page.dto.response.AdminDashboardResponse;
+import vn.demo.nike.features.admin.page.dto.response.AdminOrderListItemResponse;
+import vn.demo.nike.features.admin.page.dto.response.AdminProductInventoryItemResponse;
+import vn.demo.nike.features.catalog.category.entity.Category;
 import vn.demo.nike.features.catalog.category.repository.CategoryRepository;
-import vn.demo.nike.features.catalog.product.domain.Product;
-import vn.demo.nike.features.catalog.product.domain.ProductColor;
-import vn.demo.nike.features.catalog.product.domain.ProductImage;
-import vn.demo.nike.features.catalog.product.domain.ProductVariant;
+import vn.demo.nike.features.catalog.product.entity.Product;
+import vn.demo.nike.features.catalog.product.entity.ProductColor;
+import vn.demo.nike.features.catalog.product.entity.ProductImage;
+import vn.demo.nike.features.catalog.product.entity.ProductVariant;
 import vn.demo.nike.features.catalog.product.repository.ProductRepository;
-import vn.demo.nike.features.order.domain.Order;
+import vn.demo.nike.features.order.entity.Order;
 import vn.demo.nike.features.order.repository.OrderRepository;
-import vn.demo.nike.shared.util.ProductImageUrlResolver;
+import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
@@ -116,7 +116,7 @@ public class AdminPageDataService {
                 product.getDescription(),
                 product.getCategory() != null ? product.getCategory().getName() : "Chưa phân loại",
                 toProductStatusLabel(product),
-                ProductImageUrlResolver.toPublicUrl(imageUrl),
+                ProductImageUrlResolverUtil.toPublicUrl(imageUrl),
                 product.getPrice(),
                 product.getSalePrice(),
                 stock,

@@ -2,7 +2,7 @@ package vn.demo.nike.features.payment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import vn.demo.nike.features.payment.domain.enums.PaymentStatus;
+import vn.demo.nike.features.payment.enums.PaymentStatus;
 
 @Getter
 @AllArgsConstructor

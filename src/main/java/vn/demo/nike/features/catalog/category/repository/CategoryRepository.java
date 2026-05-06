@@ -1,7 +1,7 @@
 package vn.demo.nike.features.catalog.category.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import vn.demo.nike.features.catalog.category.domain.Category;
+import vn.demo.nike.features.catalog.category.entity.Category;
 
 import java.util.List;
 

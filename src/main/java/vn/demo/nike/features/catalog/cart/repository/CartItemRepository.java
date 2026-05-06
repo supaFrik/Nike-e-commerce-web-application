@@ -3,7 +3,7 @@ package vn.demo.nike.features.catalog.cart.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import vn.demo.nike.features.catalog.cart.domain.CartItem;
+import vn.demo.nike.features.catalog.cart.entity.CartItem;
 
 import java.util.List;
 import java.util.Optional;

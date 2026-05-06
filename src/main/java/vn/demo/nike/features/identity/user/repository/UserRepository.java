@@ -1,7 +1,7 @@
 package vn.demo.nike.features.identity.user.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import vn.demo.nike.features.identity.user.domain.User;
+import vn.demo.nike.features.identity.user.entity.User;
 
 import java.util.Optional;
 

@@ -3,19 +3,19 @@ package vn.demo.nike.features.checkout.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.demo.nike.features.catalog.product.domain.Product;
-import vn.demo.nike.features.catalog.product.domain.ProductColor;
-import vn.demo.nike.features.catalog.product.domain.ProductImage;
+import vn.demo.nike.features.catalog.product.entity.Product;
+import vn.demo.nike.features.catalog.product.entity.ProductColor;
+import vn.demo.nike.features.catalog.product.entity.ProductImage;
 import vn.demo.nike.features.catalog.product.repository.ProductRepository;
-import vn.demo.nike.features.catalog.cart.response.CartItemViewResponse;
-import vn.demo.nike.features.catalog.cart.response.CartSummaryResponse;
+import vn.demo.nike.features.catalog.cart.dto.response.CartItemViewResponse;
+import vn.demo.nike.features.catalog.cart.dto.response.CartSummaryResponse;
 import vn.demo.nike.features.catalog.cart.service.CartService;
-import vn.demo.nike.features.order.domain.Order;
-import vn.demo.nike.features.order.domain.OrderItem;
-import vn.demo.nike.features.order.domain.enums.ShippingMethod;
-import vn.demo.nike.features.checkout.dto.CheckoutPageViewData;
+import vn.demo.nike.features.order.entity.Order;
+import vn.demo.nike.features.order.entity.OrderItem;
+import vn.demo.nike.features.order.enums.ShippingMethod;
+import vn.demo.nike.features.checkout.dto.response.CheckoutPageResponse;
 import vn.demo.nike.features.order.repository.OrderRepository;
-import vn.demo.nike.shared.util.ProductImageUrlResolver;
+import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -30,7 +30,7 @@ public class CheckoutPageViewService {
     private final ProductRepository productRepository;
 
     @Transactional(readOnly = true)
-    public CheckoutPageViewData buildCheckoutPage(Long userId, Long orderId) {
+    public CheckoutPageResponse buildCheckoutPage(Long userId, Long orderId) {
         CartSummaryResponse cart = cartService.getCurrentCart();
         Optional<Order> order = resolveCheckoutOrder(userId, orderId, cart.getItemCount() > 0);
 
@@ -39,7 +39,7 @@ public class CheckoutPageViewService {
         }
 
         Order checkoutOrder = order.orElse(null);
-        return new CheckoutPageViewData(
+        return new CheckoutPageResponse(
                 cart,
                 checkoutOrder,
                 checkoutOrder != null ? checkoutOrder.getShippingMethod() : ShippingMethod.STANDARD,
@@ -112,7 +112,7 @@ public class CheckoutPageViewService {
                 ))
                 .filter(image -> Boolean.TRUE.equals(image.getIsMainForColor()))
                 .map(ProductImage::getPath)
-                .map(ProductImageUrlResolver::toPublicUrl)
+                .map(ProductImageUrlResolverUtil::toPublicUrl)
                 .findFirst()
                 .orElseGet(() -> product.getColors().stream()
                         .flatMap(color -> safeImages(color).stream())
@@ -121,7 +121,7 @@ public class CheckoutPageViewService {
                                 Comparator.nullsLast(Integer::compareTo)
                         ))
                         .map(ProductImage::getPath)
-                        .map(ProductImageUrlResolver::toPublicUrl)
+                        .map(ProductImageUrlResolverUtil::toPublicUrl)
                         .findFirst()
                         .orElse(null));
     }

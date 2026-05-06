@@ -4,23 +4,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.demo.nike.features.catalog.cart.exception.*;
-import vn.demo.nike.features.catalog.product.domain.Product;
-import vn.demo.nike.features.catalog.product.domain.ProductColor;
-import vn.demo.nike.features.catalog.product.domain.ProductImage;
-import vn.demo.nike.features.catalog.product.domain.ProductVariant;
+import vn.demo.nike.features.catalog.product.entity.Product;
+import vn.demo.nike.features.catalog.product.entity.ProductColor;
+import vn.demo.nike.features.catalog.product.entity.ProductImage;
+import vn.demo.nike.features.catalog.product.entity.ProductVariant;
 import vn.demo.nike.features.catalog.product.repository.ProductVariantRepository;
-import vn.demo.nike.features.identity.user.domain.User;
+import vn.demo.nike.features.identity.user.entity.User;
 import vn.demo.nike.features.identity.user.repository.UserRepository;
 import vn.demo.nike.features.identity.user.request.CurrentUserProvider;
-import vn.demo.nike.features.catalog.cart.domain.CartItem;
+import vn.demo.nike.features.catalog.cart.entity.CartItem;
 import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
-import vn.demo.nike.features.catalog.cart.request.AddToCartRequest;
-import vn.demo.nike.features.catalog.cart.request.UpdateCartItemQuantityRequest;
-import vn.demo.nike.features.catalog.cart.response.AddToCartResponse;
-import vn.demo.nike.features.catalog.cart.response.CartCountResponse;
-import vn.demo.nike.features.catalog.cart.response.CartItemViewResponse;
-import vn.demo.nike.features.catalog.cart.response.CartSummaryResponse;
-import vn.demo.nike.shared.util.ProductImageUrlResolver;
+import vn.demo.nike.features.catalog.cart.dto.request.AddToCartRequest;
+import vn.demo.nike.features.catalog.cart.dto.request.UpdateCartItemQuantityRequest;
+import vn.demo.nike.features.catalog.cart.dto.response.AddToCartResponse;
+import vn.demo.nike.features.catalog.cart.dto.response.CartCountResponse;
+import vn.demo.nike.features.catalog.cart.dto.response.CartItemViewResponse;
+import vn.demo.nike.features.catalog.cart.dto.response.CartSummaryResponse;
+import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -208,7 +208,7 @@ public class CartService {
                 ))
                 .filter(image -> Boolean.TRUE.equals(image.getIsMainForColor()))
                 .map(ProductImage::getPath)
-                .map(ProductImageUrlResolver::toPublicUrl)
+                .map(ProductImageUrlResolverUtil::toPublicUrl)
                 .findFirst()
                 .orElseGet(() -> images.stream()
                         .sorted(Comparator.comparing(
@@ -216,7 +216,7 @@ public class CartService {
                                 Comparator.nullsLast(Integer::compareTo)
                         ))
                         .map(ProductImage::getPath)
-                        .map(ProductImageUrlResolver::toPublicUrl)
+                        .map(ProductImageUrlResolverUtil::toPublicUrl)
                         .findFirst()
                         .orElse(null));
     }

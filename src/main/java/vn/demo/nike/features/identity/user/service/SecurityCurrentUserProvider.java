@@ -3,8 +3,8 @@ package vn.demo.nike.features.identity.user.service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import vn.demo.nike.features.identity.user.domain.CustomUserPrincipal;
-import vn.demo.nike.features.identity.user.domain.User;
+import vn.demo.nike.features.identity.user.entity.CustomUserPrincipal;
+import vn.demo.nike.features.identity.user.entity.User;
 import vn.demo.nike.features.identity.user.request.CurrentUserProvider;
 
 @Component

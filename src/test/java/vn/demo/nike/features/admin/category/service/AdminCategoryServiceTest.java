@@ -6,8 +6,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import vn.demo.nike.features.admin.category.dto.AdminCategoryCreateRequest;
-import vn.demo.nike.features.catalog.category.domain.Category;
+import vn.demo.nike.features.admin.category.dto.request.AdminCategoryCreateRequest;
+import vn.demo.nike.features.catalog.category.entity.Category;
 import vn.demo.nike.features.catalog.category.repository.CategoryRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;

@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
-import vn.demo.nike.features.admin.product.dto.AdminCreatedProductResponse;
-import vn.demo.nike.features.admin.product.dto.AdminProductCategoryOptionResponse;
-import vn.demo.nike.features.admin.product.dto.AdminProductColorRequest;
-import vn.demo.nike.features.admin.product.dto.AdminProductCreateRequest;
-import vn.demo.nike.features.admin.product.dto.AdminProductFormResponse;
-import vn.demo.nike.features.admin.product.dto.AdminProductImageRequest;
-import vn.demo.nike.features.admin.product.dto.AdminProductVariantRequest;
+import vn.demo.nike.features.admin.product.dto.response.AdminCreatedProductResponse;
+import vn.demo.nike.features.admin.product.dto.response.AdminProductCategoryOptionResponse;
+import vn.demo.nike.features.admin.product.dto.request.AdminProductColorRequest;
+import vn.demo.nike.features.admin.product.dto.request.AdminProductCreateRequest;
+import vn.demo.nike.features.admin.product.dto.response.AdminProductFormResponse;
+import vn.demo.nike.features.admin.product.dto.request.AdminProductImageRequest;
+import vn.demo.nike.features.admin.product.dto.request.AdminProductVariantRequest;
 import vn.demo.nike.features.admin.product.exception.InvalidFileMappingException;
 import vn.demo.nike.features.admin.product.exception.InvalidProductColorException;
 import vn.demo.nike.features.admin.product.exception.InvalidSalePriceException;
@@ -22,15 +22,15 @@ import vn.demo.nike.features.admin.product.exception.InvalidUploadedImageExcepti
 import vn.demo.nike.features.admin.product.exception.ProductColorNotFoundException;
 import vn.demo.nike.features.admin.product.exception.ProductNotFoundException;
 import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
-import vn.demo.nike.features.catalog.category.domain.Category;
+import vn.demo.nike.features.catalog.category.entity.Category;
 import vn.demo.nike.features.catalog.category.exception.CategoryNotFoundException;
 import vn.demo.nike.features.catalog.category.repository.CategoryRepository;
-import vn.demo.nike.features.catalog.product.domain.Product;
-import vn.demo.nike.features.catalog.product.domain.ProductColor;
-import vn.demo.nike.features.catalog.product.domain.ProductImage;
-import vn.demo.nike.features.catalog.product.domain.ProductVariant;
+import vn.demo.nike.features.catalog.product.entity.Product;
+import vn.demo.nike.features.catalog.product.entity.ProductColor;
+import vn.demo.nike.features.catalog.product.entity.ProductImage;
+import vn.demo.nike.features.catalog.product.entity.ProductVariant;
 import vn.demo.nike.features.catalog.product.repository.ProductRepository;
-import vn.demo.nike.shared.util.ProductImageUrlResolver;
+import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -125,7 +125,7 @@ public class AdminProductService {
                                 .sorted(Comparator.comparing(image -> defaultOrder(image.getOrderIndex())))
                                 .map(image -> new AdminProductFormResponse.AdminImageFormItem(
                                         image.getId(),
-                                        ProductImageUrlResolver.toPublicUrl(image.getPath()),
+                                        ProductImageUrlResolverUtil.toPublicUrl(image.getPath()),
                                         image.getTitle(),
                                         image.getAltText(),
                                         image.getOrderIndex(),

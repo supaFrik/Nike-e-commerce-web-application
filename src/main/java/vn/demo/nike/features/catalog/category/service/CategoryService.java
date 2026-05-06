@@ -2,7 +2,7 @@ package vn.demo.nike.features.catalog.category.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import vn.demo.nike.features.catalog.category.dto.CategoryView;
+import vn.demo.nike.features.catalog.category.dto.response.CategoryView;
 import vn.demo.nike.features.catalog.category.exception.CategoryNotFoundException;
 import vn.demo.nike.features.catalog.category.repository.CategoryRepository;
 

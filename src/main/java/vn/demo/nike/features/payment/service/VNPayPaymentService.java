@@ -5,14 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.demo.nike.features.order.domain.Order;
-import vn.demo.nike.features.order.domain.enums.OrderStatus;
+import vn.demo.nike.features.order.entity.Order;
+import vn.demo.nike.features.order.enums.OrderStatus;
 import vn.demo.nike.features.order.repository.OrderRepository;
 import vn.demo.nike.features.payment.config.VNPayProperties;
-import vn.demo.nike.features.payment.domain.PaymentTransaction;
-import vn.demo.nike.features.payment.domain.enums.PaymentMethod;
-import vn.demo.nike.features.payment.domain.enums.PaymentProvider;
-import vn.demo.nike.features.payment.domain.enums.PaymentStatus;
+import vn.demo.nike.features.payment.entity.PaymentTransaction;
+import vn.demo.nike.features.payment.enums.PaymentMethod;
+import vn.demo.nike.features.payment.enums.PaymentProvider;
+import vn.demo.nike.features.payment.enums.PaymentStatus;
 import vn.demo.nike.features.payment.dto.VNPayCreatePaymentResponse;
 import vn.demo.nike.features.payment.dto.VNPayIpnResponse;
 import vn.demo.nike.features.payment.dto.VNPayReturnResponse;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static vn.demo.nike.features.payment.domain.enums.PaymentStatus.PENDING;
+import static vn.demo.nike.features.payment.enums.PaymentStatus.PENDING;
 
 @Slf4j
 @Service

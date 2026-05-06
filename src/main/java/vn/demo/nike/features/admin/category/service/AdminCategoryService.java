@@ -3,9 +3,9 @@ package vn.demo.nike.features.admin.category.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.demo.nike.features.admin.category.dto.AdminCategoryCreateRequest;
-import vn.demo.nike.features.admin.category.dto.AdminCategoryResponse;
-import vn.demo.nike.features.catalog.category.domain.Category;
+import vn.demo.nike.features.admin.category.dto.request.AdminCategoryCreateRequest;
+import vn.demo.nike.features.admin.category.dto.response.AdminCategoryResponse;
+import vn.demo.nike.features.catalog.category.entity.Category;
 import vn.demo.nike.features.catalog.category.repository.CategoryRepository;
 
 @Service

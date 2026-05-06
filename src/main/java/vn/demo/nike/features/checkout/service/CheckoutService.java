@@ -3,28 +3,28 @@ package vn.demo.nike.features.checkout.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.demo.nike.features.catalog.product.domain.Product;
-import vn.demo.nike.features.catalog.product.domain.ProductColor;
-import vn.demo.nike.features.catalog.product.domain.ProductVariant;
+import vn.demo.nike.features.catalog.product.entity.Product;
+import vn.demo.nike.features.catalog.product.entity.ProductColor;
+import vn.demo.nike.features.catalog.product.entity.ProductVariant;
 import vn.demo.nike.features.catalog.product.repository.ProductVariantRepository;
-import vn.demo.nike.features.identity.user.domain.Address;
-import vn.demo.nike.features.identity.user.domain.User;
+import vn.demo.nike.features.identity.user.entity.Address;
+import vn.demo.nike.features.identity.user.entity.User;
 import vn.demo.nike.features.identity.user.repository.AddressRepository;
 import vn.demo.nike.features.identity.user.repository.UserRepository;
 import vn.demo.nike.features.identity.user.request.CurrentUserProvider;
-import vn.demo.nike.features.catalog.cart.domain.CartItem;
+import vn.demo.nike.features.catalog.cart.entity.CartItem;
 import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
-import vn.demo.nike.features.order.domain.Order;
-import vn.demo.nike.features.order.domain.OrderItem;
-import vn.demo.nike.features.order.domain.enums.ShippingMethod;
-import vn.demo.nike.features.checkout.dto.CheckoutItemSnapshotDto;
-import vn.demo.nike.features.checkout.dto.PlaceCheckoutRequest;
-import vn.demo.nike.features.checkout.dto.CheckoutInitiationResponse;
+import vn.demo.nike.features.order.entity.Order;
+import vn.demo.nike.features.order.entity.OrderItem;
+import vn.demo.nike.features.order.enums.ShippingMethod;
+import vn.demo.nike.features.checkout.model.CheckoutItemSnapshot;
+import vn.demo.nike.features.checkout.dto.request.PlaceCheckoutRequest;
+import vn.demo.nike.features.checkout.dto.response.CheckoutInitiationResponse;
 import vn.demo.nike.features.checkout.exception.InvalidCheckoutRequestException;
 import vn.demo.nike.features.checkout.exception.UnauthenticatedCheckoutException;
 import vn.demo.nike.features.order.repository.OrderRepository;
-import vn.demo.nike.features.order.domain.enums.OrderStatus;
-import vn.demo.nike.features.payment.domain.enums.PaymentMethod;
+import vn.demo.nike.features.order.enums.OrderStatus;
+import vn.demo.nike.features.payment.enums.PaymentMethod;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class CheckoutService {
         Address shippingAddress = resolveShippingAddress(user, request);
 
         List<CartItem> cartItems = loadCartItems(user.getId());
-        List<CheckoutItemSnapshotDto> snapshots = buildOrderItemSnapshots(cartItems);
+        List<CheckoutItemSnapshot> snapshots = buildOrderItemSnapshots(cartItems);
 
         BigDecimal subtotal = calculateSubtotal(snapshots);
 
@@ -82,7 +82,7 @@ public class CheckoutService {
         }
     }
 
-    private CheckoutInitiationResponse handleCheckoutCompletion(Order order, List<CheckoutItemSnapshotDto> snapshots) {
+    private CheckoutInitiationResponse handleCheckoutCompletion(Order order, List<CheckoutItemSnapshot> snapshots) {
         return checkoutPaymentHandlers.stream()
                 .filter(handler -> handler.supports(order.getPaymentMethod()))
                 .findFirst()
@@ -90,9 +90,9 @@ public class CheckoutService {
                 .orElseGet(() -> buildPendingExternalPaymentResponse(order, snapshots));
     }
 
-    private CheckoutInitiationResponse buildPendingExternalPaymentResponse(Order order, List<CheckoutItemSnapshotDto> snapshots) {
+    private CheckoutInitiationResponse buildPendingExternalPaymentResponse(Order order, List<CheckoutItemSnapshot> snapshots) {
         int itemCount = snapshots.stream()
-                .map(CheckoutItemSnapshotDto::getQuantity)
+                .map(CheckoutItemSnapshot::getQuantity)
                 .filter(quantity -> quantity != null)
                 .mapToInt(Integer::intValue)
                 .sum();
@@ -178,12 +178,12 @@ public class CheckoutService {
         return cartItems;
     }
 
-    private List<CheckoutItemSnapshotDto> buildOrderItemSnapshots(List<CartItem> cartItems) {
+    private List<CheckoutItemSnapshot> buildOrderItemSnapshots(List<CartItem> cartItems) {
         if (cartItems == null || cartItems.isEmpty()) {
             throw new InvalidCheckoutRequestException("No cartItems found for user");
         }
 
-        List<CheckoutItemSnapshotDto> orderItemSnapshots = new ArrayList<>();
+        List<CheckoutItemSnapshot> orderItemSnapshots = new ArrayList<>();
         for (CartItem cartItem : cartItems) {
             Long variantId = cartItem.getVariant().getId();
 
@@ -201,7 +201,7 @@ public class CheckoutService {
             BigDecimal unitPrice = resolveCurrentPrice(cartItem);
             BigDecimal lineTotal = unitPrice.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
 
-            CheckoutItemSnapshotDto orderItemSnapshot = new CheckoutItemSnapshotDto(
+            CheckoutItemSnapshot orderItemSnapshot = new CheckoutItemSnapshot(
                     product.getId(),
                     variant.getId(),
                     variant.getSku(),
@@ -250,14 +250,14 @@ public class CheckoutService {
         return trimmed.isEmpty() ? null : trimmed;
     }
 
-    private BigDecimal calculateSubtotal(List<CheckoutItemSnapshotDto> snapshots) {
+    private BigDecimal calculateSubtotal(List<CheckoutItemSnapshot> snapshots) {
         if (snapshots == null || snapshots.isEmpty()) {
             throw new InvalidCheckoutRequestException("No cart items found for user");
         }
 
         BigDecimal subtotal = BigDecimal.ZERO;
 
-        for (CheckoutItemSnapshotDto snapshot : snapshots) {
+        for (CheckoutItemSnapshot snapshot : snapshots) {
             if (snapshot.getLineTotal() == null) {
                 throw new InvalidCheckoutRequestException("Line total is null");
             }
@@ -324,7 +324,7 @@ public class CheckoutService {
         return OrderStatus.PENDING_PAYMENT;
     }
 
-    private void attachOrderItems(Order order, List<CheckoutItemSnapshotDto> snapshots) {
+    private void attachOrderItems(Order order, List<CheckoutItemSnapshot> snapshots) {
         if (order == null || snapshots == null || snapshots.isEmpty()) {
             throw new InvalidCheckoutRequestException("No order items found for user");
         }
@@ -333,13 +333,13 @@ public class CheckoutService {
             order.setItems(new ArrayList<>());
         }
 
-        for (CheckoutItemSnapshotDto snapshot : snapshots) {
+        for (CheckoutItemSnapshot snapshot : snapshots) {
             OrderItem orderItem = toOrderItem(order, snapshot);
             order.getItems().add(orderItem);
         }
     }
 
-    private OrderItem toOrderItem(Order order, CheckoutItemSnapshotDto snapshot) {
+    private OrderItem toOrderItem(Order order, CheckoutItemSnapshot snapshot) {
         if (order == null || snapshot == null) {
             throw new InvalidCheckoutRequestException("Snapshot must not be null");
         }
