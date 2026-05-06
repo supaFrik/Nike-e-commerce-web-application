@@ -314,7 +314,7 @@
                                         <div class="item-image">
                                             <c:choose>
                                                 <c:when test="${not empty item.imageUrl}">
-                                                    <img src="${env}${item.imageUrl}" alt="${item.productName}">
+                                                    <img src="${item.imageUrl}" alt="${item.productName}">
                                                 </c:when>
                                                 <c:otherwise>
                                                     <img src="${env}/images/products/default-product.avif" alt="${item.productName}">

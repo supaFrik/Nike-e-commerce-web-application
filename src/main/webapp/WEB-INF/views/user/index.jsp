@@ -169,7 +169,7 @@
                                                     <a aria-label="${product.name}" href="${env}/product-detail?id=${product.id}"
                                                        class="product-card__img-link-overlay" data-testid="product-card-img-link-overlay"
                                                        aria-describedby="product-${status.index + 1}-desc">
-                                                        <img src="${env}${product.thumbnailUrl}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                        <img src="${product.thumbnailUrl}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                     </a>
                                                 </c:when>
                                                 <c:otherwise>

@@ -58,11 +58,11 @@
                                     <button type="button"
                                             class="thumbnail-item<c:if test='${selectedMainImage != null and image.id == selectedMainImage.id}'> active</c:if>"
                                             data-thumbnail-index="${status.index}"
-                                            data-image-path="${env}${image.path}"
+                                            data-image-path="${image.path}"
                                             data-alt-text="${fn:escapeXml(image.altText)}"
                                             role="listitem"
                                             aria-label="View image ${status.count}">
-                                        <img src="${env}${image.path}" alt="${fn:escapeXml(image.altText)}">
+                                        <img src="${image.path}" alt="${fn:escapeXml(image.altText)}">
                                     </button>
                                 </c:forEach>
                             </c:when>
@@ -84,7 +84,7 @@
                             <c:choose>
                                 <c:when test="${selectedMainImage != null}">
                                     <img id="currentImage"
-                                         src="${env}${selectedMainImage.path}"
+                                         src="${selectedMainImage.path}"
                                          alt="${fn:escapeXml(selectedMainImage.altText)}">
                                 </c:when>
                                 <c:otherwise>
@@ -197,7 +197,7 @@
                                         <c:choose>
                                             <c:when test="${colorPreviewImage != null}">
                                                 <img class="color-option-image"
-                                                     src="${env}${colorPreviewImage.path}"
+                                                     src="${colorPreviewImage.path}"
                                                      alt="${fn:escapeXml(color.colorName)} preview">
                                             </c:when>
                                             <c:otherwise>
@@ -392,7 +392,7 @@
         <c:forEach var="image" items="${color.images}" varStatus="imageStatus">
         {
           "id": ${image.id},
-          "path": "${env}${fn:escapeXml(image.path)}",
+          "path": "${fn:escapeXml(image.path)}",
           "title": "${fn:escapeXml(image.title)}",
           "altText": "${fn:escapeXml(image.altText)}",
           "isMainForColor": ${image.isMainForColor},

@@ -310,7 +310,7 @@
                                                         <div class="wall-image-loader content-card__image" data-testid="wall-image-loader">
                                                         <c:choose>
                                                             <c:when test="${not empty product.heroImg}">
-                                                                <img src="${env}${product.heroImg}"
+                                                                <img src="${product.heroImg}"
                                                                      alt="${product.name}" loading="lazy"
                                                                      aria-describedby="product-${status.index + 1}-desc">
                                                             </c:when>

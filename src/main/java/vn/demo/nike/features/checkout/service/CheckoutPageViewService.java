@@ -111,7 +111,7 @@ public class CheckoutPageViewService {
                         Comparator.nullsLast(Integer::compareTo)
                 ))
                 .filter(image -> Boolean.TRUE.equals(image.getIsMainForColor()))
-                .map(ProductImage::getPath)
+                .map(ProductImage::getUrl)
                 .map(ProductImageUrlResolverUtil::toPublicUrl)
                 .findFirst()
                 .orElseGet(() -> product.getColors().stream()
@@ -120,7 +120,7 @@ public class CheckoutPageViewService {
                                 ProductImage::getOrderIndex,
                                 Comparator.nullsLast(Integer::compareTo)
                         ))
-                        .map(ProductImage::getPath)
+                        .map(ProductImage::getUrl)
                         .map(ProductImageUrlResolverUtil::toPublicUrl)
                         .findFirst()
                         .orElse(null));

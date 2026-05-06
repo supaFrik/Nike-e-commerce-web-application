@@ -17,7 +17,7 @@ public interface ProductSearchRepository extends Repository<Product, Long> {
         p.salePrice as salePrice,
         c.name as categoryName,
         (
-            SELECT MIN(pi.path)
+            SELECT MIN(pi.url)
             FROM ProductImage pi
             WHERE pi.color.product.id = p.id
             AND pi.isMainForColor = true

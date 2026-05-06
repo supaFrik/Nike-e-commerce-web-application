@@ -91,6 +91,9 @@
                             <c:choose>
                                 <c:when test="${not empty p.imageUrl}">
                                     <c:choose>
+                                        <c:when test="${fn:startsWith(p.imageUrl, 'http')}">
+                                            <img src="${p.imageUrl}" alt="${p.name}" class="product-image" />
+                                        </c:when>
                                         <c:when test="${fn:startsWith(p.imageUrl, '/')}">
                                             <img src="${env}${p.imageUrl}" alt="${p.name}" class="product-image" />
                                         </c:when>

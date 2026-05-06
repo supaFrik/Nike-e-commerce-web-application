@@ -85,11 +85,11 @@ public class AdminPageDataService {
                 .flatMap(color -> color.getImages().stream()
                         .sorted(Comparator.comparing(image -> image.getOrderIndex() == null ? Integer.MAX_VALUE : image.getOrderIndex())))
                 .filter(image -> Boolean.TRUE.equals(image.getIsMainForColor()))
-                .map(ProductImage::getPath)
+                .map(ProductImage::getUrl)
                 .findFirst()
                 .orElseGet(() -> sortedColors.stream()
                         .flatMap(color -> color.getImages().stream())
-                        .map(ProductImage::getPath)
+                        .map(ProductImage::getUrl)
                         .findFirst()
                         .orElse(null));
 

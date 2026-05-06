@@ -21,6 +21,7 @@ import vn.demo.nike.features.admin.product.exception.InvalidSalePriceException;
 import vn.demo.nike.features.admin.product.exception.InvalidUploadedImageException;
 import vn.demo.nike.features.admin.product.exception.ProductColorNotFoundException;
 import vn.demo.nike.features.admin.product.exception.ProductNotFoundException;
+import vn.demo.nike.features.admin.product.model.ImageMetaData;
 import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
 import vn.demo.nike.features.catalog.category.entity.Category;
 import vn.demo.nike.features.catalog.category.exception.CategoryNotFoundException;
@@ -37,6 +38,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,7 +85,7 @@ public class AdminProductService {
         validateCreateOrUpdateRequest(request, uploadedFiles, existingImages);
 
         Category category = findCategory(request.getCategoryId());
-        List<String> pathsToDelete = collectPathsToDelete(product, request, existingImages);
+        List<String> pathsToDelete = collectProviderIdsToDelete(product, request, existingImages);
 
         if (!existingVariantIds.isEmpty()) {
             cartItemRepository.deleteByVariant_IdIn(existingVariantIds);
@@ -101,7 +103,7 @@ public class AdminProductService {
     @Transactional
     public void deleteProduct(Long productId) {
         Product product = findProduct(productId);
-        List<String> pathsToDelete = collectAllImagePaths(product);
+        List<String> pathsToDelete = collectAllProviderIds(product);
         List<Long> variantIds = collectVariantIds(product);
 
         if (!variantIds.isEmpty()) {
@@ -125,7 +127,7 @@ public class AdminProductService {
                                 .sorted(Comparator.comparing(image -> defaultOrder(image.getOrderIndex())))
                                 .map(image -> new AdminProductFormResponse.AdminImageFormItem(
                                         image.getId(),
-                                        ProductImageUrlResolverUtil.toPublicUrl(image.getPath()),
+                                        ProductImageUrlResolverUtil.toPublicUrl(image.getUrl()),
                                         image.getTitle(),
                                         image.getAltText(),
                                         image.getOrderIndex(),
@@ -197,7 +199,9 @@ public class AdminProductService {
 
             for (AdminProductImageRequest imageRequest : colorRequest.getImages()) {
                 ProductImage image = new ProductImage();
-                image.setPath(resolveImagePath(imageRequest, uploadedFiles, existingImages, request.getName(), colorRequest.getColorName()));
+                ImageMetaData metaData = resolveImageMetaData(imageRequest, uploadedFiles, existingImages, product.getName(), color.getColorName());
+                image.setUrl(metaData.url());
+                image.setProviderPublicId(metaData.providerPublicId());
                 image.setTitle(imageRequest.getTitle());
                 image.setAltText(imageRequest.getAltText());
                 image.setOrderIndex(imageRequest.getOrderIndex());
@@ -210,17 +214,20 @@ public class AdminProductService {
         }
     }
 
-    private String resolveImagePath(AdminProductImageRequest imageRequest,
-                                    Map<String, MultipartFile> uploadedFiles,
-                                    Map<Long, ProductImage> existingImages,
-                                    String productName,
-                                    String colorName) {
+    private ImageMetaData resolveImageMetaData(AdminProductImageRequest imageRequest,
+                                               Map<String, MultipartFile> uploadedFiles,
+                                               Map<Long, ProductImage> existingImages,
+                                               String productName,
+                                               String colorName) {
         if (imageRequest.getExistingImageId() != null) {
             ProductImage existingImage = existingImages.get(imageRequest.getExistingImageId());
             if (existingImage == null) {
                 throw new InvalidProductColorException("Existing image does not belong to this product: " + imageRequest.getExistingImageId());
             }
-            return existingImage.getPath();
+            return new ImageMetaData(
+                    existingImage.getUrl(),
+                    existingImage.getProviderPublicId()
+            );
         }
 
         String clientKey = normalize(imageRequest.getClientKey());
@@ -228,7 +235,19 @@ public class AdminProductService {
         if (file == null) {
             throw new InvalidProductColorException("Image key '" + imageRequest.getClientKey() + "' not found in uploaded files.");
         }
-        return productImageStorageService.store(file, productName, colorName);
+
+        byte[] content;
+        try {
+            content = file.getBytes();
+        } catch (IOException ex) {
+            throw new InvalidUploadedImageException("Failed to read uploaded image bytes: " + file.getOriginalFilename());
+        }
+
+        return productImageStorageService.upload(
+                content,
+                productName,
+                colorName
+        );
     }
 
     private void validateCreateOrUpdateRequest(AdminProductCreateRequest request,
@@ -370,9 +389,9 @@ public class AdminProductService {
         return existingImages;
     }
 
-    private List<String> collectPathsToDelete(Product product,
-                                              AdminProductCreateRequest request,
-                                              Map<Long, ProductImage> existingImages) {
+    private List<String> collectProviderIdsToDelete(Product product,
+                                                    AdminProductCreateRequest request,
+                                                    Map<Long, ProductImage> existingImages) {
         Set<Long> retainedExistingImageIds = request.getColors().stream()
                 .flatMap(color -> color.getImages().stream())
                 .map(AdminProductImageRequest::getExistingImageId)
@@ -382,15 +401,15 @@ public class AdminProductService {
         return existingImages.entrySet().stream()
                 .filter(entry -> !retainedExistingImageIds.contains(entry.getKey()))
                 .map(Map.Entry::getValue)
-                .map(ProductImage::getPath)
+                .map(ProductImage::getProviderPublicId)
                 .filter(Objects::nonNull)
                 .toList();
     }
 
-    private List<String> collectAllImagePaths(Product product) {
+    private List<String> collectAllProviderIds(Product product) {
         return product.getColors().stream()
                 .flatMap(color -> color.getImages().stream())
-                .map(ProductImage::getPath)
+                .map(ProductImage::getProviderPublicId)
                 .filter(Objects::nonNull)
                 .toList();
     }
@@ -403,26 +422,26 @@ public class AdminProductService {
                 .collect(Collectors.toList());
     }
 
-    private void scheduleDeleteAfterCommit(Collection<String> pathsToDelete) {
-        if (pathsToDelete == null || pathsToDelete.isEmpty()) {
+    private void scheduleDeleteAfterCommit(Collection<String> providerIdsToDelete) {
+        if (providerIdsToDelete == null || providerIdsToDelete.isEmpty()) {
             return;
         }
 
-        List<String> immutablePaths = new ArrayList<>(pathsToDelete);
+        List<String> immutablePaths = new ArrayList<>(providerIdsToDelete);
         if (!TransactionSynchronizationManager.isSynchronizationActive()) {
-            deletePathsBestEffort(immutablePaths);
+            deleteProviderIdsBestEffort(immutablePaths);
             return;
         }
 
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
-                deletePathsBestEffort(immutablePaths);
+                deleteProviderIdsBestEffort(immutablePaths);
             }
         });
     }
 
-    private void deletePathsBestEffort(List<String> pathsToDelete) {
+    private void deleteProviderIdsBestEffort(List<String> pathsToDelete) {
         pathsToDelete.forEach(path -> {
             try {
                 productImageStorageService.delete(path);
