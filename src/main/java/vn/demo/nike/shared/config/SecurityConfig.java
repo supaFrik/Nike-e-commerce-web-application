@@ -78,7 +78,7 @@ public class SecurityConfig {
         http
                 .securityMatcher(EndpointRequest.toAnyEndpoint())
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .csrf(csrf -> csrf.disable()); // actuator không cần CSRF
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 

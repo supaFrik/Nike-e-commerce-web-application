@@ -16,11 +16,15 @@ public class CloudinaryConfig {
 
     @Bean
     public Cloudinary cloudinary() {
-        if (props.getCloudName() == null ||
-                props.getApiKey() == null ||
-                props.getApiSecret() == null) {
+        if (hasText(props.getUrl())) {
+            return new Cloudinary(props.getUrl());
+        }
 
-            throw new IllegalStateException("Missing Cloudinary config (resolved via Spring)");
+        if (!hasText(props.getCloudName()) ||
+                !hasText(props.getApiKey()) ||
+                !hasText(props.getApiSecret())) {
+
+            throw new IllegalStateException("Missing Cloudinary config. Set CLOUDINARY_URL or CLOUDINARY_CLOUD_NAME/CLOUDINARY_API_KEY/CLOUDINARY_API_SECRET");
         }
 
         return new Cloudinary(Map.of(
@@ -28,5 +32,9 @@ public class CloudinaryConfig {
                 "api_key", props.getApiKey(),
                 "api_secret", props.getApiSecret()
         ));
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.isBlank();
     }
 }

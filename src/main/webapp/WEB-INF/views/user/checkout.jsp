@@ -164,33 +164,6 @@
                             </div>
 
                             <div class="form-group">
-                                <label>Địa chỉ đang chọn</label>
-                                <div class="security-info" style="margin-top: 0;">
-                                    <i class="fas fa-home"></i>
-                                    <div class="security-text" id="selectedAddressSummary">
-                                        <c:choose>
-                                            <c:when test="${selectedAddress != null}">
-                                                <strong><c:out value="${empty selectedAddress.recipientName ? currentUser.username : selectedAddress.recipientName}" /></strong>
-                                                <p>
-                                                    <c:out value="${selectedAddress.line1}" />
-                                                    <c:if test="${not empty selectedAddress.line2}">, <c:out value="${selectedAddress.line2}" /></c:if>
-                                                    <c:if test="${not empty selectedAddress.city}">, <c:out value="${selectedAddress.city}" /></c:if>
-                                                    <c:if test="${not empty selectedAddress.province}">, <c:out value="${selectedAddress.province}" /></c:if>
-                                                    <c:if test="${not empty selectedAddress.postalCode}">, <c:out value="${selectedAddress.postalCode}" /></c:if>
-                                                    <c:if test="${not empty selectedAddress.country}">, <c:out value="${selectedAddress.country}" /></c:if>
-                                                </p>
-                                                <p><c:out value="${selectedAddress.phone}" /></p>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <strong>Địa chỉ giao hàng mới</strong>
-                                                <p>Thông tin sẽ được lấy từ form bạn đã nhập</p>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <label for="note">Ghi chú đơn hàng</label>
                                 <textarea id="note" name="note" rows="4" maxlength="500"></textarea>
                             </div>
@@ -509,12 +482,12 @@
         }
 
         function validateShippingForm() {
-            if (!recipientNameInput.value.trim()) return 'Vui lÃ²ng nháº­p ngÆ°á»i nháº­n.';
-            if (!phoneInput.value.trim()) return 'Vui lÃ²ng nháº­p sá»‘ Ä‘iá»‡n thoáº¡i.';
-            if (!line1Input.value.trim()) return 'Vui lÃ²ng nháº­p Ä‘á»‹a chá»‰.';
-            if (!cityInput.value.trim()) return 'Vui lÃ²ng nháº­p thÃ nh phá»‘.';
-            if (!countryInput.value.trim()) return 'Vui lÃ²ng nháº­p quá»‘c gia.';
-            if (!terms?.checked) return 'Báº¡n cáº§n Ä‘á»“ng Ã½ Ä‘iá»u khoáº£n trÆ°á»›c khi Ä‘áº·t hÃ ng.';
+            if (!recipientNameInput.value.trim()) return 'Vui lòng nhập địa chỉ.';
+            if (!phoneInput.value.trim()) return 'Vui lòng nhập số điện thoại.';
+            if (!line1Input.value.trim()) return 'Vui lòng nhập địa chỉ bổ sung.';
+            if (!cityInput.value.trim()) return 'Vui lòng nhập thành phố.';
+            if (!countryInput.value.trim()) return 'Vui lòng nhập quốc gia.';
+            if (!terms?.checked) return 'Vui lòng đọc kĩ Điều khoản và Điều kiện.';
             return null;
         }
 
@@ -538,11 +511,11 @@
 
             const data = await response.json().catch(() => ({}));
             if (!response.ok) {
-                throw new Error(data.message || 'Khong the tao VNPay payment URL.');
+                throw new Error(data.message || 'Không thể tạo VNPay payment URL.');
             }
 
             if (!data.paymentUrl) {
-                throw new Error('VNPay payment URL khong hop le.');
+                throw new Error('VNPay payment URL không hợp lệ.');
             }
 
             window.location.href = data.paymentUrl;
@@ -554,7 +527,7 @@
             const shippingMethod = currentShippingRadio()?.value;
             const paymentMethod = currentPaymentMethod();
             if (!shippingMethod) {
-                showError('Vui lÃ²ng chá»n phÆ°Æ¡ng thá»©c váº­n chuyá»ƒn.');
+                showError('Vui lòng chọn phương thức vận chuyển.');
                 return;
             }
 
@@ -597,13 +570,13 @@
 
                 const data = await response.json().catch(() => ({}));
                 if (!response.ok) {
-                    showError(data.message || 'KhÃ´ng thá»ƒ hoÃ n táº¥t checkout.');
+                    showError(data.message || 'Không thể hoàn tất thanh toán.');
                     return;
                 }
 
                 if (!data.paymentRequired) {
                     if (!data.orderId) {
-                        showError('Checkout thÃ nh cÃ´ng nhÆ°ng khÃ´ng nháº­n Ä‘Æ°á»£c mÃ£ Ä‘Æ¡n hÃ ng.');
+                        showError('Checkout thanh toán không thành công.');
                         return;
                     }
                     window.location.href = '${env}/orders/' + data.orderId;
@@ -624,7 +597,7 @@
                     return;
                 }
             } catch (error) {
-                showError('KhÃ´ng thá»ƒ káº¿t ná»‘i tá»›i dá»‹ch vá»¥ checkout. Vui lÃ²ng thá»­ láº¡i.');
+                showError('Không thể hoàn tất thanh toán. Vui lòng thử lại.');
             } finally {
                 if (primarySubmit) {
                     primarySubmit.disabled = false;

@@ -55,6 +55,9 @@
     if (!path) {
       return "";
     }
+    if (/^\/https?:/.test(path)) {
+      return path.slice(1);
+    }
     return /^(blob:|data:|https?:)/.test(path) ? path : window.AdminSuite.asset(path);
   }
 

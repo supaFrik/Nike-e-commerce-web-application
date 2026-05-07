@@ -51,6 +51,9 @@
     if (!imageUrl) {
       return baseEnv + "/images/products/default-product.avif";
     }
+    if (imageUrl.indexOf("/http://") === 0 || imageUrl.indexOf("/https://") === 0) {
+      return imageUrl.substring(1);
+    }
     if (imageUrl.indexOf("http://") === 0 || imageUrl.indexOf("https://") === 0) {
       return imageUrl;
     }

@@ -11,6 +11,7 @@ import vn.demo.nike.features.catalog.search.dto.response.ProductSearchPageRespon
 import vn.demo.nike.features.catalog.search.entity.ProductSearchCriteria;
 import vn.demo.nike.features.catalog.search.repository.projection.SearchProductProjection;
 import vn.demo.nike.features.catalog.search.repository.ProductSearchRepository;
+import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class ProductSearchService {
                         p.getSalePrice(),
                         p.getSalePrice() != null,
                         p.getCategoryName(),
-                        p.getImageUrl()
+                        ProductImageUrlResolverUtil.toPublicUrl(p.getImageUrl())
                 )
         ).toList();
     }

@@ -111,7 +111,8 @@ class AdminPageDataServiceTest {
         color.setProduct(product);
 
         ProductImage image = new ProductImage();
-        image.setPath("nike-air-max/den/main.webp");
+        image.setUrl("https://res.cloudinary.com/demo/image/upload/nike-air-max/den/main.webp");
+        image.setProviderPublicId("nike-air-max/den/main");
         image.setIsMainForColor(true);
         image.setOrderIndex(0);
         image.setColor(color);

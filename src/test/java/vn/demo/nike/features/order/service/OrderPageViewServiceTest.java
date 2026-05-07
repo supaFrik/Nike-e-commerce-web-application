@@ -64,7 +64,7 @@ class OrderPageViewServiceTest {
 
         assertThat(result.getItems()).hasSize(1);
         assertThat(result.getItems().get(0).getImageUrl())
-                .isEqualTo("/uploads/products/nike-test/khaki/main.avif");
+                .isEqualTo("https://res.cloudinary.com/demo/image/upload/nike-test/khaki/main.avif");
         assertThat(result.getPlacedAtLabel()).isEqualTo("02/05/2026 16:00");
         assertThat(result.getPayment().getPaymentTimeLabel()).isEqualTo("02/05/2026 16:45");
         assertThat(result.getPaymentHistory()).hasSize(1);
@@ -129,7 +129,8 @@ class OrderPageViewServiceTest {
         matchingColor.setProduct(product);
 
         ProductImage matchingImage = new ProductImage();
-        matchingImage.setPath("nike-test/khaki/main.avif");
+        matchingImage.setUrl("https://res.cloudinary.com/demo/image/upload/nike-test/khaki/main.avif");
+        matchingImage.setProviderPublicId("nike-test/khaki/main");
         matchingImage.setIsMainForColor(true);
         matchingImage.setOrderIndex(0);
         matchingImage.setColor(matchingColor);
@@ -140,7 +141,8 @@ class OrderPageViewServiceTest {
         otherColor.setProduct(product);
 
         ProductImage otherImage = new ProductImage();
-        otherImage.setPath("nike-test/black/main.avif");
+        otherImage.setUrl("https://res.cloudinary.com/demo/image/upload/nike-test/black/main.avif");
+        otherImage.setProviderPublicId("nike-test/black/main");
         otherImage.setIsMainForColor(true);
         otherImage.setOrderIndex(0);
         otherImage.setColor(otherColor);

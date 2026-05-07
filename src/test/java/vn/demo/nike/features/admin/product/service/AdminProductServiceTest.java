@@ -76,7 +76,7 @@ class AdminProductServiceTest {
         when(productRepository.findDetailById(7L)).thenReturn(Optional.of(product));
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        doNothing().when(productImageStorageService).delete("air-max/black/secondary.webp");
+        doNothing().when(productImageStorageService).delete("cloudinary/air-max/black/secondary");
 
         AdminProductCreateRequest request = buildUpdateRequest();
 
@@ -90,8 +90,9 @@ class AdminProductServiceTest {
         ProductColor savedColor = saved.getColors().get(0);
         assertThat(savedColor.getVariants()).extracting(ProductVariant::getStock).containsExactly(7, 3);
         assertThat(savedColor.getImages()).hasSize(1);
-        assertThat(savedColor.getImages().get(0).getPath()).isEqualTo("air-max/black/main.webp");
-        verify(productImageStorageService).delete("air-max/black/secondary.webp");
+        assertThat(savedColor.getImages().get(0).getUrl()).isEqualTo("https://res.cloudinary.com/demo/image/upload/air-max/black/main.webp");
+        assertThat(savedColor.getImages().get(0).getProviderPublicId()).isEqualTo("cloudinary/air-max/black/main");
+        verify(productImageStorageService).delete("cloudinary/air-max/black/secondary");
     }
 
     @Test
@@ -102,8 +103,8 @@ class AdminProductServiceTest {
         adminProductService.deleteProduct(7L);
 
         verify(productRepository).delete(product);
-        verify(productImageStorageService).delete("air-max/black/main.webp");
-        verify(productImageStorageService).delete("air-max/black/secondary.webp");
+        verify(productImageStorageService).delete("cloudinary/air-max/black/main");
+        verify(productImageStorageService).delete("cloudinary/air-max/black/secondary");
     }
 
     private AdminProductCreateRequest buildUpdateRequest() {
@@ -168,7 +169,8 @@ class AdminProductServiceTest {
 
         ProductImage mainImage = new ProductImage();
         mainImage.setId(31L);
-        mainImage.setPath("air-max/black/main.webp");
+        mainImage.setUrl("https://res.cloudinary.com/demo/image/upload/air-max/black/main.webp");
+        mainImage.setProviderPublicId("cloudinary/air-max/black/main");
         mainImage.setTitle("Main");
         mainImage.setAltText("Main image");
         mainImage.setOrderIndex(0);
@@ -177,7 +179,8 @@ class AdminProductServiceTest {
 
         ProductImage secondaryImage = new ProductImage();
         secondaryImage.setId(32L);
-        secondaryImage.setPath("air-max/black/secondary.webp");
+        secondaryImage.setUrl("https://res.cloudinary.com/demo/image/upload/air-max/black/secondary.webp");
+        secondaryImage.setProviderPublicId("cloudinary/air-max/black/secondary");
         secondaryImage.setTitle("Side");
         secondaryImage.setAltText("Side image");
         secondaryImage.setOrderIndex(1);

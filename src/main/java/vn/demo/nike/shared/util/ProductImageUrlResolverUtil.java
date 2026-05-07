@@ -14,6 +14,10 @@ public final class ProductImageUrlResolverUtil {
 
         String normalized = storedPath.trim().replace('\\', '/');
 
+        if (normalized.startsWith("/http://") || normalized.startsWith("/https://")) {
+            return normalized.substring(1);
+        }
+
         if (normalized.startsWith("http://") || normalized.startsWith("https://")) {
             return normalized;
         }
