@@ -69,7 +69,7 @@
                                                     Gender <span class="filter-group_count">(1)</span>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
-                                                     fill="#000000" transform="rotate(180)" aria-hidden="true">
+                                                     fill="#000000" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                     <g id="SVGRepo_iconCarrier">
@@ -91,7 +91,7 @@
                                                     Shop By Price
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
-                                                     fill="#000000" transform="rotate(180)" aria-hidden="true">
+                                                     fill="#000000" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                     <g id="SVGRepo_iconCarrier">
@@ -131,7 +131,7 @@
                                                     </div>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
-                                                     fill="#000000" transform="rotate(180)" aria-hidden="true">
+                                                     fill="#000000" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                     <g id="SVGRepo_iconCarrier">
@@ -156,7 +156,7 @@
                                                     </div>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
-                                                     fill="#000000" transform="rotate(180)" aria-hidden="true">
+                                                     fill="#000000" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                     <g id="SVGRepo_iconCarrier">
@@ -181,7 +181,7 @@
                                                     </div>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
-                                                     fill="#000000" transform="rotate(180)" aria-hidden="true">
+                                                     fill="#000000" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                     <g id="SVGRepo_iconCarrier">
@@ -209,7 +209,7 @@
                                                     </div>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
-                                                     fill="#000000" transform="rotate(180)" aria-hidden="true">
+                                                     fill="#000000" aria-hidden="true">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                     <g id="SVGRepo_iconCarrier">
@@ -229,7 +229,7 @@
                     </div>
                 </aside>
             </div>
-            <div class="container">
+            <div class="product-list-content">
                 <!-- Product List header -->
                 <div class="product-header" role="region" aria-labelledby="page-title">
                     <div class="product-title-section">
@@ -310,7 +310,7 @@
                                                         <div class="wall-image-loader content-card__image" data-testid="wall-image-loader">
                                                         <c:choose>
                                                             <c:when test="${not empty product.heroImg}">
-                                                                <img src="${env}${product.heroImg}"
+                                                                <img src="${product.heroImg}"
                                                                      alt="${product.name}" loading="lazy"
                                                                      aria-describedby="product-${status.index + 1}-desc">
                                                             </c:when>

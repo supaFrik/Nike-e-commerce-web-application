@@ -44,7 +44,7 @@
                         <c:forEach var="cartItem" items="${cart.items}">
                             <div class="cart-item" data-cart-item-id="${cartItem.cartItemId}">
                                 <div class="item-image" data-view-product="${cartItem.productId}">
-                                    <img src="${env}${cartItem.imageUrl}" alt="${cartItem.productName}">
+                                    <img src="${cartItem.imageUrl}" alt="${cartItem.productName}">
                                 </div>
                                 <div class="item-details">
                                     <div class="item-header">

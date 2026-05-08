@@ -8,6 +8,17 @@
       .replace(/'/g, "&#39;");
   }
 
+  function resolveImagePath(path) {
+    const normalized = String(path || "").trim();
+    if (!normalized) {
+      return normalized;
+    }
+    if (/^\/https?:\/\//i.test(normalized)) {
+      return normalized.slice(1);
+    }
+    return normalized;
+  }
+
   function resolveInitialImage(images) {
     if (!images || images.length === 0) {
       return null;
@@ -56,7 +67,7 @@
     }
 
     window.productDetailState.selectedImageIndex = boundedIndex;
-    currentImage.src = image.path;
+    currentImage.src = resolveImagePath(image.path);
     currentImage.alt = image.altText || image.title || defaultProductName;
 
     document.querySelectorAll(".thumbnail-item").forEach((item, itemIndex) => {
@@ -76,7 +87,7 @@
 
         document.querySelectorAll(".thumbnail-item").forEach((item) => item.classList.remove("active"));
         button.classList.add("active");
-        currentImage.src = button.dataset.imagePath;
+        currentImage.src = resolveImagePath(button.dataset.imagePath);
         currentImage.alt = button.dataset.altText || defaultProductName;
       });
     });
@@ -116,14 +127,15 @@
     const initialImage = resolveInitialImage(images);
     const initialIndex = images.findIndex((image) => initialImage && image.id === initialImage.id);
     window.productDetailState.selectedImageIndex = initialIndex >= 0 ? initialIndex : 0;
-    currentImage.src = initialImage.path;
+    currentImage.src = resolveImagePath(initialImage.path);
     currentImage.alt = initialImage.altText || initialImage.title || defaultProductName;
 
     const hasMainImage = images.some((image) => image.isMainForColor);
     thumbnailNav.innerHTML = images.map((image, index) => {
       const isActive = image.isMainForColor || (!hasMainImage && index === 0);
       const altText = image.altText || image.title || "Product image";
-      return `<button type="button" class="thumbnail-item ${isActive ? "active" : ""}" data-thumbnail-index="${index}" data-image-path="${escapeHtml(image.path)}" data-alt-text="${escapeHtml(altText)}" aria-label="View image ${index + 1}"><img src="${escapeHtml(image.path)}" alt="${escapeHtml(altText)}"></button>`;
+      const imagePath = resolveImagePath(image.path);
+      return `<button type="button" class="thumbnail-item ${isActive ? "active" : ""}" data-thumbnail-index="${index}" data-image-path="${escapeHtml(imagePath)}" data-alt-text="${escapeHtml(altText)}" aria-label="View image ${index + 1}"><img src="${escapeHtml(imagePath)}" alt="${escapeHtml(altText)}"></button>`;
     }).join("");
 
     bindThumbnailEvents();

@@ -90,14 +90,7 @@
                         <div class="product-image-wrapper">
                             <c:choose>
                                 <c:when test="${not empty p.imageUrl}">
-                                    <c:choose>
-                                        <c:when test="${fn:startsWith(p.imageUrl, '/')}">
-                                            <img src="${env}${p.imageUrl}" alt="${p.name}" class="product-image" />
-                                        </c:when>
-                                        <c:otherwise>
-                                            <img src="${env}/uploads/products/${p.imageUrl}" alt="${p.name}" class="product-image" />
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <img src="${p.imageUrl}" alt="${p.name}" class="product-image" />
                                 </c:when>
                                 <c:otherwise>
                                     <img src="${env}/images/products/default-product.avif" alt="${p.name}" class="product-image" />

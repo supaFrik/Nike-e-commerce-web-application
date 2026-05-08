@@ -38,8 +38,18 @@
       return `${window.APP_CTX || ""}/${normalized}`;
     },
     asset(path) {
-      const normalized = String(path || "").replace(/^\/+/, "");
-      return `${window.APP_CTX || ""}/${normalized}`;
+      const normalized = String(path || "").trim();
+      if (!normalized) {
+        return "";
+      }
+      if (/^\/https?:\/\//i.test(normalized)) {
+        return normalized.slice(1);
+      }
+      if (/^(blob:|data:|https?:)/i.test(normalized)) {
+        return normalized;
+      }
+      const relativePath = normalized.replace(/^\/+/, "");
+      return `${window.APP_CTX || ""}/${relativePath}`;
     },
     currency(amount) {
       return new Intl.NumberFormat("vi-VN", {

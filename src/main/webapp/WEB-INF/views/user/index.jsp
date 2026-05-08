@@ -169,7 +169,7 @@
                                                     <a aria-label="${product.name}" href="${env}/product-detail?id=${product.id}"
                                                        class="product-card__img-link-overlay" data-testid="product-card-img-link-overlay"
                                                        aria-describedby="product-${status.index + 1}-desc">
-                                                        <img src="${env}${product.thumbnailUrl}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                        <img src="${product.thumbnailUrl}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                     </a>
                                                 </c:when>
                                                 <c:otherwise>
@@ -238,7 +238,7 @@
                     <div class="sport-slide" data-sport="basketball" role="listitem" aria-label="Basketball category">
                         <img src="${env}/images/sports/dunk.webp" alt="Basketball" aria-describedby="basketball-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="basketball-desc">
-                            <span>Rổ</span>
+                            <span>Bóng Rổ</span>
                         </div>
                         <span id="basketball-desc" class="sr-only">Shop Nike basketball shoes and apparel</span>
                     </div>

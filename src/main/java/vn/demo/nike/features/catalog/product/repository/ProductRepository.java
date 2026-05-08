@@ -37,7 +37,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         p.type,
         COALESCE(c.name, 'Uncategorized'),
         (
-            SELECT MIN(pi.path)
+            SELECT MIN(pi.url)
             FROM ProductImage pi
             WHERE pi.color.product.id = p.id
             AND pi.isMainForColor = true

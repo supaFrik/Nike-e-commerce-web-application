@@ -94,7 +94,7 @@ public class ProductQueryResponseMapper {
                 ))
                 .map(image -> new ProductImageDetailResponse(
                         image.getId(),
-                        ProductImageUrlResolverUtil.toPublicUrl(image.getPath()),
+                        ProductImageUrlResolverUtil.toPublicUrl(image.getUrl()),
                         image.getTitle(),
                         image.getAltText(),
                         image.getIsMainForColor(),
@@ -138,11 +138,11 @@ public class ProductQueryResponseMapper {
                     return color.getImages().stream()
                             .filter(image -> Boolean.TRUE.equals(image.getIsMainForColor()))
                             .findFirst()
-                            .map(ProductImage::getPath)
+                            .map(ProductImage::getUrl)
                             .map(ProductImageUrlResolverUtil::toPublicUrl)
                             .orElseGet(() -> color.getImages().stream()
                                     .findFirst()
-                                    .map(ProductImage::getPath)
+                                    .map(ProductImage::getUrl)
                                     .map(ProductImageUrlResolverUtil::toPublicUrl)
                                     .orElse(null));
                 })

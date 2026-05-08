@@ -5,12 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import vn.demo.nike.features.catalog.search.dto.response.ProductSearchItemResponse;
 import vn.demo.nike.features.catalog.search.dto.response.ProductSearchPageResponse;
 import vn.demo.nike.features.catalog.search.entity.ProductSearchCriteria;
 import vn.demo.nike.features.catalog.search.repository.projection.SearchProductProjection;
 import vn.demo.nike.features.catalog.search.repository.ProductSearchRepository;
+import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class ProductSearchService {
 
     private final ProductSearchRepository productSearchRepository;
 
-    public ProductSearchPageResponse search(ProductSearchCriteria criteria) {
+    public ProductSearchPageResponse search(@NonNull ProductSearchCriteria criteria) {
         Sort sort = resolveSort(criteria.getSort());
 
         Pageable pageable = buildPageable(criteria, sort);
@@ -56,7 +58,7 @@ public class ProductSearchService {
                         p.getSalePrice(),
                         p.getSalePrice() != null,
                         p.getCategoryName(),
-                        p.getImageUrl()
+                        ProductImageUrlResolverUtil.toPublicUrl(p.getImageUrl())
                 )
         ).toList();
     }

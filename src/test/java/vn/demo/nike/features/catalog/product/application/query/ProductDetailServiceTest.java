@@ -50,7 +50,8 @@ class ProductDetailServiceTest {
 
         ProductImage image = new ProductImage();
         image.setId(100L);
-        image.setPath("products/pegasus/main.jpg");
+        image.setUrl("https://res.cloudinary.com/demo/image/upload/products/pegasus/main.jpg");
+        image.setProviderPublicId("products/pegasus/main");
         image.setIsMainForColor(true);
         image.setOrderIndex(1);
 
@@ -79,6 +80,6 @@ class ProductDetailServiceTest {
         assertThat(response.getCategoryName()).isEqualTo("Running");
         assertThat(response.getColors()).hasSize(1);
         assertThat(response.getColors().get(0).getImages().get(0).getPath())
-                .isEqualTo("/uploads/products/products/pegasus/main.jpg");
+                .isEqualTo("https://res.cloudinary.com/demo/image/upload/products/pegasus/main.jpg");
     }
 }

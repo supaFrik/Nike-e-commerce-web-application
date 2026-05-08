@@ -1,9 +1,10 @@
 package vn.demo.nike.features.admin.product.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import vn.demo.nike.features.admin.product.model.ImageMetaData;
 
 public interface ProductImageStorageService {
-    String store(MultipartFile file, String productSlug, String colorSlug);
+    ImageMetaData upload(byte[] content, String productSlug, String colorSlug);
 
     void delete(String storedPath);
 }

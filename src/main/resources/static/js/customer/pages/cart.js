@@ -20,6 +20,27 @@ function cartPageEnv() {
   return (window.APP_CTX || "").replace(/\/$/, "");
 }
 
+function resolveCartImageUrl(imageUrl) {
+  if (!imageUrl) {
+    return "";
+  }
+
+  const normalized = String(imageUrl).trim();
+  if (!normalized) {
+    return "";
+  }
+
+  if (/^\/https?:\/\//i.test(normalized)) {
+    return normalized.slice(1);
+  }
+
+  if (/^https?:\/\//i.test(normalized)) {
+    return normalized;
+  }
+
+  return normalized.startsWith("/") ? `${cartPageEnv()}${normalized}` : `${cartPageEnv()}/${normalized}`;
+}
+
 function formatCurrency(value) {
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
@@ -119,7 +140,7 @@ function renderCartItems(items) {
   renderFilledState();
 
   list.innerHTML = items.map(function (item) {
-    const imageUrl = item.imageUrl ? `${cartPageEnv()}${item.imageUrl}` : "";
+    const imageUrl = resolveCartImageUrl(item.imageUrl);
     const minusDisabled = item.quantity <= 1 ? "disabled" : "";
     const plusDisabled = !item.active || item.quantity >= (item.stock || 0) ? "disabled" : "";
     const stockText = item.active ? `Tồn kho: ${item.stock ?? 0}` : "Biến thể không còn hoạt động";

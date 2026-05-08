@@ -207,7 +207,7 @@ public class CartService {
                         Comparator.nullsLast(Comparator.naturalOrder())
                 ))
                 .filter(image -> Boolean.TRUE.equals(image.getIsMainForColor()))
-                .map(ProductImage::getPath)
+                .map(ProductImage::getUrl)
                 .map(ProductImageUrlResolverUtil::toPublicUrl)
                 .findFirst()
                 .orElseGet(() -> images.stream()
@@ -215,7 +215,7 @@ public class CartService {
                                 ProductImage::getOrderIndex,
                                 Comparator.nullsLast(Integer::compareTo)
                         ))
-                        .map(ProductImage::getPath)
+                        .map(ProductImage::getUrl)
                         .map(ProductImageUrlResolverUtil::toPublicUrl)
                         .findFirst()
                         .orElse(null));
