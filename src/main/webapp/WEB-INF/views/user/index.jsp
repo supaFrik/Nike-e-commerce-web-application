@@ -238,7 +238,7 @@
                     <div class="sport-slide" data-sport="basketball" role="listitem" aria-label="Basketball category">
                         <img src="${env}/images/sports/dunk.webp" alt="Basketball" aria-describedby="basketball-desc">
                         <div class="sport-button" role="button" tabindex="0" aria-describedby="basketball-desc">
-                            <span>Rổ</span>
+                            <span>Bóng Rổ</span>
                         </div>
                         <span id="basketball-desc" class="sr-only">Shop Nike basketball shoes and apparel</span>
                     </div>

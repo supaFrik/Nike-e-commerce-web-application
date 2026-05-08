@@ -89,13 +89,74 @@
         return;
       }
 
-      function setExpanded(expanded) {
-        group.setAttribute("aria-expanded", expanded ? "true" : "false");
-        trigger.setAttribute("aria-expanded", expanded ? "true" : "false");
-        panel.hidden = !expanded;
+      function animatePanel(open) {
+        const durationMs = 240;
+
+        if (open) {
+          panel.hidden = false;
+          panel.style.overflow = "hidden";
+          panel.style.height = "0px";
+          panel.style.opacity = "0";
+
+          // Force reflow so the browser picks up the start height.
+          // eslint-disable-next-line no-unused-expressions
+          panel.offsetHeight;
+
+          const targetHeight = panel.scrollHeight;
+          panel.style.transition = "height " + durationMs + "ms cubic-bezier(0.2, 0, 0, 1), opacity " + durationMs + "ms ease";
+          panel.style.height = targetHeight + "px";
+          panel.style.opacity = "1";
+
+          window.setTimeout(function () {
+            panel.style.transition = "";
+            panel.style.height = "auto";
+            panel.style.overflow = "";
+          }, durationMs);
+          return;
+        }
+
+        // Closing
+        panel.style.overflow = "hidden";
+        const startHeight = panel.scrollHeight;
+        panel.style.height = startHeight + "px";
+        panel.style.opacity = "1";
+
+        // Force reflow before we transition to 0.
+        // eslint-disable-next-line no-unused-expressions
+        panel.offsetHeight;
+
+        panel.style.transition = "height " + durationMs + "ms cubic-bezier(0.4, 0, 0.2, 1), opacity " + durationMs + "ms ease";
+        panel.style.height = "0px";
+        panel.style.opacity = "0";
+
+        window.setTimeout(function () {
+          panel.hidden = true;
+          panel.style.transition = "";
+          panel.style.height = "";
+          panel.style.opacity = "";
+          panel.style.overflow = "";
+        }, durationMs);
       }
 
-      setExpanded(false);
+      function setExpanded(expanded, options) {
+        const instant = !!(options && options.instant);
+        group.setAttribute("aria-expanded", expanded ? "true" : "false");
+        trigger.setAttribute("aria-expanded", expanded ? "true" : "false");
+
+        if (instant) {
+          panel.hidden = !expanded;
+          panel.style.transition = "";
+          panel.style.overflow = "";
+          panel.style.height = expanded ? "auto" : "0px";
+          panel.style.opacity = expanded ? "1" : "0";
+          return;
+        }
+
+        animatePanel(expanded);
+      }
+
+      // Initial state should not animate (prevents page-load flicker).
+      setExpanded(false, { instant: true });
 
       trigger.addEventListener("click", function () {
         const expanded = trigger.getAttribute("aria-expanded") === "true";
@@ -116,14 +177,38 @@
     const toggle = qs(".hide-filters-btn");
     const label = qs(".hide-filters-label", toggle);
     const listing = qs(".product-listing");
+    const sidebar = qs(".sidebar", listing);
 
-    if (!toggle || !label || !listing) {
+    if (!toggle || !label || !listing || !sidebar) {
       return;
     }
 
     toggle.addEventListener("click", function () {
-      const collapsed = listing.classList.toggle("filters-collapsed");
-      label.textContent = collapsed ? "Show Filters" : "Hide Filters";
+      const durationMs = 320;
+      const isCollapsed = listing.classList.contains("filters-collapsed");
+
+      // Show filters: bring sidebar back, shrink grid to normal.
+      if (isCollapsed) {
+        listing.classList.remove("filters-collapsed");
+        listing.classList.remove("filters-collapsing");
+        listing.classList.add("filters-expanding");
+        label.textContent = "Hide Filters";
+
+        window.requestAnimationFrame(function () {
+          listing.classList.remove("filters-expanding");
+        });
+        return;
+      }
+
+      // Hide filters: slide sidebar fully out left + expand grid.
+      listing.classList.remove("filters-expanding");
+      listing.classList.add("filters-collapsing");
+      label.textContent = "Show Filters";
+
+      window.setTimeout(function () {
+        listing.classList.remove("filters-collapsing");
+        listing.classList.add("filters-collapsed");
+      }, durationMs);
     });
   }
 

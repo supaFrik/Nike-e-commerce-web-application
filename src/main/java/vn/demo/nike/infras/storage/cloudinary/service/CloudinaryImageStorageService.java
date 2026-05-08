@@ -16,13 +16,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CloudinaryImageStorageService implements ProductImageStorageService {
 
+    private static final String ROOT_FOLDER = "nike/products";
+
     private final Cloudinary cloudinary;
 
     @Override
     public ImageMetaData upload(byte[] content, String productSlug, String colorSlug) {
-        if (content == null || content.length == 0) {
-            throw new InvalidUploadedImageException("Uploaded image content must not be empty");
-        }
+        validateContent(content);
 
         try {
             Map<?, ?> result = cloudinary.uploader().upload(
@@ -33,22 +33,19 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
                     )
             );
 
-            String imageUrl = (String) result.get("secure_url");
-            String providerPublicId = (String) result.get("public_id");
+            return new ImageMetaData(
+                    requireValue(result.get("secure_url"), "Missing Cloudinary image URL"),
+                    requireValue(result.get("public_id"), "Missing Cloudinary public ID")
+            );
 
-            if (imageUrl == null || imageUrl.isBlank() || providerPublicId == null || providerPublicId.isBlank()) {
-                throw new InvalidUploadedImageException("Cloudinary did not return complete image metadata");
-            }
-
-            return new ImageMetaData(imageUrl, providerPublicId);
         } catch (IOException ex) {
-            throw new InvalidUploadedImageException("Failed to upload image to Cloudinary");
+            throw new InvalidUploadedImageException("Failed to upload image");
         }
     }
 
     @Override
     public void delete(String providerPublicId) {
-        if (providerPublicId == null || providerPublicId.isBlank()) {
+        if (isBlank(providerPublicId)) {
             return;
         }
 
@@ -58,29 +55,50 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
                     ObjectUtils.asMap("resource_type", "image")
             );
         } catch (IOException ex) {
-            throw new InvalidUploadedImageException("Failed to delete image from Cloudinary");
+            throw new InvalidUploadedImageException("Failed to delete image");
+        }
+    }
+
+    private void validateContent(byte[] content) {
+        if (content == null || content.length == 0) {
+            throw new InvalidUploadedImageException("Image content must not be empty");
         }
     }
 
     private String buildFolder(String productSlug, String colorSlug) {
-        return "nike/products/" + sanitizePathSegment(productSlug) + "/" + sanitizePathSegment(colorSlug);
+        return ROOT_FOLDER + "/"
+                + sanitize(productSlug) + "/"
+                + sanitize(colorSlug);
     }
 
-    private String sanitizePathSegment(String value) {
-        if (value == null || value.isBlank()) {
-            throw new InvalidUploadedImageException("Cloudinary folder segment must not be blank");
+    private String sanitize(String value) {
+        if (isBlank(value)) {
+            throw new InvalidUploadedImageException("Invalid Cloudinary folder segment");
         }
 
-        String normalized = value.trim()
+        String sanitized = value.trim()
                 .toLowerCase(Locale.ROOT)
                 .replaceAll("[^a-z0-9]+", "-")
-                .replaceAll("^-+", "")
-                .replaceAll("-+$", "");
+                .replaceAll("(^-+|-+$)", "");
 
-        if (normalized.isBlank()) {
-            throw new InvalidUploadedImageException("Invalid Cloudinary folder segment: " + value);
+        if (sanitized.isBlank()) {
+            throw new InvalidUploadedImageException("Invalid Cloudinary folder segment");
         }
 
-        return normalized;
+        return sanitized;
+    }
+
+    private String requireValue(Object value, String message) {
+        String result = (String) value;
+
+        if (isBlank(result)) {
+            throw new InvalidUploadedImageException(message);
+        }
+
+        return result;
+    }
+
+    private boolean isBlank(String value) {
+        return value == null || value.isBlank();
     }
 }

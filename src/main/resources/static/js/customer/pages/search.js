@@ -66,6 +66,32 @@
     return baseEnv + "/uploads/products/" + imageUrl;
   }
 
+  function buildSkeletonCard() {
+    let html = "";
+    html += '<div class="product-card skeleton-card" aria-hidden="true">';
+    html += '  <div class="product-image-wrapper">';
+    html += '    <div class="skeleton skeleton-media"></div>';
+    html += "  </div>";
+    html += '  <div class="product-info">';
+    html += '    <div class="skeleton skeleton-text skeleton-badge"></div>';
+    html += '    <div class="skeleton skeleton-text skeleton-title"></div>';
+    html += '    <div class="skeleton skeleton-text skeleton-subtitle"></div>';
+    html += '    <div class="skeleton skeleton-text skeleton-price"></div>';
+    html += "  </div>";
+    html += "</div>";
+    return html;
+  }
+
+  function renderSkeletonGrid(count) {
+    if (!productGrid) return;
+    const safeCount = Math.max(4, Math.min(count || 12, 24));
+    let html = "";
+    for (let i = 0; i < safeCount; i += 1) {
+      html += buildSkeletonCard();
+    }
+    productGrid.innerHTML = html;
+  }
+
   function buildProductCard(product) {
     const hasSale = !!product.hasSale && product.salePrice != null && product.price != null;
     const imageUrl = resolveImageUrl(product.imageUrl);
@@ -147,6 +173,11 @@
     setStatus("Searching...");
     if (productGrid) {
       productGrid.classList.add("loading");
+      productGrid.setAttribute("aria-busy", "true");
+      renderSkeletonGrid(12);
+    }
+    if (paginationContainer) {
+      paginationContainer.style.display = "none";
     }
 
     const params = new URLSearchParams();
@@ -179,6 +210,7 @@
             ? '<div class="no-products">Không tìm thấy sản phẩm phù hợp với tìm kiếm của bạn.</div>'
             : items.map(buildProductCard).join("");
           productGrid.classList.remove("loading");
+          productGrid.removeAttribute("aria-busy");
         }
 
         buildPagination(data.totalPages || 1, data.page || 1);
@@ -189,6 +221,7 @@
         setStatus("Error searching");
         if (productGrid) {
           productGrid.classList.remove("loading");
+          productGrid.removeAttribute("aria-busy");
         }
       });
   }

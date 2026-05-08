@@ -136,20 +136,62 @@
         min-height:16px;
         }
         .product-grid.loading {
-        opacity:0.5;
         position:relative;
         }
-        .product-grid.loading:after {
-        content:'Searching...';
-        position:absolute;
-        inset:0;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-weight:600;
-        background:rgba(255,255,255,0.6);
-        color:#111;
+
+        /* Skeleton loading (mirrors product card layout) */
+        .skeleton {
+            position: relative;
+            display: block;
+            background: var(--color-bg-secondary);
+            border-radius: var(--size-border-radius-s);
+            overflow: hidden;
         }
+
+        .skeleton::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            transform: translateX(-100%);
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.55) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: skeleton-shimmer 1.15s ease-in-out infinite;
+        }
+
+        @keyframes skeleton-shimmer {
+            100% { transform: translateX(100%); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .skeleton::after { animation: none; }
+        }
+
+        .skeleton-card {
+            text-decoration: none;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .skeleton-media {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+
+        .skeleton-text {
+            height: 12px;
+            border-radius: 999px;
+            margin-bottom: var(--size-spacing-xs);
+        }
+
+        .skeleton-badge { width: 72px; height: 10px; }
+        .skeleton-title { width: 88%; height: 14px; }
+        .skeleton-subtitle { width: 60%; height: 12px; margin-bottom: var(--size-spacing-s); }
+        .skeleton-price { width: 42%; height: 14px; margin-bottom: 0; }
 
         .category-scroll {
             display: flex;
@@ -383,7 +425,7 @@
         body.search-page { overflow:hidden; }
         .search-page .search-page-container { display:flex; flex-direction:column; height:100vh; }
         .search-page .search-header, .search-page .category-filter-row { position:relative; top:0; z-index: 10; }
-        .search-page .product-grid { flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; padding-right:2px; }
+        .search-page .product-grid { flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; padding: 20px 0; }
         .search-page .product-grid::-webkit-scrollbar { width:8px; }
         .search-page .product-grid::-webkit-scrollbar-track { background:transparent; }
         .search-page .product-grid::-webkit-scrollbar-thumb { background:rgba(0,0,0,0.25); border-radius:4px; }

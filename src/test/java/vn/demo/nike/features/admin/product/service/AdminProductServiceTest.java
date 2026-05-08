@@ -1,9 +1,9 @@
 package vn.demo.nike.features.admin.product.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -49,8 +49,21 @@ class AdminProductServiceTest {
     @Mock
     private CartItemRepository cartItemRepository;
 
-    @InjectMocks
     private AdminProductService adminProductService;
+
+    @BeforeEach
+    void setUp() {
+        ProductImageResolver productImageResolver = new ProductImageResolver(productImageStorageService);
+        adminProductService = new AdminProductService(
+                productRepository,
+                categoryRepository,
+                cartItemRepository,
+                new ProductValidationService(),
+                new ProductCleanupService(productImageStorageService),
+                new ProductBuilderService(productImageResolver),
+                new ProductFileMapService()
+        );
+    }
 
     @Test
     void getProductForm_returnsRealVariantInventoryFromBackend() {
