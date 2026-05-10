@@ -2,6 +2,7 @@ package vn.demo.nike.features.catalog.product.repository;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -50,4 +51,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 """)
     List<ProductListItemView> findProductList(@Param("categoryId") Long categoryId, Pageable pageable);
 
+    @EntityGraph(attributePaths = {"colors", "colors.images"})
+    List<Product> findWithColorsAndImagesByIdIn(List<Long> ids);
 }

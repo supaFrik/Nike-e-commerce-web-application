@@ -21,10 +21,9 @@ import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -165,14 +164,22 @@ public class OrderPageViewService {
     }
 
     private List<OrderItemView> buildItems(Order order) {
+        List<Long> productIds = order.getItems().stream()
+                .map(OrderItem::getProductId)
+                .filter(Objects::nonNull)
+                .distinct().toList();
+
+        Map<Long, Product> productsById = productRepository.findWithColorsAndImagesByIdIn(productIds).stream()
+                .collect(Collectors.toMap(Product::getId, Function.identity()));
+
         return order.getItems().stream()
-                .map(this::toOrderItemView)
-        .toList();
+                .map(orderItem -> toOrderItemView(orderItem, productsById))
+                .toList();
     }
 
-    private OrderItemView toOrderItemView(OrderItem orderItem) {
+    private OrderItemView toOrderItemView(OrderItem orderItem, Map<Long, Product> productsById) {
         return OrderItemView.builder()
-                .imageUrl(resolveOrderItemImage(orderItem))
+                .imageUrl(resolveOrderItemImage(orderItem, productsById.get(orderItem.getProductId())))
                 .productName(orderItem.getProductName())
                 .productUrl(null)
                 .sku(orderItem.getSku())
@@ -224,12 +231,11 @@ public class OrderPageViewService {
                 .build();
     }
 
-    private String resolveOrderItemImage(OrderItem orderItem) {
+    private String resolveOrderItemImage(OrderItem orderItem, Product product) {
         if (orderItem.getProductId() == null) {
             return null;
         }
 
-        Product product = productRepository.findById(orderItem.getProductId()).orElse(null);
         if (product == null || product.getColors() == null || product.getColors().isEmpty()) {
             return null;
         }
