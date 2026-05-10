@@ -25,9 +25,6 @@ public class CheckoutPageController {
     @GetMapping("/checkout")
     public String checkoutPage(@RequestParam(required = false) Long orderId, Model model) {
         Long currentUserId = currentUserProvider.getCurrentUserId();
-        if (currentUserId == null) {
-            return "redirect:/login";
-        }
 
         User currentUser = userRepository.findById(currentUserId)
                 .orElseThrow(() -> new IllegalStateException("Current user not found"));

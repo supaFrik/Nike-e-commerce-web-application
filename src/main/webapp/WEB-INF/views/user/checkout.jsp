@@ -1,9 +1,10 @@
-﻿﻿<%@ include file="/WEB-INF/views/common/variables.jsp" %>
+﻿<%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
+
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -431,8 +432,8 @@
             ].filter(Boolean);
 
             summary.innerHTML = ''
-                + '<strong>' + (recipientNameInput.value || 'Äá»‹a chá»‰ giao hÃ ng') + '</strong>'
-                + '<p>' + (parts.join(', ') || 'ThÃ´ng tin sáº½ Ä‘Æ°á»£c láº¥y tá»« form báº¡n Ä‘ang nháº­p.') + '</p>'
+                + '<strong>' + (recipientNameInput.value || 'Địa chỉ giao hàng') + '</strong>'
+                + '<p>' + (parts.join(', ') || 'Thông tin sẽ được lấy từ form bạn đang nhập.') + '</p>'
                 + '<p>' + (phoneInput.value || '') + '</p>';
         }
 
