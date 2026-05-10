@@ -21,11 +21,8 @@ public class OrderPageController {
     @GetMapping("/{id}")
     public String viewOrder(@PathVariable Long id, Model model) {
         Long currentUserId = currentUserProvider.getCurrentUserId();
+
         log.info("Order page request orderId={}, currentUserId={}", id, currentUserId);
-        if (currentUserId == null) {
-            log.warn("Order page redirecting to login because currentUserId is null for orderId={}", id);
-            return "redirect:/login";
-        }
 
         model.addAttribute("orderPage", orderPageViewService.getOrderPage(id, currentUserId));
         model.addAttribute("orderDetailPath", "/orders/" + id);

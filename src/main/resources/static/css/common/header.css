@@ -24,6 +24,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 38px;
 }
 
 .header-top-left,
@@ -191,10 +192,6 @@ justify-content: center;
 }
 .nav-link:hover {
   color: var(--color-grey-600);
-}
-.nav-link:focus {
-  outline: 2px solid var(--color-brand-orange);
-  outline-offset: 2px;
 }
 
 /* Dropdown Navigation */
@@ -888,6 +885,50 @@ justify-content: center;
   .mobile-nav-link {
     font-size: 16px;
     padding: 14px 0;
+  }
+}
+
+/* Nike-inspired sticky and mega-menu refinement */
+.header {
+  position: relative;
+}
+
+.home-page .header {
+  position: sticky;
+  top: -36px;
+  z-index: 1000;
+}
+
+.home-page .navbar {
+  position: sticky;
+  top: 0;
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: var(--size-spacing-s);
+  right: var(--size-spacing-s);
+  bottom: 8px;
+  height: 2px;
+  background: var(--color-text-primary);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms ease;
+}
+
+.nav-item:hover .nav-link::after,
+.nav-item:focus-within .nav-link::after {
+  transform: scaleX(1);
+}
+
+@media (max-width: 768px) {
+  .home-page .header {
+    top: 0;
   }
 }
 

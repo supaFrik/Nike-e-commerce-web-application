@@ -14,6 +14,9 @@ import vn.demo.nike.features.catalog.category.exception.CategoryNotFoundExceptio
 import vn.demo.nike.features.catalog.product.exception.InvalidProductStatusException;
 import vn.demo.nike.features.catalog.product.exception.ProductNotFoundException;
 import vn.demo.nike.features.checkout.exception.InvalidCheckoutRequestException;
+import vn.demo.nike.features.order.exception.InvalidOrderStateException;
+import vn.demo.nike.features.order.exception.OrderIdAndUserIdNotFoundException;
+import vn.demo.nike.features.payment.exception.InvalidPaymentMethodException;
 import vn.demo.nike.shared.dto.ErrorResponse;
 
 import java.time.Instant;
@@ -167,6 +170,36 @@ public class GlobalExceptionHandler {
                 Instant.now().toEpochMilli()
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+    }
+
+    @ExceptionHandler(OrderIdAndUserIdNotFoundException.class)
+    public ResponseEntity<ErrorResponse> orderIdAndUserIdNotFound(OrderIdAndUserIdNotFoundException e) {
+        ErrorResponse errorBody = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                e.getMessage(),
+                Instant.now().toEpochMilli()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+    }
+
+    @ExceptionHandler(InvalidOrderStateException.class)
+    public ResponseEntity<ErrorResponse> invalidOrderStateException(InvalidOrderStateException e) {
+        ErrorResponse errorBody = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                Instant.now().toEpochMilli()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
+    }
+
+    @ExceptionHandler(InvalidPaymentMethodException.class)
+    public ResponseEntity<ErrorResponse> invalidPaymentMethodException(InvalidPaymentMethodException e) {
+        ErrorResponse errorBody = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                e.getMessage(),
+                Instant.now().toEpochMilli()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
     }
 
     @ExceptionHandler(Exception.class)

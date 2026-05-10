@@ -169,8 +169,10 @@
     if (!button) {
       return;
     }
-    button.disabled = !window.productDetailState.selectedVariantId;
-    button.textContent = "Add to Bag";
+    const color = window.productDetailState.colors[window.productDetailState.selectedColorIndex];
+    const colorSoldOut = Boolean(color && color.soldOut);
+    button.disabled = colorSoldOut || !window.productDetailState.selectedVariantId;
+    button.textContent = colorSoldOut ? "Sold Out" : "Add to Bag";
   }
 
   function renderColor(index) {
@@ -181,6 +183,7 @@
 
     window.productDetailState.selectedColorIndex = index;
     window.productDetailState.selectedVariantId = null;
+    const colorSoldOut = Boolean(color.soldOut);
 
     const selectedColorLabel = document.getElementById("selected-color-label");
     if (selectedColorLabel) {
@@ -201,11 +204,22 @@
 
     renderImages(color.images);
     renderVariants(color.variants);
+
+    const soldOutAlert = document.getElementById("sold-out-colour-alert");
+    if (soldOutAlert) {
+      soldOutAlert.hidden = !colorSoldOut;
+    }
+
+    const mainImage = document.querySelector(".main-image");
+    if (mainImage) {
+      mainImage.classList.toggle("is-color-sold-out", colorSoldOut);
+    }
+
     updateAddToCartButton();
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".color-option").forEach((button) => {
+    document.querySelectorAll(".color-option[data-color-index]").forEach((button) => {
       button.addEventListener("click", () => renderColor(Number(button.dataset.colorIndex)));
     });
 
@@ -235,6 +249,10 @@
     bindThumbnailEvents();
     bindVariantEvents();
     updateImageCount(window.productDetailState.colors[0] ? window.productDetailState.colors[0].images : []);
-    updateAddToCartButton();
+    if (window.productDetailState.colors.length > 0) {
+      renderColor(0);
+    } else {
+      updateAddToCartButton();
+    }
   });
 })();

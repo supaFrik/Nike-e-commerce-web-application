@@ -141,6 +141,162 @@
    RESPONSIVE STYLES FOR SOCIAL & RECOMMENDATIONS
    ================================================== */
 
+.pdp-recommendations,
+.pdp-wearing-section {
+  background: #fff;
+  padding: 72px 0;
+}
+
+.pdp-recommendations {
+  border-top: 1px solid #e5e5e5;
+}
+
+.pdp-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.pdp-section-head--stacked {
+  align-items: flex-start;
+}
+
+.pdp-section-head h2 {
+  margin: 0;
+  color: #111;
+  font-size: clamp(24px, 3vw, 32px);
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.pdp-section-head p {
+  margin: 10px 0 0;
+  color: #111;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.pdp-section-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.pdp-card-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(280px, 1fr);
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 14px;
+  scroll-snap-type: x mandatory;
+}
+
+.pdp-card-rail .recommendation-card {
+  scroll-snap-align: start;
+  min-width: 0;
+  border-radius: 0;
+  background: #fff;
+}
+
+.recommendation-image {
+  aspect-ratio: 1 / 1;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.recommendation-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdp-card-rail .product-info {
+  padding: 12px 0 0;
+}
+
+.pdp-card-rail .product-title,
+.pdp-card-rail .product-type,
+.pdp-card-rail .product-price {
+  margin: 0 0 4px;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.pdp-card-rail .product-title,
+.pdp-card-rail .product-price {
+  color: #111;
+  font-weight: 500;
+}
+
+.pdp-card-rail .product-type {
+  color: #707072;
+  font-weight: 400;
+}
+
+.wearing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.wearing-card,
+.wearing-upload-card {
+  min-width: 0;
+}
+
+.wearing-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: block;
+  object-fit: cover;
+  background: #f5f5f5;
+}
+
+.wearing-card span {
+  display: block;
+  margin-top: 12px;
+  color: #111;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.wearing-upload-card {
+  min-height: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+  text-align: center;
+  padding: 32px;
+}
+
+.wearing-upload-card strong {
+  max-width: 260px;
+  color: #111;
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 500;
+}
+
+.wearing-upload-card span {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  line-height: 1;
+}
+
 @media (max-width: 768px) {
   .recommendations-wrapper {
     margin: 0 40px;
@@ -149,6 +305,20 @@
   .carousel-btn {
     width: 40px;
     height: 40px;
+  }
+
+  .pdp-recommendations,
+  .pdp-wearing-section {
+    padding: 48px 0;
+  }
+
+  .pdp-section-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .wearing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -164,5 +334,13 @@
   .carousel-btn {
     width: 36px;
     height: 36px;
+  }
+
+  .pdp-card-rail {
+    grid-auto-columns: 78%;
+  }
+
+  .wearing-grid {
+    grid-template-columns: 1fr;
   }
 }

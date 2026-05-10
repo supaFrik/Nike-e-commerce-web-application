@@ -176,6 +176,12 @@
 
                             <div id="color-options" class="color-options-grid">
                                 <c:forEach var="color" items="${product.colors}" varStatus="status">
+                                    <c:set var="colorSoldOut" value="true" />
+                                    <c:forEach var="variant" items="${color.variants}">
+                                        <c:if test="${variant.active and variant.stock > 0}">
+                                            <c:set var="colorSoldOut" value="false" />
+                                        </c:if>
+                                    </c:forEach>
                                     <c:set var="colorPreviewImage" value="${null}" />
                                     <c:if test="${not empty color.images}">
                                         <c:forEach var="colorImage" items="${color.images}">
@@ -188,12 +194,13 @@
                                         </c:if>
                                     </c:if>
                                     <button type="button"
-                                            class="color-btn color-option${status.first ? ' active selected' : ''}"
+                                            class="color-btn color-option${status.first ? ' active selected' : ''}${colorSoldOut ? ' sold-out' : ''}"
                                             data-color-id="${color.id}"
                                             data-color-index="${status.index}"
                                             data-color-name="${fn:escapeXml(color.colorName)}"
+                                            data-sold-out="${colorSoldOut}"
                                             aria-pressed="${status.first ? 'true' : 'false'}"
-                                            aria-label="Select color ${fn:escapeXml(color.colorName)}">
+                                            aria-label="Select color ${fn:escapeXml(color.colorName)}${colorSoldOut ? ' sold out' : ''}">
                                         <c:choose>
                                             <c:when test="${colorPreviewImage != null}">
                                                 <img class="color-option-image"
@@ -214,6 +221,9 @@
                                     <span class="design-ring" aria-hidden="true"></span>
                                     <span class="design-copy">Design<br>Your Own</span>
                                 </button>
+                            </div>
+                            <div class="sold-out-colour-alert" id="sold-out-colour-alert" role="status" hidden>
+                                <strong>Sold Out:</strong> This colour is currently unavailable.
                             </div>
                         </div>
 
@@ -262,8 +272,7 @@
                     <div class="product-actions" role="group" aria-label="Product actions">
                         <button id="add-to-cart-button"
                                 class="btn btn-primary btn-full add-to-cart"
-                                type="button"
-                                id="add-to-cart-button">
+                                type="button">
                             Add to Bag
                         </button>
                         <button id="wishlist-button"
@@ -376,6 +385,103 @@
     </div>
 </section>
 
+<section class="recommendations-section pdp-recommendations" aria-labelledby="recommendations-title">
+    <div class="container">
+        <div class="pdp-section-head">
+            <h2 id="recommendations-title">You Might Also Like</h2>
+            <div class="pdp-section-actions" aria-hidden="true">
+                <button type="button" class="carousel-btn prev" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button type="button" class="carousel-btn next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="recommendations-track pdp-card-rail">
+            <article class="recommendation-card">
+                <div class="recommendation-image">
+                    <c:choose>
+                        <c:when test="${selectedMainImage != null}">
+                            <img src="${selectedMainImage.path}" alt="${fn:escapeXml(product.name)} recommendation">
+                        </c:when>
+                        <c:otherwise>
+                            <img src="${env}/images/products/AIR+FORCE+1+'07.avif" alt="Nike recommended product">
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-type">${product.categoryName}</p>
+                    <p class="product-price">
+                        <fmt:formatNumber value="${hasSale ? product.salePrice : product.price}" type="number" maxFractionDigits="0"/>&#8363;
+                    </p>
+                </div>
+            </article>
+            <article class="recommendation-card">
+                <div class="recommendation-image">
+                    <img src="${env}/images/products/AIR+MAX+DN8.avif" alt="Nike Air Max Dn8">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Nike Air Max Dn8</h3>
+                    <p class="product-type">Men's Shoes</p>
+                    <p class="product-price">4,699,000&#8363;</p>
+                </div>
+            </article>
+            <article class="recommendation-card">
+                <div class="recommendation-image">
+                    <img src="${env}/images/products/AIR+JORDAN+1+LOW.avif" alt="Air Jordan 1 Low">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Air Jordan 1 Low</h3>
+                    <p class="product-type">Shoes</p>
+                    <p class="product-price">3,239,000&#8363;</p>
+                </div>
+            </article>
+            <article class="recommendation-card">
+                <div class="recommendation-image">
+                    <img src="${env}/images/products/PEGASUS+PLUS.avif" alt="Nike Pegasus Plus">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Nike Pegasus Plus</h3>
+                    <p class="product-type">Road Running Shoes</p>
+                    <p class="product-price">5,589,000&#8363;</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="social-section pdp-wearing-section" aria-labelledby="wearing-title">
+    <div class="container">
+        <div class="pdp-section-head pdp-section-head--stacked">
+            <div>
+                <h2 id="wearing-title">How Others Are Wearing It</h2>
+                <p>Upload your photo or mention @Nike on Instagram for a chance to be featured.</p>
+            </div>
+            <button type="button" class="upload-btn">Upload Your Photo</button>
+        </div>
+        <div class="wearing-grid">
+            <article class="wearing-card">
+                <img src="${env}/images/social/Andre F.png" alt="Customer styling Nike product">
+                <span>@andre_f</span>
+            </article>
+            <article class="wearing-card">
+                <img src="${env}/images/social/Browskin.png" alt="Customer wearing Nike sneakers">
+                <span>@browskin</span>
+            </article>
+            <article class="wearing-card">
+                <img src="${env}/images/social/Leeho.png" alt="Street style with Nike sneakers">
+                <span>@leeho</span>
+            </article>
+            <article class="wearing-upload-card">
+                <strong>Be one of the first to show your style.</strong>
+                <span aria-hidden="true">+</span>
+            </article>
+        </div>
+    </div>
+</section>
+
 <jsp:include page="/WEB-INF/views/user/layout/footer.jsp" />
 
 <template id="productDetailPayload">
@@ -384,10 +490,17 @@
   "defaultProductName": "${fn:escapeXml(product.name)}",
   "colors": [
     <c:forEach var="color" items="${product.colors}" varStatus="colorStatus">
+    <c:set var="payloadColorSoldOut" value="true" />
+    <c:forEach var="variant" items="${color.variants}">
+      <c:if test="${variant.active and variant.stock > 0}">
+        <c:set var="payloadColorSoldOut" value="false" />
+      </c:if>
+    </c:forEach>
     {
       "id": ${color.id},
       "colorName": "${fn:escapeXml(color.colorName)}",
       "hexCode": "${fn:escapeXml(color.hexCode)}",
+      "soldOut": ${payloadColorSoldOut},
       "images": [
         <c:forEach var="image" items="${color.images}" varStatus="imageStatus">
         {

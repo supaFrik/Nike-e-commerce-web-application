@@ -11,6 +11,7 @@
     <title>Nike - Đăng nhập</title>
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/user/imported/auth.jsp" />
+    <link rel="stylesheet" href="${env}/css/common/nike-design-system.css">
 </head>
 <body>
     <c:set var="usernameHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['username']}" />

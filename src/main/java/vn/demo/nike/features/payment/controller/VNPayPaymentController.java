@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.demo.nike.features.identity.user.request.CurrentUserProvider;
 import vn.demo.nike.features.payment.enums.PaymentStatus;
 import vn.demo.nike.features.payment.dto.VNPayCreatePaymentResponse;
 import vn.demo.nike.features.payment.dto.VNPayIpnResponse;
@@ -18,12 +19,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/api/payments/vnpay")
 public class VNPayPaymentController {
+
     private final VNPayPaymentService vnPayPaymentService;
+    private final CurrentUserProvider currentUserProvider;
 
     @PostMapping("/orders/{orderId}")
     public ResponseEntity<VNPayCreatePaymentResponse> createPaymentUrl(@PathVariable Long orderId,
                                                                        HttpServletRequest request) {
-        return ResponseEntity.ok(vnPayPaymentService.createPaymentUrl(orderId, request));
+        Long currentUserId = currentUserProvider.getCurrentUserId();
+        return ResponseEntity.ok(vnPayPaymentService.createPaymentUrl(orderId, request, currentUserId));
     }
 
     @GetMapping("/return")

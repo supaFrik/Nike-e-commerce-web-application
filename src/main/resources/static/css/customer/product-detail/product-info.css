@@ -68,6 +68,7 @@
 }
 
 .color-btn {
+  position: relative;
   width: 86px;
   height: 86px;
   padding: 0;
@@ -90,6 +91,53 @@
 .color-btn.active,
 .color-btn.selected {
   border-color: #111;
+}
+
+.color-btn.sold-out {
+  border-color: #cacacb;
+}
+
+.color-btn.sold-out .color-option-image,
+.color-btn.sold-out .color-swatch {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+.color-btn.sold-out::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 50%;
+  height: 2px;
+  background: #111;
+  transform: rotate(-28deg);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.color-btn.sold-out.selected,
+.color-btn.sold-out.active {
+  border-color: #111;
+}
+
+.sold-out-colour-alert {
+  margin-top: 14px;
+  padding: 16px 18px;
+  border: 1px solid #111;
+  background: #f5f5f5;
+  color: #111;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.sold-out-colour-alert strong {
+  font-weight: 500;
+}
+
+.main-image.is-color-sold-out img {
+  filter: grayscale(1);
+  opacity: 0.62;
 }
 
 .color-option-image {

@@ -1,4 +1,4 @@
-﻿<%@ include file="/WEB-INF/views/common/variables.jsp" %>
+﻿﻿<%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -339,14 +339,6 @@
                             <span id="totalDisplay"><fmt:formatNumber value="${cart.total + selectedShippingMethod.cost}" type="currency" currencySymbol="đ" /></span>
                         </div>
                     </div>
-
-                    <div class="security-info">
-                        <i class="fas fa-shield-alt"></i>
-                        <div class="security-text">
-                            <strong>Checkout đang dùng form giao hàng thật</strong>
-                            <p>Thông tin người nhận và địa chỉ trên form sẽ được bảo mật tuyệt đối.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -458,10 +450,10 @@
             }
             if (primarySubmit) {
                 if (mode === 'vnpay') {
-                    primarySubmit.textContent = 'Thanh toÃ¡n báº±ng VNPay';
+                    primarySubmit.textContent = 'Thanh toán bằng VNPay';
                     return;
                 }
-                primarySubmit.textContent = mode === 'vnpay' ? 'Thanh toÃ¡n báº±ng VNPay QR' : 'Hoàn tất thanh toán';
+                primarySubmit.textContent = mode === 'vnpay' ? 'Thanh toán bằng VNPay QR' : 'Hoàn tất thanh toán';
             }
         }
 

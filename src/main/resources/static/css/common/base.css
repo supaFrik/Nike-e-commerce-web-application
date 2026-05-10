@@ -266,8 +266,8 @@
 /* Hildera font (hero display) */
 @font-face {
   font-family: 'Hildera';
-  src: url('../fonts/hildera-webfont.woff2') format('woff2'),
-       url('../fonts/hildera-webfont.woff') format('woff');
+  src: url('../../fonts/hildera-webfont.woff2') format('woff2'),
+       url('../../fonts/hildera-webfont.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
