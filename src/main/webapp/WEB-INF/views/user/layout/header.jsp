@@ -168,7 +168,6 @@
                 </div>
             </div>
         </div>
-        
         <!-- Mobile Menu Overlay -->
         <div class="mobile-menu-overlay" id="mobileMenuOverlay">
             <div class="mobile-menu-content">

@@ -14,7 +14,7 @@
 
 </head>
 
-<body>
+<body class="home-page">
     <jsp:include page="/WEB-INF/views/user/layout/header.jsp" />
 
 <!-- Hero Section -->
@@ -310,5 +310,4 @@
     <script src="${env}/js/customer/components/carousel.js" defer></script>
 </body>
 </html>
-
 

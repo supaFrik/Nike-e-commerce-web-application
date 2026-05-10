@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.demo.nike.features.order.entity.Order;
 import vn.demo.nike.features.order.enums.OrderStatus;
+import vn.demo.nike.features.order.exception.InvalidOrderStateException;
+import vn.demo.nike.features.order.exception.OrderIdAndUserIdNotFoundException;
 import vn.demo.nike.features.order.repository.OrderRepository;
 import vn.demo.nike.features.payment.config.VNPayProperties;
 import vn.demo.nike.features.payment.entity.PaymentTransaction;
@@ -16,6 +18,7 @@ import vn.demo.nike.features.payment.enums.PaymentStatus;
 import vn.demo.nike.features.payment.dto.VNPayCreatePaymentResponse;
 import vn.demo.nike.features.payment.dto.VNPayIpnResponse;
 import vn.demo.nike.features.payment.dto.VNPayReturnResponse;
+import vn.demo.nike.features.payment.exception.InvalidPaymentMethodException;
 import vn.demo.nike.features.payment.repository.PaymentTransactionRepository;
 
 import java.math.BigDecimal;
@@ -39,8 +42,8 @@ public class VNPayPaymentService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public VNPayCreatePaymentResponse createPaymentUrl(Long orderId, HttpServletRequest request) {
-        Order order = loadOrderForVNPay(orderId);
+    public VNPayCreatePaymentResponse createPaymentUrl(Long orderId, HttpServletRequest request, Long currentUserId) {
+        Order order = loadOrderForVNPay(orderId, currentUserId);
         validateGatewayConfiguration();
 
         PaymentTransaction transaction = createPendingTransaction(order, request);
@@ -299,18 +302,16 @@ public class VNPayPaymentService {
                 .build();
     }
 
-    private Order loadOrderForVNPay(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+    private Order loadOrderForVNPay(Long orderId, Long currentUserId) {
+        Order order = orderRepository.findByIdAndUser_Id(orderId, currentUserId)
+                .orElseThrow(OrderIdAndUserIdNotFoundException::new);
 
         if (order.getPaymentMethod() != PaymentMethod.VNPAY) {
-            throw new IllegalStateException(
-                    "Order is not using VNPay: " + orderId
-            );
+            throw new InvalidPaymentMethodException(PaymentMethod.VNPAY);
         }
 
         if (order.getOrderStatus() != OrderStatus.PENDING_PAYMENT) {
-            throw new IllegalStateException("Order is not waiting for payment: " + orderId);
+            throw new InvalidOrderStateException(orderId, order.getOrderStatus(), OrderStatus.PENDING_PAYMENT);
         }
         return order;
     }
