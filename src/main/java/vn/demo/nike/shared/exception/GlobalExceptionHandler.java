@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import vn.demo.nike.features.admin.product.exception.InvalidProductColorException;
 import vn.demo.nike.features.admin.product.exception.InvalidSalePriceException;
 import vn.demo.nike.features.admin.product.exception.InvalidSizeException;
@@ -156,6 +157,16 @@ public class GlobalExceptionHandler {
                 Instant.now().toEpochMilli()
         );
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorBody);
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> noResourceFound(NoResourceFoundException e) {
+        ErrorResponse errorBody = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                e.getMessage(),
+                Instant.now().toEpochMilli()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
     }
 
     @ExceptionHandler(Exception.class)

@@ -160,16 +160,16 @@
                 <div class="shop-running-wrapper">
                     <div class="shop-running-track" id="shopRunningTrack" role="list" aria-live="polite">
                         <c:choose>
-                            <c:when test="${not empty activeProducts}">
-                                <c:forEach var="product" items="${activeProducts}" varStatus="status">
+                            <c:when test="${not empty runningSection.products}">
+                                <c:forEach var="product" items="${runningSection.products}" varStatus="status">
                                     <div class="running-card" data-category="running-shoes" role="listitem" aria-labelledby="running-${status.index + 1}-title" aria-describedby="running-${status.index + 1}-desc">
                                         <div class="product-image">
                                             <c:choose>
-                                                <c:when test="${not empty product.thumbnailUrl}">
+                                                <c:when test="${not empty product.heroImg}">
                                                     <a aria-label="${product.name}" href="${env}/product-detail?id=${product.id}"
                                                        class="product-card__img-link-overlay" data-testid="product-card-img-link-overlay"
                                                        aria-describedby="product-${status.index + 1}-desc">
-                                                        <img src="${product.thumbnailUrl}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                        <img src="${product.heroImg}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
                                                     </a>
                                                 </c:when>
                                                 <c:otherwise>

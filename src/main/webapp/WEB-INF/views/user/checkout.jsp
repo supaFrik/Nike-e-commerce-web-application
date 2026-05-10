@@ -461,7 +461,7 @@
                     primarySubmit.textContent = 'Thanh toÃ¡n báº±ng VNPay';
                     return;
                 }
-                primarySubmit.textContent = mode === 'vnpay' ? 'Thanh toÃ¡n báº±ng VNPay QR' : 'HoÃ n táº¥t thanh toÃ¡n';
+                primarySubmit.textContent = mode === 'vnpay' ? 'Thanh toÃ¡n báº±ng VNPay QR' : 'Hoàn tất thanh toán';
             }
         }
 

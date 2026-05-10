@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+
     public List<CategoryView> getAllCategories() {
         return categoryRepository.findAllByOrderByNameAsc().stream().map(c -> new CategoryView(c.getId(), c.getName())).toList();
     }
@@ -24,5 +25,14 @@ public class CategoryService {
         return categoryRepository.findById(id)
                 .map(c -> c.getName())
                 .orElseThrow(() -> new CategoryNotFoundException(id));
+    }
+
+    public Long getCategoryIdByName(String categoryName) {
+        if (categoryName == null)  {
+            return null;
+        }
+        return categoryRepository.findByNameIgnoreCase(categoryName)
+                .map(c -> c.getId())
+                .orElseThrow(() -> new CategoryNotFoundException(categoryName));
     }
 }
