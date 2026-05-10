@@ -1,5 +1,6 @@
 package vn.demo.nike.features.catalog.product.repository;
 
+import jakarta.persistence.Entity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -15,13 +16,13 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    default Optional<Product> findDetailById(Long id) {
-        return findById(id);
-    }
-
-    List<Product> findByCategory_Id(Long id);
-
-    List<Product> findByCategory_Id(Long id, Sort sort);
+    @EntityGraph(attributePaths = {
+            "category",
+            "colors",
+            "colors.images",
+            "colors.variants"
+    })
+    Optional<Product> findDetailById(Long id);
 
     @Query("""
     SELECT new vn.demo.nike.features.catalog.product.dto.request.ProductListItemView(
