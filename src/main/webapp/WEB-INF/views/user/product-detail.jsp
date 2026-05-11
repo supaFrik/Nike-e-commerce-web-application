@@ -530,5 +530,8 @@
 }
 </template>
 <script src="${env}/js/customer/pages/product-detail-page.js"></script>
+
+<!-- Vercel Speed Insights -->
+<jsp:include page="/WEB-INF/views/common/speed-insights.jsp" />
 </body>
 </html>

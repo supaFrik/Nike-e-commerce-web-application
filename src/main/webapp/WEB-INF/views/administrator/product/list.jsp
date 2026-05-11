@@ -67,5 +67,8 @@
 </div>
 <jsp:include page="/WEB-INF/views/administrator/layout/js.jsp" />
 <script src="${env}/js/admin/pages/product-list.js"></script>
+
+<!-- Vercel Speed Insights -->
+<jsp:include page="/WEB-INF/views/common/speed-insights.jsp" />
 </body>
 </html>

@@ -200,5 +200,8 @@
         <footer role="contentinfo" aria-label="Site footer">
             <jsp:include page="/WEB-INF/views/customer/layout/footer.jsp" />
         </footer>
+        
+        <!-- Vercel Speed Insights -->
+        <jsp:include page="/WEB-INF/views/common/speed-insights.jsp" />
     </body>
 </html>
