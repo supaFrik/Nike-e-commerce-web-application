@@ -26,7 +26,7 @@ public class CheckoutPageController {
     public String checkoutPage(@RequestParam(required = false) Long orderId, Model model) {
         Long currentUserId = currentUserProvider.getCurrentUserId();
 
-        User currentUser = userRepository.findById(currentUserId)
+        User currentUser = userRepository.findWithAddressesById(currentUserId)
                 .orElseThrow(() -> new IllegalStateException("Current user not found"));
         CheckoutPageResponse viewData = checkoutPageViewService.buildCheckoutPage(currentUserId, orderId);
         Address selectedAddress = currentUser.getAddress();

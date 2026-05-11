@@ -129,7 +129,7 @@ public class CheckoutService {
         if (currentUserId == null) {
             throw new UnauthenticatedCheckoutException();
         }
-        return userRepository.findById(currentUserId).orElseThrow(UnauthenticatedCheckoutException::new);
+        return userRepository.findWithAddressesById(currentUserId).orElseThrow(UnauthenticatedCheckoutException::new);
     }
 
     private ShippingMethod resolveShippingMethod(PlaceCheckoutRequest request) {
