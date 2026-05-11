@@ -209,5 +209,8 @@
     </c:choose>
 </main>
 <script src="${env}/js/customer/pages/order.js"></script>
+
+<!-- Vercel Speed Insights -->
+<jsp:include page="/WEB-INF/views/common/speed-insights.jsp" />
 </body>
 </html>

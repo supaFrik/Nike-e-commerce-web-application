@@ -218,5 +218,8 @@
 
     <script src="${env}/js/common/runtime.js"></script>
     <script src="${env}/js/customer/pages/auth.js"></script>
+    
+    <!-- Vercel Speed Insights -->
+    <jsp:include page="/WEB-INF/views/common/speed-insights.jsp" />
 </body>
 </html>

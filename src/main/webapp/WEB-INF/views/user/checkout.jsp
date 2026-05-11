@@ -1,4 +1,4 @@
-﻿<%@ include file="/WEB-INF/views/common/variables.jsp" %>
+<%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -623,5 +623,8 @@
         switchPaymentMode();
     })();
 </script>
+
+<!-- Vercel Speed Insights -->
+<jsp:include page="/WEB-INF/views/common/speed-insights.jsp" />
 </body>
 </html>

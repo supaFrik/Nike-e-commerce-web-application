@@ -308,6 +308,9 @@
     <!--  JS-->
     <jsp:include page="/WEB-INF/views/user/layout/js.jsp" />
     <script src="${env}/js/customer/components/carousel.js" defer></script>
+    
+    <!-- Vercel Speed Insights -->
+    <jsp:include page="/WEB-INF/views/common/speed-insights.jsp" />
 </body>
 </html>
 

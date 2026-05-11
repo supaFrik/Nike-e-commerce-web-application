@@ -9,6 +9,8 @@
 </head>
 <body>
     <p style="padding:2rem;text-align:center;font-family:Arial;">Redirecting to contact section... If you are not redirected, <a href="${env}/#footer-contact">click here</a>.</p>
+    
+    <!-- Vercel Speed Insights -->
+    <jsp:include page="/WEB-INF/views/common/speed-insights.jsp" />
 </body>
 </html>
-
