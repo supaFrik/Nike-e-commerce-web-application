@@ -11,4 +11,3 @@ public final class StringUtil {
         return value.trim().toLowerCase();
     }
 }
-

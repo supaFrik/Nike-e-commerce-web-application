@@ -84,7 +84,7 @@ public class SecurityConfig {
 
     @Bean
     @Order(1)
-    @Profile("prod")
+    @Profile({"prod", "bootstrap"})
     SecurityFilterChain managementProd(HttpSecurity http) throws Exception {
         http
                 .securityMatcher(EndpointRequest.toAnyEndpoint())

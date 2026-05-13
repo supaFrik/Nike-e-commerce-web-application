@@ -166,20 +166,24 @@
                                         <div class="product-image">
                                             <c:choose>
                                                 <c:when test="${not empty product.heroImg}">
-                                                    <a aria-label="${product.name}" href="${env}/product-detail?id=${product.id}"
-                                                       class="product-card__img-link-overlay" data-testid="product-card-img-link-overlay"
-                                                       aria-describedby="product-${status.index + 1}-desc">
-                                                        <img src="${product.heroImg}" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                    <a aria-label="View ${product.name}" href="${env}/product-detail?id=${product.id}"
+                                                       class="product-card__img-link" data-testid="product-card-img-link"
+                                                       aria-describedby="running-${status.index + 1}-desc">
+                                                        <img src="${product.heroImg}" alt="${product.name} - ${product.categoryName}" aria-describedby="running-${status.index + 1}-desc">
                                                     </a>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <img src="${env}/images/products/product-1.jpg" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                    <a href="${env}/product-detail?id=${product.id}" aria-label="View ${product.name}">
+                                                        <img src="${env}/images/products/default-product.avif" alt="${product.name}" aria-describedby="running-${status.index + 1}-desc">
+                                                    </a>
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
                                         <div class="product-info">
-                                            <h3 class="product-title" id="running-${status.index + 1}-title">${product.name}</h3>
-                                            <p class="product-type" id="running-${status.index + 1}-desc">${product.categoryName}</p>
+                                            <h3 class="product-title" id="running-${status.index + 1}-title">
+                                                <a href="${env}/product-detail?id=${product.id}" style="text-decoration:none; color:inherit;">${product.name}</a>
+                                            </h3>
+                                            <p class="product-type" id="running-${status.index + 1}-desc">${product.type}</p>
                                             <p class="product-price" aria-label="Price: <fmt:formatNumber value='${product.price}' type='number' maxFractionDigits='0'/> Vietnamese Dong">
                                                 <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>₫
                                             </p>

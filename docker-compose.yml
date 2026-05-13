@@ -2,6 +2,7 @@ services:
   mysql-db:
     image: mysql:8.0
     restart: always
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-nike_store}
@@ -13,8 +14,6 @@ services:
       timeout: 5s
       retries: 10
       start_period: 20s
-    ports:
-      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -27,7 +26,7 @@ services:
       mysql-db:
         condition: service_healthy
     environment:
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
       PORT: ${APP_PORT:-8080}
       MYSQL_URL: jdbc:mysql://mysql-db:3306/${MYSQL_DATABASE:-nike_store}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       MYSQLUSER: ${MYSQL_USER:-nike_app}
@@ -44,9 +43,6 @@ services:
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
 
     ports:
-      - "${APP_PORT:-8080}:8080"
-    volumes:
-      - product_uploads:/data
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
 volumes:
   mysql_data:
-  product_uploads:

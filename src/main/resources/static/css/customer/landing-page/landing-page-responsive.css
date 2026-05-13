@@ -413,3 +413,34 @@
         border: 2px solid;
     }
 }
+
+@media (max-width: 768px) {
+    .running-card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .running-card .product-title {
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+    }
+
+    .running-card .product-info {
+        padding: var(--size-spacing-s) var(--size-spacing-m);
+    }
+}
+
+@media (max-width: 480px) {
+    .running-card .product-info {
+        padding: var(--size-spacing-s) var(--size-spacing-s);
+    }
+
+    .product-title {
+        font-size: var(--font-size-s) !important;
+    }
+
+    .product-price {
+        font-size: var(--font-size-m) !important;
+    }
+}
+

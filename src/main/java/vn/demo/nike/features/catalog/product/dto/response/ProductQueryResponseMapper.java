@@ -87,11 +87,11 @@ public class ProductQueryResponseMapper {
             return List.of();
         }
 
+        // Sort by: isMainForColor DESC (true first), then by orderIndex ASC
+        // This ensures the main image is always first
         return color.getImages().stream()
-                .sorted(Comparator.comparing(
-                        ProductImage::getOrderIndex,
-                        Comparator.nullsLast(Integer::compareTo)
-                ))
+                .sorted(Comparator.comparing((ProductImage img) -> !Boolean.TRUE.equals(img.getIsMainForColor()))
+                        .thenComparing(ProductImage::getOrderIndex, Comparator.nullsLast(Integer::compareTo)))
                 .map(image -> new ProductImageDetailResponse(
                         image.getId(),
                         ProductImageUrlResolverUtil.toPublicUrl(image.getUrl()),

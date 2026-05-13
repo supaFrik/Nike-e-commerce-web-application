@@ -16,19 +16,8 @@
     <c:set var="selectedColor" value="${product.colors[0]}" />
     <c:set var="selectedImages" value="${selectedColor.images}" />
     <c:set var="selectedVariants" value="${selectedColor.variants}" />
-    <c:set var="selectedMainImage" value="${null}" />
-    <c:set var="selectedColorPreviewImage" value="${null}" />
-    <c:if test="${not empty selectedImages}">
-        <c:forEach var="image" items="${selectedImages}">
-            <c:if test="${selectedMainImage == null and image.isMainForColor}">
-                <c:set var="selectedMainImage" value="${image}" />
-            </c:if>
-        </c:forEach>
-        <c:if test="${selectedMainImage == null}">
-            <c:set var="selectedMainImage" value="${selectedImages[0]}" />
-        </c:if>
-        <c:set var="selectedColorPreviewImage" value="${selectedMainImage}" />
-    </c:if>
+    <!-- Images are now pre-sorted: main image first, then by order -->
+    <c:set var="selectedMainImage" value="${selectedImages[0]}" />
 </c:if>
 
 <!DOCTYPE html>
