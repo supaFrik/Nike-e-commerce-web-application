@@ -4,6 +4,7 @@
 @import "./product-info.css";
 @import "./reviews.css";
 @import "./social-recommendations.css";
+@import "./skeleton.css";
 @import "./animations.css"; /* animations can safely follow structure */
 @import "./product-detail-responsive.css"; /* responsive overrides last */
 

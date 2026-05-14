@@ -254,5 +254,13 @@
     } else {
       updateAddToCartButton();
     }
+
+    const revealPage = () => document.body.classList.remove("is-loading");
+    if (document.readyState === "complete") {
+      revealPage();
+    } else {
+      window.addEventListener("load", revealPage, { once: true });
+      window.setTimeout(revealPage, 900);
+    }
   });
 })();

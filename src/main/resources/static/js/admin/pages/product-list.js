@@ -18,15 +18,21 @@
     return token && headerName ? { [headerName]: token } : {};
   }
 
-  async function loadProducts() {
-    const response = await fetch(`${ctx()}/admin/api/page-data/products`, {
-      headers: { Accept: "application/json" }
+  async function loadProducts(options = {}) {
+    const cacheBust = options.cacheBust ? `?t=${Date.now()}` : "";
+    const response = await fetch(`${ctx()}/admin/api/page-data/products${cacheBust}`, {
+      headers: { Accept: "application/json" },
+      cache: "no-store"
     });
     if (!response.ok) {
       throw new Error("Không thể tải dữ liệu kho sản phẩm.");
     }
     products = await response.json();
-    selectedId = products[0]?.id || null;
+    const visible = filteredProducts();
+    const preferredSelectedId = options.preferredSelectedId ?? selectedId;
+    selectedId = visible.some((product) => product.id === preferredSelectedId)
+      ? preferredSelectedId
+      : (visible[0]?.id || products[0]?.id || null);
     renderCategoryFilters();
     renderGrid();
   }
@@ -65,6 +71,14 @@
       return;
     }
 
+    products = products.filter((item) => item.id !== productId);
+    if (selectedId === productId) {
+      const visible = filteredProducts();
+      selectedId = visible[0]?.id || products[0]?.id || null;
+    }
+    renderCategoryFilters();
+    renderGrid();
+
     const response = await fetch(`${ctx()}/admin/api/products/${productId}`, {
       method: "DELETE",
       headers: buildCsrfHeaders()
@@ -78,15 +92,11 @@
       } catch (error) {
         // Keep generic message.
       }
+      await loadProducts({ preferredSelectedId: productId, cacheBust: true });
       throw new Error(message);
     }
 
-    products = products.filter((item) => item.id !== productId);
-    if (selectedId === productId) {
-      selectedId = filteredProducts()[0]?.id || products[0]?.id || null;
-    }
-    renderCategoryFilters();
-    renderGrid();
+    await loadProducts({ preferredSelectedId: selectedId, cacheBust: true });
   }
 
   function renderQuickView(product) {

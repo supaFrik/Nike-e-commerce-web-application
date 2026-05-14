@@ -651,6 +651,29 @@ body.topbar-condensed .eyebrow {
   transform: none;
 }
 
+.btn:disabled,
+.btn[aria-busy="true"] {
+  cursor: wait;
+  opacity: 0.68;
+  pointer-events: none;
+}
+
+.btn.is-loading::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 999px;
+  animation: admin-spin 700ms linear infinite;
+}
+
+@keyframes admin-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .btn-dark {
   background: #111111;
   color: #fff;
@@ -1045,6 +1068,12 @@ body.topbar-condensed .eyebrow {
   aspect-ratio: 1 / 0.74;
   object-fit: cover;
   border-radius: 0;
+}
+
+.media-card img.is-empty {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+    #171719;
 }
 
 .media-card .copy {

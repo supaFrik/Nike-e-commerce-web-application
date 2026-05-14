@@ -1,0 +1,124 @@
+.not-found-page {
+    min-height: calc(100vh - 180px);
+    background: #fff;
+    color: #111;
+}
+
+.not-found-hero {
+    min-height: 72vh;
+    display: grid;
+    align-items: center;
+    padding: 72px 0;
+    border-top: 1px solid #e5e5e5;
+}
+
+.not-found-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 0.82fr) minmax(280px, 0.18fr);
+    gap: 36px;
+    align-items: end;
+}
+
+.not-found-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    color: #d30005;
+    font-size: 14px;
+    line-height: 1.4;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.not-found-kicker::before {
+    content: "";
+    width: 34px;
+    height: 2px;
+    background: currentColor;
+}
+
+.not-found-title {
+    max-width: 900px;
+    margin: 0;
+    color: #111;
+    font-size: clamp(58px, 12vw, 164px);
+    line-height: 0.88;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.not-found-copy {
+    max-width: 520px;
+    margin: 28px 0 0;
+    color: #4b4b4d;
+    font-size: 18px;
+    line-height: 1.55;
+}
+
+.not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 34px;
+}
+
+.not-found-btn {
+    min-height: 48px;
+    padding: 13px 24px;
+    border-radius: 999px;
+    border: 1px solid #111;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #111;
+    background: #fff;
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.not-found-btn.primary {
+    background: #111;
+    color: #fff;
+}
+
+.not-found-btn:hover,
+.not-found-btn:focus-visible {
+    border-color: #707072;
+    outline: none;
+}
+
+.not-found-marker {
+    min-height: 240px;
+    border-left: 1px solid #e5e5e5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    color: #f5f5f5;
+    font-size: clamp(90px, 15vw, 220px);
+    line-height: 0.8;
+    font-weight: 900;
+    letter-spacing: 0;
+}
+
+@media (max-width: 768px) {
+    .not-found-hero {
+        min-height: 64vh;
+        padding: 48px 0;
+    }
+
+    .not-found-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .not-found-marker {
+        min-height: auto;
+        border-left: 0;
+        justify-content: flex-start;
+        font-size: 96px;
+    }
+}

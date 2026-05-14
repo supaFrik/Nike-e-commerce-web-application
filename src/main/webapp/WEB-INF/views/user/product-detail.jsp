@@ -30,8 +30,46 @@
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/user/imported/product-detail.jsp" />
 </head>
-<body>
+<body class="product-detail-page is-loading">
 <jsp:include page="/WEB-INF/views/user/layout/header.jsp" />
+
+<section class="pdp-skeleton" aria-hidden="true">
+    <div class="container">
+        <div class="pdp-skeleton-layout">
+            <div class="pdp-skeleton-gallery">
+                <div class="pdp-skeleton-thumbs">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="pdp-skeleton-main"></div>
+            </div>
+            <div class="pdp-skeleton-info">
+                <span class="pdp-skeleton-line short"></span>
+                <span class="pdp-skeleton-line title"></span>
+                <span class="pdp-skeleton-line medium"></span>
+                <span class="pdp-skeleton-line price"></span>
+                <div class="pdp-skeleton-swatches">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="pdp-skeleton-sizes">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span class="pdp-skeleton-button"></span>
+                <span class="pdp-skeleton-button light"></span>
+            </div>
+        </div>
+    </div>
+</section>
 
 <main class="product-detail" role="main" aria-labelledby="product-title">
     <div class="container">
@@ -222,7 +260,7 @@
                                     <h4 id="size-selection-title">Select Size</h4>
                                 </div>
                                 <button type="button" class="size-guide-btn" aria-label="Open size guide">
-                                    <i class="far fa-ruler-combined" aria-hidden="true"></i>
+                                    <i class="fas fa-ruler-combined" aria-hidden="true"></i>
                                     Size Guide
                                 </button>
                             </div>
@@ -370,73 +408,6 @@
                 <li>Full-length Air Zoom unit compared to forefoot and heel units in previous models.</li>
                 <li>Designed to keep transitions smooth and energetic throughout everyday mileage.</li>
             </ul>
-        </div>
-    </div>
-</section>
-
-<section class="recommendations-section pdp-recommendations" aria-labelledby="recommendations-title">
-    <div class="container">
-        <div class="pdp-section-head">
-            <h2 id="recommendations-title">You Might Also Like</h2>
-            <div class="pdp-section-actions" aria-hidden="true">
-                <button type="button" class="carousel-btn prev" disabled>
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button type="button" class="carousel-btn next">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
-        </div>
-        <div class="recommendations-track pdp-card-rail">
-            <article class="recommendation-card">
-                <div class="recommendation-image">
-                    <c:choose>
-                        <c:when test="${selectedMainImage != null}">
-                            <img src="${selectedMainImage.path}" alt="${fn:escapeXml(product.name)} recommendation">
-                        </c:when>
-                        <c:otherwise>
-                            <img src="${env}/images/products/AIR+FORCE+1+'07.avif" alt="Nike recommended product">
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.name}</h3>
-                    <p class="product-type">${product.categoryName}</p>
-                    <p class="product-price">
-                        <fmt:formatNumber value="${hasSale ? product.salePrice : product.price}" type="number" maxFractionDigits="0"/>&#8363;
-                    </p>
-                </div>
-            </article>
-            <article class="recommendation-card">
-                <div class="recommendation-image">
-                    <img src="${env}/images/products/AIR+MAX+DN8.avif" alt="Nike Air Max Dn8">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Nike Air Max Dn8</h3>
-                    <p class="product-type">Men's Shoes</p>
-                    <p class="product-price">4,699,000&#8363;</p>
-                </div>
-            </article>
-            <article class="recommendation-card">
-                <div class="recommendation-image">
-                    <img src="${env}/images/products/AIR+JORDAN+1+LOW.avif" alt="Air Jordan 1 Low">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Air Jordan 1 Low</h3>
-                    <p class="product-type">Shoes</p>
-                    <p class="product-price">3,239,000&#8363;</p>
-                </div>
-            </article>
-            <article class="recommendation-card">
-                <div class="recommendation-image">
-                    <img src="${env}/images/products/PEGASUS+PLUS.avif" alt="Nike Pegasus Plus">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Nike Pegasus Plus</h3>
-                    <p class="product-type">Road Running Shoes</p>
-                    <p class="product-price">5,589,000&#8363;</p>
-                </div>
-            </article>
         </div>
     </div>
 </section>

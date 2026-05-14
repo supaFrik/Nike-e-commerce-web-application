@@ -1,10 +1,13 @@
 package vn.demo.nike.shared.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import vn.demo.nike.features.admin.product.exception.InvalidProductColorException;
 import vn.demo.nike.features.admin.product.exception.InvalidSalePriceException;
@@ -21,7 +24,7 @@ import vn.demo.nike.shared.dto.ErrorResponse;
 
 import java.time.Instant;
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(JsonProcessingException.class)
     public ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException ex) {
@@ -66,7 +69,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ErrorResponse> productNotFoundException(ProductNotFoundException e) {
+    public Object productNotFoundException(ProductNotFoundException e, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            return notFoundView();
+        }
+
         ErrorResponse errorBody = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 e.getMessage(),
@@ -163,7 +170,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ErrorResponse> noResourceFound(NoResourceFoundException e) {
+    public Object noResourceFound(NoResourceFoundException e, HttpServletRequest request) {
+        if (wantsHtml(request)) {
+            return notFoundView();
+        }
+
         ErrorResponse errorBody = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 e.getMessage(),
@@ -211,5 +222,16 @@ public class GlobalExceptionHandler {
                 Instant.now().toEpochMilli()
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorBody);
+    }
+
+    private boolean wantsHtml(HttpServletRequest request) {
+        String accept = request.getHeader("Accept");
+        return accept != null && accept.contains(MediaType.TEXT_HTML_VALUE);
+    }
+
+    private ModelAndView notFoundView() {
+        ModelAndView modelAndView = new ModelAndView("user/error/404");
+        modelAndView.setStatus(HttpStatus.NOT_FOUND);
+        return modelAndView;
     }
 }

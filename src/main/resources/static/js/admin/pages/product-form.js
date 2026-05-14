@@ -123,14 +123,18 @@
     });
   }
 
-  function setSavingState(isSaving) {
+  function setSavingState(isSaving, activeButton = null) {
+    document.body.classList.toggle("is-saving-product", isSaving);
+    document.body.setAttribute("aria-busy", String(isSaving));
     saveButtons.forEach((button) => {
       if (!button) {
         return;
       }
       button.disabled = isSaving;
+      button.classList.toggle("is-loading", isSaving && button === activeButton);
+      button.setAttribute("aria-busy", String(isSaving && button === activeButton));
       const mode = button.dataset.saveMode || "publish";
-      button.textContent = isSaving
+      button.textContent = isSaving && button === activeButton
         ? savingLabel(mode)
         : (button.dataset.idleLabel || idleLabel(mode));
     });
@@ -195,7 +199,7 @@
   }
 
   function defaultImage() {
-    return `${ctx()}/images/admin/products/air-max-dn8-hero.avif`;
+    return "";
   }
 
   function activeMainImage() {
@@ -224,7 +228,16 @@
     if (!imageFrame) {
       return;
     }
-    imageFrame.src = resolveImagePath(imagePath || defaultImage());
+    const resolvedImage = resolveImagePath(imagePath || defaultImage());
+    if (!resolvedImage) {
+      imageFrame.removeAttribute("src");
+      imageFrame.alt = altText || "Chưa có ảnh sản phẩm";
+      imageFrame.classList.add("is-empty");
+      return;
+    }
+
+    imageFrame.classList.remove("is-empty");
+    imageFrame.src = resolvedImage;
     imageFrame.alt = altText || "Ảnh xem trước sản phẩm";
   }
 
@@ -576,7 +589,7 @@
     });
   }
 
-  async function submitProduct(saveMode) {
+  async function submitProduct(saveMode, activeButton = null) {
     const previousStatus = productStatusInput?.value;
     if (saveMode === "draft" && productStatusInput) {
       productStatusInput.value = "DRAFT";
@@ -601,7 +614,7 @@
       : `${ctx()}/admin/api/products`;
     const method = formType === "edit" ? "PUT" : "POST";
 
-    setSavingState(true);
+    setSavingState(true, activeButton);
     try {
       const response = await fetch(url, {
         method,
@@ -631,7 +644,7 @@
       }
       throw error;
     } finally {
-      setSavingState(false);
+      setSavingState(false, activeButton);
     }
   }
 
@@ -731,7 +744,7 @@
     button?.addEventListener("click", async (event) => {
       event.preventDefault();
       try {
-        await submitProduct(button.dataset.saveMode || "publish");
+        await submitProduct(button.dataset.saveMode || "publish", button);
       } catch (error) {
         alert(error.message || "Không thể lưu sản phẩm.");
       }

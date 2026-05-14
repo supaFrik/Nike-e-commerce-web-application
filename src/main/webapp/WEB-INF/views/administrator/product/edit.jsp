@@ -86,7 +86,7 @@
                 </article>
                 <aside class="panel">
                     <div class="media-card">
-                        <img id="mainProductImage" src="${env}/images/admin/products/air-max-dn8-hero.avif" alt="Product preview">
+                        <img id="mainProductImage" alt="Product preview">
                         <div class="copy">
                             <div class="eyebrow">Featured product</div>
                             <h4>Current hero selection</h4>
