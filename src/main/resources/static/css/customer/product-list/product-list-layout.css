@@ -3,7 +3,6 @@
    Layout fundamentals, grid systems, and main containers
    ============================================================================= */
 
-/* Global Link Styles */
 a {
     color: var(--color-black);
     cursor: pointer;
@@ -21,18 +20,22 @@ a:hover {
     background: var(--color-white);
 }
 
-/* Product listing layout */
+.catalog-shell {
+    padding-top: 24px;
+}
+
 .product-listing {
     display: grid;
     grid-template-columns: 260px 1fr;
-    padding-top: 36px;
-    overflow-x: hidden;
+    align-items: start;
+    padding-top: 0;
     transition: grid-template-columns 320ms cubic-bezier(0.12, 0.85, 0.2, 1);
 }
 
-/* Main content padding (replaces inline style in JSP) */
 .product-list-content {
     padding: 0 60px;
+    min-width: 0;
+    align-self: start;
 }
 
 .product-listing.filters-collapsed {
@@ -53,6 +56,7 @@ a:hover {
 }
 
 .product-listing .sidebar {
+    align-self: start;
     will-change: transform;
     transition: transform 320ms cubic-bezier(0.12, 0.85, 0.2, 1);
 }
@@ -67,14 +71,14 @@ a:hover {
     pointer-events: none;
 }
 
-/* Default (visible) state */
 .product-listing:not(.filters-collapsing):not(.filters-collapsed):not(.filters-expanding) .sidebar {
-    transform: translateX(0);
+    transform: none;
     pointer-events: auto;
 }
 
-/* .filters-expanding is an initial "off-canvas" state; when JS removes it,
-   the sidebar transitions to translateX(0) via the default rule above. */
+.product-header-legacy {
+    display: none !important;
+}
 
 @media (prefers-reduced-motion: reduce) {
     .product-listing {
@@ -85,13 +89,11 @@ a:hover {
     }
 }
 
-/* Product Layout */
 .product-layout {
     display: flex;
     margin: 0 auto;
 }
 
-/* Categories */
 .products-showcase {
     display: block;
     direction: inherit;
@@ -99,7 +101,6 @@ a:hover {
     z-index: 0;
 }
 
-/* Fallback for older browsers that don't support CSS Grid */
 .product-grid__items {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -108,7 +109,6 @@ a:hover {
     margin: 0;
 }
 
-/* Flexbox fallback for very old browsers */
 @supports not (display: grid) {
     .product-grid__items {
         display: flex;

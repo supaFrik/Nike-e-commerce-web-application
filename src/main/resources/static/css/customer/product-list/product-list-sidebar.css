@@ -8,9 +8,9 @@
     border-right: none;
     margin: 0 0 1em 64px;
     position: sticky;
-    top: 70px;
+    top: var(--product-header-sticky-height, 0px);
     height: fit-content;
-    max-height: calc(100vh - 140px);
+    max-height: calc(100vh - var(--product-header-sticky-height, 0px) - 16px);
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -133,6 +133,17 @@ text-transform: capitalize;
     gap: 10px;
     color: var(--color-text-primary);
     font-size: 14px;
+}
+
+.filter-more-btn {
+    width: fit-content;
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--color-text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
 }
 
 .filter-option input {
