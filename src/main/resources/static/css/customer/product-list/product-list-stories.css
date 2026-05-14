@@ -4,7 +4,6 @@
    ============================================================================= */
 
 .related-stories-section {
-    padding: var(--size-spacing-xxxl) 0;
     background: var(--color-white);
     margin-top: var(--size-spacing-xl);
 }

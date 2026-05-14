@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="cfmt" uri="/WEB-INF/tlds/currency.tld" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -32,9 +33,9 @@
             <div class="sidebar" role="complementary" aria-labelledby="filters-title">
                 <!-- Mobile close button -->
                 <button class="mobile-filter-close" type="button" data-mobile-filters-toggle="close" style="display: none;"
-                        aria-label="Close filters">
+                        aria-label="Đóng bộ lọc">
                     <i class="fas fa-times" aria-hidden="true"></i>
-                    Close Filters
+                    Đóng bộ lọc
                 </button>
 
                 <!-- Nike-style sidebar categories -->
@@ -108,15 +109,15 @@
                                             </label>
                                             <label class="filter-option">
                                                 <input type="radio" name="priceRange" value="under-2000000">
-                                                <span>Dưới 2.000.000đ</span>
+                                                <span>Dưới 2,000,000₫</span>
                                             </label>
                                             <label class="filter-option">
                                                 <input type="radio" name="priceRange" value="2000000-4000000">
-                                                <span>2.000.000đ - 4.000.000đ</span>
+                                                <span>2,000,000₫ - 4,000,000₫</span>
                                             </label>
                                             <label class="filter-option">
                                                 <input type="radio" name="priceRange" value="above-4000000">
-                                                <span>Trên 4.000.000đ</span>
+                                                <span>Trên 4,000,000₫</span>
                                             </label>
                                         </div>
                                     </div>
@@ -247,14 +248,14 @@
                     </div>
                     <div class="header-controls" role="group" aria-label="Page controls">
                         <button class="mobile-filter-btn" type="button" data-mobile-filters-toggle="open" style="display: none;"
-                                aria-label="Show filters" aria-describedby="mobile-filter-desc">
+                                aria-label="Hiển thị bộ lọc" aria-describedby="mobile-filter-desc">
                             <i class="fas fa-filter" aria-hidden="true"></i>
-                            Filters
+                            Bộ lọc
                         </button>
-                        <span id="mobile-filter-desc" class="sr-only">Open filter sidebar to narrow product selection</span>
-                        <button class="hide-filters-btn" type="button" aria-label="Toggle filter visibility"
+                        <span id="mobile-filter-desc" class="sr-only">Mở thanh bộ lọc để thu hẹp danh sách sản phẩm</span>
+                        <button class="hide-filters-btn" type="button" aria-label="Chuyển đổi hiển thị bộ lọc"
                                 aria-describedby="hide-filters-desc">
-                            <span class="hide-filters-label">Hide Filters</span>
+                            <span class="hide-filters-label">Ẩn bộ lọc</span>
                             <svg aria-hidden="true" class="icon-filter-ds" focusable="false" viewBox="0 0 24 24" role="img" width="24px" height="24px" fill="none">
     <path stroke="currentColor" stroke-width="1.5" d="M21 8.25H10m-5.25 0H3"></path>
     <path stroke="currentColor" stroke-width="1.5" d="M7.5 6v0a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" clip-rule="evenodd"></path>
@@ -262,17 +263,17 @@
     <path stroke="currentColor" stroke-width="1.5" d="M16.5 13.5v0a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" clip-rule="evenodd"></path>
   </svg>
                         </button>
-                        <span id="hide-filters-desc" class="sr-only">Hide or show the product filters panel</span>
+                        <span id="hide-filters-desc" class="sr-only">Ẩn hoặc hiện bảng bộ lọc sản phẩm</span>
                         <div class="sort-by-btn" id="sortByBtn">
                             <button id="sort-toggle" class="sort-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="sort-options">
-                                Sort By
+                                Sắp xếp theo
                                 <svg id="sort-arrow" width="20" height="20" class="sort-arrow-icon" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
                             </button>
                             <form id="sort-form" method="GET" action="${env}/products/list">
                                 <ul id="sort-options" class="sort-options" role="listbox" tabindex="-1">
-                                    <li class="sort-option${param.sort == 'newest' || empty param.sort ? ' active' : ''}" data-value="newest" role="option" aria-selected="${param.sort == 'newest' || empty param.sort ? 'true' : 'false'}">Newest</li>
-                                    <li class="sort-option${param.sort == 'price_desc' ? ' active' : ''}" data-value="price_desc" role="option" aria-selected="${param.sort == 'price_desc' ? 'true' : 'false'}">Price: High-Low</li>
-                                    <li class="sort-option${param.sort == 'price_asc' ? ' active' : ''}" data-value="price_asc" role="option" aria-selected="${param.sort == 'price_asc' ? 'true' : 'false'}">Price: Low-High</li>
+                                    <li class="sort-option${param.sort == 'newest' || empty param.sort ? ' active' : ''}" data-value="newest" role="option" aria-selected="${param.sort == 'newest' || empty param.sort ? 'true' : 'false'}">Mới nhất</li>
+                                    <li class="sort-option${param.sort == 'price_desc' ? ' active' : ''}" data-value="price_desc" role="option" aria-selected="${param.sort == 'price_desc' ? 'true' : 'false'}">Giá: Cao → Thấp</li>
+                                    <li class="sort-option${param.sort == 'price_asc' ? ' active' : ''}" data-value="price_asc" role="option" aria-selected="${param.sort == 'price_asc' ? 'true' : 'false'}">Giá: Thấp → Cao</li>
                                 </ul>
                                 <input type="hidden" name="sort" id="sort-input" value="${not empty sort ? sort : 'newest'}" />
                                 <c:if test="${not empty selectedCategoryId}">
@@ -292,7 +293,7 @@
                         <c:choose>
                             <c:when test="${empty products}">
                                 <div style="padding:2rem; text-align:center; color:red; font-weight:bold;">
-                                    No products found. (Debug: products list is empty)
+                                    Không tìm thấy sản phẩm.
                                 </div>
                             </c:when>
                             <c:otherwise>
@@ -353,14 +354,14 @@
                                                             <c:choose>
                                                                 <c:when test="${product.hasSale}">
                                                                     <span class="sale-price">
-                                                                        <fmt:formatNumber value="${product.salePrice}" type="number" maxFractionDigits="0"/>&#8363;
+                                                                        ${cfmt:format(product.salePrice)}
                                                                     </span>
                                                                     <span class="orig-price" style="text-decoration:line-through; color:#777; margin-left:4px;">
-                                                                        <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>&#8363;
+                                                                        ${cfmt:format(product.price)}
                                                                     </span>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>&#8363;
+                                                                    ${cfmt:format(product.price)}
                                                                 </c:otherwise>
                                                             </c:choose>
                                                         </div>
@@ -384,14 +385,14 @@
         <section class="related-stories-section" aria-labelledby="related-stories-title">
             <div class="container">
                 <div class="related-stories-header">
-                    <h2 class="section-title" id="related-stories-title">Related Stories</h2>
+                    <h2 class="section-title" id="related-stories-title">Bài viết liên quan</h2>
                     <div class="carousel-controls" role="group" aria-label="Story carousel navigation">
                         <button class="story-nav-btn prev" id="storyPrev"
-                                aria-label="Previous stories" aria-controls="storySliderTrack">
+                                aria-label="Bài trước" aria-controls="storySliderTrack">
                             <i class="fas fa-chevron-left" aria-hidden="true"></i>
                         </button>
                         <button class="story-nav-btn next" id="storyNext"
-                                aria-label="Next stories" aria-controls="storySliderTrack">
+                                aria-label="Bài tiếp theo" aria-controls="storySliderTrack">
                             <i class="fas fa-chevron-right" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -399,7 +400,7 @@
 
                 <div class="story-slider-container" role="region" aria-labelledby="related-stories-title"
                      aria-describedby="stories-desc">
-                    <span id="stories-desc" class="sr-only">Carousel of Nike-related articles and buying guides</span>
+                    <span id="stories-desc" class="sr-only">Băng chuyền các bài viết và hướng dẫn mua sắm liên quan đến Nike</span>
                     <div class="story-slider-track" id="storySliderTrack" role="list" aria-live="polite">
                         <div class="story-slide" data-story="winter-sneakers" role="listitem"
                              aria-labelledby="story-1-title" tabindex="0">
@@ -407,11 +408,11 @@
                                  alt="The Best Nike Sneakers to Wear in Winter" aria-describedby="story-1-desc">
                             <div class="story-button" role="button" aria-describedby="story-1-desc">
                                 <div class="story-content">
-                                    <span class="story-category" aria-label="Article category">Buying guide</span>
+                                    <span class="story-category" aria-label="Article category">Hướng dẫn mua</span>
                                     <span class="story-title" id="story-1-title">The Best Nike Sneakers to Wear in Winter</span>
                                 </div>
                             </div>
-                            <span id="story-1-desc" class="sr-only">Read our guide to the best Nike sneakers for winter weather</span>
+                            <span id="story-1-desc" class="sr-only">Đọc hướng dẫn của chúng tôi về những đôi sneaker Nike tốt nhất cho mùa đông</span>
                         </div>
 
                         <div class="story-slide" data-story="cycling-gifts" role="listitem"
@@ -420,11 +421,11 @@
                                  alt="The 11 Best Nike Gifts for Cyclists" aria-describedby="story-2-desc">
                             <div class="story-button" role="button" aria-describedby="story-2-desc">
                                 <div class="story-content">
-                                    <span class="story-category" aria-label="Article category">Buying guide</span>
+                                    <span class="story-category" aria-label="Article category">Hướng dẫn mua</span>
                                     <span class="story-title" id="story-2-title">The 11 Best Nike Gifts for Cyclists</span>
                                 </div>
                             </div>
-                            <span id="story-2-desc" class="sr-only">Discover the best Nike gear and gifts for cycling enthusiasts</span>
+                            <span id="story-2-desc" class="sr-only">Khám phá trang bị và quà tặng Nike tốt nhất cho người đam mê đạp xe</span>
                         </div>
 
                         <div class="story-slide" data-story="winter-running" role="listitem"
@@ -433,11 +434,11 @@
                                  alt="The Best Nike Running Shoes for Winter" aria-describedby="story-3-desc">
                             <div class="story-button" role="button" aria-describedby="story-3-desc">
                                 <div class="story-content">
-                                    <span class="story-category" aria-label="Article category">Buying guide</span>
+                                    <span class="story-category" aria-label="Article category">Hướng dẫn mua</span>
                                     <span class="story-title" id="story-3-title">The Best Nike Running Shoes for Winter</span>
                                 </div>
                             </div>
-                            <span id="story-3-desc" class="sr-only">Find the perfect Nike running shoes for cold weather training</span>
+                            <span id="story-3-desc" class="sr-only">Tìm đôi giày chạy Nike hoàn hảo cho việc tập luyện trong thời tiết lạnh</span>
                         </div>
 
                         <div class="story-slide" data-story="standing-shoes" role="listitem"
@@ -446,7 +447,7 @@
                                  alt="The Best Shoes for Standing All Day" aria-describedby="story-4-desc">
                             <div class="story-button" role="button" aria-describedby="story-4-desc">
                                 <div class="story-content">
-                                    <span class="story-category" aria-label="Article category">Buying guide</span>
+                                    <span class="story-category" aria-label="Article category">Hướng dẫn mua</span>
                                     <span class="story-title" id="story-4-title">The Best Shoes for Standing All Day</span>
                                 </div>
                             </div>
@@ -459,11 +460,11 @@
                                  alt="The Best Shoes to Wear with Jeans" aria-describedby="story-5-desc">
                             <div class="story-button" role="button" aria-describedby="story-5-desc">
                                 <div class="story-content">
-                                    <span class="story-category" aria-label="Article category">Style guide</span>
+                                    <span class="story-category" aria-label="Article category">Hướng dẫn phối đồ</span>
                                     <span class="story-title" id="story-5-title">The Best Shoes to Wear with Jeans</span>
                                 </div>
                             </div>
-                            <span id="story-5-desc" class="sr-only">Style guide for pairing Nike shoes with jeans</span>
+                            <span id="story-5-desc" class="sr-only">Hướng dẫn phối đồ: kết hợp giày Nike với quần jeans</span>
                         </div>
 
                         <div class="story-slide" data-story="air-max-history" role="listitem"
@@ -485,7 +486,7 @@
                                  alt="The Best Winter Running Gear by Nike" aria-describedby="story-7-desc">
                             <div class="story-button" role="button" aria-describedby="story-7-desc">
                                 <div class="story-content">
-                                    <span class="story-category" aria-label="Article category">Buying guide</span>
+                                    <span class="story-category" aria-label="Article category">Hướng dẫn mua</span>
                                     <span class="story-title" id="story-7-title">The Best Winter Running Gear by Nike</span>
                                 </div>
                             </div>
@@ -498,11 +499,11 @@
                                  alt="13 Nike Tennis Gifts for Players" aria-describedby="story-8-desc">
                             <div class="story-button" role="button" aria-describedby="story-8-desc">
                                 <div class="story-content">
-                                    <span class="story-category" aria-label="Article category">Buying guide</span>
-                                    <span class="story-title" id="story-8-title">13 Nike Tennis Gifts for Players</span>
+                                    <span class="story-category" aria-label="Article category">Hướng dẫn mua</span>
+                                    <span class="story-title" id="story-8-title">Gợi ý 13 Quà tặng Nike Tennis</span>
                                 </div>
                             </div>
-                            <span id="story-8-desc" class="sr-only">Discover Nike tennis gifts suitable for players of all skill levels</span>
+                            <span id="story-8-desc" class="sr-only">Khám phá set  Nike tennis phù hợp cho người chơi với mọi trình độ</span>
                         </div>
                     </div>
                 </div>
@@ -516,8 +517,8 @@
     <div class="cart-sidebar" id="cartSidebar" role="dialog" aria-labelledby="cart-title"
          aria-describedby="cart-description">
         <div class="cart-header">
-            <h3 id="cart-title">Bag</h3>
-            <button class="cart-close" type="button" data-cart-toggle="close" aria-label="Close shopping bag">
+            <h3 id="cart-title">Giỏ hàng</h3>
+            <button class="cart-close" type="button" data-cart-toggle="close" aria-label="Đóng giỏ hàng">
                 <i class="fas fa-times" aria-hidden="true"></i>
             </button>
         </div>
@@ -525,9 +526,9 @@
         <div class="cart-content" id="cart-description" aria-live="polite">
             <div class="cart-empty" id="cartEmpty" aria-label="Empty cart state">
                 <i class="fas fa-shopping-bag" aria-hidden="true"></i>
-                <p>Your bag is empty</p>
+                <p>Giỏ hàng của bạn đang trống</p>
                 <a href="${env}/products/list" class="btn btn-primary" role="button"
-                   aria-label="Start shopping to add items to your bag">Shop Now</a>
+                   aria-label="Bắt đầu mua sắm để thêm sản phẩm vào giỏ hàng">Mua ngay</a>
             </div>
 
             <div class="cart-items" id="cartItems" aria-label="Items in your shopping bag">
@@ -535,29 +536,29 @@
         </div>
 
         <div class="cart-footer" id="cartFooter" style="display: none;" role="region" aria-labelledby="cart-total-title">
-            <div class="cart-total">
-                <h4 id="cart-total-title" class="sr-only">Order Summary</h4>
-                <div class="total-row">
-                    <span>Subtotal</span>
-                    <span id="cartSubtotal" aria-label="Subtotal amount">0&#8363;</span>
+                    <div class="cart-total">
+                <h4 id="cart-total-title" class="sr-only">Tóm tắt đơn hàng</h4>
+                    <div class="total-row">
+                    <span>Tạm tính</span>
+                    <span id="cartSubtotal" aria-label="Số tiền tạm tính">${cfmt:format(0)}</span>
                 </div>
                 <div class="total-row">
-                    <span>Estimated Delivery & Handling</span>
-                    <span aria-label="Delivery cost">Free</span>
+                    <span>Phí vận chuyển ước tính</span>
+                    <span aria-label="Delivery cost">Miễn phí</span>
                 </div>
                 <div class="total-row total-final">
-                    <span>Total</span>
-                    <span id="cartTotal" aria-label="Total amount">0&#8363;</span>
+                    <span>Tổng</span>
+                    <span id="cartTotal" aria-label="Total amount">${cfmt:format(0)}</span>
                 </div>
             </div>
             <button class="btn btn-primary btn-full" aria-describedby="member-checkout-desc">
-                Member Checkout
+                Thanh toán thành viên
             </button>
-            <span id="member-checkout-desc" class="sr-only">Checkout as a Nike member for exclusive benefits</span>
+            <span id="member-checkout-desc" class="sr-only">Thanh toán như thành viên Nike để nhận ưu đãi</span>
             <button class="btn btn-outline btn-full" aria-describedby="guest-checkout-desc">
-                Guest Checkout
+                Thanh toán cho khách
             </button>
-            <span id="guest-checkout-desc" class="sr-only">Checkout as a guest without creating an account</span>
+            <span id="guest-checkout-desc" class="sr-only">Thanh toán không cần tạo tài khoản</span>
         </div>
     </div>
 

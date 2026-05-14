@@ -24,7 +24,7 @@
                         <c:choose>
                             <c:when test="${isAuthenticated}">
                                 <!-- Greeting + link to profile -->
-                                <a href="${env}/profile" class="header-link" aria-label="Profile">
+                                <a href="${env}/profile" class="header-link" aria-label="Hồ sơ">
                                     Xin Chào, <c:out value="${displayName}" />
                                     <span class="profile-icon" aria-hidden="true">
                                         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -101,7 +101,7 @@
                         <div class="search-wrapper">
                             <!-- Updated search form -->
                             <form id="globalSearchForm" class="search-input-wrapper" action="${env}/search" method="get" role="search">
-                                <input type="text" placeholder="Tìm kiếm" class="search-input" id="searchInput" name="q" aria-label="Search products" value="${fn:escapeXml(param.q)}">
+                                <input type="text" placeholder="Tìm kiếm" class="search-input" id="searchInput" name="q" aria-label="Tìm kiếm sản phẩm" value="${fn:escapeXml(param.q)}">
                                 <button type="submit" class="search-icon-btn" aria-label="Submit search" style="background:none;border:none;padding:0;cursor:pointer">
                                     <img src="${env}/images/icons/search-interface-symbol.png" alt="Search" class="search-icon" style="width: 20px;">
                                 </button>
@@ -110,12 +110,12 @@
                     </div>
                     
                     <div class="nav-actions">
-                        <button class="icon-btn wishlist-btn" aria-label="Favorites">
+                            <button class="icon-btn wishlist-btn" aria-label="Yêu thích">
                             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                             </svg>
                         </button>
-                        <a href="${env}/cart" class="icon-btn cart-btn" aria-label="Bag">
+                        <a href="${env}/cart" class="icon-btn cart-btn" aria-label="Giỏ hàng">
                             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                                 <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -136,7 +136,7 @@
                     </button>
                     <c:choose>
                         <c:when test="${isAuthenticated}">
-                            <a href="${env}/profile" class="icon-btn mobile-profile-btn" aria-label="Profile">
+                            <a href="${env}/profile" class="icon-btn mobile-profile-btn" aria-label="Hồ sơ">
                                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="12" cy="7" r="4"></circle>
@@ -152,7 +152,7 @@
                             </a>
                         </c:otherwise>
                     </c:choose>
-                    <a href="${env}/cart" class="icon-btn mobile-cart-btn" aria-label="Bag">
+                    <a href="${env}/cart" class="icon-btn mobile-cart-btn" aria-label="Giỏ hàng">
                         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                             <line x1="3" y1="6" x2="21" y2="6"></line>

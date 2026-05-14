@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="cfmt" uri="/WEB-INF/tlds/currency.tld" %>
 
 <c:set var="currentStep" value="3" />
 <c:set var="orderAccessible" value="true" />
@@ -25,7 +26,7 @@
     <c:choose>
         <c:when test="${empty orderPage}">
             <section class="order-section-card">
-                <span class="section-eyebrow">Order Detail</span>
+                <span class="section-eyebrow">Chi tiết đơn hàng</span>
                 <h1 class="section-title">Backend cho trang order chưa được nối</h1>
                 <p class="section-copy">
                     JSP này đã sẵn sàng cho luồng mới <strong>/orders/{orderId}</strong>. Phần controller/service/repository cần trả
@@ -43,9 +44,9 @@
             <section class="receipt-shell">
                 <div class="receipt-header">
                     <div class="receipt-header-copy">
-                        <p class="receipt-eyebrow">Order confirmed</p>
+                        <p class="receipt-eyebrow">Đơn hàng đã được xác nhận</p>
                         <h1 class="receipt-title">
-                            <c:out value="${empty orderPage.successHeadline ? 'Thank you for your order' : orderPage.successHeadline}" />
+                            <c:out value="${empty orderPage.successHeadline ? 'Cảm ơn bạn đã đặt hàng' : orderPage.successHeadline}" />
                         </h1>
                     </div>
 
@@ -56,15 +57,15 @@
                     <section class="receipt-main-card">
                         <div class="receipt-meta-bar">
                             <div class="receipt-meta-item">
-                                <span>Order Number</span>
+                                <span>Mã đơn hàng</span>
                                 <strong>V<c:out value="${orderPage.orderCode}" /></strong>
                             </div>
                             <div class="receipt-meta-item">
-                                <span>Order Date</span>
+                                <span>Ngày đặt hàng</span>
                                 <strong><c:out value="${orderPage.placedAtLabel}" /></strong>
                             </div>
                             <div class="receipt-meta-item">
-                                <span>Customer</span>
+                                <span>Khách hàng</span>
                                 <strong><c:out value="${customerName}" /></strong>
                             </div>
                         </div>
@@ -75,7 +76,7 @@
 
                         <div class="receipt-info-grid">
                             <article class="receipt-info-block">
-                                <h2>Shipping Address</h2>
+                                <h2>Địa chỉ giao hàng</h2>
                                 <p class="receipt-info-strong"><c:out value="${customerName}" /></p>
                                 <p><c:out value="${orderPage.shipping.fullAddress}" /></p>
                                 <c:if test="${not empty orderPage.shipping.phone}">
@@ -84,7 +85,7 @@
                             </article>
 
                             <article class="receipt-info-block">
-                                <h2>Payment Method</h2>
+                                <h2>Phương thức thanh toán</h2>
                                 <p class="receipt-info-strong">
                                     <c:choose>
                                         <c:when test="${orderPage.payment.online}">
@@ -102,7 +103,7 @@
                             </article>
 
                             <article class="receipt-info-block">
-                                <h2>Billing Address</h2>
+                                <h2>Địa chỉ thanh toán</h2>
                                 <p class="receipt-info-strong"><c:out value="${customerName}" /></p>
                                 <p><c:out value="${orderPage.shipping.fullAddress}" /></p>
                                 <c:if test="${not empty orderPage.shipping.phone}">
@@ -111,7 +112,7 @@
                             </article>
 
                             <article class="receipt-info-block">
-                                <h2>Shipping Method</h2>
+                                <h2>Phương thức vận chuyển</h2>
                                 <p class="receipt-info-strong"><c:out value="${orderPage.shipping.shippingMethodLabel}" /></p>
                                 <p>Trạng thái đơn: <c:out value="${orderPage.orderStatusLabel}" /></p>
                                 <p>Trạng thái thanh toán: <c:out value="${orderPage.paymentStatusLabel}" /></p>
@@ -121,32 +122,32 @@
 
                     <aside class="receipt-summary-card">
                         <div class="receipt-summary-head">
-                            <h2>Order Summary</h2>
+                            <h2>Tóm tắt đơn hàng</h2>
                         </div>
 
                         <div class="receipt-summary-list">
                             <div class="receipt-summary-row">
-                                <span>SUBTOTAL:</span>
-                                <strong><fmt:formatNumber value="${orderPage.pricing.subtotal}" type="number" maxFractionDigits="0" />₫</strong>
+                                <span>TẠM TÍNH:</span>
+                                <strong>${cfmt:format(orderPage.pricing.subtotal)}</strong>
                             </div>
                             <div class="receipt-summary-row">
-                                <span>SHIPPING:</span>
-                                <strong><fmt:formatNumber value="${orderPage.pricing.shippingFee}" type="number" maxFractionDigits="0" />₫</strong>
+                                <span>PHÍ VẬN CHUYỂN:</span>
+                                <strong>${cfmt:format(orderPage.pricing.shippingFee)}</strong>
                             </div>
                             <div class="receipt-summary-row">
-                                <span>DISCOUNTS:</span>
-                                <strong>-<fmt:formatNumber value="${orderPage.pricing.discount}" type="number" maxFractionDigits="0" />₫</strong>
+                                <span>GIẢM GIÁ:</span>
+                                <strong>-${cfmt:format(orderPage.pricing.discount)}</strong>
                             </div>
                             <div class="receipt-summary-row receipt-summary-total">
-                                <span>ORDER TOTAL:</span>
-                                <strong><fmt:formatNumber value="${orderPage.pricing.total}" type="number" maxFractionDigits="0" />₫</strong>
+                                <span>TỔNG ĐƠN HÀNG:</span>
+                                <strong>${cfmt:format(orderPage.pricing.total)}</strong>
                             </div>
                         </div>
 
                         <p class="receipt-summary-note">Thuế được tính trong quá trình thanh toán.</p>
 
                         <div class="receipt-items-section">
-                            <h3>Items Ordered</h3>
+                            <h3>Sản phẩm đã đặt</h3>
 
                             <c:choose>
                                 <c:when test="${empty orderPage.items}">
@@ -190,11 +191,11 @@
                                                             </c:if>
                                                         </p>
                                                     </c:if>
-                                                    <p>QTY <c:out value="${item.quantity}" /></p>
+                                                     <p>SỐ LƯỢNG <c:out value="${item.quantity}" /></p>
                                                 </div>
 
                                                 <div class="receipt-item-price">
-                                                    <strong><fmt:formatNumber value="${item.lineTotal}" type="number" maxFractionDigits="0" />₫</strong>
+                                                    <strong>${cfmt:format(item.lineTotal)}</strong>
                                                 </div>
                                             </article>
                                         </c:forEach>

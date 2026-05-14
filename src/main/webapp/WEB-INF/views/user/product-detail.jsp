@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="cfmt" uri="/WEB-INF/tlds/currency.tld" %>
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
 
@@ -75,7 +76,7 @@
     <div class="container">
         <div class="product-layout">
             <section class="product-images" role="region" aria-labelledby="product-images-title">
-                <h2 id="product-images-title" class="sr-only">Product images</h2>
+                <h2 id="product-images-title" class="sr-only">Hình ảnh sản phẩm</h2>
 
                 <div class="image-preview">
                     <div class="thumbnail-nav" id="thumbnail-nav" role="list" aria-label="Product thumbnails">
@@ -102,11 +103,11 @@
                     </div>
 
                     <div class="main-image-container" role="region" aria-labelledby="main-image-title" aria-live="polite">
-                        <h3 id="main-image-title" class="sr-only">Main product image</h3>
+                        <h3 id="main-image-title" class="sr-only">Ảnh chính</h3>
                         <div class="main-image">
                             <div class="image-badge">
                                 <i class="fas fa-star" aria-hidden="true"></i>
-                                Highly Rated
+                                Được đánh giá cao
                             </div>
                             <c:choose>
                                 <c:when test="${selectedMainImage != null}">
@@ -136,12 +137,12 @@
                                 <i class="fas fa-images" aria-hidden="true"></i>
                                 <span id="image-count-label">
                                     <c:choose>
-                                        <c:when test="${not empty selectedImages}">${fn:length(selectedImages)} views</c:when>
-                                        <c:otherwise>1 view</c:otherwise>
+                                        <c:when test="${not empty selectedImages}">${fn:length(selectedImages)} ảnh</c:when>
+                                        <c:otherwise>1 ảnh</c:otherwise>
                                     </c:choose>
                                 </span>
                             </span>
-                            <span class="image-meta-copy">Swipe or select thumbnails to explore details.</span>
+                            <span class="image-meta-copy">Vuốt hoặc chọn hình thu nhỏ để xem chi tiết.</span>
                         </div>
                     </div>
                 </div>
@@ -162,15 +163,15 @@
                                 <c:choose>
                                     <c:when test="${hasSale}">
                                         <span class="sale-price">
-                                            <fmt:formatNumber value="${product.salePrice}" type="number" maxFractionDigits="0"/>&#8363;
+                                            ${cfmt:format(product.salePrice)}
                                         </span>
                                         <span class="original-price">
-                                            <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>&#8363;
+                                            ${cfmt:format(product.price)}
                                         </span>
                                     </c:when>
                                     <c:otherwise>
                                         <span class="regular-price">
-                                            <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>&#8363;
+                                            ${cfmt:format(product.price)}
                                         </span>
                                     </c:otherwise>
                                 </c:choose>
@@ -179,10 +180,10 @@
                             <c:if test="${hasSale}">
                                 <div class="price-summary">
                                     <span class="price-saving">
-                                        Save <fmt:formatNumber value="${discountAmount}" type="number" maxFractionDigits="0"/>&#8363;
+                                        Tiết kiệm ${cfmt:format(discountAmount)}
                                     </span>
                                     <span class="price-discount">
-                                        <fmt:formatNumber value="${discountPercent}" type="number" maxFractionDigits="0"/>% off
+                                        <fmt:formatNumber value="${discountPercent}" type="number" maxFractionDigits="0"/>% giảm
                                     </span>
                                 </div>
                             </c:if>
@@ -194,7 +195,7 @@
                         <div class="color-selection" role="group" aria-labelledby="color-selection-title">
                             <div class="selection-head color-header">
                                 <div>
-                                    <h4 id="color-selection-title">Select Colour</h4>
+                                     <h4 id="color-selection-title">Chọn màu</h4>
                                 </div>
                                 <span class="selection-value" id="selected-color-label">
                                     <c:if test="${not empty selectedColor}">${selectedColor.colorName}</c:if>
@@ -244,25 +245,25 @@
                                         </c:choose>
                                     </button>
                                 </c:forEach>
-                                <button type="button" class="color-btn color-option design-your-own" aria-label="Design your own colourway">
+                                    <button type="button" class="color-btn color-option design-your-own" aria-label="Thiết kế màu riêng">
                                     <span class="design-ring" aria-hidden="true"></span>
-                                    <span class="design-copy">Design<br>Your Own</span>
+                                    <span class="design-copy">Thiết kế<br>riêng</span>
                                 </button>
                             </div>
-                            <div class="sold-out-colour-alert" id="sold-out-colour-alert" role="status" hidden>
-                                <strong>Sold Out:</strong> This colour is currently unavailable.
+                                <div class="sold-out-colour-alert" id="sold-out-colour-alert" role="status" hidden>
+                                <strong>Hết hàng:</strong> Màu này hiện không có sẵn.
                             </div>
                         </div>
 
                         <div class="size-selection" role="group" aria-labelledby="size-selection-title">
                             <div class="selection-head size-header">
                                 <div>
-                                    <h4 id="size-selection-title">Select Size</h4>
+                                     <h4 id="size-selection-title">Chọn size</h4>
                                 </div>
-                                <button type="button" class="size-guide-btn" aria-label="Open size guide">
-                                    <i class="fas fa-ruler-combined" aria-hidden="true"></i>
-                                    Size Guide
-                                </button>
+                                 <button type="button" class="size-guide-btn" aria-label="Mở hướng dẫn chọn size">
+                                     <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                                     Hướng dẫn chọn size
+                                 </button>
                             </div>
 
                             <div class="size-options" id="size-options" role="radiogroup" aria-labelledby="size-selection-title">
@@ -280,16 +281,16 @@
                                                 <span class="size-label">${variant.size}</span>
                                                 <span class="size-stock">
                                                     <c:choose>
-                                                        <c:when test="${variant.stock <= 0 or not variant.active}">Sold out</c:when>
-                                                        <c:when test="${variant.stock <= 3}">Low stock</c:when>
-                                                        <c:otherwise>In stock</c:otherwise>
+                                                         <c:when test="${variant.stock <= 0 or not variant.active}">Hết hàng</c:when>
+                                                         <c:when test="${variant.stock <= 3}">Còn ít</c:when>
+                                                         <c:otherwise>Còn hàng</c:otherwise>
                                                     </c:choose>
                                                 </span>
                                             </button>
                                         </c:forEach>
                                     </c:when>
                                     <c:otherwise>
-                                        <div class="no-sizes-message" role="status">No sizes available.</div>
+                                           <div class="no-sizes-message" role="status">Không có size.</div>
                                     </c:otherwise>
                                 </c:choose>
                             </div>
@@ -300,18 +301,18 @@
                         <button id="add-to-cart-button"
                                 class="btn btn-primary btn-full add-to-cart"
                                 type="button">
-                            Add to Bag
+                            Thêm vào giỏ hàng
                         </button>
                         <button id="wishlist-button"
                                 class="btn btn-outline btn-full wishlist-btn"
                                 type="button">
                             <i class="far fa-heart" aria-hidden="true"></i>
-                            Favourite
+                            Yêu thích
                         </button>
                     </div>
 
                     <div class="product-info-note">
-                        This product is excluded from site promotions and discounts.
+                        Sản phẩm này không áp dụng cho chương trình khuyến mãi và giảm giá.
                     </div>
 
                     <c:if test="${not empty product.description}">
@@ -332,7 +333,7 @@
                             <li>Country/Region of Origin: Indonesia</li>
                         </ul>
 
-                        <a href="#product-story" class="product-details-link">View Product Details</a>
+                        <a href="#product-story" class="product-details-link">Xem chi tiết sản phẩm</a>
                     </div>
 
                     <div class="product-accordion-list">
@@ -341,7 +342,7 @@
                                 id="delivery-returns-toggle"
                                 aria-expanded="false"
                                 aria-controls="delivery-returns-panel">
-                            <span>Free Delivery and Returns</span>
+                            <span>Miễn phí giao hàng và trả hàng</span>
                             <i class="fas fa-chevron-down" aria-hidden="true"></i>
                         </button>
                         <div class="product-accordion-panel"
@@ -349,14 +350,14 @@
                              role="region"
                              aria-labelledby="delivery-returns-toggle"
                              hidden>
-                            <p>Your order of 5.000.000₫ or more gets free standard delivery.</p>
-                            <p>Standard delivered 4-5 Business Days</p>
-                            <p>Express delivered 2-4 Business Days</p>
-                            <p>Orders are processed and delivered Monday-Friday (excluding public holidays)</p>
-                            <p>Nike Members enjoy free returns.</p>
+                            <p>Đơn hàng từ 5,000,000₫ trở lên được miễn phí vận chuyển tiêu chuẩn.</p>
+                            <p>Giao tiêu chuẩn trong 4-5 ngày làm việc</p>
+                            <p>Giao nhanh trong 2-4 ngày làm việc</p>
+                            <p>Đơn hàng được xử lý và giao từ Thứ Hai đến Thứ Sáu (không bao gồm ngày lễ)</p>
+                            <p>Thành viên Nike được miễn phí trả hàng.</p>
                         </div>
                         <button type="button" class="product-accordion-row">
-                            <span>Reviews (24)</span>
+                            <span>Đánh giá (24)</span>
                             <span class="accordion-review-meta">
                                 <span class="review-stars" aria-hidden="true">★★★★★</span>
                                 <i class="fas fa-chevron-down" aria-hidden="true"></i>
@@ -416,18 +417,18 @@
     <div class="container">
         <div class="pdp-section-head pdp-section-head--stacked">
             <div>
-                <h2 id="wearing-title">How Others Are Wearing It</h2>
-                <p>Upload your photo or mention @Nike on Instagram for a chance to be featured.</p>
+                <h2 id="wearing-title">Xem Người khác diện sản phẩm này</h2>
+                <p>Tải ảnh của bạn hoặc tag @Nike trên Instagram để có cơ hội được giới thiệu.</p>
             </div>
-            <button type="button" class="upload-btn">Upload Your Photo</button>
+            <button type="button" class="upload-btn">Tải ảnh lên</button>
         </div>
         <div class="wearing-grid">
             <article class="wearing-card">
-                <img src="${env}/images/social/Andre F.png" alt="Customer styling Nike product">
+                <img src="${env}/images/social/Andre F.png" alt="Khách hàng phối sản phẩm Nike">
                 <span>@andre_f</span>
             </article>
             <article class="wearing-card">
-                <img src="${env}/images/social/Browskin.png" alt="Customer wearing Nike sneakers">
+                <img src="${env}/images/social/Browskin.png" alt="Khách hàng mang giày Nike">
                 <span>@browskin</span>
             </article>
             <article class="wearing-card">

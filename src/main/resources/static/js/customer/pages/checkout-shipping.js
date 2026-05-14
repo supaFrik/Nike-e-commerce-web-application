@@ -9,7 +9,10 @@
         const discountVal = parseFloat(discountInput ? discountInput.value : '0') || 0;
         const shippingDisplay = document.getElementById('shippingCostDisplay');
         const totalDisplay = document.getElementById('totalDisplay');
-        const formatter = new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'});
+        function fmtAmt(value){
+            const n = Math.round(Number(value) || 0);
+            return n.toLocaleString('en-US') + '₫';
+        }
 
         function updateSelectedVisual(selectedRadio){
             document.querySelectorAll('.delivery-option').forEach(d => d.classList.remove('selected'));
@@ -24,8 +27,8 @@
             if(!selected) return;
             const shipping = parseFloat(selected.dataset.cost || '0') || 0;
             const total = subtotalVal + shipping - discountVal;
-            if (shippingDisplay) shippingDisplay.textContent = formatter.format(shipping);
-            if (totalDisplay) totalDisplay.textContent = formatter.format(total);
+            if (shippingDisplay) shippingDisplay.textContent = fmtAmt(shipping);
+            if (totalDisplay) totalDisplay.textContent = fmtAmt(total);
             if (shippingHidden) shippingHidden.value = selected.value;
             updateSelectedVisual(selected);
         }

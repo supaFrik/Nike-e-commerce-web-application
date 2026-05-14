@@ -19,7 +19,7 @@
   function formatPrice(value) {
     if (value == null) return "";
     try {
-      return Number(value).toLocaleString("vi-VN");
+      return Number(value).toLocaleString("en-US");
     } catch (error) {
       return value;
     }

@@ -118,9 +118,9 @@
       // Build fake QR data; in real case, fetch from server
       const orderId = '#100204';
       const amountEl = document.getElementById('totalDisplay');
-      const amountText = amountEl ? amountEl.textContent : '0 VND';
+      const amountText = amountEl ? amountEl.textContent : '0₫';
       orderIdEl.textContent = `Thanh toán mã đơn hàng ${orderId}`;
-      orderAmtEl.textContent = amountText || '0 VND';
+      orderAmtEl.textContent = amountText || '0₫';
 
       const amountNumeric = (amountText || '').replace(/[^0-9]/g,'');
       const qrData = encodeURIComponent(`VNPAYQR|name=${name}|bank=${bank}|account=${account}|amount=${amountNumeric}|order=${orderId}`);

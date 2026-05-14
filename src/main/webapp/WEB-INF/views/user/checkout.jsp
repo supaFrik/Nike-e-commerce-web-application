@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="cfmt" uri="/WEB-INF/tlds/currency.tld" %>
 
 <!DOCTYPE html>
 
@@ -57,7 +58,7 @@
                                         <span class="delivery-price">
                                             <c:choose>
                                                 <c:when test="${sm.cost == 0}">Miễn phí</c:when>
-                                                <c:otherwise><fmt:formatNumber value="${sm.cost}" type="currency" currencySymbol="â‚«" /></c:otherwise>
+                                                <c:otherwise>${cfmt:format(sm.cost)}</c:otherwise>
                                             </c:choose>
                                         </span>
                                     </label>
@@ -305,7 +306,7 @@
                                             <p class="item-quantity">Số lượng: <c:out value="${item.quantity}" /></p>
                                         </div>
                                         <div class="item-price">
-                                            <fmt:formatNumber value="${item.lineTotal}" type="currency" currencySymbol="đ" />
+                                            ${cfmt:format(item.lineTotal)}
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -325,19 +326,19 @@
                         <input type="hidden" id="discountValue" value="${cart.discount}" />
                         <div class="total-row">
                             <span>Tạm tính</span>
-                            <span id="subtotalDisplay"><fmt:formatNumber value="${cart.subtotal}" type="currency" currencySymbol="đ" /></span>
+                            <span id="subtotalDisplay">${cfmt:format(cart.subtotal)}</span>
                         </div>
                         <div class="total-row">
                             <span>Vận chuyển</span>
-                            <span id="shippingCostDisplay"><fmt:formatNumber value="${selectedShippingMethod.cost}" type="currency" currencySymbol="đ" /></span>
+                            <span id="shippingCostDisplay">${cfmt:format(selectedShippingMethod.cost)}</span>
                         </div>
                         <div class="total-row">
                             <span>Giảm giá</span>
-                            <span class="discount" id="discountDisplay">-<fmt:formatNumber value="${cart.discount}" type="currency" currencySymbol="đ" /></span>
+                            <span class="discount" id="discountDisplay">-${cfmt:format(cart.discount)}</span>
                         </div>
                         <div class="total-row final-total">
                             <span>Tổng</span>
-                            <span id="totalDisplay"><fmt:formatNumber value="${cart.total + selectedShippingMethod.cost}" type="currency" currencySymbol="đ" /></span>
+                            <span id="totalDisplay">${cfmt:format(cart.total + selectedShippingMethod.cost)}</span>
                         </div>
                     </div>
                 </div>
@@ -378,7 +379,11 @@
         const paymentLanguageInput = document.getElementById('payment-language');
         const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
         const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
-        const formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
+        // Use en-US grouping to get comma as thousand separator, then append Vietnamese dong symbol without space
+        function fmtAmt(value) {
+            const n = Math.round(Number(value) || 0);
+            return n.toLocaleString('en-US') + '₫';
+        }
 
         function currentShippingRadio() {
             return document.querySelector('input[name="shippingMethod"]:checked');
@@ -393,10 +398,10 @@
             selected?.closest('.delivery-option')?.classList.add('selected');
 
             if (shippingCostDisplay) {
-                shippingCostDisplay.textContent = formatter.format(shippingCost);
+                shippingCostDisplay.textContent = fmtAmt(shippingCost);
             }
             if (totalDisplay) {
-                totalDisplay.textContent = formatter.format(total);
+                totalDisplay.textContent = fmtAmt(total);
             }
         }
 

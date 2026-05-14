@@ -26,7 +26,10 @@
   const paymentLanguageInput = document.getElementById("payment-language");
   const csrfToken = document.querySelector('meta[name="_csrf"]')?.content;
   const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
-  const formatter = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
+  function fmtAmt(value){
+    const n = Math.round(Number(value) || 0);
+    return n.toLocaleString('en-US') + '₫';
+  }
 
   function currentShippingRadio() {
     return document.querySelector('input[name="shippingMethod"]:checked');
@@ -41,10 +44,10 @@
     selected?.closest(".delivery-option")?.classList.add("selected");
 
     if (shippingCostDisplay) {
-      shippingCostDisplay.textContent = formatter.format(shippingCost);
+      shippingCostDisplay.textContent = fmtAmt(shippingCost);
     }
     if (totalDisplay) {
-      totalDisplay.textContent = formatter.format(total);
+      totalDisplay.textContent = fmtAmt(total);
     }
   }
 

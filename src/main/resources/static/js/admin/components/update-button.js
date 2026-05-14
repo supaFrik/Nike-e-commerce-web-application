@@ -53,10 +53,8 @@ async function removeCart(productId, size, color) {
 }
 
 function formatCurrency(value) {
-    return new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND"
-    }).format(value);
+    const n = Math.round(Number(value) || 0);
+    return n.toLocaleString('en-US') + '₫';
 }
 
 function updateItemCountDisplay(count) {

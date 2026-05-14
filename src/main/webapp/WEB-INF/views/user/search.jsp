@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="cfmt" uri="/WEB-INF/tlds/currency.tld" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -105,12 +106,12 @@
                             <p class="product-category">${p.categoryName}</p>
                             <p class="product-price">
                                 <c:choose>
-                                    <c:when test="${p.hasSale}">
-                                        <span class="sale-price"><fmt:formatNumber value="${p.salePrice}" type="number" maxFractionDigits="0"/>₫</span>
-                                        <span class="old-price"><fmt:formatNumber value="${p.price}" type="number" maxFractionDigits="0"/>₫</span>
+                                        <c:when test="${p.hasSale}">
+                                        <span class="sale-price">${cfmt:format(p.salePrice)}</span>
+                                        <span class="old-price">${cfmt:format(p.price)}</span>
                                     </c:when>
                                     <c:otherwise>
-                                        <fmt:formatNumber value="${p.price}" type="number" maxFractionDigits="0"/>₫
+                                        ${cfmt:format(p.price)}
                                     </c:otherwise>
                                 </c:choose>
                             </p>

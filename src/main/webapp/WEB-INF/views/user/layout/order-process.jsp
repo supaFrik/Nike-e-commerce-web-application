@@ -38,12 +38,12 @@
                     <c:when test="${step > 1}">
                         <a href="${env}/cart" aria-label="Go to cart step" class="step-link">
                             <div class="step-icon"><span>1</span></div>
-                            <span class="step-label">Cart</span>
+                            <span class="step-label">Giỏ hàng</span>
                         </a>
                     </c:when>
                     <c:otherwise>
                         <div class="step-icon"><span>1</span></div>
-                        <span class="step-label">Cart</span>
+                        <span class="step-label">Giỏ hàng</span>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -55,19 +55,19 @@
                         <c:choose>
                             <c:when test="${step >= 2}">
                                 <a href="${env}/checkout" aria-label="Go to checkout step" class="step-link">
-                                    <div class="step-icon"><span>2</span></div>
-                                    <span class="step-label">Checkout</span>
+                                        <div class="step-icon"><span>2</span></div>
+                                    <span class="step-label">Thanh toán</span>
                                 </a>
                             </c:when>
                             <c:otherwise>
                                 <div class="step-icon" style="opacity:.5"><span>2</span></div>
-                                <span class="step-label" style="opacity:.5;">Checkout</span>
+                                <span class="step-label" style="opacity:.5;">Thanh toán</span>
                             </c:otherwise>
                         </c:choose>
                     </c:when>
                     <c:otherwise>
                         <div class="step-icon" style="opacity:.5;cursor:not-allowed"><span>2</span></div>
-                        <span class="step-label" style="opacity:.5;">Checkout</span>
+                        <span class="step-label" style="opacity:.5;">Thanh toán</span>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -79,19 +79,19 @@
                         <c:choose>
                             <c:when test="${step == 3}">
                                 <div class="step-icon"><span>3</span></div>
-                                <span class="step-label">Order</span>
+                                <span class="step-label">Đơn hàng</span>
                             </c:when>
                             <c:otherwise>
                                 <a href="${resolvedOrderStepUrl}" aria-label="Go to order confirmation step" class="step-link">
                                     <div class="step-icon"><span>3</span></div>
-                                    <span class="step-label">Order</span>
+                                    <span class="step-label">Đơn hàng</span>
                                 </a>
                             </c:otherwise>
                         </c:choose>
                     </c:when>
                     <c:otherwise>
                         <div class="step-icon" style="opacity:.5;cursor:not-allowed"><span>3</span></div>
-                        <span class="step-label" style="opacity:.5;">Order</span>
+                        <span class="step-label" style="opacity:.5;">Đơn hàng</span>
                     </c:otherwise>
                 </c:choose>
             </div>

@@ -42,10 +42,8 @@ function resolveCartImageUrl(imageUrl) {
 }
 
 function formatCurrency(value) {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND"
-  }).format(Number(value || 0));
+  const n = Math.round(Number(value || 0));
+  return n.toLocaleString('en-US') + '₫';
 }
 
 function escapeHtml(value) {

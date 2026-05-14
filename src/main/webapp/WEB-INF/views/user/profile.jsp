@@ -1,5 +1,6 @@
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="cfmt" uri="/WEB-INF/tlds/currency.tld" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
@@ -139,8 +140,8 @@
                                         <div class="card-info">
                                             <div class="card-title"><c:out value="${product.name}" /></div>
                                             <div class="card-subtitle"><c:out value="${product.type}'s Shoes" /></div>
-                                            <p class="card-price" aria-label="Price: <fmt:formatNumber value='${product.price}' type='number' maxFractionDigits='0'/> Vietnamese Dong">
-                                                <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0"/>₫
+                                            <p class="card-price" aria-label="Price: ${cfmt:format(product.price)} Vietnamese Dong">
+                                                ${cfmt:format(product.price)}
                                             </p>
                                         </div>
                                 </c:forEach>

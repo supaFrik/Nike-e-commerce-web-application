@@ -2,6 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="cfmt" uri="/WEB-INF/tlds/currency.tld" %>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -53,7 +54,7 @@
                                             <p class="item-category">${cartItem.categoryName}</p>
                                             <p class="item-size">Kích thước: ${cartItem.size}</p>
                                             <p class="item-color">Màu: ${cartItem.colorName}</p>
-                                            <p class="item-color">Đơn giá: <fmt:formatNumber value="${cartItem.unitPrice}" type="currency" /></p>
+                                            <p class="item-color">Đơn giá: ${cfmt:format(cartItem.unitPrice)}</p>
                                             <p class="item-color">
                                                 <c:choose>
                                                     <c:when test="${cartItem.active}">Tồn kho: ${cartItem.stock}</c:when>
@@ -62,7 +63,7 @@
                                             </p>
                                         </div>
                                         <div class="item-price">
-                                            <fmt:formatNumber value="${cartItem.lineTotal}" type="currency" />
+                                            ${cfmt:format(cartItem.lineTotal)}
                                         </div>
                                     </div>
                                     <div class="item-actions">
@@ -126,15 +127,15 @@
                     <div class="order-summary">
                         <div class="summary-row">
                             <span>Tạm tính</span>
-                            <span id="subtotalAmount"><fmt:formatNumber value="${cart.subtotal}" type="currency"/></span>
+                            <span id="subtotalAmount">${cfmt:format(cart.subtotal)}</span>
                         </div>
                         <div class="summary-row discount-row" id="discountRow" style="${cart.discount > 0 ? 'display:flex;' : 'display:none;'}">
                             <span>Giảm giá</span>
-                            <span id="discountAmount"><fmt:formatNumber value="${cart.discount}" type="currency"/></span>
+                            <span id="discountAmount">${cfmt:format(cart.discount)}</span>
                         </div>
                         <div class="summary-row total-row">
                             <span>Tổng</span>
-                            <span id="totalAmount"><fmt:formatNumber value="${cart.total}" type="currency"/></span>
+                            <span id="totalAmount">${cfmt:format(cart.total)}</span>
                         </div>
                     </div>
 
