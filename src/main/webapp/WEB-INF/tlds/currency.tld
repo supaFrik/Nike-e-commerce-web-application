@@ -9,7 +9,7 @@
 
     <function>
         <name>format</name>
-        <function-class>vn.demo.shared.util.CurrencyUtils</function-class>
+        <function-class>vn.demo.nike.shared.util.CurrencyUtils</function-class>
         <function-signature>java.lang.String format(java.lang.Object)</function-signature>
     </function>
 </taglib>
