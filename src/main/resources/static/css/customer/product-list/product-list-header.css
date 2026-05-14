@@ -8,8 +8,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin:24px 0;
-    padding: 0;
+    margin: 0 60px 24px 64px;
+    padding: 16px 0;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--color-white);
 }
 
 .product-title {

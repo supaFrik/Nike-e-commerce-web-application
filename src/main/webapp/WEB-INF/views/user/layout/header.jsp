@@ -76,22 +76,22 @@
                 <div class="nav-center">
                     <ul class="nav-menu">
                         <li class="nav-item">
-                            <a href="${env}/products/list" class="nav-link">Mới & Nổi bật</a>
+                            <a href="${env}/products/list?sort=newest" class="nav-link">Mới & Nổi bật</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?category=men" class="nav-link">Nam</a>
+                            <a href="${env}/products/list?genders=MEN&amp;sort=newest" class="nav-link">Nam</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?category=women" class="nav-link">Nữ</a>
+                            <a href="${env}/products/list?genders=WOMEN&amp;sort=newest" class="nav-link">Nữ</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?category=kids" class="nav-link">Trẻ em</a>
+                            <a href="${env}/products/list?segments=KIDS&amp;sort=newest" class="nav-link">Trẻ em</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?sale=true" class="nav-link">Giảm giá</a>
+                            <a href="${env}/products/list?sale=true&amp;sort=newest" class="nav-link">Giảm giá</a>
                         </li>
                         <li class="nav-item">
-                            <a href="${env}/products?category=snkrs" class="nav-link">SNKRS</a>
+                            <a href="${env}/products/list?segments=SNKRS&amp;sort=newest" class="nav-link">SNKRS</a>
                         </li>
                     </ul>
                 </div>
@@ -177,22 +177,22 @@
                 
                 <ul class="mobile-nav-menu">
                     <li class="mobile-nav-item">
-                        <a href="${env}/products" class="mobile-nav-link">Mới & Nổi bật</a>
+                        <a href="${env}/products/list?sort=newest" class="mobile-nav-link">Mới & Nổi bật</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?category=men" class="mobile-nav-link">Nam</a>
+                        <a href="${env}/products/list?genders=MEN&amp;sort=newest" class="mobile-nav-link">Nam</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?category=women" class="mobile-nav-link">Nữ</a>
+                        <a href="${env}/products/list?genders=WOMEN&amp;sort=newest" class="mobile-nav-link">Nữ</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?category=kids" class="mobile-nav-link">Trẻ em</a>
+                        <a href="${env}/products/list?segments=KIDS&amp;sort=newest" class="mobile-nav-link">Trẻ em</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?sale=true" class="mobile-nav-link">Giảm giá</a>
+                        <a href="${env}/products/list?sale=true&amp;sort=newest" class="mobile-nav-link">Giảm giá</a>
                     </li>
                     <li class="mobile-nav-item">
-                        <a href="${env}/products?category=snkrs" class="mobile-nav-link">SNKRS</a>
+                        <a href="${env}/products/list?segments=SNKRS&amp;sort=newest" class="mobile-nav-link">SNKRS</a>
                     </li>
                 </ul>
                 
@@ -264,3 +264,4 @@
         </div>
     </nav>
 </header>
+

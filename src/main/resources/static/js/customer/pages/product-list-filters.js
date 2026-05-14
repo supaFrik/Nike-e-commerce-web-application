@@ -7,26 +7,10 @@
     return Array.from((root || document).querySelectorAll(selector));
   }
 
-  function parsePrice(value) {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
-
-  function formatCount(count) {
-    return " " + count;
-  }
-
-  function matchesPriceRange(price, range) {
-    switch (range) {
-      case "under-2000000":
-        return price < 2000000;
-      case "2000000-4000000":
-        return price >= 2000000 && price <= 4000000;
-      case "above-4000000":
-        return price > 4000000;
-      default:
-        return true;
-    }
+  function syncStickyMetrics() {
+    const productHeader = qs(".product-header");
+    const stickyHeight = productHeader ? productHeader.offsetHeight : 0;
+    document.documentElement.style.setProperty("--product-header-sticky-height", stickyHeight + "px");
   }
 
   function initSortDropdown() {
@@ -36,6 +20,7 @@
     const wrapper = qs("#sortByBtn");
     const form = qs("#sort-form");
     const input = qs("#sort-input");
+    const catalogSortInput = qs("#catalog-sort-input");
 
     if (!toggle || !options || !wrapper || !form || !input) {
       return;
@@ -69,6 +54,9 @@
       option.classList.add("active");
       option.setAttribute("aria-selected", "true");
       input.value = option.dataset.value || "newest";
+      if (catalogSortInput) {
+        catalogSortInput.value = input.value;
+      }
       setOpen(false);
       form.submit();
     });
@@ -90,39 +78,31 @@
       }
 
       function animatePanel(open) {
-        const durationMs = 240;
+        const durationMs = 220;
 
         if (open) {
           panel.hidden = false;
           panel.style.overflow = "hidden";
           panel.style.height = "0px";
           panel.style.opacity = "0";
-
-          // Force reflow so the browser picks up the start height.
-          // eslint-disable-next-line no-unused-expressions
           panel.offsetHeight;
 
-          const targetHeight = panel.scrollHeight;
           panel.style.transition = "height " + durationMs + "ms cubic-bezier(0.2, 0, 0, 1), opacity " + durationMs + "ms ease";
-          panel.style.height = targetHeight + "px";
+          panel.style.height = panel.scrollHeight + "px";
           panel.style.opacity = "1";
 
           window.setTimeout(function () {
             panel.style.transition = "";
             panel.style.height = "auto";
+            panel.style.opacity = "";
             panel.style.overflow = "";
           }, durationMs);
           return;
         }
 
-        // Closing
         panel.style.overflow = "hidden";
-        const startHeight = panel.scrollHeight;
-        panel.style.height = startHeight + "px";
+        panel.style.height = panel.scrollHeight + "px";
         panel.style.opacity = "1";
-
-        // Force reflow before we transition to 0.
-        // eslint-disable-next-line no-unused-expressions
         panel.offsetHeight;
 
         panel.style.transition = "height " + durationMs + "ms cubic-bezier(0.4, 0, 0.2, 1), opacity " + durationMs + "ms ease";
@@ -138,36 +118,33 @@
         }, durationMs);
       }
 
-      function setExpanded(expanded, options) {
-        const instant = !!(options && options.instant);
+      function setExpanded(expanded, instant) {
         group.setAttribute("aria-expanded", expanded ? "true" : "false");
         trigger.setAttribute("aria-expanded", expanded ? "true" : "false");
 
         if (instant) {
           panel.hidden = !expanded;
-          panel.style.transition = "";
-          panel.style.overflow = "";
           panel.style.height = expanded ? "auto" : "0px";
           panel.style.opacity = expanded ? "1" : "0";
+          panel.style.transition = "";
           return;
         }
 
         animatePanel(expanded);
       }
 
-      // Initial state should not animate (prevents page-load flicker).
-      setExpanded(false, { instant: true });
+      setExpanded(false, true);
 
       trigger.addEventListener("click", function () {
         const expanded = trigger.getAttribute("aria-expanded") === "true";
-        setExpanded(!expanded);
+        setExpanded(!expanded, false);
       });
 
       trigger.addEventListener("keydown", function (event) {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
           const expanded = trigger.getAttribute("aria-expanded") === "true";
-          setExpanded(!expanded);
+          setExpanded(!expanded, false);
         }
       });
     });
@@ -187,12 +164,11 @@
       const durationMs = 320;
       const isCollapsed = listing.classList.contains("filters-collapsed");
 
-      // Show filters: bring sidebar back, shrink grid to normal.
       if (isCollapsed) {
         listing.classList.remove("filters-collapsed");
         listing.classList.remove("filters-collapsing");
         listing.classList.add("filters-expanding");
-        label.textContent = "Hide Filters";
+        label.textContent = "Ẩn bộ lọc";
 
         window.requestAnimationFrame(function () {
           listing.classList.remove("filters-expanding");
@@ -200,10 +176,9 @@
         return;
       }
 
-      // Hide filters: slide sidebar fully out left + expand grid.
       listing.classList.remove("filters-expanding");
       listing.classList.add("filters-collapsing");
-      label.textContent = "Show Filters";
+      label.textContent = "Hiện bộ lọc";
 
       window.setTimeout(function () {
         listing.classList.remove("filters-collapsing");
@@ -212,62 +187,130 @@
     });
   }
 
-  function initClientFilters() {
-    const cards = qsa("[data-product-card='true']");
-    const emptyState = qs("#client-filter-empty");
-    const titleCount = qs("#page-title-count");
-    const priceInputs = qsa("input[name='priceRange']");
-    const saleOnlyInput = qs("#saleOnlyFilter");
+  function initFilterCounts() {
+    qsa(".filters-group__close").forEach(function (group) {
+      const counter = qs(".filter-group_count", group);
+      const inputs = qsa("input[type='checkbox']:checked, input[type='radio']:checked", group);
 
-    if (!cards.length || !titleCount || !priceInputs.length) {
+      if (!counter) {
+        return;
+      }
+
+      counter.textContent = inputs.length > 0 ? "(" + inputs.length + ")" : "";
+    });
+  }
+
+  function initFilterForm() {
+    const form = qs("#catalog-filter-form");
+
+    if (!form) {
       return;
     }
 
-    function getActivePriceRange() {
-      const selected = priceInputs.find(function (input) {
-        return input.checked;
-      });
-      return selected ? selected.value : "all";
-    }
-
-    function applyFilters() {
-      const activePriceRange = getActivePriceRange();
-      const saleOnly = saleOnlyInput ? saleOnlyInput.checked : false;
-      let visibleCount = 0;
-
-      cards.forEach(function (card) {
-        const price = parsePrice(card.dataset.price);
-        const hasSale = String(card.dataset.hasSale).toLowerCase() === "true";
-        const visible = matchesPriceRange(price, activePriceRange) && (!saleOnly || hasSale);
-
-        card.hidden = !visible;
-        if (visible) {
-          visibleCount += 1;
-        }
-      });
-
-      titleCount.textContent = formatCount(visibleCount);
-      if (emptyState) {
-        emptyState.hidden = visibleCount > 0;
+    form.addEventListener("change", function (event) {
+      const target = event.target;
+      if (!target || !target.name) {
+        return;
       }
-    }
 
-    priceInputs.forEach(function (input) {
-      input.addEventListener("change", applyFilters);
+      initFilterCounts();
+      form.submit();
     });
 
-    if (saleOnlyInput) {
-      saleOnlyInput.addEventListener("change", applyFilters);
+    initFilterCounts();
+  }
+
+  function initCategoryLinks() {
+    const links = qsa("[data-category-link='true']");
+
+    if (!links.length) {
+      return;
     }
 
-    applyFilters();
+    const currentParams = new URLSearchParams(window.location.search);
+
+    links.forEach(function (link) {
+      const url = new URL(link.href, window.location.origin);
+      const params = new URLSearchParams(currentParams.toString());
+      const categoryId = link.dataset.categoryId;
+
+      if (categoryId) {
+        params.set("categoryId", categoryId);
+      } else {
+        params.delete("categoryId");
+      }
+
+      if (!params.get("sort")) {
+        params.set("sort", "newest");
+      }
+
+      link.href = url.pathname + (params.toString() ? "?" + params.toString() : "");
+    });
+  }
+
+  function initSportsToggle() {
+    const button = qs("[data-sports-toggle]");
+    const extraOptions = qsa(".filter-option--more");
+
+    if (!button || !extraOptions.length) {
+      return;
+    }
+
+    function setExpanded(expanded) {
+      extraOptions.forEach(function (option) {
+        option.hidden = !expanded;
+      });
+
+      button.setAttribute("data-sports-toggle", expanded ? "true" : "false");
+      button.textContent = expanded ? "-Less" : "+More";
+    }
+
+    const hasSelectedExtraOption = extraOptions.some(function (option) {
+      const input = option.querySelector("input");
+      return input && input.checked;
+    });
+
+    setExpanded(hasSelectedExtraOption);
+
+    button.addEventListener("click", function () {
+      const expanded = button.getAttribute("data-sports-toggle") === "true";
+      setExpanded(!expanded);
+    });
+  }
+
+  function initMobileFilters() {
+    const sidebar = qs(".sidebar");
+    const openButton = qs("[data-mobile-filters-toggle='open']");
+    const closeButton = qs("[data-mobile-filters-toggle='close']");
+
+    if (!sidebar || !openButton || !closeButton) {
+      return;
+    }
+
+    function setOpen(open) {
+      sidebar.classList.toggle("mobile-open", open);
+      document.body.classList.toggle("mobile-filters-open", open);
+    }
+
+    openButton.addEventListener("click", function () {
+      setOpen(true);
+    });
+
+    closeButton.addEventListener("click", function () {
+      setOpen(false);
+    });
   }
 
   function init() {
+    syncStickyMetrics();
     initSortDropdown();
     initFilterSections();
     initSidebarToggle();
-    initClientFilters();
+    initFilterForm();
+    initCategoryLinks();
+    initSportsToggle();
+    initMobileFilters();
+    window.addEventListener("resize", syncStickyMetrics);
   }
 
   if (document.readyState === "loading") {

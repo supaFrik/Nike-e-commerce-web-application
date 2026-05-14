@@ -306,7 +306,7 @@
                         <button id="wishlist-button"
                                 class="btn btn-outline btn-full wishlist-btn"
                                 type="button">
-                            <i class="far fa-heart" aria-hidden="true"></i>
+                            <i class="fas fa-heart" aria-hidden="true"></i>
                             Yêu thích
                         </button>
                     </div>

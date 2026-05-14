@@ -5,7 +5,7 @@
 
 .related-stories-section {
     background: var(--color-white);
-    margin-top: var(--size-spacing-xl);
+    margin: var(--size-spacing-xl) 0;
 }
 
 .related-stories-header {

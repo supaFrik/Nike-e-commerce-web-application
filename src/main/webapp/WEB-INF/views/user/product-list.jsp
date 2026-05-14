@@ -4,6 +4,30 @@
 <%@ taglib prefix="cfmt" uri="/WEB-INF/tlds/currency.tld" %>
 <%@ include file="/WEB-INF/views/common/variables.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<c:set var="selectedGenders" value="," />
+<c:if test="${not empty paramValues.genders}">
+    <c:set var="selectedGenders" value=",${fn:join(paramValues.genders, ',')}," />
+</c:if>
+<c:set var="selectedSizes" value="," />
+<c:if test="${not empty paramValues.sizes}">
+    <c:set var="selectedSizes" value=",${fn:join(paramValues.sizes, ',')}," />
+</c:if>
+<c:set var="selectedColors" value="," />
+<c:if test="${not empty paramValues.colors}">
+    <c:set var="selectedColors" value=",${fn:join(paramValues.colors, ',')}," />
+</c:if>
+<c:set var="selectedShoeHeights" value="," />
+<c:if test="${not empty paramValues.shoeHeights}">
+    <c:set var="selectedShoeHeights" value=",${fn:join(paramValues.shoeHeights, ',')}," />
+</c:if>
+<c:set var="selectedWidths" value="," />
+<c:if test="${not empty paramValues.widths}">
+    <c:set var="selectedWidths" value=",${fn:join(paramValues.widths, ',')}," />
+</c:if>
+<c:set var="selectedSports" value="," />
+<c:if test="${not empty paramValues.sports}">
+    <c:set var="selectedSports" value=",${fn:join(paramValues.sports, ',')}," />
+</c:if>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +53,84 @@
 
     <!-- Main Content -->
     <main class="main" role="main" aria-labelledby="page-title">
-        <div class="product-listing">
+        <div class="catalog-shell">
+            <div class="product-header" role="region" aria-labelledby="page-title">
+                <div class="product-title-section">
+                    <h1 class="product-title" id="page-title">
+                        <span id="page-title-label">
+                            <c:choose>
+                                <c:when test="${not empty selectedCategoryName}">
+                                    <c:out value="${selectedCategoryName}"/>
+                                </c:when>
+                                <c:otherwise>All Shoes</c:otherwise>
+                            </c:choose>
+                        </span>
+                        <span id="page-title-count"><c:out value=" ${totalProducts}"/></span>
+                    </h1>
+                </div>
+                <div class="header-controls" role="group" aria-label="Page controls">
+                    <button class="mobile-filter-btn" type="button" data-mobile-filters-toggle="open" style="display: none;"
+                            aria-label="Hiá»ƒn thá»‹ bá»™ lá»c" aria-describedby="mobile-filter-desc">
+                        <i class="fas fa-filter" aria-hidden="true"></i>
+                        Bá»™ lá»c
+                    </button>
+                    <span id="mobile-filter-desc" class="sr-only">Má»Ÿ thanh bá»™ lá»c Ä‘á»ƒ thu háº¹p danh sÃ¡ch sáº£n pháº©m</span>
+                    <button class="hide-filters-btn" type="button" aria-label="Chuyá»ƒn Ä‘á»•i hiá»ƒn thá»‹ bá»™ lá»c"
+                            aria-describedby="hide-filters-desc">
+                        <span class="hide-filters-label">Ẩn bộ lọc</span>
+                        <svg aria-hidden="true" class="icon-filter-ds" focusable="false" viewBox="0 0 24 24" role="img" width="24px" height="24px" fill="none">
+    <path stroke="currentColor" stroke-width="1.5" d="M21 8.25H10m-5.25 0H3"></path>
+    <path stroke="currentColor" stroke-width="1.5" d="M7.5 6v0a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" clip-rule="evenodd"></path>
+    <path stroke="currentColor" stroke-width="1.5" d="M3 15.75h10.75m5 0H21"></path>
+    <path stroke="currentColor" stroke-width="1.5" d="M16.5 13.5v0a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" clip-rule="evenodd"></path>
+  </svg>
+                    </button>
+                    <span id="hide-filters-desc" class="sr-only">áº¨n hoáº·c hiá»‡n báº£ng bá»™ lá»c sáº£n pháº©m</span>
+                    <div class="sort-by-btn" id="sortByBtn">
+                        <button id="sort-toggle" class="sort-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="sort-options">
+                            Sắp xếp theo
+                            <svg id="sort-arrow" width="20" height="20" class="sort-arrow-icon" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                        </button>
+                        <form id="sort-form" method="GET" action="${env}/products/list">
+                            <ul id="sort-options" class="sort-options" role="listbox" tabindex="-1">
+                                <li class="sort-option${param.sort == 'newest' || empty param.sort ? ' active' : ''}" data-value="newest" role="option" aria-selected="${param.sort == 'newest' || empty param.sort ? 'true' : 'false'}">Mới nhất</li>
+                                <li class="sort-option${param.sort == 'price_desc' ? ' active' : ''}" data-value="price_desc" role="option" aria-selected="${param.sort == 'price_desc' ? 'true' : 'false'}">Giá cao nhất</li>
+                                <li class="sort-option${param.sort == 'price_asc' ? ' active' : ''}" data-value="price_asc" role="option" aria-selected="${param.sort == 'price_asc' ? 'true' : 'false'}">Giá thấp nhất</li>
+                            </ul>
+                            <input type="hidden" name="sort" id="sort-input" value="${not empty sort ? sort : 'newest'}" />
+                            <c:if test="${not empty selectedCategoryId}">
+                                <input type="hidden" name="categoryId" value="${selectedCategoryId}" />
+                            </c:if>
+                            <c:forEach var="segment" items="${paramValues.segments}">
+                                <input type="hidden" name="segments" value="${segment}" />
+                            </c:forEach>
+                            <c:forEach var="gender" items="${paramValues.genders}">
+                                <input type="hidden" name="genders" value="${gender}" />
+                            </c:forEach>
+                            <c:if test="${param.sale == 'true'}">
+                                <input type="hidden" name="sale" value="true" />
+                            </c:if>
+                            <c:forEach var="size" items="${paramValues.sizes}">
+                                <input type="hidden" name="sizes" value="${size}" />
+                            </c:forEach>
+                            <c:forEach var="color" items="${paramValues.colors}">
+                                <input type="hidden" name="colors" value="${color}" />
+                            </c:forEach>
+                            <c:forEach var="shoeHeight" items="${paramValues.shoeHeights}">
+                                <input type="hidden" name="shoeHeights" value="${shoeHeight}" />
+                            </c:forEach>
+                            <c:forEach var="width" items="${paramValues.widths}">
+                                <input type="hidden" name="widths" value="${width}" />
+                            </c:forEach>
+                            <c:forEach var="sport" items="${paramValues.sports}">
+                                <input type="hidden" name="sports" value="${sport}" />
+                            </c:forEach>
+                        </form>
+                    </div>
+                    <span id="sort-desc" class="sr-only">Change the order products are displayed</span>
+                </div>
+            </div>
+            <div class="product-listing">
             <div class="sidebar" role="complementary" aria-labelledby="filters-title">
                 <!-- Mobile close button -->
                 <button class="mobile-filter-close" type="button" data-mobile-filters-toggle="close" style="display: none;"
@@ -46,6 +147,8 @@
                             <!-- Dynamic categories list -->
                             <c:forEach var="cat" items="${categories}">
                                 <a href="${env}/products/list?categoryId=${cat.id}<c:if test='${not empty sort}'>&amp;sort=${sort}</c:if>"
+                                   data-category-link="true"
+                                   data-category-id="${cat.id}"
                                    class="categories__item<c:if test='${cat.id == selectedCategoryId}'> active</c:if>"
                                    aria-describedby="${cat.id}-desc">
                                     <c:out value="${cat.name}"/>
@@ -58,8 +161,15 @@
 
                 <aside class="filters" id="left-nav" role="region" aria-labelledby="filters-title">
                     <div class="filters-inner">
-                        <nav aria-label="Product filters">
+                        <form id="catalog-filter-form" method="GET" action="${env}/products/list" aria-label="Product filters">
                             <h2 id="filters-title" class="sr-only">Filter Products</h2>
+                            <input type="hidden" name="sort" value="${not empty sort ? sort : 'newest'}" id="catalog-sort-input" />
+                            <c:if test="${not empty selectedCategoryId}">
+                                <input type="hidden" name="categoryId" value="${selectedCategoryId}" />
+                            </c:if>
+                            <c:forEach var="segment" items="${paramValues.segments}">
+                                <input type="hidden" name="segments" value="${segment}" />
+                            </c:forEach>
                             <div class="filter-group" role="group" aria-label="Product filtering options">
                                 <div class="filters-group__wrapper">
                                     <div class="filters-group__close" aria-expanded="false">
@@ -67,7 +177,8 @@
                                             <div aria-expanded="false" aria-label="Filter by gender" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="gender-filter-desc">
                                                 <div class="trigger-content__label">
-                                                    Gender <span class="filter-group_count">(1)</span>
+                                                    Gender
+                                                    <span class="filter-group_count"></span>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" aria-hidden="true">
@@ -81,15 +192,30 @@
                                             <span id="gender-filter-desc" class="sr-only">Click to expand gender filter options</span>
                                         </span>
                                         <div class="filter-panel" data-filter-panel hidden>
-                                            <p class="filter-note">Danh mục hiện đang được điều hướng bằng menu bên trái.</p>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="genders" value="MEN"
+                                                       <c:if test="${fn:contains(selectedGenders, ',MEN,')}">checked</c:if>>
+                                                <span>Men</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="genders" value="WOMEN"
+                                                       <c:if test="${fn:contains(selectedGenders, ',WOMEN,')}">checked</c:if>>
+                                                <span>Women</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="genders" value="UNISEX"
+                                                       <c:if test="${fn:contains(selectedGenders, ',UNISEX,')}">checked</c:if>>
+                                                <span>Unisex</span>
+                                            </label>
                                         </div>
                                     </div>
                                     <div class="filters-group__close" aria-expanded="false">
                                         <span class="filters-group-btn">
-                                            <div aria-expanded="false" aria-label="Filter by price range" role="button"
-                                                 class="trigger-content" tabindex="0" aria-describedby="price-filter-desc">
+                                            <div aria-expanded="false" aria-label="Filter by sale offers" role="button"
+                                                 class="trigger-content" tabindex="0" aria-describedby="sale-filter-desc">
                                                 <div class="trigger-content__label">
-                                                    Shop By Price
+                                                    Sale &amp; Offers
+                                                    <span class="filter-group_count"></span>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" aria-hidden="true">
@@ -100,24 +226,13 @@
                                                     </g>
                                                 </svg>
                                             </div>
-                                            <span id="price-filter-desc" class="sr-only">Click to expand price filter options</span>
+                                            <span id="sale-filter-desc" class="sr-only">Click to expand sale filter options</span>
                                         </span>
                                         <div class="filter-panel" data-filter-panel hidden>
                                             <label class="filter-option">
-                                                <input type="radio" name="priceRange" value="all" checked>
-                                                <span>Tất cả mức giá</span>
-                                            </label>
-                                            <label class="filter-option">
-                                                <input type="radio" name="priceRange" value="under-2000000">
-                                                <span>Dưới 2,000,000₫</span>
-                                            </label>
-                                            <label class="filter-option">
-                                                <input type="radio" name="priceRange" value="2000000-4000000">
-                                                <span>2,000,000₫ - 4,000,000₫</span>
-                                            </label>
-                                            <label class="filter-option">
-                                                <input type="radio" name="priceRange" value="above-4000000">
-                                                <span>Trên 4,000,000₫</span>
+                                                <input type="checkbox" name="sale" value="true"
+                                                       <c:if test="${param.sale == 'true'}">checked</c:if>>
+                                                <span>Sale</span>
                                             </label>
                                         </div>
                                     </div>
@@ -127,9 +242,7 @@
                                                  class="trigger-content" tabindex="0" aria-describedby="size-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Size
-                                                    <div class="filter-group_count">
-
-                                                    </div>
+                                                    <span class="filter-group_count"></span>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" aria-hidden="true">
@@ -143,7 +256,58 @@
                                             <span id="size-filter-desc" class="sr-only">Click to expand size filter options</span>
                                         </span>
                                         <div class="filter-panel" data-filter-panel hidden>
-                                            <p class="filter-note">Trang danh sách hiện chưa có dữ liệu size để lọc phía client.</p>
+                                            <c:choose>
+                                                <c:when test="${not empty availableSizes}">
+                                                    <c:forEach var="sizeOption" items="${availableSizes}">
+                                                        <c:set var="sizeToken" value=",${sizeOption}," />
+                                                        <label class="filter-option">
+                                                            <input type="checkbox" name="sizes" value="${sizeOption}"
+                                                                   <c:if test="${fn:contains(selectedSizes, sizeToken)}">checked</c:if>>
+                                                            <span><c:out value="${sizeOption}" /></span>
+                                                        </label>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p class="filter-note">Waiting for backend size options.</p>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </div>
+                                    <div class="filters-group__close" aria-expanded="false">
+                                        <span class="filters-group-btn">
+                                            <div aria-expanded="false" aria-label="Filter by colour" role="button"
+                                                 class="trigger-content" tabindex="0" aria-describedby="colour-filter-desc">
+                                                <div class="trigger-content__label">
+                                                    Colour
+                                                    <span class="filter-group_count"></span>
+                                                </div>
+                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
+                                                     fill="#000000" aria-hidden="true">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path fill="#000000" d="M488.832 344.32l-339.84 356.672a32 32 0 000 44.16l.384.384a29.44 29.44 0 0042.688 0l320-335.872 319.872 335.872a29.44 29.44 0 0042.688 0l.384-.384a32 32 0 000-44.16L535.168 344.32a32 32 0 00-46.336 0z"></path>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <span id="colour-filter-desc" class="sr-only">Click to expand colour filter options</span>
+                                        </span>
+                                        <div class="filter-panel" data-filter-panel hidden>
+                                            <c:choose>
+                                                <c:when test="${not empty availableColors}">
+                                                    <c:forEach var="colorOption" items="${availableColors}">
+                                                        <c:set var="colorToken" value=",${colorOption}," />
+                                                        <label class="filter-option">
+                                                            <input type="checkbox" name="colors" value="${colorOption}"
+                                                                   <c:if test="${fn:contains(selectedColors, colorToken)}">checked</c:if>>
+                                                            <span><c:out value="${colorOption}" /></span>
+                                                        </label>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p class="filter-note">Waiting for backend colour options.</p>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
                                     <div class="filters-group__close" aria-expanded="false">
@@ -152,9 +316,7 @@
                                                  class="trigger-content" tabindex="0" aria-describedby="height-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Shoe Height
-                                                    <div class="filter-group_count">
-
-                                                    </div>
+                                                    <span class="filter-group_count"></span>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" aria-hidden="true">
@@ -168,34 +330,20 @@
                                             <span id="height-filter-desc" class="sr-only">Click to expand shoe height filter options</span>
                                         </span>
                                         <div class="filter-panel" data-filter-panel hidden>
-                                            <p class="filter-note">Bộ lọc chiều cao giày sẽ cần thêm dữ liệu domain trước khi bật.</p>
-                                        </div>
-                                    </div>
-                                    <div class="filters-group__close" aria-expanded="false">
-                                        <span class="filters-group-btn">
-                                            <div aria-expanded="false" aria-label="Filter by collections" role="button"
-                                                 class="trigger-content" tabindex="0" aria-describedby="collections-filter-desc">
-                                                <div class="trigger-content__label">
-                                                    Collections
-                                                    <div class="filter-group_count">
-
-                                                    </div>
-                                                </div>
-                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
-                                                     fill="#000000" aria-hidden="true">
-                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                    <g id="SVGRepo_iconCarrier">
-                                                        <path fill="#000000" d="M488.832 344.32l-339.84 356.672a32 32 0 000 44.16l.384.384a29.44 29.44 0 0042.688 0l320-335.872 319.872 335.872a29.44 29.44 0 0042.688 0l.384-.384a32 32 0 000-44.16L535.168 344.32a32 32 0 00-46.336 0z"></path>
-                                                    </g>
-                                                </svg>
-                                            </div>
-                                            <span id="collections-filter-desc" class="sr-only">Click to expand collections filter options</span>
-                                        </span>
-                                        <div class="filter-panel" data-filter-panel hidden>
                                             <label class="filter-option">
-                                                <input type="checkbox" id="saleOnlyFilter">
-                                                <span>Chỉ hiện sản phẩm đang giảm giá</span>
+                                                <input type="checkbox" name="shoeHeights" value="LOW_TOP"
+                                                       <c:if test="${fn:contains(selectedShoeHeights, ',LOW_TOP,')}">checked</c:if>>
+                                                <span>Low top</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="shoeHeights" value="MID_TOP"
+                                                       <c:if test="${fn:contains(selectedShoeHeights, ',MID_TOP,')}">checked</c:if>>
+                                                <span>Mid top</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="shoeHeights" value="HIGH_TOP"
+                                                       <c:if test="${fn:contains(selectedShoeHeights, ',HIGH_TOP,')}">checked</c:if>>
+                                                <span>High top</span>
                                             </label>
                                         </div>
                                     </div>
@@ -205,9 +353,7 @@
                                                  class="trigger-content" tabindex="0" aria-describedby="width-filter-desc">
                                                 <div class="trigger-content__label">
                                                     Width
-                                                    <div class="filter-group_count">
-
-                                                    </div>
+                                                    <span class="filter-group_count"></span>
                                                 </div>
                                                 <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
                                                      fill="#000000" aria-hidden="true">
@@ -221,18 +367,90 @@
                                             <span id="width-filter-desc" class="sr-only">Click to expand width filter options</span>
                                         </span>
                                         <div class="filter-panel" data-filter-panel hidden>
-                                            <p class="filter-note">Bộ lọc chiều rộng giày chưa có dữ liệu để áp dụng.</p>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="widths" value="REGULAR"
+                                                       <c:if test="${fn:contains(selectedWidths, ',REGULAR,')}">checked</c:if>>
+                                                <span>Regular</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="widths" value="WIDE"
+                                                       <c:if test="${fn:contains(selectedWidths, ',WIDE,')}">checked</c:if>>
+                                                <span>Wide</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="widths" value="EXTRA_WIDE"
+                                                       <c:if test="${fn:contains(selectedWidths, ',EXTRA_WIDE,')}">checked</c:if>>
+                                                <span>Extra wide</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="filters-group__close" aria-expanded="false">
+                                        <span class="filters-group-btn">
+                                            <div aria-expanded="false" aria-label="Filter by sport" role="button"
+                                                 class="trigger-content" tabindex="0" aria-describedby="sports-filter-desc">
+                                                <div class="trigger-content__label">
+                                                    Sports
+                                                    <span class="filter-group_count"></span>
+                                                </div>
+                                                <svg viewBox="0 0 1024 1024" class="icon" xmlns="http://www.w3.org/2000/svg"
+                                                     fill="#000000" aria-hidden="true">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path fill="#000000" d="M488.832 344.32l-339.84 356.672a32 32 0 000 44.16l.384.384a29.44 29.44 0 0042.688 0l320-335.872 319.872 335.872a29.44 29.44 0 0042.688 0l.384-.384a32 32 0 000-44.16L535.168 344.32a32 32 0 00-46.336 0z"></path>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            <span id="sports-filter-desc" class="sr-only">Click to expand sports filter options</span>
+                                        </span>
+                                        <div class="filter-panel" data-filter-panel hidden>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="sports" value="LIFESTYLE"
+                                                       <c:if test="${fn:contains(selectedSports, ',LIFESTYLE,')}">checked</c:if>>
+                                                <span>Lifestyle</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="sports" value="RUNNING"
+                                                       <c:if test="${fn:contains(selectedSports, ',RUNNING,')}">checked</c:if>>
+                                                <span>Running</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="sports" value="TRAINING_GYM"
+                                                       <c:if test="${fn:contains(selectedSports, ',TRAINING_GYM,')}">checked</c:if>>
+                                                <span>Training &amp; gym</span>
+                                            </label>
+                                            <label class="filter-option">
+                                                <input type="checkbox" name="sports" value="BASKETBALL"
+                                                       <c:if test="${fn:contains(selectedSports, ',BASKETBALL,')}">checked</c:if>>
+                                                <span>Basketball</span>
+                                            </label>
+                                            <label class="filter-option filter-option--more" hidden>
+                                                <input type="checkbox" name="sports" value="FOOTBALL"
+                                                       <c:if test="${fn:contains(selectedSports, ',FOOTBALL,')}">checked</c:if>>
+                                                <span>Football</span>
+                                            </label>
+                                            <label class="filter-option filter-option--more" hidden>
+                                                <input type="checkbox" name="sports" value="TENNIS"
+                                                       <c:if test="${fn:contains(selectedSports, ',TENNIS,')}">checked</c:if>>
+                                                <span>Tennis</span>
+                                            </label>
+                                            <label class="filter-option filter-option--more" hidden>
+                                                <input type="checkbox" name="sports" value="SKATEBOARDING"
+                                                       <c:if test="${fn:contains(selectedSports, ',SKATEBOARDING,')}">checked</c:if>>
+                                                <span>Skateboarding</span>
+                                            </label>
+                                            <button class="filter-more-btn" type="button" data-sports-toggle="false">+More</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </nav>
+                        </form>
                     </div>
                 </aside>
             </div>
             <div class="product-list-content">
                 <!-- Product List header -->
-                <div class="product-header" role="region" aria-labelledby="page-title">
+                <div class="product-header product-header-legacy" hidden aria-hidden="true" role="region" aria-labelledby="page-title">
                     <div class="product-title-section">
                         <h1 class="product-title" id="page-title">
                             <span id="page-title-label">
@@ -279,6 +497,30 @@
                                 <c:if test="${not empty selectedCategoryId}">
                                     <input type="hidden" name="categoryId" value="${selectedCategoryId}" />
                                 </c:if>
+                                <c:forEach var="segment" items="${paramValues.segments}">
+                                    <input type="hidden" name="segments" value="${segment}" />
+                                </c:forEach>
+                                <c:forEach var="gender" items="${paramValues.genders}">
+                                    <input type="hidden" name="genders" value="${gender}" />
+                                </c:forEach>
+                                <c:if test="${param.sale == 'true'}">
+                                    <input type="hidden" name="sale" value="true" />
+                                </c:if>
+                                <c:forEach var="size" items="${paramValues.sizes}">
+                                    <input type="hidden" name="sizes" value="${size}" />
+                                </c:forEach>
+                                <c:forEach var="color" items="${paramValues.colors}">
+                                    <input type="hidden" name="colors" value="${color}" />
+                                </c:forEach>
+                                <c:forEach var="shoeHeight" items="${paramValues.shoeHeights}">
+                                    <input type="hidden" name="shoeHeights" value="${shoeHeight}" />
+                                </c:forEach>
+                                <c:forEach var="width" items="${paramValues.widths}">
+                                    <input type="hidden" name="widths" value="${width}" />
+                                </c:forEach>
+                                <c:forEach var="sport" items="${paramValues.sports}">
+                                    <input type="hidden" name="sports" value="${sport}" />
+                                </c:forEach>
                             </form>
                         </div>
                         <span id="sort-desc" class="sr-only">Change the order products are displayed</span>
@@ -326,7 +568,7 @@
                                                 <div class="product-card__info">
                                                     <div class="product_msg_info">
                                                         <div class="product-card__messaging" role="status" aria-label="Product status">
-                                                            ${product.status}
+                                                            <c:out value="${product.status.displayName}" />
                                                         </div>
                                                         <div class="product-card__titles">
                                                             <div class="product-card__title" id="product-${status.index + 1}-title">
@@ -379,6 +621,7 @@
                     </div>
                 </section>
             </div>
+        </div>
         </div>
 
         <!-- Related Stories Section -->
