@@ -1,4 +1,4 @@
-package vn.demo.shared.util;
+package vn.demo.nike.shared.util;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -10,13 +10,7 @@ public final class CurrencyUtils {
     private static final String CURRENCY_SYMBOL = "₫";
 
     private CurrencyUtils() {
-        // utility
     }
-
-    /**
-     * Format a numeric value as Vietnamese Dong using comma as thousands separator and appending ₫ with no space.
-     * Examples: 7999000 -> "7,999,000₫"
-     */
     public static String format(Object value) {
         if (value == null) {
             return "0" + CURRENCY_SYMBOL;
