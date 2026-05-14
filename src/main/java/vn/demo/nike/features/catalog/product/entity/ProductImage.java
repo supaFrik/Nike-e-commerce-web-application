@@ -20,7 +20,7 @@ public class ProductImage extends BaseEntity {
     @Column(nullable = false)
     private String providerPublicId;
 
-    @Column(unique = true, length = 255)
+    @Column(length = 255)
     private String title;
 
     @Column(length = 512)
