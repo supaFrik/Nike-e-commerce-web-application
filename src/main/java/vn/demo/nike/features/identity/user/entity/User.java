@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import vn.demo.nike.features.identity.user.enums.Role;
-import vn.demo.nike.shared.domain.BaseEntity;
+import vn.demo.nike.shared.entity.BaseEntity;
 
 import java.util.Collection;
 import java.util.List;

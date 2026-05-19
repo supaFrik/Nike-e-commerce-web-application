@@ -5,7 +5,7 @@ import lombok.*;
 import vn.demo.nike.features.order.entity.Order;
 import vn.demo.nike.features.payment.enums.PaymentProvider;
 import vn.demo.nike.features.payment.enums.PaymentStatus;
-import vn.demo.nike.shared.domain.BaseEntity;
+import vn.demo.nike.shared.entity.BaseEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

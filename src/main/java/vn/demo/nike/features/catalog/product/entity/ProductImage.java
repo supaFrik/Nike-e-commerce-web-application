@@ -2,7 +2,7 @@ package vn.demo.nike.features.catalog.product.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import vn.demo.nike.shared.domain.BaseEntity;
+import vn.demo.nike.shared.entity.BaseEntity;
 
 
 @Getter

@@ -11,7 +11,7 @@
     margin: 0 60px 24px 64px;
     padding: 16px 0;
     position: sticky;
-    top: 0;
+    top: var(--header-visible-offset, 0px);
     z-index: 40;
     background: var(--color-white);
 }

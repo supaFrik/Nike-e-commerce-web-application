@@ -4,8 +4,9 @@
 
 /* Header Structure */
 .header {
-  position: relative;
-  z-index: 1000;
+  position: sticky;
+  top: 0;
+  z-index: 1100;
   background-color: var(--color-bg-primary);
 }
   .header-link:hover, .header-link:focus {
@@ -86,8 +87,6 @@ justify-content: center;
   position: relative;
   z-index: 1000;
   min-height: 60px;
-  transition: transform 220ms cubic-bezier(0.2, 0, 0, 1), box-shadow 180ms ease;
-  will-change: transform;
 }
 
 .nav-content {
@@ -376,6 +375,9 @@ justify-content: center;
 
 /* Mobile Menu Overlay */
 .mobile-menu-overlay {
+  display: none;
+  visibility: hidden;
+  pointer-events: none;
   position: fixed;
   top: 0;
   right: 0;
@@ -606,6 +608,11 @@ justify-content: center;
   
   .mobile-actions {
     display: flex;
+  }
+
+  .mobile-menu-overlay {
+    display: block;
+    visibility: visible;
   }
   
   .mobile-menu-btn {
