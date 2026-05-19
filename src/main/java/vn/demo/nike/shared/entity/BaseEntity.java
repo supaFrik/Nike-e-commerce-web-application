@@ -1,4 +1,4 @@
-package vn.demo.nike.shared.domain;
+package vn.demo.nike.shared.entity;
 
 import java.time.LocalDateTime;
 

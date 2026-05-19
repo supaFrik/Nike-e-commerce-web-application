@@ -8,7 +8,7 @@ import vn.demo.nike.features.identity.user.entity.User;
 import vn.demo.nike.features.order.enums.OrderStatus;
 import vn.demo.nike.features.order.enums.ShippingMethod;
 import vn.demo.nike.features.payment.enums.PaymentMethod;
-import vn.demo.nike.shared.domain.BaseEntity;
+import vn.demo.nike.shared.entity.BaseEntity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

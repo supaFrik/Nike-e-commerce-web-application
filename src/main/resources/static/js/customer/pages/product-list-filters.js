@@ -10,7 +10,7 @@
   function syncStickyMetrics() {
     const productHeader = qs(".product-header");
     const stickyHeight = productHeader ? productHeader.offsetHeight : 0;
-    document.documentElement.style.setProperty("--product-header-sticky-height", stickyHeight + "px");
+    document.documentElement.style.setProperty("--product-header-height", stickyHeight + "px");
   }
 
   function initSortDropdown() {

@@ -1,6 +1,8 @@
 // Mobile Navigation Utility
 // Handles mobile menu sidebar functionality
 
+const MOBILE_NAV_BREAKPOINT = 1180;
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeMobileNav();
 });
@@ -24,6 +26,9 @@ function initializeMobileNav() {
     };
     
     function openMobileMenu() {
+        if (window.innerWidth > MOBILE_NAV_BREAKPOINT) {
+            return;
+        }
         mobileMenuOverlay.classList.add('active');
         mobileMenuBtn.classList.add('active');
         body.classList.add('menu-open');
@@ -110,7 +115,7 @@ function initializeMobileNav() {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
             // Close mobile menu if screen becomes desktop size
-            if (window.innerWidth > 768) {
+            if (window.innerWidth > MOBILE_NAV_BREAKPOINT) {
                 closeMobileMenu();
             }
         }, 150);
@@ -137,6 +142,9 @@ function initializeMobileNav() {
     const originalCloseMobileMenu = closeMobileMenu;
     
     openMobileMenu = function() {
+        if (window.innerWidth > MOBILE_NAV_BREAKPOINT) {
+            return;
+        }
         originalOpenMobileMenu();
         preventBodyScroll();
     };

@@ -8,9 +8,9 @@
     border-right: none;
     margin: 0 0 1em 64px;
     position: sticky;
-    top: var(--product-header-sticky-height, 0px);
+    top: calc(var(--header-visible-offset, 0px) + var(--product-header-height, 0px));
     height: fit-content;
-    max-height: calc(100vh - var(--product-header-sticky-height, 0px) - 16px);
+    max-height: calc(100vh - var(--header-visible-offset, 0px) - var(--product-header-height, 0px) - 16px);
     overflow-y: auto;
     overflow-x: hidden;
 }
