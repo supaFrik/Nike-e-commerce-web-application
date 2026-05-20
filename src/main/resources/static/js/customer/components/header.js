@@ -45,16 +45,6 @@
     }
   }
 
-  function bindHeaderActions() {
-    document.querySelectorAll("[data-mobile-menu-toggle]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        if (typeof window.toggleMobileMenu === "function") {
-          window.toggleMobileMenu();
-        }
-      });
-    });
-  }
-
   function bindPageShowReload() {
     window.addEventListener("pageshow", function (event) {
       const navigation = performance.getEntriesByType && performance.getEntriesByType("navigation");
@@ -68,7 +58,6 @@
   function init() {
     syncHeaderOffset();
     bindGlobalSearchFallback();
-    bindHeaderActions();
     bindPageShowReload();
     window.addEventListener("resize", syncHeaderOffset);
 

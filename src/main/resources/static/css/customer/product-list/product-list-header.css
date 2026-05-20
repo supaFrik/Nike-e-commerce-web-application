@@ -8,12 +8,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 60px 24px 64px;
+    margin: 0 60px 24px 60px;
     padding: 16px 0;
     position: sticky;
     top: var(--header-visible-offset, 0px);
     z-index: 40;
-    background: var(--color-white);
+    background: var(--nike-color-canvas);
 }
 
 .product-title {
@@ -26,7 +26,7 @@ text-transform: capitalize;
 
 .product-count {
     font-size: 16px;
-    color: var(--color-grey-600);
+    color: var(--nike-color-mute);
     margin: 8px 0 0 0;
 }
 
@@ -34,6 +34,17 @@ text-transform: capitalize;
     display: flex;
     align-items: center;
     gap: 24px;
+}
+
+.mobile-filter-chip-track {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.mobile-category-tabs,
+.mobile-filter-chip {
+    display: none;
 }
 
 .hide-filters-btn {
@@ -45,7 +56,7 @@ text-transform: capitalize;
     font-size: 16px;
     color: var(--color-text-primary);
     cursor: pointer;
-    padding: 0;
+    padding: 10px 0;
 }
 
 .sort-by-btn {
@@ -137,10 +148,10 @@ text-transform: capitalize;
     color: var(--color-text-primary);
     cursor: pointer;
     padding: 0;
-    transition: cubic-bezier(0.4,0,0.2,1), background 0.3s cubic-bezier(0.4,0,0.2,1);
+    transition: color 0.2s ease;
 }
 .sort-by-btn.expanded {
-    border-radius: 8px 8px 0 0;
+    border-radius: 0;
 }
 
 /* Sort toggle arrow rotation */
@@ -159,14 +170,14 @@ text-transform: capitalize;
     display: none;
     position: absolute;
     top: 100%;
-    left: -50px;
+    left: 0;
     min-width: 150px;
     max-width: 200px;
     max-height: 320px;
     overflow-y: auto;
     pointer-events: none;
-    background: #fff;
-    border-radius: 0 0 8px 8px;
+    background: var(--nike-color-canvas);
+    border-radius: var(--button-border-radius);
     z-index: 10;
     opacity: 0;
     transform: translateY(-8px) scaleY(0.95);
@@ -193,5 +204,5 @@ text-transform: capitalize;
     transition: background 0.2s;
 }
 .sort-options li:hover, .sort-options li.active {
-    color: var(--color-primary);
+    color: var(--nike-color-ink);
 }

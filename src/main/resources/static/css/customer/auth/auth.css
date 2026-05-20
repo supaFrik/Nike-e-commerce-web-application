@@ -35,6 +35,6 @@
 
 body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--nike-color-canvas);
+  color: var(--nike-color-ink);
 }

@@ -3,176 +3,154 @@
 
 const MOBILE_NAV_BREAKPOINT = 1180;
 
-document.addEventListener('DOMContentLoaded', function() {
-    initializeMobileNav();
+document.addEventListener("DOMContentLoaded", function () {
+  initializeMobileNav();
 });
 
 function initializeMobileNav() {
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-    const body = document.body;
-    
-    if (!mobileMenuBtn || !mobileMenuOverlay) return;
-    
-    // Toggle mobile menu
-    window.toggleMobileMenu = function() {
-        const isOpen = mobileMenuOverlay.classList.contains('active');
-        
-        if (isOpen) {
-            closeMobileMenu();
-        } else {
-            openMobileMenu();
-        }
-    };
-    
-    function openMobileMenu() {
-        if (window.innerWidth > MOBILE_NAV_BREAKPOINT) {
-            return;
-        }
-        mobileMenuOverlay.classList.add('active');
-        mobileMenuBtn.classList.add('active');
-        body.classList.add('menu-open');
-        
-        // Add escape key listener
-        document.addEventListener('keydown', handleEscapeKey);
-        
-        // Add click outside listener
-        setTimeout(() => {
-            document.addEventListener('click', handleClickOutside);
-        }, 100);
+  const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+  const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+  const mobileMenuContent = document.querySelector(".mobile-menu-content");
+  const toggleButtons = document.querySelectorAll("[data-mobile-menu-toggle]");
+  const mobileSearchBtn = document.querySelector(".mobile-search-btn");
+  const globalSearchForm = document.getElementById("globalSearchForm");
+  const mobileMenuLinks = mobileMenuOverlay.querySelectorAll("a[href]");
+  const body = document.body;
+
+  if (!mobileMenuBtn || !mobileMenuOverlay || !mobileMenuContent) {
+    return;
+  }
+
+  function handleEscapeKey(event) {
+    if (event.key === "Escape") {
+      closeMobileMenu();
     }
-    
-    function closeMobileMenu() {
-        mobileMenuOverlay.classList.remove('active');
-        mobileMenuBtn.classList.remove('active');
-        body.classList.remove('menu-open');
-        
-        // Remove event listeners
-        document.removeEventListener('keydown', handleEscapeKey);
-        document.removeEventListener('click', handleClickOutside);
+  }
+
+  function handleClickOutside(event) {
+    if (!mobileMenuContent.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+      closeMobileMenu();
     }
-    
-    function handleEscapeKey(e) {
-        if (e.key === 'Escape') {
-            closeMobileMenu();
-        }
+  }
+
+  function preventBodyScroll() {
+    const scrollY = window.scrollY;
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+  }
+
+  function restoreBodyScroll() {
+    const scrollY = body.style.top;
+    body.style.position = "";
+    body.style.top = "";
+    body.style.width = "";
+    window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+  }
+
+  function openMobileMenu() {
+    if (window.innerWidth > MOBILE_NAV_BREAKPOINT) {
+      return;
     }
-    
-    function handleClickOutside(e) {
-        const mobileMenuContent = document.querySelector('.mobile-menu-content');
-        if (!mobileMenuContent.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-            closeMobileMenu();
-        }
-    }
-    
-    // Handle mobile search functionality
-    const mobileSearchBtn = document.querySelector('.mobile-search-btn');
-    const mobileSearchInput = document.querySelector('.mobile-search-input');
-    
-    if (mobileSearchBtn && mobileSearchInput) {
-        mobileSearchBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const query = mobileSearchInput.value.trim();
-            if (query) {
-                // Handle search functionality here
-                console.log('Mobile search for:', query);
-                // You can redirect to search results page
-                // window.location.href = `/search?q=${encodeURIComponent(query)}`;
-            }
-        });
-        
-        mobileSearchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                mobileSearchBtn.click();
-            }
-        });
-    }
-    
-    // Handle mobile menu links
-    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            // Close menu when link is clicked
-            closeMobileMenu();
-        });
+
+    mobileMenuOverlay.classList.add("active");
+    mobileMenuBtn.classList.add("active");
+    body.classList.add("menu-open");
+    toggleButtons.forEach(function (button) {
+      button.setAttribute("aria-expanded", "true");
     });
-    
-    // Handle mobile profile and cart buttons
-    const mobileProfileBtn = document.querySelector('.mobile-profile-btn');
-    const mobileCartBtn = document.querySelector('.mobile-cart-btn');
-    
-    if (mobileProfileBtn) {
-        mobileProfileBtn.addEventListener('click', function() {
-            // Handle profile action
-            window.location.href = '/auth';
-        });
-    }
-    
-    // Handle window resize
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            // Close mobile menu if screen becomes desktop size
-            if (window.innerWidth > MOBILE_NAV_BREAKPOINT) {
-                closeMobileMenu();
-            }
-        }, 150);
+    preventBodyScroll();
+
+    document.addEventListener("keydown", handleEscapeKey);
+    setTimeout(function () {
+      document.addEventListener("click", handleClickOutside);
+    }, 100);
+  }
+
+  function closeMobileMenu() {
+    const wasOpen = mobileMenuOverlay.classList.contains("active");
+
+    mobileMenuOverlay.classList.remove("active");
+    mobileMenuBtn.classList.remove("active");
+    body.classList.remove("menu-open");
+    toggleButtons.forEach(function (button) {
+      button.setAttribute("aria-expanded", "false");
     });
-    
-    // Prevent body scroll when menu is open
-    function preventBodyScroll() {
-        const scrollY = window.scrollY;
-        body.style.position = 'fixed';
-        body.style.top = `-${scrollY}px`;
-        body.style.width = '100%';
+
+    document.removeEventListener("keydown", handleEscapeKey);
+    document.removeEventListener("click", handleClickOutside);
+
+    if (wasOpen) {
+      restoreBodyScroll();
     }
-    
-    function restoreBodyScroll() {
-        const scrollY = body.style.top;
-        body.style.position = '';
-        body.style.top = '';
-        body.style.width = '';
-        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  }
+
+  window.toggleMobileMenu = function () {
+    const isOpen = mobileMenuOverlay.classList.contains("active");
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
     }
-    
-    // Update the open/close functions to handle body scroll
-    const originalOpenMobileMenu = openMobileMenu;
-    const originalCloseMobileMenu = closeMobileMenu;
-    
-    openMobileMenu = function() {
-        if (window.innerWidth > MOBILE_NAV_BREAKPOINT) {
-            return;
-        }
-        originalOpenMobileMenu();
-        preventBodyScroll();
-    };
-    
-    closeMobileMenu = function() {
-        originalCloseMobileMenu();
-        restoreBodyScroll();
-    };
-    
-    // Update global functions
-    window.toggleMobileMenu = function() {
-        const isOpen = mobileMenuOverlay.classList.contains('active');
-        
-        if (isOpen) {
-            closeMobileMenu();
-        } else {
-            openMobileMenu();
-        }
-    };
+  };
+
+  toggleButtons.forEach(function (button) {
+    button.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      window.toggleMobileMenu();
+    });
+  });
+
+  if (mobileSearchBtn && globalSearchForm) {
+    mobileSearchBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      closeMobileMenu();
+
+      const searchInput = globalSearchForm.querySelector('input[name="q"]');
+      if (searchInput) {
+        searchInput.focus();
+        searchInput.scrollIntoView({ block: "nearest", inline: "nearest" });
+      } else {
+        globalSearchForm.submit();
+      }
+    });
+  }
+
+  mobileMenuLinks.forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      const href = (link.getAttribute("href") || "").trim();
+
+      if (!href || href === "#") {
+        event.preventDefault();
+        return;
+      }
+
+      window.setTimeout(function () {
+        closeMobileMenu();
+      }, 0);
+    });
+  });
+
+  let resizeTimeout;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function () {
+      if (window.innerWidth > MOBILE_NAV_BREAKPOINT) {
+        closeMobileMenu();
+      }
+    }, 150);
+  });
+
+  document.addEventListener("openMobileMenu", openMobileMenu);
+  document.addEventListener("closeMobileMenu", closeMobileMenu);
 }
 
 // Export functions for external use
-window.openMobileMenu = function() {
-    const event = new CustomEvent('openMobileMenu');
-    document.dispatchEvent(event);
+window.openMobileMenu = function () {
+  document.dispatchEvent(new CustomEvent("openMobileMenu"));
 };
 
-window.closeMobileMenu = function() {
-    const event = new CustomEvent('closeMobileMenu');
-    document.dispatchEvent(event);
+window.closeMobileMenu = function () {
+  document.dispatchEvent(new CustomEvent("closeMobileMenu"));
 };

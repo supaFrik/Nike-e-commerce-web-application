@@ -85,9 +85,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: var(--size-border-width-s) solid var(--color-grey-200);
-  border-radius: var(--size-border-radius-s);
-  background-color: var(--color-bg-primary);
+  border: 1px solid var(--nike-color-hairline);
+  border-radius: var(--nike-radius-button);
+  background-color: var(--nike-color-canvas);
   cursor: pointer;
   text-decoration: none;
   color: var(--color-black);
@@ -106,7 +106,7 @@
 }
 
 .auth-footer a {
-  color: var(--color-text-link);
+  color: var(--nike-color-ink);
   text-decoration: none;
   font-weight: var(--font-weight-medium);
 }

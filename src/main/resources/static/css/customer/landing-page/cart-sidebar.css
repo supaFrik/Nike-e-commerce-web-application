@@ -3,7 +3,7 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background-color: var(--color-brand-orange);
+  background-color: var(--color-text-primary);
   color: var(--color-white);
   border-radius: 50%;
   width: 18px;
@@ -26,7 +26,7 @@
   transition: right var(--transition-duration-normal) ease;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-30);
+  border-left: var(--size-border-width-s) solid var(--color-border-tertiary);
 }
 
 .cart-sidebar.active {
@@ -167,7 +167,7 @@
 }
 
 .remove-btn:hover {
-  color: var(--color-brand-orange);
+  color: var(--color-text-primary);
 }
 
 .cart-footer {

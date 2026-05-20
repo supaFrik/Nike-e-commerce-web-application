@@ -76,8 +76,8 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0;
   border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  background: #f7f7f7;
+  border-radius: 0;
+  background: var(--nike-color-soft-cloud);
 }
 
 .story-feature-item {
@@ -124,8 +124,8 @@
   margin-top: 28px;
   padding: 28px 44px;
   border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  background: #f7f7f7;
+  border-radius: 0;
+  background: var(--nike-color-soft-cloud);
   color: #111;
   display: flex;
   align-items: center;

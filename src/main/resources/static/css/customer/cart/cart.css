@@ -2,7 +2,7 @@
 
 /* Main Layout */
 .cart-main {
-    background: var(--color-bg-secondary);
+    background: var(--nike-color-canvas);
     padding: var(--size-spacing-xxxl) 0;
     min-height: 600px;
 }
@@ -36,7 +36,7 @@
     padding: 80px var(--size-spacing-m);
     max-width: 500px;
     margin: 0 auto;
-    background: var(--color-bg-primary);
+    background: var(--nike-color-canvas);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
 }
 
@@ -44,7 +44,7 @@
     width: 64px;
     height: 64px;
     margin: 0 auto var(--size-spacing-l);
-    background: var(--color-text-primary);
+    background: var(--nike-color-ink);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -91,7 +91,7 @@
     padding: var(--size-spacing-xl);
     background: var(--color-bg-primary);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 .item-image {
@@ -100,8 +100,8 @@
     flex-shrink: 0;
     overflow: hidden;
     cursor: pointer;
-    border-radius: 10px;
-    background: var(--color-bg-secondary);
+    border-radius: 0;
+    background: var(--nike-color-soft-cloud);
 }
 
 .item-image img {
@@ -157,7 +157,7 @@ text-transform: capitalize;
     display: flex;
     align-items: center;
     gap: var(--size-spacing-s);
-    background: var(--color-bg-active);
+    background: var(--nike-color-canvas);
     padding: var(--size-spacing-s) var(--size-spacing-s);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
 }
@@ -236,7 +236,7 @@ text-transform: capitalize;
     background: var(--color-bg-primary);
     padding: 40px;
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
-    border-radius: 10px;
+    border-radius: 0;
     height: fit-content;
     position: sticky;
     top: 100px;
@@ -268,7 +268,7 @@ text-transform: capitalize;
     padding: var(--size-spacing-s);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
     font-size: var(--font-size-xs);
-    border-radius: 10px;
+    border-radius: 24px;
     transition: border-color var(--transition-duration-fast) var(--transition-timing-function-ease);
 }
 
@@ -282,7 +282,7 @@ text-transform: capitalize;
     background: var(--color-text-primary);
     color: var(--color-bg-primary);
     border: var(--size-border-width-m) solid var(--color-text-primary);
-    border-radius: 10px;
+    border-radius: 999px;
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -293,8 +293,8 @@ text-transform: capitalize;
 }
 
 .apply-promo-btn:hover {
-    background: transparent;
-    color: var(--color-text-primary);
+    background: var(--nike-color-ink);
+    color: var(--nike-color-canvas);
 }
 
 /* Order Summary */
@@ -331,7 +331,7 @@ text-transform: capitalize;
     background: var(--color-text-primary);
     color: var(--color-bg-primary);
     border: var(--size-border-width-m) solid var(--color-text-primary);
-    border-radius: 10px;
+    border-radius: 999px;
     font-size: var(--font-size-s);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -384,8 +384,7 @@ text-transform: capitalize;
     align-items: flex-start;
     gap: 16px;
     padding: 20px;
-    background: #f9f9f9;
-    border-radius: 10px;
+    background: var(--nike-color-soft-cloud);
     border: 1px solid #e5e5e5;
 }
 

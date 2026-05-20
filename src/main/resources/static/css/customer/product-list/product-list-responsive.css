@@ -7,7 +7,6 @@
 @media (max-width: 1439px) and (min-width: 1200px) {
     .product-listing {
         grid-template-columns: 260px 1fr;
-        gap: 48px;
     }
     
     .product-grid__items {
@@ -25,7 +24,6 @@
     
     .product-listing {
         grid-template-columns: 240px 1fr;
-        gap: 36px;
     }
     
     .left-nav-container {
@@ -78,15 +76,12 @@
 @media (max-width: 1023px) and (min-width: 768px) {
     .product-listing {
         grid-template-columns: 1fr;
-        gap: 24px;
-        padding: 0 24px;
     }
     
     .sidebar {
         border-right: none;
         border-bottom: 1px solid var(--color-grey-200);
         padding: 20px 0 24px;
-        position: relative;
         max-height: none;
         order: -1;
     }
@@ -95,10 +90,6 @@
         grid-template-columns: repeat(2, 1fr);
         gap: 36px 16px;
         margin: 0;
-    }
-    
-    .categories__content {
-        display: none;
     }
     
     .categories__content-responsive {
@@ -546,28 +537,9 @@
     }
     
     .sidebar.mobile-open {
-        display: block;
-    }
-    
-    /* Mobile filter close button */
-    .mobile-filter-close {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        background: #f5f5f5;
-        color: #111;
-        border: 1px solid #ddd;
-        padding: 12px 16px;
-        border-radius: 6px;
-        font-size: 14px;
-        cursor: pointer;
-        margin-bottom: 20px;
-        width: 100%;
-    }
-    
-    .mobile-filter-close:hover {
-        background: #eee;
+        display: none !important;
+        visibility: hidden;
+        pointer-events: none;
     }
     
     /* Mobile filter button */
@@ -600,8 +572,6 @@
         gap: 16px;
         margin: 16px 0;
         text-align: center;
-        position: static;
-        top: auto;
     }
     
     .header-controls {
@@ -848,12 +818,6 @@ body.mobile-filters-open {
         min-height: 40px;
     }
     
-    .mobile-filter-close {
-        font-size: 12px;
-        padding: 10px 14px;
-        margin-bottom: 16px;
-    }
-    
     .product-title {
         font-size: 18px;
         margin-bottom: 8px;
@@ -988,7 +952,6 @@ body.mobile-filters-open {
 @media (min-width: 769px) and (max-width: 1024px) {
     .product-listing {
         grid-template-columns: 240px 1fr;
-        margin-left: 20px;
     }
     
     .product-grid__items {
@@ -1017,7 +980,6 @@ body.mobile-filters-open {
     
     /* Prevent text selection on interactive elements */
     .mobile-filter-btn,
-    .mobile-filter-close,
     .sort-by-btn,
     .product-card__colorway-btn {
         -webkit-user-select: none;
@@ -1164,4 +1126,506 @@ body.mobile-filters-open {
         break-inside: avoid;
         page-break-inside: avoid;
     }
+}
+
+@media (max-width: 768px) {
+    .catalog-shell {
+        padding-top: 0;
+    }
+
+    .product-header {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        margin: 0;
+        padding: 20px 16px 14px;
+        background: var(--nike-color-canvas);
+        box-shadow: inset 0 -1px 0 var(--nike-color-hairline-soft);
+        text-align: left;
+    }
+
+    .product-title-section {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        min-width: 0;
+    }
+
+    .product-title {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin: 0;
+        font-size: 1.9rem;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+    }
+
+    #page-title-count {
+        font-size: 1.9rem;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+    }
+
+    .mobile-category-tabs {
+        gap: 20px;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 2px;
+    }
+
+    .mobile-category-tabs::-webkit-scrollbar,
+    .mobile-filter-chip-track::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mobile-category-tab {
+        flex: 0 0 auto;
+        color: var(--nike-color-ink);
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.3;
+        padding-bottom: 2px;
+    }
+
+    .mobile-category-tab.active {
+        border-bottom: 2px solid var(--nike-color-ink);
+    }
+
+    .header-controls {
+        display: block;
+    }
+
+    .hide-filters-btn {
+        display: none;
+    }
+
+    .mobile-filter-chip-track {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 2px;
+    }
+
+    .mobile-filter-btn,
+    .mobile-filter-chip {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex: 0 0 auto;
+        min-height: 42px;
+        padding: 0 16px;
+        border: 1px solid var(--nike-color-hairline-soft);
+        border-radius: 999px;
+        background: var(--nike-color-canvas);
+        color: var(--nike-color-ink);
+        font-size: 0.9375rem;
+        font-weight: 500;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .mobile-filter-btn {
+        width: 42px;
+        padding: 0;
+        font-size: 0;
+    }
+
+    .sort-by-btn {
+        display: none !important;
+    }
+
+    .mobile-filter-btn i {
+        display: inline-block;
+        font-size: 14px;
+    }
+
+    .product-listing {
+        display: block;
+        padding: 0;
+    }
+
+    .product-list-content {
+        padding: 14px 16px 0;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .left-nav-categories {
+        display: none;
+    }
+
+    .mobile-filter-hub-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(17, 17, 17, 0.22);
+        z-index: 1196;
+    }
+
+    .mobile-filter-hub {
+        position: fixed;
+        inset: 0;
+        z-index: 1197;
+        background: var(--nike-color-canvas);
+    }
+
+    .mobile-filter-hub__panel {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100dvh;
+        background: var(--nike-color-canvas);
+    }
+
+    .mobile-filter-hub__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 24px 22px 18px;
+    }
+
+    .mobile-filter-hub__title {
+        margin: 0;
+        font-size: 2rem;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        font-weight: 500;
+        color: var(--nike-color-ink);
+    }
+
+    .mobile-filter-hub__close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 999px;
+        background: #f5f5f5;
+        color: var(--nike-color-ink);
+        font-size: 1.15rem;
+    }
+
+    .mobile-filter-hub__content {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding: 0 22px 24px;
+    }
+
+    .mobile-filter-hub__section {
+        padding: 18px 0 22px;
+        border-top: 1px solid var(--nike-color-hairline-soft);
+    }
+
+    .mobile-filter-hub__section:first-child {
+        border-top: none;
+        padding-top: 6px;
+    }
+
+    .mobile-filter-hub__section-title {
+        margin: 0 0 18px;
+        font-size: 1rem;
+        line-height: 1.3;
+        font-weight: 600;
+        color: var(--nike-color-ink);
+    }
+
+    .mobile-filter-hub__options {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .mobile-filter-hub__option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1rem;
+        line-height: 1.35;
+        color: var(--nike-color-ink);
+    }
+
+    .mobile-filter-hub__option input {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        accent-color: var(--nike-color-ink);
+    }
+
+    .mobile-filter-hub__footer {
+        position: sticky;
+        bottom: 0;
+        padding: 16px 22px calc(16px + env(safe-area-inset-bottom, 0px));
+        background: var(--nike-color-canvas);
+        box-shadow: inset 0 1px 0 var(--nike-color-hairline-soft);
+    }
+
+    .mobile-filter-hub__apply {
+        width: 100%;
+        min-height: 56px;
+        border: none;
+        border-radius: 999px;
+        background: var(--nike-color-ink);
+        color: var(--nike-color-canvas);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .mobile-filter-hub__apply:disabled {
+        background: #e5e5e5;
+        color: #b3b3b3;
+    }
+
+    .mobile-filter-sheet-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(17, 17, 17, 0.38);
+        z-index: 1198;
+    }
+
+    .mobile-filter-sheet {
+        position: fixed;
+        inset: auto 0 0;
+        z-index: 1199;
+        padding-top: 24px;
+    }
+
+    .mobile-filter-sheet__panel {
+        background: var(--nike-color-canvas);
+        border-radius: 28px 28px 0 0;
+        min-height: 280px;
+        max-height: min(72dvh, 640px);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 -1px 0 var(--nike-color-hairline-soft);
+    }
+
+    .mobile-filter-sheet__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 24px 24px 18px;
+    }
+
+    .mobile-filter-sheet__title {
+        margin: 0;
+        font-size: 1.05rem;
+        line-height: 1.25;
+        font-weight: 500;
+        color: var(--nike-color-ink);
+    }
+
+    .mobile-filter-sheet__close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 999px;
+        background: #f5f5f5;
+        color: var(--nike-color-ink);
+        font-size: 1.15rem;
+    }
+
+    .mobile-filter-sheet__content {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding: 0 24px 24px;
+    }
+
+    .mobile-filter-sheet__options {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .mobile-filter-sheet__option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1rem;
+        line-height: 1.35;
+        color: var(--nike-color-ink);
+    }
+
+    .mobile-filter-sheet__option input {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        accent-color: var(--nike-color-ink);
+    }
+
+    .mobile-filter-sheet__footer {
+        position: sticky;
+        bottom: 0;
+        padding: 16px 24px calc(16px + env(safe-area-inset-bottom, 0px));
+        background: var(--nike-color-canvas);
+        box-shadow: inset 0 1px 0 var(--nike-color-hairline-soft);
+    }
+
+    .mobile-filter-sheet__apply {
+        width: 100%;
+        min-height: 56px;
+        border: none;
+        border-radius: 999px;
+        background: var(--nike-color-ink);
+        color: var(--nike-color-canvas);
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .mobile-filter-sheet__apply:disabled {
+        background: #e5e5e5;
+        color: #b3b3b3;
+    }
+
+    .filters {
+        padding-top: 0;
+    }
+
+    .filters-group__close {
+        padding: 18px 0;
+        border-bottom: 1px solid var(--nike-color-hairline-soft);
+    }
+
+    .trigger-content__label {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .filter-panel {
+        gap: 14px;
+        padding: 14px 0 6px;
+    }
+
+    .filter-option {
+        font-size: 0.95rem;
+    }
+
+    .product-grid__items {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 6px;
+        padding: 0;
+    }
+
+    .product-card {
+        background: transparent;
+        min-height: 0;
+    }
+
+    .product-card__body {
+        padding: 0;
+    }
+
+    .wall-image-loader,
+    .content-card__image {
+        aspect-ratio: 1 / 1;
+        margin-bottom: 10px;
+        background: var(--nike-color-soft-cloud);
+    }
+
+    .product-card__messaging {
+        margin-bottom: 2px;
+        font-size: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .product-card__title {
+        font-size: 0.95rem;
+        line-height: 1.3;
+    }
+
+    .product-card__subtitle {
+        font-size: 0.85rem;
+        line-height: 1.35;
+        margin-bottom: 6px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-card__count-wrapper {
+        margin-bottom: 4px;
+    }
+
+    .product-card__product-count,
+    .product-card__colorway-btn {
+        margin-top: 0;
+        padding-bottom: 0;
+        font-size: 0.78rem;
+        color: var(--nike-color-mute);
+        text-decoration: none;
+    }
+
+    .product-card__price {
+        font-size: 0.98rem;
+        line-height: 1.3;
+    }
+
+    .related-stories-section {
+        margin: 32px 0 0;
+        padding: 0 16px 20px;
+    }
+
+    .related-stories-header {
+        align-items: flex-start;
+        text-align: left;
+        margin-bottom: 18px;
+    }
+
+    .related-stories-header .section-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 359px) {
+    .product-grid__items {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .product-list-content {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .product-header {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .left-nav-categories {
+        display: block;
+    }
+
+    .categories__content {
+        display: flex;
+    }
+
+    .categories__content-responsive {
+        display: none;
+    }
+}
+
+.product-header {
+    position: sticky;
+    top: var(--header-visible-offset, 0px);
+    z-index: 1090;
+    background: var(--nike-color-canvas);
 }

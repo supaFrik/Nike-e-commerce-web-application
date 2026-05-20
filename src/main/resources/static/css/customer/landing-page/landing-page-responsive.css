@@ -1,446 +1,265 @@
-    /* =============================================================================
+/* =============================================================================
    LANDING PAGE RESPONSIVE STYLES
-   All responsive breakpoints and mobile optimizations for landing page
+   Mobile-first adjustments for homepage sections using the real DOM seams.
    ============================================================================= */
 
-/* Hero Section Responsive */
-@media (max-width: 1200px) {
-    .hero-title h1 {
-        font-size: 150px;
-    }
-    
-    .hero-logo img {
-        left: 200px;
-        width: 80px;
-    }
+@media (max-width: 1023px) {
+  .featured-container {
+    margin: var(--size-spacing-xxl) auto;
+  }
+
+  .featured-grid {
+    aspect-ratio: auto;
+  }
 }
 
-@media (max-width: 900px) {
-    .hero {
-        height: 70vh;
-    }
-    
-    .video-placeholder {
-        height: 70vh;
-    }
-    
-    .hero-title h1 {
-        font-size: 120px;
-    }
-    
-    .hero-logo img {
-        left: 150px;
-        width: 70px;
-    }
+@media (max-width: 767px) {
+  .featured-container {
+    margin: var(--size-spacing-xl) auto;
+  }
+
+  .featured .section-title,
+  .shop-icons-section .section-title,
+  .shop-running-section .section-title,
+  .shop-by-sport-header .section-title {
+    font-size: var(--font-size-l);
+  }
+
+  .featured-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+
+  .featured-item {
+    min-height: 340px;
+  }
+
+  .featured-content {
+    padding: 20px 16px;
+  }
+
+  .featured-title {
+    font-size: var(--font-size-m);
+    margin-bottom: 12px;
+  }
+
+  .shop-icons-section,
+  .shop-running-section,
+  .shop-by-sport-section {
+    padding-top: var(--size-spacing-xl);
+    padding-bottom: var(--size-spacing-xl);
+  }
+
+  .shop-icons-section .section-title,
+  .shop-running-section .section-title {
+    margin-bottom: 22px;
+    padding: 0 16px;
+  }
+
+  .shop-icons-carousel,
+  .shop-running-carousel {
+    padding: 0 16px;
+  }
+
+  .shop-icons-track,
+  .shop-running-track,
+  .sport-slider-track {
+    gap: 12px;
+  }
+
+  .carousel-btn,
+  .sport-nav-btn {
+    opacity: 0.72;
+  }
+
+  .shop-by-sport-header {
+    padding: 0 16px;
+    margin-bottom: 22px;
+  }
+
+  .sport-slider-container {
+    padding: 0 16px;
+  }
+
+  .sport-slide {
+    flex-basis: min(74vw, 380px);
+    height: 250px;
+  }
+
+  .sport-button {
+    bottom: 12px;
+    left: 12px;
+    padding: 8px 14px;
+  }
 }
 
-@media (max-width: 768px) {
-    .hero {
-        height: 60vh;
-    }
-    
-    .video-placeholder {
-        height: 60vh;
-    }
-    
-    .hero-banner-container {
-        margin: 30px 0;
-    }
-    
-    .hero-title h1 {
-        font-size: 80px;
-    }
-    
-    .hero-logo img {
-        left: 100px;
-        width: 50px;
-    }
-    
-    .hero-subtiles {
-        font-size: var(--font-size-s);
-        margin-bottom: 15px;
-    }
+@media (max-width: 575px) {
+  .featured-container {
+    margin: var(--size-spacing-l) auto;
+  }
+
+  .featured .section-title,
+  .shop-icons-section .section-title,
+  .shop-running-section .section-title {
+    font-size: var(--font-size-m);
+  }
+
+  .featured .section-title {
+    padding: 0 16px;
+  }
+
+  .featured-grid {
+    gap: 10px;
+  }
+
+  .featured-item {
+    min-height: 280px;
+  }
+
+  .featured-title {
+    font-size: 22px;
+  }
+
+  .featured-category {
+    font-size: 13px;
+  }
+
+  .shop-icons-section,
+  .shop-running-section,
+  .shop-by-sport-section {
+    padding-top: var(--size-spacing-l);
+    padding-bottom: var(--size-spacing-l);
+  }
+
+  .shop-icons-section .section-title,
+  .shop-running-section .section-title {
+    padding: 0 12px;
+    margin-bottom: 18px;
+    text-align: left;
+  }
+
+  .shop-icons-carousel,
+  .shop-running-carousel,
+  .sport-slider-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .shop-icon-card {
+    min-width: min(76vw, 280px);
+  }
+
+  .shop-icon-card img {
+    height: min(58vw, 220px);
+  }
+
+  .shop-running-section {
+    --run-card-size: min(84vw, 320px);
+  }
+
+  .running-card .product-info {
+    padding: 12px 8px 0;
+  }
+
+  .shop-by-sport-header {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0 12px;
+    margin-bottom: 18px;
+  }
+
+  .carousel-controls {
+    align-self: flex-end;
+  }
+
+  .sport-slide {
+    flex-basis: min(82vw, 320px);
+    height: 220px;
+  }
+
+  .sport-button span {
+    font-size: var(--font-size-xs);
+  }
+
+  .carousel-btn {
+    width: 30px;
+    height: 30px;
+    top: -36px;
+  }
+
+  .carousel-btn.prev {
+    right: 40px;
+  }
+
+  .sport-nav-btn {
+    width: 34px;
+    height: 34px;
+  }
 }
 
-@media (max-width: 480px) {
-    .hero {
-        height: 50vh;
-    }
-    
-    .video-placeholder {
-        height: 50vh;
-    }
-    
-    .hero-banner-container {
-        margin: 20px 0;
-        padding: 0 16px;
-    }
-    
-    .hero-title h1 {
-        font-size: 60px;
-        line-height: 1;
-    }
-    
-    .hero-logo img {
-        left: 80px;
-        width: 40px;
-    }
-    
-    .hero-subtiles {
-        font-size: var(--font-size-xs);
-        margin-bottom: 10px;
-    }
-    
-    .hero-button {
-        padding: var(--button-padding-top-s) var(--button-padding-sides-s);
-        font-size: var(--font-size-xs);
-    }
+@media (max-width: 375px) {
+  .featured .section-title,
+  .shop-icons-section .section-title,
+  .shop-running-section .section-title,
+  .shop-by-sport-header .section-title {
+    font-size: var(--font-size-s);
+  }
+
+  .featured-item {
+    min-height: 240px;
+  }
+
+  .featured-content {
+    padding: 16px 12px;
+  }
+
+  .shop-icon-card {
+    min-width: calc(100vw - 36px);
+  }
+
+  .shop-running-section {
+    --run-card-size: calc(100vw - 32px);
+  }
+
+  .sport-slide {
+    flex-basis: calc(100vw - 32px);
+    height: 196px;
+  }
+
+  .shop-icons-carousel,
+  .shop-running-carousel,
+  .sport-slider-container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .shop-icons-section .section-title,
+  .shop-running-section .section-title,
+  .shop-by-sport-header {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .carousel-btn {
+    width: 28px;
+    height: 28px;
+    top: -34px;
+  }
+
+  .carousel-btn.prev {
+    right: 36px;
+  }
 }
 
-@media (max-width: 360px) {
-    .hero-title h1 {
-        font-size: 45px;
-    }
-    
-    .hero-logo img {
-        left: 60px;
-        width: 30px;
-    }
-}
-
-/* Featured Section Responsive */
-@media (max-width: 1024px) {
-    .featured-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 768px) {
-    .featured {
-        padding: 40px 16px;
-    }
-    
-    .featured-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .featured-item {
-        min-height: 300px;
-    }
-    
-    .featured-title {
-        font-size: var(--font-size-l);
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .featured {
-        padding: 30px 12px;
-    }
-    
-    .featured-item {
-        min-height: 250px;
-    }
-    
-    .featured-title {
-        font-size: var(--font-size-m);
-        margin-bottom: 15px;
-    }
-    
-    .featured-content {
-        padding: 16px;
-    }
-}
-
-/* Shop by Sport Responsive */
-@media (max-width: 1024px) {
-    .sport-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .shop-by-sport-section {
-        padding: 40px 16px;
-    }
-    
-    .sport-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    .shop-by-sport-header .section-title {
-        font-size: var(--font-size-l);
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .shop-by-sport-section {
-        padding: 30px 12px;
-    }
-    
-    .shop-by-sport-header .section-title {
-        font-size: var(--font-size-m);
-        margin-bottom: 15px;
-    }
-    
-    .sport-item {
-        min-height: 200px;
-    }
-}
-
-/* Shop Running Responsive */
-@media (max-width: 1024px) {
-    .running-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .shop-running-section {
-        padding: 40px 16px;
-    }
-    
-    .running-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    .shop-running-section .section-title {
-        font-size: var(--font-size-l);
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .shop-running-section {
-        padding: 30px 12px;
-    }
-    
-    .shop-running-section .section-title {
-        font-size: var(--font-size-m);
-        margin-bottom: 15px;
-    }
-}
-
-/* Shop Icons Responsive */
-@media (max-width: 1024px) {
-    .icons-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-    }
-}
-
-@media (max-width: 768px) {
-    .shop-icons-section {
-        padding: 40px 16px;
-    }
-    
-    .icons-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-    
-    .shop-icons-section .section-title {
-        font-size: var(--font-size-l);
-        margin-bottom: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .shop-icons-section {
-        padding: 30px 12px;
-    }
-    
-    .icons-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-    
-    .shop-icons-section .section-title {
-        font-size: var(--font-size-m);
-        margin-bottom: 15px;
-    }
-    
-    .icon-item {
-        min-height: 150px;
-    }
-}
-
-/* Cart Sidebar Responsive */
-@media (max-width: 768px) {
-    .cart-sidebar {
-        width: 100%;
-        right: -100%;
-    }
-    
-    .cart-sidebar.active {
-        right: 0;
-    }
-    
-    .cart-header {
-        padding: 20px;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .cart-content {
-        padding: 20px;
-    }
-    
-    .cart-footer {
-        padding: 20px;
-        border-top: 1px solid #eee;
-    }
-    
-    .cart-item {
-        padding: 15px 0;
-    }
-    
-    .cart-item-image {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .cart-item-details h4 {
-        font-size: var(--font-size-s);
-    }
-    
-    .cart-item-price {
-        font-size: var(--font-size-s);
-    }
-}
-
-@media (max-width: 480px) {
-    .cart-sidebar {
-        width: 100vw;
-    }
-    
-    .cart-header {
-        padding: 16px;
-    }
-    
-    .cart-content {
-        padding: 16px;
-    }
-    
-    .cart-footer {
-        padding: 16px;
-    }
-    
-    .cart-item-image {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .cart-total {
-        font-size: var(--font-size-s);
-    }
-    
-    .checkout-btn {
-        padding: 12px 16px;
-        font-size: var(--font-size-s);
-    }
-}
-
-/* General Landing Page Mobile Optimizations */
-@media (max-width: 768px) {
-    /* Touch-friendly interactions */
-    .hero-button,
-    .featured-button,
-    .sport-button,
-    .running-button,
-    .icon-button {
-        min-height: 44px;
-        padding: 12px 24px;
-        font-size: 14px;
-        touch-action: manipulation;
-    }
-    
-    /* Improved spacing */
-    .section {
-        margin-bottom: 40px;
-    }
-    
-    .container {
-        padding: 0 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Smaller touch targets for very small screens */
-    .hero-button,
-    .featured-button,
-    .sport-button,
-    .running-button,
-    .icon-button {
-        min-height: 40px;
-        padding: 10px 20px;
-        font-size: 13px;
-    }
-    
-    /* Tighter spacing */
-    .section {
-        margin-bottom: 30px;
-    }
-    
-    .container {
-        padding: 0 12px;
-    }
-}
-
-/* Accessibility and Performance */
 @media (prefers-reduced-motion: reduce) {
-    .hero-button,
-    .featured-item,
-    .sport-item,
-    .running-item,
-    .icon-item {
-        transition: none !important;
-        animation: none !important;
-    }
+  .featured-item,
+  .shop-icon-card img,
+  .running-card,
+  .running-card .product-image img,
+  .sport-slide,
+  .carousel-btn,
+  .sport-nav-btn {
+    transition: none !important;
+    animation: none !important;
+  }
 }
-
-@media (prefers-contrast: high) {
-    .hero-button,
-    .featured-item,
-    .sport-item,
-    .running-item,
-    .icon-item {
-        border: 2px solid;
-    }
-}
-
-@media (max-width: 768px) {
-    .running-card {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .running-card .product-title {
-        -webkit-line-clamp: 1;
-        line-clamp: 1;
-    }
-
-    .running-card .product-info {
-        padding: var(--size-spacing-s) var(--size-spacing-m);
-    }
-}
-
-@media (max-width: 480px) {
-    .running-card .product-info {
-        padding: var(--size-spacing-s) var(--size-spacing-s);
-    }
-
-    .product-title {
-        font-size: var(--font-size-s) !important;
-    }
-
-    .product-price {
-        font-size: var(--font-size-m) !important;
-    }
-}
-

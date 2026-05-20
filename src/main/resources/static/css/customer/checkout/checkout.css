@@ -2,7 +2,7 @@
 
 /* Main Layout */
 .checkout-main {
-    background: var(--color-bg-secondary);
+    background: var(--nike-color-canvas);
     padding: var(--size-spacing-xxxl) 0;
     min-height: 600px;
 }
@@ -34,10 +34,10 @@
 }
 
 .section-card {
-    background: var(--color-bg-primary);
+    background: var(--nike-color-canvas);
     padding: 40px;
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
-    border-radius: 10px;
+    border-radius: 0;
     margin-bottom: var(--size-spacing-l);
 }
 
@@ -57,7 +57,7 @@
 
 .delivery-option {
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
-    border-radius: 10px;
+    border-radius: 0;
     margin-bottom: var(--size-spacing-s);
     transition: all var(--transition-duration-fast) var(--transition-timing-function-ease);
     cursor: pointer;
@@ -69,7 +69,7 @@
 
 .delivery-option.selected {
     border-color: var(--color-border-active);
-    background: var(--color-bg-active);
+    background: var(--nike-color-soft-cloud);
 }
 
 .delivery-option input[type="radio"] {
@@ -149,7 +149,7 @@
     font-size: var(--font-size-xs);
     font-family: inherit;
     transition: border-color var(--transition-duration-fast) var(--transition-timing-function-ease);
-    background: var(--color-bg-primary);
+    background: var(--nike-color-canvas);
 }
 
 .form-group input:focus,
@@ -202,10 +202,10 @@
 
 /* Order Summary */
 .order-summary {
-    background: var(--color-bg-primary);
+    background: var(--nike-color-canvas);
     padding: 40px;
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 .order-items {
@@ -230,9 +230,9 @@
     height: 100px;
     flex-shrink: 0;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 0;
     transition: transform var(--transition-duration-fast) var(--transition-timing-function-ease);
-    background: var(--color-bg-secondary);
+    background: var(--nike-color-soft-cloud);
 }
 
 .item-image:hover {
@@ -303,7 +303,6 @@
     flex: 1;
     padding: var(--size-spacing-s);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
-    border-radius: 10px;
     font-size: var(--font-size-xs);
     font-family: inherit;
 }
@@ -318,7 +317,7 @@
     background: var(--color-text-primary);
     color: var(--color-bg-primary);
     border: var(--size-border-width-m) solid var(--color-text-primary);
-    border-radius: 10px;
+    border-radius: 999px;
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -369,7 +368,7 @@
     background: var(--color-text-primary);
     color: var(--color-bg-primary);
     border: var(--size-border-width-m) solid var(--color-text-primary);
-    border-radius: 10px;
+    border-radius: 999px;
     font-size: var(--font-size-s);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
@@ -400,7 +399,6 @@
     padding: var(--size-spacing-m);
     background: var(--color-bg-active);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
-    border-radius: 10px;
 }
 
 .security-info i {
@@ -440,7 +438,6 @@
 .delivery-options.input-error {
     border: 1px solid #d93025;
     padding: 4px;
-    border-radius: 8px;
 }
 .delivery-options.input-error:before {
     content: 'Please select a shipping method';
@@ -635,7 +632,7 @@ body {
 .payment-form {
     width: 100%;
     max-width: 36rem;
-    background: #fff;
+    background: var(--color-bg);
 }
 
 @media (min-width: 640px) {
@@ -667,15 +664,13 @@ legend {
     align-items: center;
     justify-content: space-between;
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
     padding: 12px;
     cursor: pointer;
-    background: #fff;
+    background: var(--color-bg);
 }
 
 .option:has(input:checked) {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.2);
 }
 
 .label-text {
@@ -739,7 +734,6 @@ legend {
 .input {
     display: block;
     border: 1px solid var(--color-input-border);
-    border-radius: var(--radius-lg);
     background: #f9fafb;
     padding: 10px 12px;
     font-size: 0.875rem;
@@ -749,7 +743,6 @@ legend {
 
 .input:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.15);
 }
 
 .input-with-icon {
@@ -788,14 +781,12 @@ legend {
 .tooltip {
     position: absolute;
     margin-left: 8px;
-    transform: translateY(-4px);
+    transform: translateY(0);
     background: #111827;
     color: #fff;
     font-size: 0.875rem;
     font-weight: 500;
     padding: 6px 10px;
-    border-radius: 8px;
-    box-shadow: var(--shadow-sm);
     opacity: 0;
     pointer-events: none;
     transition: opacity .2s ease;
@@ -874,8 +865,7 @@ legend {
     width: 100%;
     max-width: 960px;
     background: #fff;
-    border-radius: var(--radius-lg);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--color-border);
     padding: 24px;
 }
 
@@ -897,7 +887,6 @@ legend {
     background: transparent;
     border: 0;
     padding: 6px;
-    border-radius: 8px;
     color: #9ca3af;
     cursor: pointer;
 }
@@ -922,7 +911,6 @@ legend {
 
 .qr-box {
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
     padding: 16px;
 }
 
@@ -973,7 +961,6 @@ legend {
 
 .banks-box {
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
     padding: 16px;
 }
 
@@ -996,7 +983,6 @@ legend {
     justify-content: center;
     background: var(--color-bg-soft);
     padding: 8px;
-    border-radius: 8px;
 }
 
 .bank-logo {
@@ -1006,7 +992,6 @@ legend {
 
 /* Alerts */
 .alert {
-    border-radius: var(--radius-lg);
     border: 1px solid #fecaca;
     /* red-200 */
     background: #fef2f2;

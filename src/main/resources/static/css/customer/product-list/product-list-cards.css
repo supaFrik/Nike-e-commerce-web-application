@@ -9,21 +9,22 @@
     font-size: 16px;
     line-height: 1.75;
     vertical-align: top;
-    border-radius: var(--size-border-radius-s);
+    border-radius: 0;
     transition: all var(--transition-duration-fast) ease;
 }
 
 .content-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transform: none;
+    box-shadow: none;
 }
 
 .content-card__image {
     width: 100%;
     position: relative;
     overflow: hidden;
-    border-radius: var(--size-border-radius-s);
+    border-radius: 0;
     aspect-ratio: 1;
+    background: var(--nike-color-soft-cloud);
 }
 
 .content-card__image img {
@@ -50,7 +51,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+    background: rgba(17, 17, 17, 0.08);
     opacity: 0;
     transition: opacity var(--transition-duration-fast) ease;
     display: flex;
@@ -94,7 +95,7 @@ figure {
     width: 100%;
     aspect-ratio: 1;
     overflow: hidden;
-    background: var(--color-grey-50);
+    background: var(--nike-color-soft-cloud);
     margin-bottom: 12px;
 }
 
@@ -114,7 +115,7 @@ figure {
 }
 
 .product-card__messaging {
-    color: #9E3500;
+    color: var(--nike-color-sale);
     margin-bottom: 0;
     font-size: 16px;
     font-weight: 500;
@@ -140,7 +141,7 @@ text-transform: capitalize;
 }
 
 .product-card__subtitle {
-    color: var(--color-grey-500);
+    color: var(--nike-color-mute);
     font-size: 16px;
     font-weight: 400;
     margin-bottom: 8px;
@@ -164,7 +165,7 @@ text-transform: capitalize;
     padding: 0;
     padding-bottom: var(--size-spacing-s);
     font-size: var(--font-size-xs);
-    color: var(--color-text-secondary);
+    color: var(--nike-color-mute);
     text-decoration: underline;
     transition: color var(--transition-duration-fast) ease;
 }
@@ -174,7 +175,7 @@ text-transform: capitalize;
 }
 
 .product-card__product-count, .product-card__subtitle {
-    color: var(--color-text-secondary);
+    color: var(--nike-color-mute);
     font-size: var(--font-size-xs);
     margin-top: var(--size-spacing-xs);
 }

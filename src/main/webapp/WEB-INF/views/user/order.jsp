@@ -17,7 +17,6 @@
 
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/user/imported/order.jsp" />
-    <link rel="stylesheet" href="${env}/css/common/nike-design-system.css">
 </head>
 <body class="order-page-body">
 <jsp:include page="/WEB-INF/views/user/layout/order-process.jsp" />

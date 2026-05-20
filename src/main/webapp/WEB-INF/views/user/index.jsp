@@ -24,16 +24,16 @@
         <img src="${env}/images/nike-hero-wallpaper.jpg"
              alt="Nike global brand advertising wallpaper">
     </div>
-</section>
-
     <div class="hero-banner-container" role="banner" aria-labelledby="hero-main-title" aria-describedby="hero-description">
-        <div class="hero-title">
-            <h1 id="hero-main-title" aria-label="Main hero title">
-                Too Easy
-            </h1>
-        </div>
-        <div class="hero-logo">
-            <img src="${env}/images/air-jordan-logo.png" alt="Air Jordan Logo" aria-describedby="hero-description">
+        <div class="hero-brand-lockup">
+            <div class="hero-title">
+                <h1 id="hero-main-title" aria-label="Main hero title">
+                    Too Easy
+                </h1>
+            </div>
+            <div class="hero-logo">
+                <img src="${env}/images/air-jordan-logo.png" alt="Air Jordan Logo" aria-describedby="hero-description">
+            </div>
         </div>
         <div class="hero-subtiles">
             <span id="hero-description" aria-label="Hero subtitle">
@@ -48,6 +48,7 @@
             </a>
         </div>
     </div>
+</section>
     <!-- Featured -->
     <section class="featured" aria-labelledby="featured-title">
         <div class="featured-container">

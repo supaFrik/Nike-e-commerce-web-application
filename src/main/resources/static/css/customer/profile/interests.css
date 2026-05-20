@@ -110,7 +110,6 @@
 
 .interests-card {
     background: var(--color-bg-secondary);
-    border-radius: var(--size-border-radius-m);
     aspect-ratio: 1 / 1;
     width: 40%;
     display: flex;
@@ -120,17 +119,17 @@
     color: var(--color-text-secondary);
     font-size: var(--font-size-xs);
     cursor: pointer;
-    transition: all var(--transition-duration-normal) var(--transition-timing-function-ease);
-    border: var(--size-border-width-s) solid transparent;
+    transition: background var(--transition-duration-normal) var(--transition-timing-function-ease),
+        border-color var(--transition-duration-normal) var(--transition-timing-function-ease),
+        color var(--transition-duration-normal) var(--transition-timing-function-ease);
+    border: var(--size-border-width-s) solid var(--color-border-tertiary);
     padding: var(--size-spacing-m);
     text-align: center;
 }
 
 .interests-card:hover {
     background: var(--color-bg-primary);
-    border-color: var(--color-brand-red);
-    box-shadow: var(--shadow-30);
-    transform: translateY(-2px);
+    border-color: var(--color-text-primary);
 }
 
 .interests-card .add-icon {
@@ -141,7 +140,7 @@
 }
 
 .interests-card:hover .add-icon {
-    color: var(--color-brand-red);
+    color: var(--color-text-primary);
 }
 
 .add-label {
@@ -207,9 +206,6 @@
         gap: var(--size-spacing-l);
     }
     
-    .interests-card:hover {
-        transform: translateY(-4px);
-    }
 }
 
 /* Performance optimizations for reduced motion */
@@ -221,7 +217,4 @@
         transition: none;
     }
     
-    .interests-card:hover {
-        transform: none;
-    }
 }

@@ -78,7 +78,6 @@
     background: var(--color-text-primary);
     border-radius: var(--size-border-radius-s);
 }
-}
 
 /* Responsive Design - Mobile First */
 @media (max-width: 600px) {
@@ -133,8 +132,7 @@
     margin: var(--size-spacing-xl) auto;
     padding: var(--size-spacing-xl);
     background: var(--color-bg-primary);
-    border-radius: var(--size-border-radius-m);
-    box-shadow: var(--shadow-20);
+    border: var(--size-border-width-s) solid var(--color-border-tertiary);
 }
 
 .profile-container h2 {
@@ -147,9 +145,8 @@
 /* Interest Section */
 .interest-section {
     margin-top: var(--size-spacing-xl);
-    padding: var(--size-spacing-s);
+    padding: var(--size-spacing-m);
     border: var(--size-border-width-s) solid var(--color-border-tertiary);
-    border-radius: var(--size-border-radius-s);
     background: var(--color-bg-secondary);
 }
 

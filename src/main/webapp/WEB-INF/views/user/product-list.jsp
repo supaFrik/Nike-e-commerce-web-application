@@ -67,8 +67,19 @@
                         </span>
                         <span id="page-title-count"><c:out value=" ${totalProducts}"/></span>
                     </h1>
+                    <div class="mobile-category-tabs" role="navigation" aria-label="Product categories">
+                        <c:forEach var="cat" items="${categories}">
+                            <a href="${env}/products/list?categoryId=${cat.id}<c:if test='${not empty sort}'>&amp;sort=${sort}</c:if>"
+                               data-category-link="true"
+                               data-category-id="${cat.id}"
+                               class="mobile-category-tab<c:if test='${cat.id == selectedCategoryId}'> active</c:if>">
+                                <c:out value="${cat.name}"/>
+                            </a>
+                        </c:forEach>
+                    </div>
                 </div>
                 <div class="header-controls" role="group" aria-label="Page controls">
+                    <div class="mobile-filter-chip-track" aria-label="Mobile sort and filter chips">
                     <button class="mobile-filter-btn" type="button" data-mobile-filters-toggle="open" style="display: none;"
                             aria-label="Hiá»ƒn thá»‹ bá»™ lá»c" aria-describedby="mobile-filter-desc">
                         <i class="fas fa-filter" aria-hidden="true"></i>
@@ -127,18 +138,17 @@
                             </c:forEach>
                         </form>
                     </div>
+                    <button class="mobile-filter-chip" type="button" data-mobile-filter-target="gender">Gender</button>
+                    <button class="mobile-filter-chip" type="button" data-mobile-filter-target="sale">Sale</button>
+                    <button class="mobile-filter-chip" type="button" data-mobile-filter-target="size">Size</button>
+                    <button class="mobile-filter-chip" type="button" data-mobile-filter-target="colour">Colour</button>
+                    <button class="mobile-filter-chip" type="button" data-mobile-filter-target="sports">Sports</button>
+                    </div>
                     <span id="sort-desc" class="sr-only">Change the order products are displayed</span>
                 </div>
             </div>
             <div class="product-listing">
             <div class="sidebar" role="complementary" aria-labelledby="filters-title">
-                <!-- Mobile close button -->
-                <button class="mobile-filter-close" type="button" data-mobile-filters-toggle="close" style="display: none;"
-                        aria-label="Đóng bộ lọc">
-                    <i class="fas fa-times" aria-hidden="true"></i>
-                    Đóng bộ lọc
-                </button>
-
                 <!-- Nike-style sidebar categories -->
                 <div class="left-nav-categories" role="navigation" aria-labelledby="categories-title">
                     <div class="left-nav-container">
@@ -172,7 +182,7 @@
                             </c:forEach>
                             <div class="filter-group" role="group" aria-label="Product filtering options">
                                 <div class="filters-group__wrapper">
-                                    <div class="filters-group__close" aria-expanded="false">
+                                    <div class="filters-group__close" data-mobile-filter-key="gender" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by gender" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="gender-filter-desc">
@@ -209,7 +219,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="filters-group__close" aria-expanded="false">
+                                    <div class="filters-group__close" data-mobile-filter-key="sale" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by sale offers" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="sale-filter-desc">
@@ -236,7 +246,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="filters-group__close" aria-expanded="false">
+                                    <div class="filters-group__close" data-mobile-filter-key="size" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by shoe size" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="size-filter-desc">
@@ -273,7 +283,7 @@
                                             </c:choose>
                                         </div>
                                     </div>
-                                    <div class="filters-group__close" aria-expanded="false">
+                                    <div class="filters-group__close" data-mobile-filter-key="colour" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by colour" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="colour-filter-desc">
@@ -310,7 +320,7 @@
                                             </c:choose>
                                         </div>
                                     </div>
-                                    <div class="filters-group__close" aria-expanded="false">
+                                    <div class="filters-group__close" data-mobile-filter-key="height" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by shoe height" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="height-filter-desc">
@@ -347,7 +357,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="filters-group__close" aria-expanded="false">
+                                    <div class="filters-group__close" data-mobile-filter-key="width" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by shoe width" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="width-filter-desc">
@@ -384,7 +394,7 @@
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="filters-group__close" aria-expanded="false">
+                                    <div class="filters-group__close" data-mobile-filter-key="sports" aria-expanded="false">
                                         <span class="filters-group-btn">
                                             <div aria-expanded="false" aria-label="Filter by sport" role="button"
                                                  class="trigger-content" tabindex="0" aria-describedby="sports-filter-desc">
@@ -450,10 +460,10 @@
             </div>
             <div class="product-list-content">
                 <!-- Product List header -->
-                <div class="product-header product-header-legacy" hidden aria-hidden="true" role="region" aria-labelledby="page-title">
+                <div class="product-header product-header-legacy" hidden aria-hidden="true" role="region" aria-labelledby="page-title-legacy">
                     <div class="product-title-section">
-                        <h1 class="product-title" id="page-title">
-                            <span id="page-title-label">
+                        <h1 class="product-title" id="page-title-legacy">
+                            <span id="page-title-label-legacy">
                                 <c:choose>
                                     <c:when test="${not empty selectedCategoryName}">
                                         <c:out value="${selectedCategoryName}"/>
@@ -461,7 +471,7 @@
                                     <c:otherwise>All Shoes</c:otherwise>
                                 </c:choose>
                             </span>
-                            <span id="page-title-count"><c:out value=" ${totalProducts}"/></span>
+                            <span id="page-title-count-legacy"><c:out value=" ${totalProducts}"/></span>
                         </h1>
                     </div>
                     <div class="header-controls" role="group" aria-label="Page controls">
@@ -482,18 +492,18 @@
   </svg>
                         </button>
                         <span id="hide-filters-desc" class="sr-only">Ẩn hoặc hiện bảng bộ lọc sản phẩm</span>
-                        <div class="sort-by-btn" id="sortByBtn">
-                            <button id="sort-toggle" class="sort-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="sort-options">
+                        <div class="sort-by-btn" id="sortByBtnLegacy">
+                            <button id="sort-toggle-legacy" class="sort-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="sort-options-legacy">
                                 Sắp xếp theo
-                                <svg id="sort-arrow" width="20" height="20" class="sort-arrow-icon" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                                <svg id="sort-arrow-legacy" width="20" height="20" class="sort-arrow-icon" viewBox="0 0 20 20"><path d="M6 8l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
                             </button>
-                            <form id="sort-form" method="GET" action="${env}/products/list">
-                                <ul id="sort-options" class="sort-options" role="listbox" tabindex="-1">
+                            <form id="sort-form-legacy" method="GET" action="${env}/products/list">
+                                <ul id="sort-options-legacy" class="sort-options" role="listbox" tabindex="-1">
                                     <li class="sort-option${param.sort == 'newest' || empty param.sort ? ' active' : ''}" data-value="newest" role="option" aria-selected="${param.sort == 'newest' || empty param.sort ? 'true' : 'false'}">Mới nhất</li>
                                     <li class="sort-option${param.sort == 'price_desc' ? ' active' : ''}" data-value="price_desc" role="option" aria-selected="${param.sort == 'price_desc' ? 'true' : 'false'}">Giá: Cao → Thấp</li>
                                     <li class="sort-option${param.sort == 'price_asc' ? ' active' : ''}" data-value="price_asc" role="option" aria-selected="${param.sort == 'price_asc' ? 'true' : 'false'}">Giá: Thấp → Cao</li>
                                 </ul>
-                                <input type="hidden" name="sort" id="sort-input" value="${not empty sort ? sort : 'newest'}" />
+                                <input type="hidden" name="sort" id="sort-input-legacy" value="${not empty sort ? sort : 'newest'}" />
                                 <c:if test="${not empty selectedCategoryId}">
                                     <input type="hidden" name="categoryId" value="${selectedCategoryId}" />
                                 </c:if>
@@ -753,6 +763,40 @@
             </div>
         </section>
     </main>
+
+    <div class="mobile-filter-hub-backdrop" data-mobile-hub-backdrop hidden></div>
+    <section class="mobile-filter-hub" data-mobile-filter-hub hidden aria-hidden="true"
+             role="dialog" aria-modal="true" aria-labelledby="mobile-filter-hub-title">
+        <div class="mobile-filter-hub__panel">
+            <div class="mobile-filter-hub__header">
+                <h2 class="mobile-filter-hub__title" id="mobile-filter-hub-title">Filter</h2>
+                <button class="mobile-filter-hub__close" type="button" data-mobile-hub-close aria-label="Close filter hub">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="mobile-filter-hub__content" data-mobile-hub-content></div>
+            <div class="mobile-filter-hub__footer">
+                <button class="mobile-filter-hub__apply" type="button" data-mobile-hub-apply disabled>Apply</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="mobile-filter-sheet-backdrop" data-mobile-sheet-backdrop hidden></div>
+    <section class="mobile-filter-sheet" data-mobile-filter-sheet hidden aria-hidden="true"
+             role="dialog" aria-modal="true" aria-labelledby="mobile-filter-sheet-title">
+        <div class="mobile-filter-sheet__panel">
+            <div class="mobile-filter-sheet__header">
+                <h2 class="mobile-filter-sheet__title" id="mobile-filter-sheet-title" data-mobile-sheet-title>Filters</h2>
+                <button class="mobile-filter-sheet__close" type="button" data-mobile-sheet-close aria-label="Close filter sheet">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="mobile-filter-sheet__content" data-mobile-sheet-content></div>
+            <div class="mobile-filter-sheet__footer">
+                <button class="mobile-filter-sheet__apply" type="button" data-mobile-sheet-apply disabled>Apply</button>
+            </div>
+        </div>
+    </section>
 
     <jsp:include page="/WEB-INF/views/user/layout/footer.jsp" />
 

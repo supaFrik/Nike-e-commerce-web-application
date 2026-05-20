@@ -22,7 +22,6 @@
     <!-- CSS includes -->
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
     <jsp:include page="/WEB-INF/views/user/imported/profile.jsp" />
-    <link rel="stylesheet" href="${env}/css/common/nike-design-system.css">
 
     <!-- JavaScript includes -->
     <script src="${env}/js/customer/components/carousel.js" defer></script>

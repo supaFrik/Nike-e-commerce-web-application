@@ -281,23 +281,544 @@
   function initMobileFilters() {
     const sidebar = qs(".sidebar");
     const openButton = qs("[data-mobile-filters-toggle='open']");
-    const closeButton = qs("[data-mobile-filters-toggle='close']");
+    const filterChips = qsa(".mobile-filter-chip[data-mobile-filter-target]");
+    const categoryTabs = qsa(".mobile-category-tab");
+    const hub = qs("[data-mobile-filter-hub]");
+    const hubBackdrop = qs("[data-mobile-hub-backdrop]");
+    const hubContent = qs("[data-mobile-hub-content]");
+    const hubApplyButton = qs("[data-mobile-hub-apply]");
+    const hubCloseButton = qs("[data-mobile-hub-close]");
+    const sheet = qs("[data-mobile-filter-sheet]");
+    const backdrop = qs("[data-mobile-sheet-backdrop]");
+    const sheetTitle = qs("[data-mobile-sheet-title]");
+    const sheetContent = qs("[data-mobile-sheet-content]");
+    const applyButton = qs("[data-mobile-sheet-apply]");
+    const closeSheetButton = qs("[data-mobile-sheet-close]");
+    const sortForm = qs("#sort-form");
+    const sortInput = qs("#sort-input");
+    const catalogSortInput = qs("#catalog-sort-input");
+    const catalogForm = qs("#catalog-filter-form");
 
-    if (!sidebar || !openButton || !closeButton) {
+    if (!sidebar || !openButton || !hub || !hubBackdrop || !hubContent || !hubApplyButton || !hubCloseButton || !sheet || !backdrop || !sheetTitle || !sheetContent || !applyButton || !closeSheetButton || !catalogForm) {
       return;
     }
 
-    function setOpen(open) {
-      sidebar.classList.toggle("mobile-open", open);
-      document.body.classList.toggle("mobile-filters-open", open);
+    let activeSheetKey = null;
+    let pendingState = null;
+    let hubState = null;
+    const sheetFooter = applyButton.parentElement;
+
+    const hubGroups = ["gender", "sale", "size", "colour", "height", "width", "sports"];
+
+    function isMobileViewport() {
+      return window.matchMedia("(max-width: 768px)").matches;
     }
 
-    openButton.addEventListener("click", function () {
-      setOpen(true);
+    function cloneSelectedValues(inputs) {
+      return inputs.filter(function (input) {
+        return input.checked;
+      }).map(function (input) {
+        return input.value;
+      });
+    }
+
+    function getGroup(groupKey) {
+      return qs("[data-mobile-filter-key='" + groupKey + "']");
+    }
+
+    function getGroupInputs(groupKey) {
+      const group = getGroup(groupKey);
+      return group ? qsa("input[name]", group) : [];
+    }
+
+    function arraysEqual(left, right) {
+      if (left.length !== right.length) {
+        return false;
+      }
+
+      return left.every(function (value, index) {
+        return value === right[index];
+      });
+    }
+
+    function getFilterTitle(groupKey) {
+      const titles = {
+        all: "Filters",
+        category: "Choose Category",
+        sort: "Sort by",
+        gender: "Filter by Gender",
+        sale: "Filter by Sale",
+        size: "Filter by Size",
+        colour: "Filter by Colour",
+        sports: "Filter by Sports"
+      };
+
+      return titles[groupKey] || "Filters";
+    }
+
+    function getCurrentState(groupKey) {
+      if (groupKey === "category") {
+        const activeTab = qs(".mobile-category-tab.active");
+        return {
+          value: activeTab ? (activeTab.dataset.categoryId || "") : ""
+        };
+      }
+
+      if (groupKey === "sort") {
+        return {
+          value: sortInput ? sortInput.value || "newest" : "newest"
+        };
+      }
+
+      const inputs = getGroupInputs(groupKey);
+      return {
+        values: cloneSelectedValues(inputs)
+      };
+    }
+
+    function getCurrentHubState() {
+      const filterValues = {};
+
+      hubGroups.forEach(function (groupKey) {
+        filterValues[groupKey] = cloneSelectedValues(getGroupInputs(groupKey));
+      });
+
+      return {
+        sort: sortInput ? sortInput.value || "newest" : "newest",
+        filters: filterValues
+      };
+    }
+
+    function hasPendingChanges() {
+      if (!activeSheetKey || !pendingState) {
+        return false;
+      }
+
+      const currentState = getCurrentState(activeSheetKey);
+
+      if (activeSheetKey === "category" || activeSheetKey === "sort") {
+        return pendingState.value !== currentState.value;
+      }
+
+      return !arraysEqual([].concat(pendingState.values || []).sort(), [].concat(currentState.values || []).sort());
+    }
+
+    function updateApplyState() {
+      applyButton.disabled = !hasPendingChanges();
+    }
+
+    function arraysMatch(left, right) {
+      return arraysEqual([].concat(left || []).sort(), [].concat(right || []).sort());
+    }
+
+    function hasHubChanges() {
+      if (!hubState) {
+        return false;
+      }
+
+      const currentState = getCurrentHubState();
+
+      if (hubState.sort !== currentState.sort) {
+        return true;
+      }
+
+      return hubGroups.some(function (groupKey) {
+        return !arraysMatch(hubState.filters[groupKey], currentState.filters[groupKey]);
+      });
+    }
+
+    function updateHubApplyState() {
+      hubApplyButton.disabled = !hasHubChanges();
+    }
+
+    function closeSheet() {
+      activeSheetKey = null;
+      pendingState = null;
+      sheet.hidden = true;
+      backdrop.hidden = true;
+      sheet.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("mobile-filters-open");
+      sheetContent.innerHTML = "";
+      updateApplyState();
+    }
+
+    function closeHub() {
+      hubState = null;
+      hub.hidden = true;
+      hubBackdrop.hidden = true;
+      hub.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("mobile-filters-open");
+      hubContent.innerHTML = "";
+      updateHubApplyState();
+    }
+
+    function openSheet(groupKey, nextState) {
+      closeHub();
+      activeSheetKey = groupKey;
+      pendingState = nextState || getCurrentState(groupKey);
+      renderSheet(groupKey);
+      sheet.hidden = false;
+      backdrop.hidden = false;
+      sheet.setAttribute("aria-hidden", "false");
+      document.body.classList.add("mobile-filters-open");
+      updateApplyState();
+    }
+
+    function openHub() {
+      closeSheet();
+      hubState = getCurrentHubState();
+      renderHub();
+      hub.hidden = false;
+      hubBackdrop.hidden = false;
+      hub.setAttribute("aria-hidden", "false");
+      document.body.classList.add("mobile-filters-open");
+      updateHubApplyState();
+    }
+
+    function renderCategorySheet() {
+      const selectedValue = pendingState.value || "";
+      const items = categoryTabs.map(function (tab) {
+        const categoryId = tab.dataset.categoryId || "";
+        const checked = categoryId === selectedValue ? " checked" : "";
+        return [
+          "<label class='mobile-filter-sheet__option'>",
+          "<input type='radio' name='mobile-sheet-category' value='" + categoryId + "'" + checked + ">",
+          "<span>" + tab.textContent.trim() + "</span>",
+          "</label>"
+        ].join("");
+      });
+
+      sheetContent.innerHTML = "<div class='mobile-filter-sheet__options'>" + items.join("") + "</div>";
+
+      qsa("input[name='mobile-sheet-category']", sheetContent).forEach(function (input) {
+        input.addEventListener("change", function () {
+          pendingState.value = input.value;
+          updateApplyState();
+        });
+      });
+    }
+
+    function renderSortSheet() {
+      const options = qsa(".sort-option", sortForm).map(function (option) {
+        return {
+          value: option.dataset.value || "newest",
+          label: option.textContent.trim()
+        };
+      });
+
+      const selectedValue = pendingState.value || "newest";
+      sheetContent.innerHTML = "<div class='mobile-filter-sheet__options'>" + options.map(function (option) {
+        const checked = option.value === selectedValue ? " checked" : "";
+        return [
+          "<label class='mobile-filter-sheet__option'>",
+          "<input type='radio' name='mobile-sheet-sort' value='" + option.value + "'" + checked + ">",
+          "<span>" + option.label + "</span>",
+          "</label>"
+        ].join("");
+      }).join("") + "</div>";
+
+      qsa("input[name='mobile-sheet-sort']", sheetContent).forEach(function (input) {
+        input.addEventListener("change", function () {
+          pendingState.value = input.value;
+          updateApplyState();
+        });
+      });
+    }
+
+    function renderFilterGroupSheet(groupKey) {
+      const inputs = getGroupInputs(groupKey);
+      const selectedValues = [].concat(pendingState.values || []);
+
+      sheetContent.innerHTML = "<div class='mobile-filter-sheet__options'>" + inputs.map(function (sourceInput, index) {
+        const optionType = sourceInput.type === "radio" ? "radio" : "checkbox";
+        const optionName = "mobile-sheet-" + groupKey + (optionType === "radio" ? "" : "-" + index);
+        const checked = selectedValues.indexOf(sourceInput.value) !== -1 ? " checked" : "";
+        const sourceLabel = sourceInput.closest("label");
+        const labelText = sourceLabel ? sourceLabel.textContent.trim() : sourceInput.value;
+        return [
+          "<label class='mobile-filter-sheet__option'>",
+          "<input type='" + optionType + "' data-sheet-value='" + sourceInput.value + "' name='" + optionName + "'" + checked + ">",
+          "<span>" + labelText + "</span>",
+          "</label>"
+        ].join("");
+      }).join("") + "</div>";
+
+      qsa("input[data-sheet-value]", sheetContent).forEach(function (input) {
+        input.addEventListener("change", function () {
+          pendingState.values = qsa("input[data-sheet-value]", sheetContent).filter(function (item) {
+            return item.checked;
+          }).map(function (item) {
+            return item.getAttribute("data-sheet-value");
+          });
+          updateApplyState();
+        });
+      });
+    }
+
+    function renderSheet(groupKey) {
+      sheetTitle.textContent = getFilterTitle(groupKey);
+      sheetFooter.hidden = false;
+
+      if (groupKey === "category") {
+        renderCategorySheet();
+        return;
+      }
+
+      if (groupKey === "sort") {
+        renderSortSheet();
+        return;
+      }
+
+      renderFilterGroupSheet(groupKey);
+    }
+
+    function renderHubSortSection() {
+      const options = qsa(".sort-option", sortForm).map(function (option) {
+        return {
+          value: option.dataset.value || "newest",
+          label: option.textContent.trim()
+        };
+      });
+
+      return [
+        "<section class='mobile-filter-hub__section'>",
+        "<h3 class='mobile-filter-hub__section-title'>Sort By</h3>",
+        "<div class='mobile-filter-hub__options'>",
+        options.map(function (option) {
+          const checked = option.value === hubState.sort ? " checked" : "";
+          return [
+            "<label class='mobile-filter-hub__option'>",
+            "<input type='radio' name='mobile-hub-sort' value='" + option.value + "'" + checked + ">",
+            "<span>" + option.label + "</span>",
+            "</label>"
+          ].join("");
+        }).join(""),
+        "</div>",
+        "</section>"
+      ].join("");
+    }
+
+    function renderHubFilterSection(groupKey) {
+      const group = getGroup(groupKey);
+      const labelNode = group ? qs(".trigger-content__label", group) : null;
+      const title = labelNode ? labelNode.childNodes[0].textContent.trim() : getFilterTitle(groupKey).replace("Filter by ", "");
+      const inputs = getGroupInputs(groupKey);
+      const selectedValues = [].concat((hubState.filters[groupKey] || []));
+
+      return [
+        "<section class='mobile-filter-hub__section' data-mobile-hub-group='" + groupKey + "'>",
+        "<h3 class='mobile-filter-hub__section-title'>" + title + "</h3>",
+        "<div class='mobile-filter-hub__options'>",
+        inputs.map(function (sourceInput, index) {
+          const optionType = sourceInput.type === "radio" ? "radio" : "checkbox";
+          const optionName = "mobile-hub-" + groupKey + (optionType === "radio" ? "" : "-" + index);
+          const checked = selectedValues.indexOf(sourceInput.value) !== -1 ? " checked" : "";
+          const sourceLabel = sourceInput.closest("label");
+          const labelText = sourceLabel ? sourceLabel.textContent.trim() : sourceInput.value;
+          return [
+            "<label class='mobile-filter-hub__option'>",
+            "<input type='" + optionType + "' data-hub-group='" + groupKey + "' data-hub-value='" + sourceInput.value + "' name='" + optionName + "'" + checked + ">",
+            "<span>" + labelText + "</span>",
+            "</label>"
+          ].join("");
+        }).join(""),
+        "</div>",
+        "</section>"
+      ].join("");
+    }
+
+    function bindHubEvents() {
+      qsa("input[name='mobile-hub-sort']", hubContent).forEach(function (input) {
+        input.addEventListener("change", function () {
+          hubState.sort = input.value;
+          updateHubApplyState();
+        });
+      });
+
+      hubGroups.forEach(function (groupKey) {
+        qsa("[data-hub-group='" + groupKey + "']", hubContent).forEach(function (input) {
+          input.addEventListener("change", function () {
+            hubState.filters[groupKey] = qsa("[data-hub-group='" + groupKey + "']", hubContent).filter(function (item) {
+              return item.checked;
+            }).map(function (item) {
+              return item.getAttribute("data-hub-value");
+            });
+            updateHubApplyState();
+          });
+        });
+      });
+    }
+
+    function renderHub() {
+      hubContent.innerHTML = [
+        renderHubSortSection(),
+        hubGroups.map(function (groupKey) {
+          return renderHubFilterSection(groupKey);
+        }).join("")
+      ].join("");
+
+      bindHubEvents();
+    }
+
+    function syncCategorySelection(categoryId) {
+      const currentParams = new URLSearchParams(window.location.search);
+
+      if (categoryId) {
+        currentParams.set("categoryId", categoryId);
+      } else {
+        currentParams.delete("categoryId");
+      }
+
+      if (!currentParams.get("sort")) {
+        currentParams.set("sort", "newest");
+      }
+
+      window.location.search = currentParams.toString();
+    }
+
+    function syncSortSelection(sortValue) {
+      if (sortInput) {
+        sortInput.value = sortValue;
+      }
+
+      if (catalogSortInput) {
+        catalogSortInput.value = sortValue;
+      }
+
+      sortForm.submit();
+    }
+
+    function syncFilterSelection(groupKey) {
+      const selectedValues = [].concat(pendingState.values || []);
+
+      getGroupInputs(groupKey).forEach(function (input) {
+        input.checked = selectedValues.indexOf(input.value) !== -1;
+      });
+
+      initFilterCounts();
+      catalogForm.submit();
+    }
+
+    function applyHub() {
+      if (!hubState) {
+        return;
+      }
+
+      if (sortInput) {
+        sortInput.value = hubState.sort;
+      }
+
+      if (catalogSortInput) {
+        catalogSortInput.value = hubState.sort;
+      }
+
+      hubGroups.forEach(function (groupKey) {
+        const selectedValues = [].concat(hubState.filters[groupKey] || []);
+        getGroupInputs(groupKey).forEach(function (input) {
+          input.checked = selectedValues.indexOf(input.value) !== -1;
+        });
+      });
+
+      initFilterCounts();
+      catalogForm.submit();
+    }
+
+    function applySheet() {
+      if (!activeSheetKey || !pendingState) {
+        return;
+      }
+
+      if (activeSheetKey === "category") {
+        syncCategorySelection(pendingState.value || "");
+        return;
+      }
+
+      if (activeSheetKey === "sort") {
+        syncSortSelection(pendingState.value || "newest");
+        return;
+      }
+
+      syncFilterSelection(activeSheetKey);
+    }
+
+    openButton.addEventListener("click", function (event) {
+      if (!isMobileViewport()) {
+        return;
+      }
+
+      event.preventDefault();
+      openHub();
     });
 
-    closeButton.addEventListener("click", function () {
-      setOpen(false);
+    hubCloseButton.addEventListener("click", function () {
+      closeHub();
+    });
+
+    hubBackdrop.addEventListener("click", closeHub);
+
+    hubApplyButton.addEventListener("click", function () {
+      applyHub();
+    });
+
+    closeSheetButton.addEventListener("click", function () {
+      closeSheet();
+    });
+
+    backdrop.addEventListener("click", closeSheet);
+
+    applyButton.addEventListener("click", function () {
+      applySheet();
+    });
+
+    filterChips.forEach(function (chip) {
+      chip.addEventListener("click", function (event) {
+        if (!isMobileViewport()) {
+          return;
+        }
+
+        event.preventDefault();
+        const target = chip.getAttribute("data-mobile-filter-target");
+        openSheet(target || "gender");
+      });
+    });
+
+    categoryTabs.forEach(function (tab) {
+      tab.addEventListener("click", function (event) {
+        if (!isMobileViewport()) {
+          return;
+        }
+
+        event.preventDefault();
+        openSheet("category", {
+          value: tab.dataset.categoryId || ""
+        });
+      });
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape") {
+        return;
+      }
+
+      if (!sheet.hidden) {
+        closeSheet();
+      }
+
+      if (!hub.hidden) {
+        closeHub();
+      }
+    });
+
+    window.addEventListener("resize", function () {
+      if (!isMobileViewport()) {
+        if (!sheet.hidden) {
+          closeSheet();
+        }
+
+        if (!hub.hidden) {
+          closeHub();
+        }
+      }
     });
   }
 

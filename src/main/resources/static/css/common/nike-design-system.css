@@ -1,0 +1,240 @@
+/* ==================================================
+   NIKE DESIGN SYSTEM FOUNDATION
+   Shared visual rules layered on top of base/main tokens.
+   ================================================== */
+
+:root {
+  --nike-color-ink: #111111;
+  --nike-color-canvas: #ffffff;
+  --nike-color-soft-cloud: #f5f5f5;
+  --nike-color-hairline: #cacacb;
+  --nike-color-hairline-soft: #e5e5e5;
+  --nike-color-charcoal: #39393b;
+  --nike-color-mute: #707072;
+  --nike-color-stone: #9e9ea0;
+  --nike-color-sale: #d30005;
+  --nike-space-2xs: 2px;
+  --nike-space-xs: 4px;
+  --nike-space-sm: 8px;
+  --nike-space-md: 12px;
+  --nike-space-lg: 18px;
+  --nike-space-xl: 24px;
+  --nike-space-2xl: 30px;
+  --nike-space-section: 48px;
+  --nike-radius-pill: 9999px;
+  --nike-radius-search: 24px;
+  --nike-radius-button: 30px;
+}
+
+html,
+body {
+  overflow-x: hidden;
+  font-family: var(--font-family-body-alt);
+  background: var(--nike-color-canvas);
+  color: var(--nike-color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.section-title,
+.page-title,
+.product-title,
+.receipt-title,
+.not-found-title {
+  font-family: var(--font-family-heading);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--nike-color-ink);
+}
+
+p,
+li,
+span,
+label,
+input,
+textarea,
+select,
+button,
+a {
+  font-family: var(--font-family-body-alt);
+}
+
+a {
+  color: inherit;
+}
+
+.container {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--size-spacing-grid-exterior-gutter-s);
+}
+
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-outline,
+.contact-submit-btn,
+.checkout-btn,
+.apply-promo-btn,
+.not-found-btn,
+.receipt-home-link {
+  min-height: 48px;
+  border-radius: var(--nike-radius-button);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.btn-primary,
+.checkout-btn,
+.contact-submit-btn {
+  background: var(--nike-color-ink);
+  color: var(--nike-color-canvas);
+  border: 1px solid var(--nike-color-ink);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible,
+.checkout-btn:hover,
+.checkout-btn:focus-visible,
+.contact-submit-btn:hover,
+.contact-submit-btn:focus-visible {
+  background: var(--nike-color-ink);
+  color: var(--nike-color-canvas);
+  border-color: var(--nike-color-ink);
+}
+
+.btn-secondary {
+  background: var(--nike-color-soft-cloud);
+  color: var(--nike-color-ink);
+  border: 1px solid var(--nike-color-soft-cloud);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  background: var(--nike-color-soft-cloud);
+  color: var(--nike-color-ink);
+  border-color: var(--nike-color-hairline);
+}
+
+.btn-outline,
+.receipt-home-link,
+.not-found-btn:not(.primary) {
+  background: var(--nike-color-canvas);
+  color: var(--nike-color-ink);
+  border: 1px solid var(--nike-color-hairline);
+}
+
+.btn-outline:hover,
+.btn-outline:focus-visible,
+.receipt-home-link:hover,
+.receipt-home-link:focus-visible,
+.not-found-btn:hover,
+.not-found-btn:focus-visible {
+  background: var(--nike-color-canvas);
+  color: var(--nike-color-ink);
+  border-color: var(--nike-color-ink);
+}
+
+.icon-btn,
+.sport-nav-btn,
+.carousel-btn,
+.quantity-btn,
+.search-close-btn {
+  border-radius: var(--nike-radius-pill);
+}
+
+input,
+select,
+textarea,
+.promo-code,
+.search-input,
+.form-input {
+  border-radius: var(--nike-radius-search);
+  border: 1px solid var(--nike-color-hairline);
+  background: var(--nike-color-canvas);
+  color: var(--nike-color-ink);
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.promo-code:focus,
+.search-input:focus,
+.form-input:focus {
+  outline: none;
+  border-color: var(--nike-color-ink);
+  box-shadow: 0 0 0 4px var(--nike-color-soft-cloud);
+}
+
+.section-card,
+.order-summary,
+.cart-summary,
+.cart-item,
+.delivery-option,
+.order-section-card,
+.receipt-main-card,
+.receipt-summary-card,
+.empty-cart {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.wall-image-loader,
+.item-image,
+.color-btn,
+.content-card__image,
+.main-image,
+.thumbnail-item,
+.running-card .product-image,
+.product-image-wrapper {
+  background: var(--nike-color-soft-cloud);
+}
+
+.sale-price,
+.price-discount,
+.price-saving,
+.product-card__messaging {
+  color: var(--nike-color-sale);
+}
+
+.product-subtitle,
+.product-card__subtitle,
+.product-card__product-count,
+.item-count,
+.item-category,
+.item-size,
+.item-color,
+.search-results-count,
+.delivery-time,
+.selection-value,
+.product-info-note,
+.not-found-copy,
+.footer-links a,
+.footer-bottom-left p {
+  color: var(--nike-color-mute);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-inline: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-inline: 12px;
+  }
+}

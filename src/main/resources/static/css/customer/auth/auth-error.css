@@ -25,20 +25,19 @@
   bottom: 25px;
   right: 25px;
   width: 375px;
-  background: #fff;
+  background: var(--color-bg-primary);
   padding: 25px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  border-radius: 12px;
+  border: 1px solid var(--color-border-tertiary);
   border-left: 3px solid #000;
   overflow: hidden;
   opacity: 0;
   transform: translateY(calc(100% + 25px));
   transition: all 0.5s cubic-bezier(0.68,-0.55,0.265,1.35);
   z-index: 9999;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
 }
 
 .toast.active {
@@ -90,7 +89,7 @@
 
 .toast-close:hover,
 .toast-close:focus-visible {
-  color: #333;
+  color: #111;
   outline: none;
 }
 

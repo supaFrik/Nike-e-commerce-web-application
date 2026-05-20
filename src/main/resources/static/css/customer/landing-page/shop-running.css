@@ -124,7 +124,7 @@
 }
 
 @media (hover: none) and (pointer: coarse) {
-  .running-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,.08); transform:none; }
+  .running-card:hover { transform:none; }
   .running-card:hover .product-image img { transform:none; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-family);
   line-height: 1.6;
   color: var(--color-text-primary);
   background-color: var(--color-bg-primary);
@@ -84,11 +84,11 @@ a {
 }
 
 .btn-secondary {
-  background-color: var(--color-brand-orange);
-  color: var(--color-white);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
 }
 .btn-secondary:hover {
-  background-color: var(--color-orange-500);
+  background-color: var(--color-border-tertiary);
 }
 
 .btn-outline {
@@ -194,7 +194,7 @@ a {
   position: absolute;
   top: -5px;
   right: -5px;
-  background-color: var(--color-brand-orange);
+  background-color: var(--color-text-primary);
   color: var(--color-white);
   border-radius: 50%;
   width: 18px;
@@ -217,7 +217,7 @@ a {
   transition: right var(--transition-duration-normal) ease;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-30);
+  border-left: var(--size-border-width-s) solid var(--color-border-tertiary);
 }
 .cart-sidebar.active {
   right: 0;
@@ -350,7 +350,7 @@ a {
   margin-left: auto;
 }
 .remove-btn:hover {
-  color: var(--color-brand-orange);
+  color: var(--color-text-primary);
 }
 
 .cart-footer {

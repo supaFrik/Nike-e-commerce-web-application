@@ -22,7 +22,6 @@
 }
 .app-card img {
     width: 100%;
-    border-radius: 8px;
     object-fit: cover;
 }
 .app-card .card-info {
@@ -41,10 +40,10 @@
 }
 .app-card .download-btn {
     padding: 6px 18px;
-    border-radius: 20px;
-    border: 1px solid #111;
-    background: #fff;
-    color: #111;
+    border-radius: 999px;
+    border: 1px solid var(--color-text-primary);
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
     font-weight: 500;
     cursor: pointer;
 }
