@@ -61,13 +61,21 @@ public class CheckoutService {
 
         attachOrderItems(order, snapshots);
 
-        deductStock(cartItems);
+        if (shouldFinalizeCartImmediately(paymentMethod)) {
+            deductStock(cartItems);
+        }
 
         Order savedOrder = orderRepository.save(order);
 
-        clearCart(cartItems);
+        if (shouldFinalizeCartImmediately(paymentMethod)) {
+            clearCart(cartItems);
+        }
 
         return handleCheckoutCompletion(savedOrder, snapshots);
+    }
+
+    private boolean shouldFinalizeCartImmediately(PaymentMethod paymentMethod) {
+        return paymentMethod == PaymentMethod.COD;
     }
 
     private PaymentMethod resolvePaymentMethod(PlaceCheckoutRequest request) {

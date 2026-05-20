@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    @EntityGraph(attributePaths = {"category", "colors"})
+    @EntityGraph(attributePaths = {"category"})
     Optional<Product> findDetailById(Long id);
 
     @Query("""
@@ -45,6 +45,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             """)
     List<ProductListItemView> findProductList(@Param("categoryId") Long categoryId, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"colors", "colors.images"})
+    @EntityGraph(attributePaths = {"colors"})
     List<Product> findWithColorsAndImagesByIdIn(List<Long> ids);
 }

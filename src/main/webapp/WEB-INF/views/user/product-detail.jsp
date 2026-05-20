@@ -18,7 +18,9 @@
     <c:set var="selectedImages" value="${selectedColor.images}" />
     <c:set var="selectedVariants" value="${selectedColor.variants}" />
     <!-- Images are now pre-sorted: main image first, then by order -->
-    <c:set var="selectedMainImage" value="${selectedImages[0]}" />
+    <c:if test="${not empty selectedImages}">
+        <c:set var="selectedMainImage" value="${selectedImages[0]}" />
+    </c:if>
 </c:if>
 
 <!DOCTYPE html>

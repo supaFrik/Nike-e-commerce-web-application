@@ -155,7 +155,7 @@
     }
 
     console.info("[checkout] VNPay initiate redirect", { orderId, paymentUrl: data.paymentUrl });
-    window.location.href = data.paymentUrl;
+    window.location.replace(data.paymentUrl);
   }
 
   async function placeOrder() {
@@ -227,7 +227,7 @@
 
       if (data.paymentUrl) {
         console.info("[checkout] VNPay checkout redirect", { orderId: data.orderId, paymentUrl: data.paymentUrl });
-        window.location.href = data.paymentUrl;
+        window.location.replace(data.paymentUrl);
         return;
       }
 

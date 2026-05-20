@@ -57,8 +57,8 @@ class OrderPageViewServiceTest {
                 .thenReturn(Optional.of(order));
         when(paymentTransactionRepository.findByOrder_IdOrderByCreateDateDesc(order.getId()))
                 .thenReturn(List.of(paymentTransaction));
-        when(productRepository.findById(order.getItems().get(0).getProductId()))
-                .thenReturn(Optional.of(product));
+        when(productRepository.findWithColorsAndImagesByIdIn(List.of(order.getItems().get(0).getProductId())))
+                .thenReturn(List.of(product));
 
         var result = orderPageViewService.getOrderPage(order.getId(), order.getUser().getId());
 

@@ -18,6 +18,8 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
 
     void deleteByVariant_IdIn(List<Long> variantIds);
 
+    void deleteByUser_IdAndVariant_IdIn(Long userId, List<Long> variantIds);
+
     @Query("""
   SELECT COALESCE(SUM(c.quantity), 0)
   FROM CartItem c

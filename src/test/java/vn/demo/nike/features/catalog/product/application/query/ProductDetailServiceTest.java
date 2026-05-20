@@ -71,7 +71,7 @@ class ProductDetailServiceTest {
         color.setVariants(List.of(variant));
         product.setColors(List.of(color));
 
-        when(productRepository.findById(10L)).thenReturn(Optional.of(product));
+        when(productRepository.findDetailById(10L)).thenReturn(Optional.of(product));
 
         ProductDetailResponse response = new ProductDetailService(productRepository, productQueryResponseMapper)
                 .getProductDetail(10L);

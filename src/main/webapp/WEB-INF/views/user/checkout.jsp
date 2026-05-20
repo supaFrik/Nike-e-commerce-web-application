@@ -516,7 +516,7 @@
                 throw new Error('VNPay payment URL không hợp lệ.');
             }
 
-            window.location.href = data.paymentUrl;
+            window.location.replace(data.paymentUrl);
         }
 
         async function placeOrder() {
@@ -587,7 +587,7 @@
                     }
 
                     if (data.paymentUrl) {
-                        window.location.href = data.paymentUrl;
+                        window.location.replace(data.paymentUrl);
                         return;
                     }
 

@@ -5,7 +5,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
+import vn.demo.nike.features.catalog.product.entity.ProductVariant;
+import vn.demo.nike.features.catalog.product.repository.ProductVariantRepository;
 import vn.demo.nike.features.order.entity.Order;
+import vn.demo.nike.features.order.entity.OrderItem;
 import vn.demo.nike.features.order.enums.OrderStatus;
 import vn.demo.nike.features.order.exception.InvalidOrderStateException;
 import vn.demo.nike.features.order.exception.OrderIdAndUserIdNotFoundException;
@@ -25,6 +29,7 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -35,11 +40,14 @@ import static vn.demo.nike.features.payment.enums.PaymentStatus.PENDING;
 @RequiredArgsConstructor
 public class VNPayPaymentService {
     private static final int SAFE_AUDIT_TEXT_LENGTH = 240;
+    private static final ZoneId VNPAY_ZONE = ZoneId.of("Asia/Ho_Chi_Minh");
 
     private final VNPayProperties vnPayProperties;
     private final VNPaySignatureService vnPaySignatureService;
     private final PaymentTransactionRepository paymentTransactionRepository;
     private final OrderRepository orderRepository;
+    private final ProductVariantRepository productVariantRepository;
+    private final CartItemRepository cartItemRepository;
 
     @Transactional
     public VNPayCreatePaymentResponse createPaymentUrl(Long orderId, HttpServletRequest request, Long currentUserId) {
@@ -73,7 +81,7 @@ public class VNPayPaymentService {
         params.put("vnp_ReturnUrl", vnPayProperties.getReturnUrl());
         params.put("vnp_IpAddr", normalizeGatewayIpAddress(vnPaySignatureService.getIpAddress(request)));
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(VNPAY_ZONE);
         params.put("vnp_CreateDate", formatVnPayDate(now));
 
         LocalDateTime expire = now.plusMinutes(15);
@@ -105,7 +113,7 @@ public class VNPayPaymentService {
         );
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public VNPayReturnResponse handleReturn(Map<String, String> params) {
         String secureHash = params.get("vnp_SecureHash");
 
@@ -125,21 +133,27 @@ public class VNPayPaymentService {
         String transactionStatus = params.get("vnp_TransactionStatus");
 
         PaymentTransaction txn = paymentTransactionRepository
-                .findByTxnRef(txnRef)
+                .findByTxnRefForUpdate(txnRef)
                 .orElse(null);
 
         Long orderId = (txn != null) ? txn.getOrder().getId() : null;
 
         PaymentStatus suggestedStatus;
 
+        boolean amountValid = txn != null && isGatewayAmountValid(txn, params.get("vnp_Amount"));
         boolean paymentSuccess =
                 signatureValid
+                        && amountValid
                         && "00".equals(responseCode)
                         && "00".equals(transactionStatus);
 
         suggestedStatus = paymentSuccess
                 ? PaymentStatus.SUCCESS
                 : PaymentStatus.FAILED;
+
+        if (txn != null && signatureValid && txn.getOrder().getOrderStatus() == OrderStatus.PENDING_PAYMENT) {
+            applyGatewayResult(txn, params, paymentSuccess, responseCode, transactionStatus);
+        }
 
         log.info("VNPay return txnRef={}, responseCode={}, transactionStatus={}, valid={}", txnRef, responseCode, transactionStatus, signatureValid);
 
@@ -200,35 +214,12 @@ public class VNPayPaymentService {
                     .build();
         }
 
-        long gatewayAmount;
-        try {
-            if (amountRaw == null || amountRaw.isBlank()) {
-                log.warn("VNPay IPN missing amount, txnRef={}", txnRef);
-                return VNPayIpnResponse.builder()
-                        .RspCode("04")
-                        .Message("Invalid amount")
-                        .build();
-            }
-
-            gatewayAmount = Long.parseLong(amountRaw);
-        } catch (NumberFormatException ex) {
-            log.warn("VNPay IPN invalid amount format, txnRef={}, amount={}",
-                    txnRef, amountRaw);
-            return VNPayIpnResponse.builder()
-                    .RspCode("04")
-                    .Message("Invalid amount")
-                    .build();
-        }
-
-        long expectedAmount = transaction.getAmount()
-                .longValueExact() * 100L;
-
-        if (gatewayAmount != expectedAmount) {
+        if (!isGatewayAmountValid(transaction, amountRaw)) {
             log.warn(
-                    "VNPay IPN amount mismatch, txnRef={}, expected={}, actual={}",
+                    "VNPay IPN amount invalid, txnRef={}, expected={}, actual={}",
                     txnRef,
-                    expectedAmount,
-                    gatewayAmount
+                    transaction.getAmount().longValueExact() * 100L,
+                    amountRaw
             );
 
             return VNPayIpnResponse.builder()
@@ -239,10 +230,6 @@ public class VNPayPaymentService {
 
         boolean paymentSuccess =
                 "00".equals(responseCode) && "00".equals(transactionStatus);
-
-        PaymentStatus paymentStatus = paymentSuccess ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
-
-        OrderStatus orderStatus = paymentSuccess ? OrderStatus.PROCESSING : OrderStatus.PAYMENT_FAILED;
 
         Order order = transaction.getOrder();
         if (order.getPaymentMethod() != PaymentMethod.VNPAY) {
@@ -266,26 +253,12 @@ public class VNPayPaymentService {
                     .build();
         }
 
-        transaction.setStatus(paymentStatus);
-        transaction.setResponseCode(responseCode);
+        PaymentStatus paymentStatus = paymentSuccess ? PaymentStatus.SUCCESS : PaymentStatus.FAILED;
+        applyGatewayResult(transaction, params, paymentSuccess, responseCode, transactionStatus);
         transaction.setTransactionNo(transactionNo);
         transaction.setBankCode(bankCode);
-        transaction.setTransactionStatus(transactionStatus);
         transaction.setPayDate(parseVnPayDate(payDateRaw));
-        transaction.setRawResponsePayload(toSafeAuditText(new TreeMap<>(params).toString()));
         transaction.setIpnProcessed(true);
-
-        if (!paymentSuccess) {
-            transaction.setFailureReason(
-                    toSafeAuditText("VNPay payment failed: responseCode=" + responseCode
-                            + ", txnRef=" + txnRef
-                            + ", transactionStatus=" + transactionStatus)
-            );
-        } else {
-            transaction.setFailureReason(null);
-        }
-
-        order.setOrderStatus(orderStatus);
 
         paymentTransactionRepository.save(transaction);
         orderRepository.save(order);
@@ -294,12 +267,88 @@ public class VNPayPaymentService {
                 "VNPay IPN processed successfully, txnRef={}, paymentStatus={}, orderStatus={}",
                 txnRef,
                 paymentStatus,
-                orderStatus
+                order.getOrderStatus()
         );
         return VNPayIpnResponse.builder()
                 .RspCode("00")
                 .Message("Confirm success")
                 .build();
+    }
+
+    private void finalizeSuccessfulPaymentOrder(Order order) {
+        deductStock(order);
+        clearPurchasedCartItems(order);
+        order.setOrderStatus(OrderStatus.PROCESSING);
+    }
+
+    private void applyGatewayResult(PaymentTransaction transaction,
+                                    Map<String, String> params,
+                                    boolean paymentSuccess,
+                                    String responseCode,
+                                    String transactionStatus) {
+        transaction.setStatus(paymentSuccess ? PaymentStatus.SUCCESS : PaymentStatus.FAILED);
+        transaction.setResponseCode(responseCode);
+        transaction.setTransactionNo(params.get("vnp_TransactionNo"));
+        transaction.setBankCode(params.get("vnp_BankCode"));
+        transaction.setTransactionStatus(transactionStatus);
+        transaction.setPayDate(parseVnPayDate(params.get("vnp_PayDate")));
+        transaction.setRawResponsePayload(toSafeAuditText(new TreeMap<>(params).toString()));
+
+        if (paymentSuccess) {
+            transaction.setFailureReason(null);
+            finalizeSuccessfulPaymentOrder(transaction.getOrder());
+            return;
+        }
+
+        transaction.setFailureReason(
+                toSafeAuditText("VNPay payment failed: responseCode=" + responseCode
+                        + ", txnRef=" + transaction.getTxnRef()
+                        + ", transactionStatus=" + transactionStatus)
+        );
+        transaction.getOrder().setOrderStatus(OrderStatus.PAYMENT_FAILED);
+    }
+
+    private boolean isGatewayAmountValid(PaymentTransaction transaction, String amountRaw) {
+        if (transaction == null || amountRaw == null || amountRaw.isBlank()) {
+            return false;
+        }
+
+        try {
+            long gatewayAmount = Long.parseLong(amountRaw);
+            long expectedAmount = transaction.getAmount().longValueExact() * 100L;
+            return gatewayAmount == expectedAmount;
+        } catch (ArithmeticException | NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    private void deductStock(Order order) {
+        for (OrderItem item : order.getItems()) {
+            Long variantId = item.getVariantId();
+            ProductVariant variant = productVariantRepository.findByIdForUpdate(variantId)
+                    .orElseThrow(() -> new InvalidOrderStateException(order.getId(), order.getOrderStatus(), OrderStatus.PROCESSING));
+
+            Integer requestedQuantity = item.getQuantity();
+            Integer currentStock = variant.getStock();
+            if (!Boolean.TRUE.equals(variant.getActive()) || currentStock == null || currentStock < requestedQuantity) {
+                throw new InvalidOrderStateException(order.getId(), order.getOrderStatus(), OrderStatus.PROCESSING);
+            }
+
+            variant.setStock(currentStock - requestedQuantity);
+        }
+    }
+
+    private void clearPurchasedCartItems(Order order) {
+        Long userId = order.getUser().getId();
+        List<Long> variantIds = order.getItems().stream()
+                .map(OrderItem::getVariantId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+
+        if (!variantIds.isEmpty()) {
+            cartItemRepository.deleteByUser_IdAndVariant_IdIn(userId, variantIds);
+        }
     }
 
     private Order loadOrderForVNPay(Long orderId, Long currentUserId) {
