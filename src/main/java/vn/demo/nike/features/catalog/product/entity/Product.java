@@ -2,6 +2,8 @@ package vn.demo.nike.features.catalog.product.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import vn.demo.nike.shared.entity.BaseEntity;
 import vn.demo.nike.features.catalog.category.entity.Category;
 import vn.demo.nike.features.catalog.product.enums.ProductStatus;
@@ -32,6 +34,7 @@ public class Product extends BaseEntity {
     private Category category;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false, length = 20)
     private ProductStatus productStatus;
 
