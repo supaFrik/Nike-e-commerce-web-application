@@ -194,8 +194,9 @@
                                 </c:forEach>
                             </c:when>
                             <c:otherwise>
-                                <div style="padding:2rem; text-align:center; color:red; font-weight:bold;">
-                                    No running products found.
+                                <div class="running-empty-state" role="status" aria-live="polite">
+                                    <span class="running-empty-badge">No products found</span>
+                                    <p class="running-empty-copy">Running category currently has no products to show.</p>
                                 </div>
                             </c:otherwise>
                         </c:choose>

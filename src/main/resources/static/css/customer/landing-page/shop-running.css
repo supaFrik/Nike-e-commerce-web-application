@@ -83,6 +83,41 @@
 .running-card .product-type,
 .running-card .product-price { color: #111; }
 
+.running-empty-state {
+  min-height: 320px;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  gap: var(--size-spacing-s);
+  padding: var(--size-spacing-xxl) var(--size-spacing-l);
+  text-align: center;
+  background: linear-gradient(135deg, #f7f7f7 0%, #efefef 100%);
+  border-radius: 28px;
+}
+
+.running-empty-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold, 600);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.running-empty-copy {
+  margin: 0;
+  max-width: 28rem;
+  color: #5f5f5f;
+  font-size: var(--font-size-s);
+  line-height: 1.6;
+  white-space: normal;
+}
+
 .product-title {
   font-size: clamp(var(--font-size-s), 2vw, var(--font-size-m));
   font-weight: var(--font-weight-medium);
