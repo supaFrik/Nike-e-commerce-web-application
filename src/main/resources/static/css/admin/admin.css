@@ -582,7 +582,6 @@ body.topbar-condensed .eyebrow {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
   margin-bottom: 18px;
 }
 
@@ -911,6 +910,7 @@ body.topbar-condensed .eyebrow {
 .badge {
   display: inline-flex;
   align-items: center;
+  text-align: center;
   gap: 7px;
   padding: 7px 10px;
   border-radius: 999px;
@@ -1590,6 +1590,20 @@ body.topbar-condensed .eyebrow {
 
 .upload-thumb-card {
   position: relative;
+  flex: 0 0 auto;
+  border-radius: 18px;
+  cursor: grab;
+  transition: transform 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+}
+
+.upload-thumb-card.is-dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+
+.upload-thumb-card.is-drop-target {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 2px rgba(217, 31, 38, 0.22);
 }
 
 .upload-thumb-remove {

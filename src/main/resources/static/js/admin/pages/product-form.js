@@ -6,6 +6,14 @@
     colors: []
   };
   const sliderIndexByColor = {};
+  const selectionState = {
+    sizeColor: "",
+    uploadColor: ""
+  };
+  const dragState = {
+    colorName: "",
+    fromIndex: -1
+  };
 
   const colorList = document.getElementById("colorList");
   const sizeContainer = document.getElementById("sizeMap");
@@ -154,11 +162,65 @@
     return state.colors.find((item) => item.colorName === colorName);
   }
 
+  function colorNames() {
+    return state.colors.map((color) => color.colorName);
+  }
+
+  function resolveSelectedColor(preferredValue) {
+    const colors = colorNames();
+    if (!colors.length) {
+      return "";
+    }
+    if (preferredValue && colors.includes(preferredValue)) {
+      return preferredValue;
+    }
+    return colors[0];
+  }
+
+  function setSelectedColors(sizeValue, uploadValue) {
+    selectionState.sizeColor = resolveSelectedColor(sizeValue);
+    selectionState.uploadColor = resolveSelectedColor(uploadValue);
+
+    if (sizeColor) {
+      sizeColor.value = selectionState.sizeColor;
+    }
+    if (uploadColor) {
+      uploadColor.value = selectionState.uploadColor;
+    }
+  }
+
   function activeUploadColor() {
-    if (uploadColor?.value) {
+    if (selectionState.uploadColor && getColorState(selectionState.uploadColor)) {
+      return selectionState.uploadColor;
+    }
+    if (uploadColor?.value && getColorState(uploadColor.value)) {
       return uploadColor.value;
     }
     return state.colors[0]?.colorName || "";
+  }
+
+  function normalizeImageOrder(color) {
+    if (!color) {
+      return;
+    }
+    color.images.forEach((image, index) => {
+      image.orderIndex = index;
+    });
+  }
+
+  function reorderColorImages(colorName, fromIndex, toIndex) {
+    const color = getColorState(colorName);
+    if (!color || fromIndex === toIndex) {
+      return;
+    }
+    if (fromIndex < 0 || fromIndex >= color.images.length || toIndex < 0 || toIndex >= color.images.length) {
+      return;
+    }
+
+    const [movedImage] = color.images.splice(fromIndex, 1);
+    color.images.splice(toIndex, 0, movedImage);
+    normalizeImageOrder(color);
+    sliderIndexByColor[colorName] = toIndex;
   }
 
   function sortVariants(variants) {
@@ -211,6 +273,9 @@
   }
 
   function syncSelects() {
+    const previousSizeColor = selectionState.sizeColor || sizeColor?.value;
+    const previousUploadColor = selectionState.uploadColor || uploadColor?.value;
+
     if (sizeColor) {
       sizeColor.innerHTML = state.colors
         .map((color) => `<option value="${color.colorName}">${color.colorName}</option>`)
@@ -222,6 +287,8 @@
         .map((color) => `<option value="${color.colorName}">${color.colorName}</option>`)
         .join("");
     }
+
+    setSelectedColors(previousSizeColor, previousUploadColor);
   }
 
   function setPreviewImage(imagePath, altText) {
@@ -403,7 +470,7 @@
             </div>
             <div class="upload-thumbs">
               ${images.map((image, index) => `
-                <div class="upload-thumb-card ${index === activeIndex ? "is-active" : ""}">
+                <div class="upload-thumb-card ${index === activeIndex ? "is-active" : ""}" draggable="true" data-drag-image data-color="${color.colorName}" data-index="${index}">
                   <button class="upload-thumb ${index === activeIndex ? "is-active" : ""}" type="button" data-thumb-index="${index}" data-color="${color.colorName}" aria-label="${color.colorName} image ${index + 1}">
                     <img src="${resolveImagePath(image.path)}" alt="${color.colorName} ${index + 1}">
                   </button>
@@ -487,6 +554,7 @@
     }
 
     color.images.push(...uploaded);
+    normalizeImageOrder(color);
     sliderIndexByColor[color.colorName] = color.images.length - uploaded.length;
     refreshAll();
     if (productImageInput) {
@@ -498,8 +566,12 @@
     if (!window.confirm(`Xóa màu "${colorName}" cùng toàn bộ size, ảnh và tồn kho của màu này?`)) {
       return;
     }
+    const currentSizeColor = sizeColor?.value || selectionState.sizeColor;
+    const currentUploadColor = uploadColor?.value || selectionState.uploadColor;
     state.colors = state.colors.filter((color) => color.colorName !== colorName);
     delete sliderIndexByColor[colorName];
+    selectionState.sizeColor = currentSizeColor === colorName ? "" : currentSizeColor;
+    selectionState.uploadColor = currentUploadColor === colorName ? "" : currentUploadColor;
     refreshAll();
   }
 
@@ -521,6 +593,7 @@
       return;
     }
     color.images.splice(index, 1);
+    normalizeImageOrder(color);
     ensureMainImage(color);
     if ((sliderIndexByColor[colorName] || 0) >= color.images.length) {
       sliderIndexByColor[colorName] = Math.max(color.images.length - 1, 0);
@@ -683,7 +756,7 @@
         altText: image.altText,
         orderIndex: image.orderIndex,
         isMainForColor: Boolean(image.isMainForColor)
-      })),
+      })).sort((left, right) => (left.orderIndex ?? 0) - (right.orderIndex ?? 0)),
       variants: (color.variants || []).map((variant) => ({
         sku: variant.sku,
         size: variant.size,
@@ -694,6 +767,7 @@
 
     state.colors.forEach((color) => {
       sortVariants(color.variants);
+      normalizeImageOrder(color);
       sliderIndexByColor[color.colorName] = 0;
     });
 
@@ -767,6 +841,8 @@
     if (colorInput) {
       colorInput.value = "";
     }
+    selectionState.sizeColor = value;
+    selectionState.uploadColor = value;
     refreshAll();
   });
 
@@ -796,6 +872,7 @@
     if (sizeInput) {
       sizeInput.value = "";
     }
+    selectionState.sizeColor = color.colorName;
     refreshAll();
   });
 
@@ -807,7 +884,14 @@
     removeSize(removeButton.dataset.color, removeButton.dataset.size);
   });
 
-  uploadColor?.addEventListener("change", refreshAll);
+  sizeColor?.addEventListener("change", () => {
+    selectionState.sizeColor = sizeColor.value;
+  });
+
+  uploadColor?.addEventListener("change", () => {
+    selectionState.uploadColor = uploadColor.value;
+    refreshAll();
+  });
 
   uploadPreview?.addEventListener("click", (event) => {
     const thumb = event.target.closest("[data-thumb-index]");
@@ -849,6 +933,57 @@
     if (removeButton) {
       removeImage(removeButton.dataset.color, Number(removeButton.dataset.index));
     }
+  });
+
+  uploadPreview?.addEventListener("dragstart", (event) => {
+    const thumbCard = event.target.closest("[data-drag-image]");
+    if (!thumbCard) {
+      return;
+    }
+    dragState.colorName = thumbCard.dataset.color || "";
+    dragState.fromIndex = Number(thumbCard.dataset.index);
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", `${dragState.colorName}:${dragState.fromIndex}`);
+    }
+    thumbCard.classList.add("is-dragging");
+  });
+
+  uploadPreview?.addEventListener("dragover", (event) => {
+    const thumbCard = event.target.closest("[data-drag-image]");
+    if (!thumbCard || dragState.fromIndex < 0 || thumbCard.dataset.color !== dragState.colorName) {
+      return;
+    }
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = "move";
+    }
+    const activeDrop = uploadPreview.querySelector(".upload-thumb-card.is-drop-target");
+    if (activeDrop && activeDrop !== thumbCard) {
+      activeDrop.classList.remove("is-drop-target");
+    }
+    thumbCard.classList.add("is-drop-target");
+  });
+
+  uploadPreview?.addEventListener("drop", (event) => {
+    const thumbCard = event.target.closest("[data-drag-image]");
+    if (!thumbCard || dragState.fromIndex < 0 || thumbCard.dataset.color !== dragState.colorName) {
+      return;
+    }
+    event.preventDefault();
+    const toIndex = Number(thumbCard.dataset.index);
+    reorderColorImages(dragState.colorName, dragState.fromIndex, toIndex);
+    dragState.colorName = "";
+    dragState.fromIndex = -1;
+    refreshAll();
+  });
+
+  uploadPreview?.addEventListener("dragend", () => {
+    dragState.colorName = "";
+    dragState.fromIndex = -1;
+    uploadPreview.querySelectorAll(".upload-thumb-card").forEach((card) => {
+      card.classList.remove("is-dragging", "is-drop-target");
+    });
   });
 
   stockContainer?.addEventListener("input", (event) => {
