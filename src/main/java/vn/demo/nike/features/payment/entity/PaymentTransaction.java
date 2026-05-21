@@ -57,6 +57,7 @@ public class PaymentTransaction extends BaseEntity {
      * Internal business status
      */
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     private PaymentStatus status;
 
