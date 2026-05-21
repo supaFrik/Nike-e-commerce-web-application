@@ -87,13 +87,14 @@ Known challenges and next improvements:
 - Spring Data JPA
 - Spring Security
 - MySQL 8
-- JSP + JSTL
+- Legacy JSP + JSTL
 - Maven
 - Docker / Docker Compose
 - Spring Boot Actuator
 - Micrometer Prometheus Registry
 - JUnit 5 / Spring Boot Test
-- Railway-ready runtime configuration via environment variables
+- Cloud-hosting like Railway runtime configuration via environment variables
+- VPS or local server deployment with externalized configuration and persistent storage for product images
 
 ## Project Structure
 
@@ -264,6 +265,21 @@ mvn clean package -DskipTests
 Current note:
 - Existing tests cover admin product/category services, admin page data, order page view logic, and VNPAY controller behavior
 - The project still needs broader test coverage for checkout, payment, security, and edge-case inventory flows
+
+### Test VNPay cards data
+
+Below are test card numbers and credentials for the VNPAY sandbox (use only in development/testing environments):
+
+| Type     | Bank | Card number           | Name           | Valid through | CVV | Status                                           |
+|----------|------|-----------------------|----------------|---------------|-----|--------------------------------------------------|
+| ATM Card | NCB  | 9704198526191432198   | NGUYEN VAN A   | 07/15         | 123 | Successful                                       |
+| ATM Card | NCB  | 9704195798459170488   | NGUYEN VAN A   | 07/15         | 123 | Card does not have enough balance                |
+| ATM Card | NCB  | 9704192181368742      | NGUYEN VAN A   | 07/15         | 123 | Card not activated                               |
+| ATM Card | NCB  | 9704193370791314      | NGUYEN VAN A   | 07/15         | 123 | Card is locked                                   |
+| ATM Card | NCB  | 9704194841945513      | NGUYEN VAN A   | 07/15         | 123 | Card expired                                     |
+
+- OTP - `123456`
+- Password - `1234`
 
 ## Contributing
 
