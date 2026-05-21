@@ -2,6 +2,8 @@ package vn.demo.nike.features.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import vn.demo.nike.features.order.entity.Order;
 import vn.demo.nike.features.payment.enums.PaymentProvider;
 import vn.demo.nike.features.payment.enums.PaymentStatus;
@@ -35,6 +37,7 @@ public class PaymentTransaction extends BaseEntity {
     private Order order;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     @Column(nullable = false)
     private PaymentProvider provider;
 
