@@ -110,9 +110,11 @@ public class PaymentTransaction extends BaseEntity {
      * Raw data (audit/debug)
      */
     @Lob
+    @Column(name = "raw_request_payload", columnDefinition = "LONGTEXT")
     private String rawRequestPayload;
 
     @Lob
+    @Column(name = "raw_response_payload", columnDefinition = "LONGTEXT")
     private String rawResponsePayload;
 
     /**
