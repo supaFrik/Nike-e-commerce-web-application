@@ -2,12 +2,29 @@
    HEADER & NAVIGATION STYLES
    ================================================== */
 
+:root {
+  --header-top-height: 38px;
+  --header-nav-height: 60px;
+  --header-visible-offset: 98px;
+  --product-header-height: 0px;
+  --sticky-stack-gap: 16px;
+}
+
 /* Header Structure */
 .header {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 1100;
+  isolation: isolate;
   background-color: var(--nike-color-canvas);
+}
+
+.header.is-stuck {
+  box-shadow: 0 1px 0 var(--nike-color-hairline-soft);
 }
 
 .header-link:hover,

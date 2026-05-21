@@ -38,4 +38,8 @@ public class SignupForm implements Serializable {
         if (password == null) return confirmPassword == null;
         return password.equals(confirmPassword);
     }
+
+    @NotBlank
+    @Pattern(regexp = "^\\d{8}$" ,message = "Code phải có đúng 8 chữ số")
+    private String verificationCode;
 }

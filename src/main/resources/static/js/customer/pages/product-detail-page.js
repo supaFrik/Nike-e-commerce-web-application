@@ -71,13 +71,22 @@
     currentImage.alt = image.altText || image.title || defaultProductName;
 
     document.querySelectorAll(".thumbnail-item").forEach((item, itemIndex) => {
-      item.classList.toggle("active", itemIndex === boundedIndex);
+      const isActive = itemIndex === boundedIndex;
+      item.classList.toggle("active", isActive);
+      item.setAttribute("aria-selected", isActive ? "true" : "false");
     });
   }
 
   function bindThumbnailEvents() {
     const currentImage = document.getElementById("currentImage");
-    document.querySelectorAll(".thumbnail-item").forEach((button) => {
+    if (!currentImage) {
+      return;
+    }
+
+    const thumbnails = Array.from(document.querySelectorAll(".thumbnail-item"));
+    thumbnails.forEach((button, index) => {
+      button.setAttribute("aria-selected", button.classList.contains("active") ? "true" : "false");
+
       button.addEventListener("click", () => {
         const imageIndex = Number(button.dataset.thumbnailIndex);
         if (!Number.isNaN(imageIndex)) {
@@ -85,10 +94,26 @@
           return;
         }
 
-        document.querySelectorAll(".thumbnail-item").forEach((item) => item.classList.remove("active"));
+        document.querySelectorAll(".thumbnail-item").forEach((item) => {
+          item.classList.remove("active");
+          item.setAttribute("aria-selected", "false");
+        });
         button.classList.add("active");
+        button.setAttribute("aria-selected", "true");
         currentImage.src = resolveImagePath(button.dataset.imagePath);
         currentImage.alt = button.dataset.altText || defaultProductName;
+      });
+
+      button.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+          return;
+        }
+
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const nextIndex = (index + direction + thumbnails.length) % thumbnails.length;
+        event.preventDefault();
+        thumbnails[nextIndex].focus();
+        setActiveImage(nextIndex);
       });
     });
   }
@@ -139,9 +164,6 @@
     }).join("");
 
     bindThumbnailEvents();
-    if (window.ThumbnailGallery && typeof window.ThumbnailGallery.refresh === "function") {
-      window.ThumbnailGallery.refresh();
-    }
   }
 
   function renderVariants(variants) {

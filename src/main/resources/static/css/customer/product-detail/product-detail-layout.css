@@ -18,7 +18,8 @@
 
 .product-images {
   position: sticky;
-  top: 96px;
+  top: calc(var(--header-visible-offset, 98px) + var(--sticky-stack-gap, 16px));
+  z-index: 20;
   align-self: start;
 }
 
@@ -192,7 +193,6 @@
   .product-info {
     position: static;
   }
-
   .product-images {
     position: static;
   }

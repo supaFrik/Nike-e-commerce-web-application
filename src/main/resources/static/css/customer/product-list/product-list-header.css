@@ -11,8 +11,8 @@
     margin: 0 60px 24px 60px;
     padding: 16px 0;
     position: sticky;
-    top: var(--header-visible-offset, 0px);
-    z-index: 40;
+    top: var(--header-visible-offset, 98px);
+    z-index: 1090;
     background: var(--nike-color-canvas);
 }
 

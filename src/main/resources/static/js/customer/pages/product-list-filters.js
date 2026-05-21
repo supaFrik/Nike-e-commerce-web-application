@@ -832,6 +832,13 @@
     initSportsToggle();
     initMobileFilters();
     window.addEventListener("resize", syncStickyMetrics);
+
+    if (typeof ResizeObserver === "function") {
+      const productHeader = qs(".product-header");
+      if (productHeader) {
+        new ResizeObserver(syncStickyMetrics).observe(productHeader);
+      }
+    }
   }
 
   if (document.readyState === "loading") {

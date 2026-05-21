@@ -34,7 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ERROR).permitAll()
 
-                        .requestMatchers("/", "/login", "/signup", "/error", "/favicon.ico", "/slick/**", "/products/**", "/product-detail", "/api/v1/products/**", "/api/payments/vnpay/return", "/api/payments/vnpay/ipn", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/static/**", "/assets/**", "/uploads/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/", "/login", "/signup", "/api/auth/signup-verification-code", "/api/auth/check-duplicate", "/error", "/favicon.ico", "/slick/**", "/products/**", "/product-detail", "/api/v1/products/**", "/api/payments/vnpay/return", "/api/payments/vnpay/ipn", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/static/**", "/assets/**", "/uploads/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 

@@ -1623,9 +1623,3 @@ body.mobile-filters-open {
     }
 }
 
-.product-header {
-    position: sticky;
-    top: var(--header-visible-offset, 0px);
-    z-index: 1090;
-    background: var(--nike-color-canvas);
-}

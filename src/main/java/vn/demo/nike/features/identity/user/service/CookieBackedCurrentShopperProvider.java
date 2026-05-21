@@ -24,13 +24,6 @@ public class CookieBackedCurrentShopperProvider implements CurrentShopperProvide
 
     @Override
     public ShopperContext getCurrentShopperContext() {
-        // TODO 1: Call extractAuthenticatedUserId() first.
-        // TODO 2: If userId exists, return an authenticated ShopperContext and do not create a guest cookie.
-        // TODO 3: If userId is null, read guest_id from GuestIdentityCookieManager.
-        // TODO 4: If guest_id is missing or blank, generate a new UUID string.
-        // TODO 5: Persist the new guest_id with GuestIdentityCookieManager.writeGuestId(...).
-        // TODO 6: Return a guest ShopperContext containing only guestId.
-        // TODO 7: Keep this method free from cart/checkout business rules; it should only resolve identity.
         Long userId = extractAuthenticatedUserId();
 
         // Logged in user
@@ -61,14 +54,6 @@ public class CookieBackedCurrentShopperProvider implements CurrentShopperProvide
     }
 
     private Long extractAuthenticatedUserId(){
-        // TODO 1: Read Authentication from SecurityContextHolder.
-        // TODO 2: Return null when authentication is missing.
-        // TODO 3: Return null when authentication is not authenticated.
-        // TODO 4: Return null when authentication is AnonymousAuthenticationToken.
-        // TODO 5: Inspect authentication.getPrincipal().
-        // TODO 6: If principal is CustomUserPrincipal, return its id.
-        // TODO 7: If this repo also supports User as principal, decide whether to support that here too.
-        // TODO 8: Return null for any unsupported principal type.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication instanceof AnonymousAuthenticationToken){
             return null;

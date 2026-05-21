@@ -136,6 +136,26 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="form-label" for="signUpVerificationCode">Code*</label>
+                    <div id="signUpVerificationBanner" class="verification-alert" role="alert" aria-live="assertive" style="display:none;">
+                        <span class="verification-alert-icon" aria-hidden="true">!</span>
+                        <span id="signUpVerificationBannerText">Invalid verification code</span>
+                    </div>
+                    <div class="verification-code-container">
+                        <input type="text" name="verificationCode" class="form-input verification-code-input" id="signUpVerificationCode" placeholder="Code*" inputmode="numeric" maxlength="8" autocomplete="one-time-code" aria-describedby="signUpVerificationCodeError signUpVerificationCountdown">
+                        <button type="button" class="code-resend-button" id="signUpResendCode" aria-label="Resend verification code">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 12a9 9 0 0 1-15.2 6.5"></path>
+                                <path d="M3 12A9 9 0 0 1 18.2 5.5"></path>
+                                <path d="M18 2v4h4"></path>
+                                <path d="M6 22v-4H2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="signUpVerificationCodeError" class="error-message" role="alert" aria-live="assertive" style="display:none;"></div>
+                    <div id="signUpVerificationCountdown" class="code-countdown" aria-live="polite"></div>
+                </div>
+                <div class="form-group">
                     <label class="form-label" for="signUpPassword">Mật khẩu</label>
                     <div id="signUpPasswordError" class="error-message" role="alert" aria-live="assertive" style="${passwordHasError ? 'display:block;' : 'display:none;'}">
                         <c:if test="${passwordHasError}">
@@ -151,6 +171,12 @@
                             </svg>
                         </button>
                     </div>
+                    <ul class="password-requirements" id="signUpPasswordRequirements" aria-label="Password requirements">
+                        <li data-password-rule="length">Minimum of 8 characters</li>
+                        <li data-password-rule="uppercase">At least 1 uppercase letter</li>
+                        <li data-password-rule="lowercase">At least 1 lowercase letter</li>
+                        <li data-password-rule="number">At least 1 number</li>
+                    </ul>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="signUpConfirmPassword">Xác nhận mật khẩu</label>

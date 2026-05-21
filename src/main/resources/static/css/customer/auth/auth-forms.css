@@ -102,6 +102,122 @@
   display: block;
 }
 
+.form-input.error {
+  border-color: var(--color-text-critical);
+}
+
+.form-input.error:focus {
+  border-color: var(--color-text-critical);
+}
+
+.verification-alert {
+  align-items: center;
+  gap: var(--size-spacing-s);
+  background: var(--color-grey-100);
+  border-radius: var(--size-border-radius-s);
+  color: var(--color-black);
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--size-spacing-m);
+  padding: var(--size-spacing-m);
+}
+
+.verification-alert-icon {
+  align-items: center;
+  border: var(--size-border-width-s) solid var(--color-text-critical);
+  border-radius: 999px;
+  color: var(--color-text-critical);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  height: 18px;
+  justify-content: center;
+  line-height: 1;
+  width: 18px;
+}
+
+.verification-code-container {
+  position: relative;
+}
+
+.verification-code-input {
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.02em;
+  padding-right: 56px;
+}
+
+.code-resend-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--color-black);
+  cursor: pointer;
+  display: inline-flex;
+  height: 40px;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  right: var(--size-spacing-s);
+  top: 50%;
+  transform: translateY(-50%);
+  transition: color var(--transition-duration-normal) var(--transition-timing-function-ease),
+    opacity var(--transition-duration-normal) var(--transition-timing-function-ease);
+  width: 40px;
+}
+
+.code-resend-button:hover:not(:disabled),
+.code-resend-button:focus-visible:not(:disabled) {
+  color: var(--color-grey-600);
+}
+
+.code-resend-button:disabled {
+  color: var(--color-grey-300);
+  cursor: not-allowed;
+}
+
+.code-countdown {
+  color: var(--color-grey-500);
+  font-size: var(--font-size-xs);
+  margin-top: var(--size-spacing-xs);
+  min-height: 18px;
+  text-align: right;
+}
+
+.password-requirements {
+  color: var(--color-grey-500);
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  margin: var(--size-spacing-s) 0 0;
+  padding: 0;
+}
+
+.password-requirements li {
+  align-items: center;
+  display: flex;
+  font-size: var(--font-size-xs);
+  gap: var(--size-spacing-xs);
+}
+
+.password-requirements li::before {
+  border: var(--size-border-width-s) solid var(--color-grey-300);
+  border-radius: 999px;
+  content: "";
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+}
+
+.password-requirements li.is-met {
+  color: var(--color-text-success);
+}
+
+.password-requirements li.is-met::before {
+  background: var(--color-text-success);
+  border-color: var(--color-text-success);
+}
+
 /* Success messages */
 .success-message {
   background-color: var(--color-green-50);

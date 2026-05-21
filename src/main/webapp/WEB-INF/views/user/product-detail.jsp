@@ -492,6 +492,7 @@
   ]
 }
 </template>
+<jsp:include page="/WEB-INF/views/user/layout/js.jsp" />
 <script src="${env}/js/customer/pages/product-detail-page.js"></script>
 </body>
 </html>
