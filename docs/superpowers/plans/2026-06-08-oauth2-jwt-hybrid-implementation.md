@@ -285,11 +285,15 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class OAuth2UserProvisioningServiceTest {
 
-    @Mock UserRepository userRepository;
-    @Mock OAuthProviderAccountRepository accountRepository;
-    @Mock PasswordEncoder passwordEncoder;
+    @Mock
+    UserRepository userRepository;
+    @Mock
+    OAuthProviderAccountRepository accountRepository;
+    @Mock
+    PasswordEncoder passwordEncoder;
 
-    @InjectMocks OAuth2UserProvisioningService service;
+    @InjectMocks
+    OAuth2UserService service;
 
     @Test
     void provisionCreatesNewUserWhenVerifiedEmailDoesNotExist() {
@@ -533,7 +537,6 @@ package vn.demo.nike.features.identity.oauth.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -542,9 +545,9 @@ import vn.demo.nike.features.identity.user.entity.User;
 
 @Service
 @RequiredArgsConstructor
-public class NikeOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class NikeOAuth2UserService implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final OAuth2UserProvisioningService provisioningService;
+    private final OAuth2UserService provisioningService;
     private final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
 
     @Override
