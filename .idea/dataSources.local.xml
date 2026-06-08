@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="dataSourceStorageLocal" created-in="IU-261.23567.138">
+  <component name="dataSourceStorageLocal" created-in="IU-261.25134.95">
     <data-source name="nike_store@localhost" uuid="2d860b17-e923-498f-b81d-38caee013eaa">
       <database-info product="MySQL" version="8.0.43" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-9.7.0 (Revision: 0aade1f13bcc98faf7dda5c02e782481eb291f62)" dbms="MYSQL" exact-version="8.0.43" exact-driver-version="9.7">
         <extra-name-characters>$</extra-name-characters>

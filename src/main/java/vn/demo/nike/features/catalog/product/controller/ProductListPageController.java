@@ -17,7 +17,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class ProductListController {
+public class ProductListPageController {
 
     private final ProductListService productListService;
     private final CategoryService categoryService;

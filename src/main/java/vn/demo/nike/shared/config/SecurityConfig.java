@@ -29,8 +29,9 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
 
+
     @Bean
-    @Order(2)
+    @Order(3)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ERROR).permitAll()
 

@@ -162,7 +162,7 @@ textarea,
 .promo-code,
 .search-input,
 .form-input {
-  border-radius: var(--nike-radius-search);
+  border-radius: var(--size-border-width-s);
   border: 1px solid var(--nike-color-hairline);
   background: var(--nike-color-canvas);
   color: var(--nike-color-ink);
