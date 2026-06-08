@@ -4,18 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import vn.demo.nike.features.catalog.search.dto.request.ProductSearchRequest;
 import vn.demo.nike.features.catalog.search.dto.response.ProductSearchPageResponse;
 import vn.demo.nike.features.catalog.search.entity.ProductSearchCriteria;
 import vn.demo.nike.features.catalog.search.service.ProductSearchService;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ProductSearchApiController {
 
-    private final ProductSearchService  productSearchService;
+    private final ProductSearchService productSearchService;
 
-    @GetMapping("/api/products/search")
+    @GetMapping("/api/v1/products/search")
     public ResponseEntity<ProductSearchPageResponse> search(ProductSearchRequest criteria) {
         return ResponseEntity.ok(productSearchService.search(new ProductSearchCriteria(criteria)));
     }
