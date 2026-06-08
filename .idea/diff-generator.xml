@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DiffGenerationConfig">
+    <option name="snapshotDb" value="false" />
+    <option name="snapshotModelValue" value="nike-ecommerce:entityManagerFactory" />
+    <option name="sourceDbValue" value="2d860b17-e923-498f-b81d-38caee013eaa__nike_store" />
+    <option name="sourceModelValue" value="nike-ecommerce:entityManagerFactory" />
+    <option name="targetDbValue" value="2d860b17-e923-498f-b81d-38caee013eaa" />
+  </component>
+</project>
