@@ -179,7 +179,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
-import vn.demo.nike.features.identity.user.entity.User;
+import vn.demo.nike.features.entity.user.User;
 import vn.demo.nike.shared.entity.BaseEntity;
 
 @Getter
@@ -217,7 +217,7 @@ Create `OAuthProviderAccountRepository.java`:
 package vn.demo.nike.features.identity.oauth.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import vn.demo.nike.features.identity.oauth.entity.OAuthProviderAccount;
+import vn.demo.nike.infras.security.oauth.entity.OAuthProviderAccount;
 
 import java.util.Optional;
 
@@ -268,11 +268,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import vn.demo.nike.features.identity.oauth.entity.OAuthProviderAccount;
-import vn.demo.nike.features.identity.oauth.repository.OAuthProviderAccountRepository;
-import vn.demo.nike.features.identity.user.entity.User;
-import vn.demo.nike.features.identity.user.enums.Role;
-import vn.demo.nike.features.identity.user.repository.UserRepository;
+import vn.demo.nike.infras.security.oauth.entity.OAuthProviderAccount;
+import vn.demo.nike.infras.security.oauth.repository.OAuthProviderAccountRepository;
+import vn.demo.nike.features.entity.user.User;
+import vn.demo.nike.features.enums.user.Role;
+import vn.demo.nike.features.repository.user.UserRepository;
+import vn.demo.nike.infras.security.oauth.service.OAuth2UserProvisioningService;
 
 import java.util.Optional;
 
@@ -293,7 +294,7 @@ class OAuth2UserProvisioningServiceTest {
     PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    OAuth2UserService service;
+    OAuth2UserProvisioningService service;
 
     @Test
     void provisionCreatesNewUserWhenVerifiedEmailDoesNotExist() {
@@ -371,11 +372,11 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vn.demo.nike.features.identity.oauth.entity.OAuthProviderAccount;
-import vn.demo.nike.features.identity.oauth.repository.OAuthProviderAccountRepository;
-import vn.demo.nike.features.identity.user.entity.User;
-import vn.demo.nike.features.identity.user.enums.Role;
-import vn.demo.nike.features.identity.user.repository.UserRepository;
+import vn.demo.nike.infras.security.oauth.entity.OAuthProviderAccount;
+import vn.demo.nike.infras.security.oauth.repository.OAuthProviderAccountRepository;
+import vn.demo.nike.features.entity.user.User;
+import vn.demo.nike.features.enums.user.Role;
+import vn.demo.nike.features.repository.user.UserRepository;
 
 import java.util.Locale;
 import java.util.UUID;
@@ -541,13 +542,14 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import vn.demo.nike.features.identity.oauth.model.NikeOAuth2User;
-import vn.demo.nike.features.identity.user.entity.User;
+import vn.demo.nike.features.entity.user.User;
+import vn.demo.nike.infras.security.oauth.service.OAuth2UserProvisioningService;
 
 @Service
 @RequiredArgsConstructor
 public class NikeOAuth2UserService implements org.springframework.security.oauth2.client.userinfo.OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final OAuth2UserService provisioningService;
+    private final OAuth2UserProvisioningService provisioningService;
     private final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
 
     @Override
@@ -597,7 +599,7 @@ private final NikeOAuth2UserService nikeOAuth2UserService;
 Add import:
 
 ```java
-import vn.demo.nike.features.identity.oauth.service.NikeOAuth2UserService;
+
 ```
 
 After `.formLogin(...)`, add:
@@ -695,7 +697,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
-import vn.demo.nike.features.identity.user.entity.User;
+import vn.demo.nike.features.entity.user.User;
 
 import java.time.Instant;
 import java.util.List;
@@ -785,8 +787,8 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import vn.demo.nike.features.identity.user.entity.User;
-import vn.demo.nike.features.identity.user.enums.Role;
+import vn.demo.nike.features.entity.user.User;
+import vn.demo.nike.features.enums.user.Role;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -931,8 +933,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.demo.nike.features.identity.auth.jwt.JwtAuthenticationConverter;
 import vn.demo.nike.features.identity.auth.jwt.JwtProperties;
-import vn.demo.nike.features.identity.oauth.service.NikeOAuth2UserService;
-import vn.demo.nike.features.identity.user.repository.UserRepository;
+import vn.demo.nike.infras.security.oauth.service.NikeOAuth2UserService;
+import vn.demo.nike.features.repository.user.UserRepository;
 
 import java.time.Instant;
 import java.util.List;
@@ -946,12 +948,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import({SecurityConfig.class, JwtAuthenticationConverter.class})
 class ApiSecurityConfigTest {
 
-    @Autowired MockMvc mvc;
+    @Autowired
+    MockMvc mvc;
 
-    @MockitoBean UserRepository userRepository;
-    @MockitoBean NikeOAuth2UserService nikeOAuth2UserService;
-    @MockitoBean JwtDecoder jwtDecoder;
-    @MockitoBean JwtProperties jwtProperties;
+    @MockitoBean
+    UserRepository userRepository;
+    @MockitoBean
+    NikeOAuth2UserService nikeOAuth2UserService;
+    @MockitoBean
+    JwtDecoder jwtDecoder;
+    @MockitoBean
+    JwtProperties jwtProperties;
 
     @Test
     void protectedApiWithoutTokenReturnsUnauthorized() throws Exception {
@@ -1037,14 +1044,11 @@ private final JwtProperties jwtProperties;
 Add imports:
 
 ```java
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.authentication.AuthenticationManager;
+
 import vn.demo.nike.features.identity.auth.dto.LoginResponse;
 import vn.demo.nike.features.identity.auth.jwt.JwtProperties;
 import vn.demo.nike.features.identity.auth.jwt.JwtService;
-import vn.demo.nike.features.identity.auth.request.LoginRequest;
-import vn.demo.nike.features.identity.user.entity.User;
+
 ```
 
 - [ ] **Step 3: Add login endpoint**

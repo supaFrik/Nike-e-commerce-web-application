@@ -419,7 +419,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("[data-social-provider]").forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
-      showToast(`Đăng nhập với ${button.dataset.socialProvider} sẽ được triển khai sau.`, { type: "info" });
+      const provider = button.dataset.socialProvider;
+      if (provider === "google") {
+        window.location.href = `${ctx}/oauth2/authorization/google`;
+        return;
+      }
+      showToast(`Dang nhap voi ${provider} se duoc trien khai sau.`, { type: "info" });
     });
   });
 

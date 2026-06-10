@@ -19,7 +19,7 @@ import vn.demo.nike.features.catalog.product.exception.ProductNotFoundException;
 import vn.demo.nike.features.checkout.exception.InvalidCheckoutRequestException;
 import vn.demo.nike.features.order.exception.InvalidOrderStateException;
 import vn.demo.nike.features.order.exception.OrderIdAndUserIdNotFoundException;
-import vn.demo.nike.features.payment.exception.InvalidPaymentMethodException;
+import vn.demo.nike.infras.payment.vnpay.exception.InvalidPaymentMethodException;
 import vn.demo.nike.shared.dto.ErrorResponse;
 
 import java.time.Instant;

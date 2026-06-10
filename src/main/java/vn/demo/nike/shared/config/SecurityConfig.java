@@ -20,7 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CsrfException;
-import vn.demo.nike.features.identity.user.repository.UserRepository;
+import vn.demo.nike.infras.security.oauth.service.NikeOAuth2UserService;
+import vn.demo.nike.features.user.repository.UserRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +29,7 @@ import vn.demo.nike.features.identity.user.repository.UserRepository;
 public class SecurityConfig {
 
     private final UserRepository userRepository;
-
+    private final NikeOAuth2UserService nikeOAuth2UserService;
 
     @Bean
     @Order(3)
@@ -45,6 +46,13 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .defaultSuccessUrl("/", false)
                         .permitAll())
+
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfo -> userInfo.userService(nikeOAuth2UserService))
+                        .defaultSuccessUrl("/", false)
+                        .failureUrl("/login?oauthError=true")
+                )
 
                 .logout(logout -> logout
                         .logoutUrl("/logout")

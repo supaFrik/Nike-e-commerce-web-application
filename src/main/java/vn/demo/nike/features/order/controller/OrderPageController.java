@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import vn.demo.nike.features.identity.user.request.CurrentUserProvider;
+import vn.demo.nike.features.user.request.CurrentUserProvider;
 import vn.demo.nike.features.order.service.OrderPageViewService;
 
 @Controller

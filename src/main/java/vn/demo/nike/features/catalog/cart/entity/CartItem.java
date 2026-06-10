@@ -3,7 +3,7 @@ package vn.demo.nike.features.catalog.cart.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import vn.demo.nike.features.catalog.product.entity.ProductVariant;
-import vn.demo.nike.features.identity.user.entity.User;
+import vn.demo.nike.features.user.entity.User;
 import vn.demo.nike.shared.entity.BaseEntity;
 
 @Entity

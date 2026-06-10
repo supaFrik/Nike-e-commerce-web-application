@@ -13,10 +13,10 @@ import vn.demo.nike.features.order.enums.OrderStatus;
 import vn.demo.nike.features.order.dto.*;
 import vn.demo.nike.features.order.exception.OrderIdAndUserIdNotFoundException;
 import vn.demo.nike.features.order.repository.OrderRepository;
-import vn.demo.nike.features.payment.entity.PaymentTransaction;
-import vn.demo.nike.features.payment.enums.PaymentMethod;
-import vn.demo.nike.features.payment.enums.PaymentStatus;
-import vn.demo.nike.features.payment.repository.PaymentTransactionRepository;
+import vn.demo.nike.infras.payment.vnpay.entity.PaymentTransaction;
+import vn.demo.nike.infras.payment.vnpay.enums.PaymentMethod;
+import vn.demo.nike.infras.payment.vnpay.enums.PaymentStatus;
+import vn.demo.nike.infras.payment.vnpay.repository.PaymentTransactionRepository;
 import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
 
 import java.time.LocalDateTime;
