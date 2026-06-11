@@ -1,0 +1,3 @@
+ALTER TABLE payment_transaction
+    MODIFY COLUMN provider VARCHAR(255) NOT NULL,
+    MODIFY COLUMN status VARCHAR(255) NOT NULL;
