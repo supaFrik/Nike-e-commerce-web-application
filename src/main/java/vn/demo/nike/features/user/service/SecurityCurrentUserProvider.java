@@ -2,8 +2,10 @@ package vn.demo.nike.features.user.service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
-import vn.demo.nike.infras.security.oauth.entity.OAuth2User;
+import vn.demo.nike.infras.security.oauth.entity.NikeOidcUser;
+import vn.demo.nike.infras.security.oauth.entity.NikeOAuth2User;
 import vn.demo.nike.features.user.entity.CustomUserPrincipal;
 import vn.demo.nike.features.user.entity.User;
 import vn.demo.nike.features.user.request.CurrentUserProvider;
@@ -25,8 +27,16 @@ public class SecurityCurrentUserProvider implements CurrentUserProvider {
             return custom.getId();
         }
 
-        if(principal instanceof OAuth2User oAuth2User) {
-            return oAuth2User.getId();
+        if (principal instanceof NikeOAuth2User nikeOAuth2User) {
+            return nikeOAuth2User.getId();
+        }
+
+        if (principal instanceof NikeOidcUser nikeOidcUser) {
+            return nikeOidcUser.getId();
+        }
+
+        if (principal instanceof Jwt jwt) {
+            return parseUserId(jwt.getSubject());
         }
 
         if (principal instanceof User user) {
@@ -34,5 +44,17 @@ public class SecurityCurrentUserProvider implements CurrentUserProvider {
         }
 
         return null;
+    }
+
+    private Long parseUserId(String subject) {
+        if (subject == null || subject.isBlank()) {
+            return null;
+        }
+
+        try {
+            return Long.parseLong(subject);
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 }

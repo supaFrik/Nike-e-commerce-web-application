@@ -5,6 +5,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import vn.demo.nike.infras.security.oauth.entity.OAuthProviderAccount;
 import vn.demo.nike.infras.security.oauth.repository.OAuthProviderAccountRepository;
 import vn.demo.nike.features.user.entity.User;
@@ -22,7 +23,8 @@ public class OAuth2UserProvisioningService {
     private final UserRepository userRepository;
     private final OAuthProviderAccountRepository oAuthProviderAccountRepository;
 
-    User provision(
+    @Transactional
+    public User provision(
             String provider,
             String providerSubject,
             String email,

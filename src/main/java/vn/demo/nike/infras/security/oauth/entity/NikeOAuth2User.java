@@ -5,31 +5,32 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 @Getter
 @AllArgsConstructor
-public class OAuth2User implements org.springframework.security.oauth2.core.user.OAuth2User {
+public class NikeOAuth2User implements org.springframework.security.oauth2.core.user.OAuth2User {
     private final Long id;
     private final String email;
+    private final String displayName;
     private final Collection<? extends GrantedAuthority> authorities;
     private final Map<String, Object> attributes;
-    private final String nameAttributeKey;
 
     @Override
     public Map<String, Object> getAttributes() {
-        return Map.of();
+        return attributes;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities;
     }
 
     @Override
     public String getName() {
-        Object value = attributes.get(nameAttributeKey);
-        return value == null ? null : value.toString();
+        if (displayName != null && !displayName.isBlank()) {
+            return displayName;
+        }
+        return email;
     }
 }

@@ -4,5 +4,8 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V1__init_schema.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V2__reconcile_enum_columns_with_hibernate.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V3__add_oauth_provider_accounts.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V4__ensure_payment_transaction_enum_columns_are_varchar.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V5__ensure_payment_transaction_raw_payload_columns_are_longtext.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V6__ensure_application_enum_columns_are_varchar.sql" dialect="MySQL" />
   </component>
 </project>

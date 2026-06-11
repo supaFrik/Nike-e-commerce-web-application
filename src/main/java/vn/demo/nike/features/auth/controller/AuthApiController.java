@@ -1,6 +1,7 @@
 package vn.demo.nike.features.auth.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,10 @@ public class AuthApiController {
     private final UserRepository userRepository;
     private final SignUpVerificationService signUpVerificationService;
 
-    @PostMapping("/api/v1/auth/verification-codes")
+    @PostMapping({
+            "/api/v1/auth/verification-codes",
+            "/api/auth/signup-verification-code"
+    })
     @ResponseBody
     public ResponseEntity<MessageResponse> sendVerificationCode(
             @Valid @RequestBody SignUpVerificationRequest request
@@ -30,7 +34,10 @@ public class AuthApiController {
         return ResponseEntity.ok(new MessageResponse("Code xác nhận đã được gửi, Vui lòng kiểm tra hộp thư email !"));
     }
 
-    @GetMapping("/api/v1/auth/availability")
+    @GetMapping({
+            "/api/v1/auth/availability",
+            "/api/auth/check-duplicate"
+    })
     @ResponseBody
     public ResponseEntity<AvailabilityResponse> checkAvailability(
             @RequestParam(required = false) String username,
@@ -44,5 +51,13 @@ public class AuthApiController {
                 && userRepository.existsByEmail(email.trim().toLowerCase());
 
         return ResponseEntity.ok(new AvailabilityResponse(usernameExists, emailExists));
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<MessageResponse> handleIllegalState(IllegalStateException ex) {
+        HttpStatus status = ex.getMessage() != null && ex.getMessage().contains("wait")
+                ? HttpStatus.TOO_MANY_REQUESTS
+                : HttpStatus.INTERNAL_SERVER_ERROR;
+        return ResponseEntity.status(status).body(new MessageResponse(ex.getMessage()));
     }
 }

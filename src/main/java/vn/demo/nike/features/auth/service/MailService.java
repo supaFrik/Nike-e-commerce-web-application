@@ -2,6 +2,7 @@ package vn.demo.nike.features.auth.service;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -12,15 +13,20 @@ public class MailService {
 
     private final JavaMailSender mailSender;
 
+    @Value("${spring.mail.username}")
+    private String fromAddress;
+
     public void sendVerificationCode(String to, String code) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setFrom(fromAddress);
             helper.setTo(to);
             helper.setSubject("Mã code xác minh email của bạn");
             helper.setText(buildTemplate(code), true);
             mailSender.send(mimeMessage);
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            throw new IllegalStateException("Could not send verification email", ex);
         }
     }
 

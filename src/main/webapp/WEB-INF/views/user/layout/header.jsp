@@ -2,7 +2,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <c:set var="isAuthenticated" value="${pageContext.request.userPrincipal != null}" />
-<c:set var="displayName" value="${isAuthenticated ? pageContext.request.userPrincipal.name : ''}" />
+<c:set var="displayName" value="${isAuthenticated ? (not empty currentUserDisplayName ? currentUserDisplayName : pageContext.request.userPrincipal.name) : ''}" />
 <c:set var="isAdmin" value="${pageContext.request.isUserInRole('ADMIN')}" />
 
 <!-- Header -->
