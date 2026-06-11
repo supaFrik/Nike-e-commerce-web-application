@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import vn.demo.nike.features.identity.user.entity.User;
+import vn.demo.nike.features.user.entity.User;
 import vn.demo.nike.features.order.enums.OrderStatus;
 import vn.demo.nike.features.order.enums.ShippingMethod;
-import vn.demo.nike.features.payment.enums.PaymentMethod;
+import vn.demo.nike.infras.payment.vnpay.enums.PaymentMethod;
 import vn.demo.nike.shared.entity.BaseEntity;
 
 import java.math.BigDecimal;

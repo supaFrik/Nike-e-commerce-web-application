@@ -221,7 +221,8 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ email: email.toLowerCase() })
       });
       if (!response.ok) {
-        throw new Error("Verification email endpoint is not ready");
+        const errorPayload = await response.json().catch(() => ({}));
+        throw new Error(errorPayload.message || "Verification email endpoint is not ready");
       }
       signUpForm.dataset.verificationRequested = "true";
       signUpForm.dataset.verificationEmail = email.toLowerCase();
@@ -229,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       startResendCooldown();
     } catch (error) {
       resendCodeButton && (resendCodeButton.disabled = false);
-      showToast("Verification email service is not ready yet", { type: "info" });
+      showToast(error.message || "Verification email service is not ready yet", { type: "info" });
     }
   }
 
@@ -419,7 +420,12 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll("[data-social-provider]").forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
-      showToast(`Đăng nhập với ${button.dataset.socialProvider} sẽ được triển khai sau.`, { type: "info" });
+      const provider = button.dataset.socialProvider;
+      if (provider === "google") {
+        window.location.href = `${ctx}/oauth2/authorization/google`;
+        return;
+      }
+      showToast(`Dang nhap voi ${provider} se duoc trien khai sau.`, { type: "info" });
     });
   });
 

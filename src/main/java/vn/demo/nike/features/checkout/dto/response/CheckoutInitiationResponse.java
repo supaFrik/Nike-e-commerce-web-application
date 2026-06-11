@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import vn.demo.nike.features.checkout.model.CheckoutItemSnapshot;
 import vn.demo.nike.features.order.enums.OrderStatus;
-import vn.demo.nike.features.payment.enums.PaymentMethod;
+import vn.demo.nike.infras.payment.vnpay.enums.PaymentMethod;
 
 import java.math.BigDecimal;
 import java.util.List;
