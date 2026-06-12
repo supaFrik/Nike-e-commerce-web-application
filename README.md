@@ -14,7 +14,7 @@
 [![JSP](https://img.shields.io/badge/View-JSP%20%2B%20JSTL-blue)](https://jakarta.ee/specifications/tags/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A production-minded Spring Boot e-commerce application for a Nike-style footwear storefront. The project combines a server-rendered customer experience, an admin back office, MySQL persistence, payment integration hooks, Cloudinary-backed media configuration, email delivery, OAuth2 login support, and operational endpoints for health and metrics.
+A production-minded Spring Boot e-commerce application for a Nike-style footwear storefront. The project combines a server-rendered customer experience, an admin back office, MySQL persistence, payment integration hooks, Cloudinary-backed media configuration, email delivery, JWT Authentication, OAuth2 login support, and operational endpoints for health and metrics.
 
 > Brand note: Nike names, marks, and product references belong to Nike, Inc. This repository is a learning and portfolio project. Replace branded assets and naming before public commercial use unless you have the required rights.
 
