@@ -41,9 +41,11 @@ public class CartService {
         Long userId = requireCurrentUserId();
         User user = getCurrentUser(userId);
         ProductVariant variant = getVariantOrThrow(request.getVariantId());
+
         ensureVariantCanBePurchased(variant);
 
         CartItem cartItem = cartItemRepository.findByUser_IdAndVariant_Id(userId, request.getVariantId()).orElse(null);
+
         if (cartItem != null) {
             int newQty = request.getQuantity() + cartItem.getQuantity();
             ensureRequestedQuantityWithinStock(newQty, variant);

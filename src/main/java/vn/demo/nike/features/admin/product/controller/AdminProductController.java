@@ -31,10 +31,7 @@ public class AdminProductController {
         return ResponseEntity.ok(adminProductService.getProductForm(productId));
     }
 
-    @PostMapping(
-            value = "/admin/api/v1/products",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdminCreatedProductResponse> createProduct(
             @RequestPart("productData") AdminProductCreateRequest productData,
             @RequestPart("files") List<MultipartFile> files,
