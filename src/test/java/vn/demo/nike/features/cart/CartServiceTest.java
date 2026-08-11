@@ -14,9 +14,9 @@ import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
 import vn.demo.nike.features.catalog.cart.service.CartService;
 import vn.demo.nike.features.catalog.product.entity.ProductVariant;
 import vn.demo.nike.features.catalog.product.repository.ProductVariantRepository;
-import vn.demo.nike.features.identity.user.entity.User;
-import vn.demo.nike.features.identity.user.repository.UserRepository;
-import vn.demo.nike.features.identity.user.request.CurrentUserProvider;
+import vn.demo.nike.features.user.entity.User;
+import vn.demo.nike.features.user.repository.UserRepository;
+import vn.demo.nike.features.user.request.CurrentUserProvider;
 
 import java.util.Optional;
 
