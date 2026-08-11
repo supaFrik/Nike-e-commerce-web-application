@@ -17,6 +17,9 @@ public class ProductImage extends BaseEntity {
     @Column(length = 1024, nullable = false)
     private String url;
 
+    @Column(nullable = true)
+    private String path;
+
     @Column(nullable = false)
     private String providerPublicId;
 
