@@ -1,5 +1,6 @@
 package vn.demo.nike.features.admin.product.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/api/v1/products")
+@RequestMapping("/admin/api/products")
 public class AdminProductController {
 
     private final AdminProductService adminProductService;
@@ -33,7 +34,7 @@ public class AdminProductController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AdminCreatedProductResponse> createProduct(
-            @RequestPart("productData") AdminProductCreateRequest productData,
+            @Valid @RequestPart("productData") AdminProductCreateRequest productData,
             @RequestPart("files") List<MultipartFile> files,
             @RequestParam("fileClientKeys") List<String> fileClientKeys
     ) {
@@ -42,7 +43,7 @@ public class AdminProductController {
                 files,
                 fileClientKeys
         );
-        URI location = URI.create("/admin/api/v1/products/" + response.getProductId());
+        URI location = URI.create("/admin/api/products/" + response.getProductId());
         return ResponseEntity
                 .created(location)
                 .body(response);
@@ -54,7 +55,7 @@ public class AdminProductController {
     )
     public ResponseEntity<AdminCreatedProductResponse> updateProduct(
             @PathVariable Long productId,
-            @RequestPart("productData") AdminProductCreateRequest productData,
+            @Valid @RequestPart("productData") AdminProductCreateRequest productData,
             @RequestPart(value = "files", required = false) List<MultipartFile> files,
             @RequestParam(value = "fileClientKeys", required = false) List<String> fileClientKeys
     ) {
@@ -64,10 +65,7 @@ public class AdminProductController {
                 files,
                 fileClientKeys
         );
-        URI location  = URI.create("/admin/api/v1/products/" + response.getProductId());
-        return ResponseEntity
-                .created(location)
-                .body(response);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{productId}")

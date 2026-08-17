@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import vn.demo.nike.features.admin.product.dto.request.AdminProductColorRequest;
 import vn.demo.nike.features.admin.product.dto.response.AdminCreatedProductResponse;
 import vn.demo.nike.features.admin.product.dto.response.AdminProductCategoryOptionResponse;
 import vn.demo.nike.features.admin.product.dto.request.AdminProductCreateRequest;
+import vn.demo.nike.features.admin.product.dto.request.AdminProductVariantRequest;
 import vn.demo.nike.features.admin.product.dto.response.AdminProductFormResponse;
 import vn.demo.nike.features.admin.product.exception.ProductNotFoundException;
 import vn.demo.nike.features.catalog.cart.repository.CartItemRepository;
@@ -21,12 +23,14 @@ import vn.demo.nike.features.catalog.product.entity.ProductImage;
 import vn.demo.nike.features.catalog.product.entity.ProductVariant;
 import vn.demo.nike.features.catalog.product.repository.ProductRepository;
 import vn.demo.nike.shared.util.ProductImageUrlResolverUtil;
+import vn.demo.nike.shared.util.StringUtil;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -66,20 +70,19 @@ public class AdminProductService {
         Product product = findProduct(productId);
         Map<String, MultipartFile> uploadedFiles = productFileMapService.buildFileMap(files, fileClientKeys);
         Map<Long, ProductImage> existingImages = indexExistingImages(product);
-        List<Long> existingVariantIds = collectVariantIds(product);
+        List<Long> removedVariantIds = collectRemovedVariantIds(product, request);
 
         productValidationService.validateCreateOrUpdateRequest(request, uploadedFiles, existingImages);
 
         Category category = findCategory(request.getCategoryId());
         List<String> pathsToDelete = productCleanupService.collectProviderIdsToDelete(product, request, existingImages);
 
-        if (!existingVariantIds.isEmpty()) {
-            cartItemRepository.deleteByVariant_IdIn(existingVariantIds);
+        if (!removedVariantIds.isEmpty()) {
+            cartItemRepository.deleteByVariant_IdIn(removedVariantIds);
         }
 
         productBuilderService.applyProductFields(product, request, category);
-        product.getColors().clear();
-        productBuilderService.rebuildColorBlocks(product, request, uploadedFiles, existingImages);
+        productBuilderService.rebuildColorBlocksKeepingExistingIds(product, request, uploadedFiles, existingImages);
 
         Product savedProduct = productRepository.save(product);
         productCleanupService.scheduleDeleteAfterCommit(pathsToDelete);
@@ -168,6 +171,28 @@ public class AdminProductService {
                 .map(ProductVariant::getId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    private List<Long> collectRemovedVariantIds(Product product, AdminProductCreateRequest request) {
+        Set<String> submittedVariantKeys = request.getColors().stream()
+                .flatMap(color -> color.getVariants().stream()
+                        .map(variant -> variantKey(color, variant)))
+                .collect(Collectors.toSet());
+
+        return product.getColors().stream()
+                .flatMap(color -> color.getVariants().stream()
+                        .filter(variant -> !submittedVariantKeys.contains(variantKey(color, variant)))
+                        .map(ProductVariant::getId))
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    private String variantKey(AdminProductColorRequest color, AdminProductVariantRequest variant) {
+        return StringUtil.normalize(color.getColorName()) + "|" + StringUtil.normalize(variant.getSize());
+    }
+
+    private String variantKey(ProductColor color, ProductVariant variant) {
+        return StringUtil.normalize(color.getColorName()) + "|" + StringUtil.normalize(variant.getSize());
     }
 
     private Product findProduct(Long productId) {

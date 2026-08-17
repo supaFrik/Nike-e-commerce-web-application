@@ -1,5 +1,6 @@
 package vn.demo.nike.features.catalog.cart.controller;
 
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,7 +30,7 @@ public class CartController {
     @ApiResponse(responseCode = "400", description = "Invalid request"
             , content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     @PostMapping("/items")
-    public ResponseEntity<AddToCartResponse> addToCart(@RequestBody AddToCartRequest request) {
+    public ResponseEntity<AddToCartResponse> addToCart(@Valid @RequestBody AddToCartRequest request) {
         return ResponseEntity.ok(cartService.addToCart(request));
     }
 
@@ -42,7 +43,7 @@ public class CartController {
     // Update cart item request
     @PatchMapping("/items/{cartItemId}")
     public ResponseEntity<CartSummaryResponse> updateCartItemQuantity(@PathVariable Long cartItemId,
-                                                                      @RequestBody UpdateCartItemQuantityRequest request) {
+                                                                      @Valid @RequestBody UpdateCartItemQuantityRequest request) {
         return ResponseEntity.ok(cartService.updateCartItemQuantity(cartItemId, request));
     }
 

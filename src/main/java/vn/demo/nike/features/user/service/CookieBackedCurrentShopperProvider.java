@@ -28,11 +28,7 @@ public class CookieBackedCurrentShopperProvider implements CurrentShopperProvide
 
         // Logged in user
         if(userId != null){
-            return new ShopperContext(
-                    true,
-                    userId,
-                    null
-            );
+            return ShopperContext.authenticated(userId);
         }
 
         // Guest user
@@ -46,11 +42,7 @@ public class CookieBackedCurrentShopperProvider implements CurrentShopperProvide
                     guestId
             );
         }
-        return new ShopperContext(
-                true,
-                userId,
-                guestId
-        );
+        return ShopperContext.guest(guestId);
     }
 
     private Long extractAuthenticatedUserId(){

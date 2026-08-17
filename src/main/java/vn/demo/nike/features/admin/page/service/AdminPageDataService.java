@@ -2,6 +2,7 @@ package vn.demo.nike.features.admin.page.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.demo.nike.features.admin.page.dto.response.AdminCategoryListItemResponse;
@@ -32,13 +33,14 @@ public class AdminPageDataService {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private static final int LOW_STOCK_THRESHOLD = 10;
+    private static final int ADMIN_LIST_LIMIT = 200;
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final OrderRepository orderRepository;
 
     public List<AdminProductInventoryItemResponse> listProductInventory() {
-        return productRepository.findAll(Sort.by(Sort.Direction.DESC, "createDate")).stream()
+        return productRepository.findAll(PageRequest.of(0, ADMIN_LIST_LIMIT, Sort.by(Sort.Direction.DESC, "createDate"))).getContent().stream()
                 .map(this::toInventoryItem)
                 .toList();
     }
@@ -50,29 +52,18 @@ public class AdminPageDataService {
     }
 
     public List<AdminOrderListItemResponse> listOrders() {
-        return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "createDate")).stream()
+        return orderRepository.findAll(PageRequest.of(0, ADMIN_LIST_LIMIT, Sort.by(Sort.Direction.DESC, "createDate"))).getContent().stream()
                 .map(this::toOrderItem)
                 .toList();
     }
 
     public AdminDashboardResponse getDashboard() {
-        List<AdminProductInventoryItemResponse> products = listProductInventory();
-        List<Order> orders = orderRepository.findAll();
-
-        BigDecimal totalRevenue = orders.stream()
-                .map(Order::getTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        long lowStockProductCount = products.stream()
-                .filter(item -> item.stock() > 0 && item.stock() <= LOW_STOCK_THRESHOLD)
-                .count();
-
         return new AdminDashboardResponse(
-                products.size(),
+                productRepository.count(),
                 categoryRepository.count(),
-                orders.size(),
-                lowStockProductCount,
-                totalRevenue
+                orderRepository.count(),
+                productRepository.countLowStockProducts(LOW_STOCK_THRESHOLD),
+                orderRepository.sumTotalRevenue()
         );
     }
 

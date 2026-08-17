@@ -47,4 +47,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @EntityGraph(attributePaths = {"colors"})
     List<Product> findWithColorsAndImagesByIdIn(List<Long> ids);
+
+    @Query("""
+            SELECT COUNT(DISTINCT p.id)
+            FROM Product p
+            JOIN p.colors c
+            JOIN c.variants v
+            WHERE v.stock > 0
+            AND v.stock <= :threshold
+            """)
+    long countLowStockProducts(@Param("threshold") int threshold);
 }

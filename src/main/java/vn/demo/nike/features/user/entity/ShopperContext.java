@@ -6,18 +6,25 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ShopperContext {
-    // TODO 1: Decide the invariant for this context:
-    //         - authenticated shopper must have userId and must not have guestId.
-    //         - guest shopper must have guestId and must not have userId.
-    // TODO 2: Add factory methods when you implement this exercise:
-    //         - authenticated(Long userId)
-    //         - guest(String guestId)
-    // TODO 3: Add helper methods when needed by CartService:
-    //         - isGuest()
-    //         - requireUserId()
-    //         - requireGuestId()
-    // TODO 4: Validate constructor/factory inputs so invalid mixed states cannot be created.
     private final boolean authenticated;
     private final Long userId;
     private final String guestId;
+
+    public static ShopperContext authenticated(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("Authenticated shopper requires a user id");
+        }
+        return new ShopperContext(true, userId, null);
+    }
+
+    public static ShopperContext guest(String guestId) {
+        if (guestId == null || guestId.isBlank()) {
+            throw new IllegalArgumentException("Guest shopper requires a guest id");
+        }
+        return new ShopperContext(false, null, guestId);
+    }
+
+    public boolean isGuest() {
+        return !authenticated;
+    }
 }

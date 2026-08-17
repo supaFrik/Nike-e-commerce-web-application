@@ -17,6 +17,7 @@ import java.util.Map;
 public class CloudinaryImageStorageService implements ProductImageStorageService {
 
     private static final String ROOT_FOLDER = "nike/products";
+    private static final int MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
     private final Cloudinary cloudinary;
 
@@ -63,6 +64,43 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
         if (content == null || content.length == 0) {
             throw new InvalidUploadedImageException("Image content must not be empty");
         }
+        if (content.length > MAX_IMAGE_BYTES) {
+            throw new InvalidUploadedImageException("Image must not exceed 5 MB");
+        }
+        if (!looksLikeSupportedImage(content)) {
+            throw new InvalidUploadedImageException("Only JPEG, PNG, GIF, and WebP images are supported");
+        }
+    }
+
+    private boolean looksLikeSupportedImage(byte[] content) {
+        return hasPrefix(content, new byte[]{(byte) 0xFF, (byte) 0xD8, (byte) 0xFF})
+                || hasPrefix(content, new byte[]{(byte) 0x89, 0x50, 0x4E, 0x47})
+                || hasPrefix(content, new byte[]{0x47, 0x49, 0x46, 0x38})
+                || isWebp(content);
+    }
+
+    private boolean isWebp(byte[] content) {
+        return content.length >= 12
+                && content[0] == 0x52
+                && content[1] == 0x49
+                && content[2] == 0x46
+                && content[3] == 0x46
+                && content[8] == 0x57
+                && content[9] == 0x45
+                && content[10] == 0x42
+                && content[11] == 0x50;
+    }
+
+    private boolean hasPrefix(byte[] content, byte[] prefix) {
+        if (content.length < prefix.length) {
+            return false;
+        }
+        for (int i = 0; i < prefix.length; i++) {
+            if (content[i] != prefix[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private String buildFolder(String productSlug, String colorSlug) {
