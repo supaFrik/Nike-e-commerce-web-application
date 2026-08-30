@@ -626,6 +626,10 @@
                             </c:otherwise>
                         </c:choose>
                     </div>
+                    <div id="infinite-scroll-state" data-current-page="${currentPage}" data-total-pages="${totalPages}" data-has-next="${hasNext}" data-category-id="${selectedCategoryId}" data-sort="${sort}" hidden></div>
+                    <div id="infinite-scroll-sentinel" aria-hidden="true" style="height:1px;"></div>
+                    <div id="infinite-scroll-loading" hidden style="text-align:center;padding:1rem;">Dang tai...</div>
+                    <div id="infinite-scroll-end" hidden style="text-align:center;padding:1rem;color:#777;">Da hien thi tat ca san pham</div>
                     <div id="client-filter-empty" class="filter-empty-state" hidden>
                         Không có sản phẩm nào phù hợp với bộ lọc hiện tại.
                     </div>
@@ -853,5 +857,6 @@
     <jsp:include page="/WEB-INF/views/user/layout/js.jsp" />
     <script src="${env}/js/customer/components/carousel.js" defer></script>
     <script src="${env}/js/customer/pages/product-list-filters.js" defer></script>
+    <script src="${env}/js/customer/pages/product-list-infinite.js" defer></script>
 </body>
 </html>

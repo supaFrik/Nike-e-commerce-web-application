@@ -1,21 +1,14 @@
 package vn.demo.nike.features.catalog.product.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import vn.demo.nike.features.catalog.product.dto.request.ProductListItemView;
-import vn.demo.nike.features.catalog.product.dto.response.ProductCartResponse;
 import vn.demo.nike.features.catalog.product.dto.response.ProductQueryResponseMapper;
 import vn.demo.nike.features.catalog.product.repository.ProductRepository;
-
-import java.util.List;
-
-/**
- * Provide queries related to product listing,
- * such as fetching products by category with sorting options.
- */
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +16,17 @@ public class ProductListService {
     private final ProductRepository productRepository;
     private final ProductQueryResponseMapper productQueryResponseMapper;
 
-    public List<ProductListItemView> getProductList(Long categoryId, String sort) {
-        Pageable pageable = PageRequest.of(0, 100, resolveSort(sort));
-        return productRepository.findProductList(categoryId, pageable).stream()
-                .map(productQueryResponseMapper::toProductListItemView)
-                .toList();
+    private static final int PAGE_SIZE = 20;
+
+    public Page<ProductListItemView> getProductList(Long categoryId, String sort, int page) {
+        int safePage = Math.max(0, page);
+        Pageable pageable = PageRequest.of(safePage, PAGE_SIZE, resolveSort(sort));
+        return productRepository.findProductList(categoryId, pageable)
+                .map(productQueryResponseMapper::toProductListItemView);
+    }
+
+    public Page<ProductListItemView> getProductList(Long categoryId, String sort) {
+        return getProductList(categoryId, sort, 0);
     }
 
     private Sort resolveSort(String sort) {
