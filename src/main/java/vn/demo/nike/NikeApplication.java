@@ -3,7 +3,6 @@ package vn.demo.nike;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
@@ -34,5 +33,4 @@ public class NikeApplication {
 //            throw new RuntimeException(e);
 //        }
 //        return "Hello World";
-    }
 }
