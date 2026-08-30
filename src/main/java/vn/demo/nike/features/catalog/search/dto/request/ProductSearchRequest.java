@@ -2,11 +2,9 @@ package vn.demo.nike.features.catalog.search.dto.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.aspectj.bridge.IMessage;
 
 @Getter
 @Setter
@@ -25,4 +23,8 @@ public class ProductSearchRequest {
     @Min(value = 1, message = "PageSize phải lớn hơn hoặc bằng 1")
     @Max(value = 100, message = "PageSize phải nhỏ hơn hoặc bằng 100")
     private Integer pageSize;
+
+    public void setQ(String q) {
+        this.query = q;
+    }
 }

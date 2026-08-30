@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
         log.warn("Data integrity violation", e);
         ErrorResponse errorBody = new ErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
-                "Database error: " + e.getMessage(),
+                "Request violates data integrity rules.",
                 Instant.now().toEpochMilli()
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);

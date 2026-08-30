@@ -73,7 +73,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE, DispatcherType.ERROR).permitAll()
 
-                        .requestMatchers("/", "/login", "/signup", "/api/auth/signup-verification-code", "/api/auth/check-duplicate", "/api/v1/auth/verification-codes", "/api/v1/auth/availability", "/error", "/favicon.ico", "/slick/**", "/products/**", "/product-detail", "/api/v1/products/**", "/api/payments/vnpay/return", "/api/payments/vnpay/ipn", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/static/**", "/assets/**", "/uploads/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/", "/login", "/signup", "/search", "/api/auth/signup-verification-code", "/api/auth/check-duplicate", "/api/v1/auth/verification-codes", "/api/v1/auth/availability", "/error", "/favicon.ico", "/slick/**", "/products/**", "/product-detail", "/api/products/search", "/api/v1/products/**", "/api/payments/vnpay/return", "/api/payments/vnpay/ipn", "/css/**", "/js/**", "/images/**", "/videos/**", "/fonts/**", "/static/**", "/assets/**", "/uploads/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                        .requestMatchers("/actuator/health",
+                                "/actuator/info",
+                                "/actuator/metrics",
+                                "/actuator/metrics/**",
+                                "/actuator/prometheus").permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 

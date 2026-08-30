@@ -187,7 +187,7 @@
     params.append("page", String(currentPage));
     params.append("pageSize", "24");
 
-    fetch(baseEnv + "/api/products/search?" + params.toString(), { signal: controller.signal })
+    fetch(baseEnv + "/api/v1/products/search?" + params.toString(), { signal: controller.signal })
       .then(function (response) {
         if (!response.ok) {
           throw new Error("HTTP " + response.status);

@@ -16,7 +16,7 @@ public class ProductSearchApiController {
 
     private final ProductSearchService productSearchService;
 
-    @GetMapping("/api/v1/products/search")
+    @GetMapping({"/api/v1/products/search", "/api/products/search"})
     public ResponseEntity<ProductSearchPageResponse> search(ProductSearchRequest criteria) {
         return ResponseEntity.ok(productSearchService.search(new ProductSearchCriteria(criteria)));
     }

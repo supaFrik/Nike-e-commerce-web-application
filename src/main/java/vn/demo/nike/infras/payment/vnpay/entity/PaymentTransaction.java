@@ -18,15 +18,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "payment_transaction",
-        indexes = {
-                @Index(name = "idx_txn_ref", columnList = "txnRef"),
-                @Index(name = "idx_order_id", columnList = "order_id")
-        },
-        uniqueConstraints = {
-                @UniqueConstraint(name = "uk_txn_ref", columnNames = "txnRef")
-        }
-)
+@Table(name = "payment_transaction", indexes = {@Index(name = "idx_txn_ref", columnList = "txnRef"), @Index(name = "idx_order_id", columnList = "order_id")}, uniqueConstraints = {@UniqueConstraint(name = "uk_txn_ref", columnNames = "txnRef")})
 public class PaymentTransaction extends BaseEntity {
 
     /**
