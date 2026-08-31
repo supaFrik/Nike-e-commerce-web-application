@@ -45,3 +45,7 @@ uploads/
 docker-data/
 
 .DS_Store
+
+.my.cnf
+/postman/product-seed.postman_collection.json
+/postman/product-seed-data.json

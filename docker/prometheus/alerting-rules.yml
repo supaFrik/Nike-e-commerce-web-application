@@ -1,0 +1,12 @@
+groups:
+  - name: spring-boot-alerts
+    rules:
+
+      - alert: HighCpuUsage
+        expr: process_cpu_usage > 0.8
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage"
+          description: "Application CPU usage has been above 80% for 1 minutes."

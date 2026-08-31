@@ -16,8 +16,11 @@ services:
       start_period: 20s
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - nike-network
 
   app:
+    image: nike-ecommerce-app:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -51,5 +54,12 @@ services:
 
     ports:
       - "127.0.0.1:${APP_PORT:-8080}:8080"
+    networks:
+      - nike-network
+
 volumes:
   mysql_data:
+
+networks:
+  nike-network:
+    name: nike-network
