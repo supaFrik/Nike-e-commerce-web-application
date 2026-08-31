@@ -1,0 +1,18 @@
+services:
+  k6:
+    image: grafana/k6:latest
+    container_name: nike-k6
+    environment:
+      K6_PROMETHEUS_RW_SERVER_URL: http://prometheus:9090/api/v1/write
+      K6_PROMETHEUS_RW_TREND_STATS: p(90),p(95),p(99),avg,min,max
+    volumes:
+      - ./smoke:/scripts/smoke:ro
+      - ./load:/scripts/load:ro
+      - ./stress:/scripts/stress:ro
+    networks:
+      - nike-network
+
+networks:
+  nike-network:
+    external: true
+    name: nike-network

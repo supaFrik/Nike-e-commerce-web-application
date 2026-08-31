@@ -1,533 +1,324 @@
 <p align="center">
-  <img
-    src="src/main/resources/static/images/e0891c394d4f7b7c09e783e29df07505.png"
-    alt="Nike Screenshot"
-    width="400">
+  <img src="src/main/resources/static/images/e0891c394d4f7b7c09e783e29df07505.png" alt="Nike Storefront" width="360" />
 </p>
 
-# Nike E-commerce Web Application
+# Nike E-Commerce Web Application
 
 [![Java 17](https://img.shields.io/badge/Java-17-orange)](https://www.oracle.com/java/)
 [![Spring Boot 3.2.4](https://img.shields.io/badge/Spring%20Boot-3.2.4-6DB33F)](https://spring.io/projects/spring-boot)
-[![MySQL 8](https://img.shields.io/badge/MySQL-8.0-4479A1)](https://www.mysql.com/)
-[![Maven](https://img.shields.io/badge/Maven-3.6%2B-C71A36)](https://maven.apache.org/)
-[![JSP](https://img.shields.io/badge/View-JSP%20%2B%20JSTL-blue)](https://jakarta.ee/specifications/tags/)
+[![MySQL 8.0](https://img.shields.io/badge/MySQL-8.0-4479A1)](https://www.mysql.com/)
+[![Maven 3.9](https://img.shields.io/badge/Maven-3.9-C71A36)](https://maven.apache.org/)
+[![JSP + JSTL](https://img.shields.io/badge/View-JSP%20%2B%20JSTL-blue)](https://jakarta.ee/specifications/tags/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A production-minded Spring Boot e-commerce application for a Nike-style footwear storefront. The project combines a server-rendered customer experience, an admin back office, MySQL persistence, payment integration hooks, Cloudinary-backed media configuration, email delivery, JWT Authentication, OAuth2 login support, and operational endpoints for health and metrics.
+> **A modular Spring Boot storefront** — server-rendered JSP customer experience + admin back office, MySQL + JPA + Flyway, JWT/OAuth2, VNPay, Cloudinary, and Docker-ready. Built to learn real e-commerce flows, not to demo a toy.
 
-> Brand note: Nike names, marks, and product references belong to Nike, Inc. This repository is a learning and portfolio project. Replace branded assets and naming before public commercial use unless you have the required rights.
+> **Brand note:** Nike names/marks belong to Nike, Inc. This is a portfolio/learning project. Replace branded assets before any commercial use.
+
+---
+
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Installation](#installation)
+- [Running the Project](#running-the-project)
+- [Env Configuration](#env-configuration)
+- [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Roadmap](#roadmap)
+
+---
 
 ## Introduction
 
-Nike E-commerce Web Application is built as a full-stack Java web application using Spring Boot, Spring MVC, JSP/JSTL, Spring Security, Spring Data JPA, Flyway, and MySQL. It models the core flows of a commerce platform:
+Nike E-Commerce is a **full-stack, modular monolith** built with Spring Boot 3.2, Spring MVC, Spring Security, Spring Data JPA (Hibernate), Flyway, MySQL 8 and JSP/JSTL.
 
-- Product discovery through home, listing, detail, category, and search pages
-- Variant-aware catalog management with colors, sizes, images, stock, and publish state
-- Cart, checkout, order, and payment flows
-- Customer identity with local authentication, OAuth2 support, profile data, and addresses
-- Admin workflows for dashboard data, categories, products, inventory, and orders
-- Deployment-oriented configuration through profiles, Docker, environment variables, Actuator, and Prometheus metrics
+It models the core commerce loop end-to-end:
 
-The codebase follows a package-by-feature structure so each domain owns its controllers, DTOs, entities, repositories, services, and exceptions as much as possible.
+**Discovery ? Variant selection ? Cart ? Checkout ? Order ? Payment ? Admin operations**
 
-## Key Features
+The codebase is **package-by-feature** — each domain (`catalog`, `identity`, `checkout`, `order`, `admin`) owns its controllers, DTOs, entities, repositories, services and exceptions. Shared cross-cutting concerns live in `shared/`, infrastructure integrations in `infras/`.
 
-### Customer Storefront
+**What this project is good for:** learning how a real storefront is wired (auth, catalog, inventory, orders, payments) without the complexity of microservices.
 
-- Server-rendered JSP pages for home, catalog, product detail, cart, checkout, order, profile, and authentication flows
-- Product search and filtering APIs
-- Product detail views with color, size, image, and variant inventory selection
-- Cart item add, update, remove, count, and summary behavior
-- Checkout initiation and placement flow
-- COD and VNPAY-oriented payment handling
+**What it is not:** a Nike-affiliated product, nor a microservices reference.
+
+## Features
+
+### Storefront
+- Home, category listing, product detail, search, cart, checkout, order detail, profile, etc — all server-rendered JSP
+- Variant-aware catalog: `Product ? ProductColor ? ProductImage / ProductVariant (size, SKU, stock, inventory_status)`
+- Cart add/update/remove/count/summary (user-scoped)
+- Checkout with address selection, shipping method, COD / VNPay sandbox
 
 ### Admin Back Office
+- Dashboard metrics, product list & form (colors/variants/images/stock), category CRUD, order list & management
+- DTO-bounded admin APIs under `/admin/api/**`
 
-- Admin dashboard data endpoints
-- Product inventory list and product form data
-- Product creation and editing with categories, colorways, variants, stock, and images
-- Category management endpoints
-- Order list and order management pages
-- DTO-based request and response boundaries for admin APIs
+### Identity & Security
+- Spring Security, role-based `CUSTOMER` / `ADMIN`, form login + JWT resource server, Google OAuth2, signup verification via email
+- BCrypt passwords, CSRF-aware frontend bootstrap
 
-### Identity and Security
+### Platform & Observability
+- MySQL 8 + JPA (validate mode) + Flyway
+- Profiles: `local` (Maven, 9090), `docker` (Compose, 8080), `prod` — env-driven
+- Optional observability stack (Docker): **Actuator** (`health,info,metrics,prometheus`), **Prometheus** scraping `app:8080/actuator/prometheus` + `mysqld-exporter`, **Grafana** (3001) with provisioned datasource, **k6** smoke/load/stress for `/products/list`
+- WAR packaging (`mvn clean package` ? `target/*.war`), Dockerfile + Compose
 
-- Spring Security integration
-- Role-based access between customer and admin areas
-- Local signup/login flow
-- Signup verification and email service integration
-- Google OAuth2 client configuration
-- JWT/resource-server dependencies for token-oriented security evolution
-- CSRF-aware frontend runtime bootstrap
+## Architecture
 
-### Platform and Operations
-
-- MySQL 8 persistence with Spring Data JPA
-- Flyway migrations in `src/main/resources/db/migration`
-- Dockerfile and Docker Compose support
-- Environment-specific Spring profiles: `local`, `docker`, `prod`, and `bootstrap`
-- Cloudinary configuration for product media storage
-- Spring Boot Actuator with health, metrics, and Prometheus endpoints
-- WAR packaging as `target/nike-starter.war`
-
-## Overall Architecture
-
-The application is a modular monolith. It keeps deployment simple while separating business capabilities by package and layer.
+### High-level
 
 ```mermaid
 flowchart LR
-    Browser[Customer/Admin Browser]
-    JSP[JSP Views + Static Assets]
-    Controllers[Spring MVC Controllers]
-    Services[Feature Services]
-    Repositories[Spring Data JPA Repositories]
-    DB[(MySQL 8)]
-    Flyway[Flyway Migrations]
-    External[External Providers]
-
-    Browser --> JSP
-    Browser --> Controllers
-    JSP --> Controllers
-    Controllers --> Services
-    Services --> Repositories
-    Repositories --> DB
-    Flyway --> DB
-    Services --> External
-
-    External --> VNPAY[VNPAY Sandbox/Payment Gateway]
-    External --> Mail[SMTP Mail Provider]
-    External --> OAuth[Google OAuth2]
-    External --> Cloudinary[Cloudinary Media]
+  U[Browser] --> JSP[JSP + Static Assets]
+  U --> C[Spring MVC Controllers]
+  JSP --> C
+  C --> S[Feature Services]
+  S --> R[Spring Data JPA Repositories]
+  R --> DB[(MySQL 8)]
+  Flyway[Flyway V1..V6] --> DB
+  S --> Ext[External Providers]
+  Ext --> VNPay[VNPay Sandbox]
+  Ext --> Mail[SMTP]
+  Ext --> OAuth[Google OAuth2]
+  Ext --> Cloudinary[Cloudinary]
+  S --> Actuator[Actuator / Prometheus]
+  Actuator --> Prometheus[Prometheus]
+  Prometheus --> Grafana[Grafana]
 ```
 
-### Request Flow
+### Request flow
 
 ```mermaid
 sequenceDiagram
-    participant U as User
-    participant C as Controller
-    participant S as Service
-    participant R as Repository
-    participant D as MySQL
-    participant V as JSP/API Response
-
-    U->>C: HTTP request
-    C->>S: Validate and delegate use case
-    S->>R: Load or persist domain data
-    R->>D: SQL via JPA/Hibernate
-    D-->>R: Result set
-    R-->>S: Entities/projections
-    S-->>C: DTO/view model
-    C-->>V: Render JSP or JSON
-    V-->>U: HTML or API response
+  participant U as User
+  participant C as Controller
+  participant S as Service
+  participant R as Repository
+  participant D as MySQL
+  participant V as View/API
+  U->>C: GET /products/list?page=0&size=20
+  C->>S: validate + Pageable
+  S->>R: findProductList(categoryId, Pageable)
+  R->>D: SELECT ... LIMIT 20 OFFSET 0 + COUNT(*)
+  D-->>R: rows
+  R-->>S: Page<ProductListItemView>
+  S-->>C: DTO page
+  C-->>V: JSP (20 cards) or JSON (/products/list/data)
+  V-->>U: HTML + IntersectionObserver loads next page
 ```
 
-### Package Boundaries
+### Module boundaries
 
 ```mermaid
 flowchart TB
-    App[NikeApplication]
-    Features[features]
-    Shared[shared]
-    Infra[infras]
+  App[NikeApplication]
+  Features[features]
+  Shared[shared: config, dto, exception, util]
+  Infra[infras: storage, security, payment]
 
-    App --> Features
-    Features --> Shared
-    Features --> Infra
+  App --> Features
+  Features --> Shared
+  Features --> Infra
+  Features --> Catalog[catalog: product, category, search, cart]
+  Features --> Checkout[checkout]
+  Features --> Order[order]
+  Features --> Admin[admin]
+  Features --> Home[home]
+  Features --> Identity[identity]
+```
 
-    Features --> Admin[admin]
-    Features --> Catalog[catalog]
-    Features --> Checkout[checkout]
-    Features --> Home[home]
-    Features --> Identity[identity]
-    Features --> Order[order]
-    Features --> Payment[payment]
+**Data model (simplified):**
 
-    Shared --> Config[config]
-    Shared --> CommonDto[dto]
-    Shared --> Exceptions[exception]
-    Shared --> Utilities[util]
-    Infra --> Storage[storage]
+```mermaid
+erDiagram
+  CATEGORY ||--o{ PRODUCTS : has
+  PRODUCTS ||--o{ PRODUCT_COLORS : has
+  PRODUCT_COLORS ||--o{ PRODUCT_IMAGES : has
+  PRODUCT_COLORS ||--o{ PRODUCT_VARIANTS : has
+  USERS ||--o{ CART_ITEMS : owns
+  CART_ITEMS }o--|| PRODUCT_VARIANTS : refs
+  USERS ||--o{ ORDERS : places
+  ORDERS ||--o{ ORDER_ITEMS : contains
 ```
 
 ## Installation
 
 ### Prerequisites
-
-Install the following before running the project:
-
-- Java 17
-- Maven 3.6 or newer
-- Docker Desktop, or a local MySQL 8 server
-- Git
-
-Verify your Java and Maven versions:
-
+- **Java 17**, **Maven 3.9+**, **Docker Desktop** (or local MySQL 8), **Git**
 ```bash
 java -version
 mvn -version
+docker --version
 ```
 
-### Clone the Repository
-
+### Clone
 ```bash
 git clone https://github.com/supaFrik/Nike-e-commerce-web-application.git
 cd "Nike Ecommerce Web Application"
 ```
 
-### Configure Environment Variables
-
-Copy the example environment file and fill in local values:
-
+### Env file
 ```bash
-cp .env.example .env
+cp .env.example .env   # Windows: Copy-Item .env.example .env
+# edit .env — never commit real secrets
 ```
-
-On Windows PowerShell:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Do not commit real credentials. If any secret was previously committed, rotate it before using the application in a real environment.
 
 ## Running the Project
 
-### Option 1: Run with Docker Compose
-
-This starts MySQL and the Spring Boot application together.
-
+### 1) Docker (recommended) — app + MySQL + optional observability
 ```bash
 docker compose up -d --build
-```
-
-By default, Compose maps the application to:
-
-```text
-http://localhost:8080
-```
-
-To view container status:
-
-```bash
 docker compose ps
-```
-
-To stop the stack:
-
-```bash
+# app: http://localhost:8080 (APP_PORT in .env)
+# observability: docker compose -f docker/monitoring.yml up -d  # prometheus 9090, grafana 3001, mysql-exporter 9104
+docker compose logs -f app
 docker compose down
 ```
 
-### Option 2: Run MySQL with Docker and the App with Maven
-
-Start MySQL:
-
+### 2) Local Maven + Docker MySQL
 ```bash
 docker compose up -d mysql-db
-```
-
-Run the application with the local profile:
-
-```bash
 mvn spring-boot:run -Dspring-boot.run.profiles=local
+# http://localhost:9090
 ```
 
-The application starts at:
-
-```text
-http://localhost:9090
-```
-
-### Option 3: Build a WAR Artifact
-
-Compile and package:
-
+### 3) WAR
 ```bash
-mvn clean package
-```
-
-Skip tests when you only need a deployable artifact:
-
-```bash
+mvn clean package          # target/*.war
 mvn clean package -DskipTests
 ```
 
-The generated artifact is:
-
-```text
-target/nike-starter.war
-```
-
-### Useful Development Commands
-
+### Performance tests (local Docker)
 ```bash
-mvn clean compile
-mvn test
-mvn spring-boot:run -Dspring-boot.run.profiles=local
-mvn clean package -DskipTests
-docker compose up -d
-docker compose logs -f app
+# smoke / load / stress currently only for /products/list?categoryId=3&sort=newest
+powershell -ExecutionPolicy Bypass -File k6/run-k6.ps1 -Type smoke
+docker compose -f k6/k6-testing.yml run --rm k6 run -o experimental-prometheus-rw /scripts/load/product-list.js
 ```
 
-### Common URLs
+### Baseline URLs
 
-| Area | URL |
-| --- | --- |
-| Storefront | `http://localhost:9090` |
-| Admin area | `http://localhost:9090/admin` |
-| Health check | `http://localhost:9090/actuator/health` |
-| Prometheus metrics | `http://localhost:9090/actuator/prometheus` |
+| Area | Local (`9090`) | Docker (`8080`) |
+|---|---|---|
+| Storefront | http://localhost:9090 | http://localhost:8080 |
+| Admin | http://localhost:9090/admin | http://localhost:8080/admin |
+| Product list | /products/list?page=0&size=20 | /products/list?page=0&size=20 |
+| Health | /actuator/health | /actuator/health |
+| Prometheus | /actuator/prometheus | /actuator/prometheus |
+| Grafana | — | http://localhost:3001 |
+| Prometheus UI | — | http://localhost:9090 |
 
-When running through Docker Compose, use the configured `APP_PORT` value from `.env`; the default is `8080`.
+## Env Configuration
 
-## Environment Configuration
+Profiles: `local` ? `application-local.properties`, `docker` ? `application-docker.properties`, `prod` ? `application-prod.properties`. `application.properties` holds defaults.
 
-Spring profiles are used to separate local development, Docker, production, and database bootstrap behavior.
+**Core**
 
-| Profile | File | Purpose |
-| --- | --- | --- |
-| `local` | `application-local.properties` | Local Maven development |
-| `docker` | `application-docker.properties` | Docker Compose or containerized app runtime |
-| `prod` | `application-prod.properties` | Production-style deployments behind a proxy/load balancer |
-| `bootstrap` | `application-bootstrap.properties` | First-run bootstrap behavior for a new environment |
+| Variable | Required | Example |
+|---|---|---|
+| `SPRING_PROFILES_ACTIVE` | yes | `local` / `docker` / `prod` |
+| `PORT` / `APP_PORT` | no | `9090` (local) `8080` (docker) |
+| `MYSQL_URL` | yes (except local) | `jdbc:mysql://mysql-db:3306/nike_store?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC` |
+| `MYSQL_USER` / `MYSQL_PASSWORD` | yes | `nike_app` / `***` |
+| `MYSQL_ROOT_PASSWORD` | yes (docker) | `***` |
+| `JWT_SECRET` | yes | long random string |
 
-### Core Variables
+**Payments (VNPay sandbox)**
 
-| Variable | Required | Description | Example |
-| --- | --- | --- | --- |
-| `SPRING_PROFILES_ACTIVE` | Yes | Active Spring profile | `local`, `docker`, `prod` |
-| `PORT` or `APP_PORT` | No | Application port | `9090`, `8080` |
-| `MYSQL_URL` | Yes outside `local` defaults | JDBC connection URL | `jdbc:mysql://localhost:3307/nike_store?...` |
-| `MYSQLUSER` | Yes | Database username | `nike_app` |
-| `MYSQLPASSWORD` | Yes | Database password | `change-me` |
-| `JWT_SECRET` | Yes | Secret used for JWT signing/validation | `replace-with-long-random-secret` |
+| Variable | Purpose |
+|---|---|
+| `VNPAY_TMN_CODE`, `VNPAY_HASH_SECRET`, `VNPAY_PAY_URL`, `VNPAY_RETURN_URL`, `VNPAY_IPN_URL`, `VNPAY_API_URL` | Sandbox gateway |
 
-### Payment Variables
+**Mail / OAuth / Media**
 
-| Variable | Description |
-| --- | --- |
-| `VNPAY_TMN_CODE` | VNPAY terminal/merchant code |
-| `VNPAY_HASH_SECRET` | VNPAY hash secret |
-| `VNPAY_PAY_URL` | VNPAY payment URL |
-| `VNPAY_RETURN_URL` | Browser return URL after payment |
-| `VNPAY_IPN_URL` | Server-to-server payment notification URL |
-| `VNPAY_API_URL` | VNPAY transaction API URL |
+| Variable | Purpose                        |
+|---|--------------------------------|
+| `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD` | SMTP (e.g. smtp.gmail.com:587) |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | OAuth2                         |
+| `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | Cloud Image                    |
 
-### VNPay Sandbox Test Card
-
-| Field | Value |
-|---------|---------|
-| `Bank` | NCB |
-| `Card Number` | 9704198526191432198 |
-| `Card Holder` | NGUYEN VAN A |
-| `Issue Date` | 07/15 |
-| `OTP` | 123456 |
-
-Development sandbox values should be stored in `.env` or local machine secrets, not hard-coded into source files.
-
-### Mail Variables
-
-| Variable | Description |
-| --- | --- |
-| `MAIL_HOST` | SMTP host, for example `smtp.gmail.com` |
-| `MAIL_PORT` | SMTP port, commonly `587` |
-| `MAIL_USERNAME` | SMTP username |
-| `MAIL_PASSWORD` | SMTP password or app password |
-
-### OAuth2 Variables
-
-| Variable | Description |
-| --- | --- |
-| `GOOGLE_CLIENT_ID` | Google OAuth2 client ID |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth2 client secret |
-
-### Cloudinary Variables
-
-| Variable | Description |
-| --- | --- |
-| `CLOUDINARY_URL` | Optional complete Cloudinary URL |
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
-
-### Example PowerShell Session
-
+**Example — PowerShell local run:**
 ```powershell
-$env:SPRING_PROFILES_ACTIVE = "local"
-$env:PORT = "9090"
-$env:MYSQL_URL = "jdbc:mysql://localhost:3307/nike_store?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
-$env:MYSQLUSER = "nike_app"
-$env:MYSQLPASSWORD = "change-me"
-$env:JWT_SECRET = "replace-with-a-long-random-secret"
-$env:VNPAY_TMN_CODE = ""
-$env:VNPAY_HASH_SECRET = ""
-$env:MAIL_HOST = "smtp.gmail.com"
-$env:MAIL_PORT = "587"
-$env:MAIL_USERNAME = ""
-$env:MAIL_PASSWORD = ""
-$env:CLOUDINARY_CLOUD_NAME = ""
-$env:CLOUDINARY_API_KEY = ""
-$env:CLOUDINARY_API_SECRET = ""
-
+$env:SPRING_PROFILES_ACTIVE="local"; $env:PORT="9090"
+$env:MYSQL_URL="jdbc:mysql://localhost:3307/nike_store?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+$env:MYSQL_USER="nike_app"; $env:MYSQL_PASSWORD="your-root-password"; $env:JWT_SECRET="your-jwt-secret"
 mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
+
+> Keep secrets in `.env` / host env, never in Git. Rotate any credential that was once committed.
 
 ## Folder Structure
 
 ```text
 .
-|-- .github/                         # GitHub and automation-related files
-|-- database/                        # Database support files, if any
-|-- docs/                            # Project notes, design docs, test plans
-|-- src/
-|   |-- main/
-|   |   |-- java/vn/demo/nike/
-|   |   |   |-- NikeApplication.java
-|   |   |   |-- features/
-|   |   |   |   |-- admin/          # Admin dashboard, categories, products, orders
-|   |   |   |   |-- catalog/        # Product, category, search, cart catalog flows
-|   |   |   |   |-- checkout/       # Checkout orchestration and page data
-|   |   |   |   |-- home/           # Storefront home page
-|   |   |   |   |-- identity/       # Auth, OAuth, users, shopper context
-|   |   |   |   |-- order/          # Order pages and order domain behavior
-|   |   |   |   `-- payment/        # Payment controller/services
-|   |   |   |-- infras/
-|   |   |   |   `-- storage/        # Storage integrations
-|   |   |   `-- shared/             # Shared config, DTOs, exceptions, utilities
-|   |   |-- resources/
-|   |   |   |-- db/migration/       # Flyway SQL migrations
-|   |   |   |-- static/             # CSS, JS, images, fonts, vendor assets
-|   |   |   |-- application.properties
-|   |   |   |-- application-local.properties
-|   |   |   |-- application-docker.properties
-|   |   |   |-- application-prod.properties
-|   |   |   `-- application-bootstrap.properties
-|   |   `-- webapp/WEB-INF/views/
-|   |       |-- administrator/      # Admin JSP pages and layouts
-|   |       |-- common/             # Shared JSP fragments/pages
-|   |       `-- user/               # Customer JSP pages and layouts
-|   `-- test/                       # Unit and integration tests
-|-- docker-compose.yml
-|-- Dockerfile
-|-- pom.xml
-|-- LICENSE
-`-- README.md
++-- docker/                 # monitoring.yml, prometheus/, grafana/, mysql-exporter/
++-- k6/                     # smoke/, load/, stress/ (k6 scripts) + run-k6.ps1
++-- docs/                   # performance test plans, technical notes
++-- src/
+¦   +-- main/
+¦   ¦   +-- java/vn/demo/nike/
+¦   ¦   ¦   +-- NikeApplication.java
+¦   ¦   ¦   +-- features/
+¦   ¦   ¦   +-- infras/           # storage (Cloudinary), security (JWT/OAuth)
+¦   ¦   ¦   +-- shared/           # config, dto, exception, util
+¦   ¦   +-- resources/
+¦   ¦   ¦   +-- db/migration/     # Flyway migration
+¦   ¦   ¦   +-- static/           # css/, js/customer|admin/, images/, fonts/
+¦   ¦   ¦   +-- application*.properties
+¦   ¦   ¦   +-- administrator/    # admin theme assets
+¦   ¦   +-- webapp/WEB-INF/views/
+¦   ¦       +-- administrator/    # admin JSP layouts
+¦   ¦       +-- common/           # fragments, variables.jsp (env = contextPath)
+¦   ¦       +-- user/             # storefront JSP (product-list.jsp: pagination 20 + infinite scroll via IntersectionObserver ? /products/list/data)
+¦   +-- test/                     # unit tests
++-- docker-compose.yml            # app + mysql-db (nike-network)
++-- Dockerfile
++-- pom.xml                       # Spring Boot 3.2.4, Java 17, WAR
++-- .env.example
 ```
 
-## Database Migrations
+## Contributing
 
-Flyway runs migrations from:
+Keep it boring, reviewable, and secure.
 
-```text
-src/main/resources/db/migration
-```
+1. Branch: `git checkout -b feature/product-list-pagination`
+2. One concern per PR — no drive-by refactors
+3. Respect package-by-feature; keep business logic in services, not JSPs/controllers
+4. Web/API boundaries use DTOs — never expose JPA entities
+5. DB changes ? Flyway migration under `db/migration/`
+6. Add/update tests with behavior changes
+7. Never commit secrets, `.env`, `target/`, or IDE files
 
-Current migrations include:
+**Commit style:** `feat:`, `fix:`, `docs:`, `refactor:` (imperative)
 
-| Migration | Purpose |
-| --- | --- |
-| `V1__init_schema.sql` | Initial schema |
-| `V2__reconcile_enum_columns_with_hibernate.sql` | Enum column alignment |
-| `V3__add_oauth_provider_accounts.sql` | OAuth provider account support |
-
-The application uses `spring.jpa.hibernate.ddl-auto=validate` in the main profiles, which means schema drift should be handled through migrations rather than automatic Hibernate table creation.
-
-## Testing
-
-Run the full test suite:
-
-```bash
-mvn test
-```
-
-Run a targeted test class:
-
-```bash
-mvn -Dtest=AdminProductServiceTest test
-```
-
-Recommended checks before opening a pull request:
-
-```bash
-mvn clean compile
-mvn test
-mvn clean package -DskipTests
-```
-
-## Contribution Guidelines
-
-Contributions should keep the project maintainable, secure, and easy to review.
-
-1. Create a focused branch:
-
-   ```bash
-   git checkout -b feature/product-filter-sort
-   ```
-
-2. Keep each pull request scoped to one concern.
-3. Follow the existing package-by-feature structure.
-4. Use DTOs at web/API boundaries; do not expose JPA entities directly.
-5. Keep business rules inside services, not JSPs or controllers.
-6. Add or update tests when changing behavior.
-7. Use Flyway migrations for database schema changes.
-8. Do not commit secrets, real payment credentials, local passwords, generated build output, or IDE-only files.
-9. Document meaningful architectural or workflow changes in `docs/`.
-
-### Commit Style
-
-Use clear, imperative commit messages:
-
-```text
-feat: add product search filters
-fix: preserve selected variant during cart update
-docs: rewrite project setup guide
-refactor: isolate checkout payment handler
-```
-
-### Pull Request Checklist
-
-- [ ] The app compiles with `mvn clean compile`
-- [ ] Relevant tests pass with `mvn test`
-- [ ] New environment variables are documented
-- [ ] Database changes include Flyway migrations
-- [ ] Sensitive values are not committed
-- [ ] UI changes are verified in both customer and admin flows, when applicable
+**PR checklist:**
+- [ ] `mvn clean compile` / `mvn test` passes
+- [ ] New env vars documented
+- [ ] Flyway migration included if schema changed
+- [ ] No secrets committed
+- [ ] UI verified for storefront + admin where applicable
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
-
-The MIT license covers the source code in this repository. It does not grant rights to Nike trademarks, logos, product images, or other third-party brand assets.
+[MIT](LICENSE) — covers source code. Nike trademarks, logos, and product imagery are not licensed.
 
 ## Roadmap
 
-### Near Term
+**Near term** — correctness & hygiene
+- [ ] Expand test coverage (checkout, payment, inventory, security)
 
-- Expand automated test coverage for checkout, payment, inventory, security, and order flows
-- Remove remaining inline scripts from JSP pages and continue consolidating frontend behavior into static JS modules
-- Move all local secrets to environment variables and rotate any credentials that were committed during development
-- Harden profile-specific configuration for local, Docker, bootstrap, and production usage
-- Add seed/demo data workflow for local development
-- Guest shopper context and authenticated customer context support
+**Platform**
+- [ ] CI (compile + tests + Flyway validate) — GitHub Actions
+- [ ] Structured logging + Grafana dashboards for `http.server.requests`, Hikari, JVM, Tomcat (Actuator already exposed)
+- [ ] DB backup/restore docs for MySQL + media
 
-### Platform Improvements
+**Product**
+- [ ] Checkout resilience (retries, failed-payment states, idempotent VNPay IPN)
+- [ ] Richer order tracking & admin lifecycle
+- [ ] Promotions/coupons, wishlist, audit log for admin inventory changes
 
-- Add CI checks for compile, tests, formatting, and migration validation
-- Document deployment playbooks for Docker VPS and cloud platforms
-- Improve observability with structured logging and production dashboards
-- Add backup and restore documentation for MySQL and product media
-- Add OpenAPI documentation for JSON endpoints
-
-### Product Improvements
-
-- Improve checkout resilience for payment retries and failed payment states
-- Add richer order tracking and admin order lifecycle controls
-- Add promotion, discount, and coupon support
-- Add wishlist and saved cart capabilities
-- Add audit logging for admin product and inventory changes
-
-## Additional Documentation
-
-Project documentation lives in [`docs/`](docs).
+---
+*Docs:* [`docs/`](docs) · *Health:* `/actuator/health` · *Metrics:* `/actuator/prometheus`
