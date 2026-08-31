@@ -197,24 +197,19 @@ See `.env.example` for VNPay, Mail, OAuth2, Cloudinary vars.
 ```text
 src/main/java/vn/demo/nike/
   NikeApplication.java
-  features/admin/      # dashboard, products, categories, orders
-  features/catalog/    # product, category, search, cart
-  features/checkout/   # checkout flow
-  features/identity/   # auth, users
-  features/order/      # order pages/domain
-  features/payment/    # VNPay
+  features/            # dashboard, products, categories, orders, admin, etc
   infras/              # storage, security
   shared/              # config, dto, exception, util
 src/main/resources/
-  db/migration/ V1..V6 Flyway
-  static/ css/, js/customer|admin/, images/
+  db/migration/        # Flyway migration
+  static/              # css/, js/customer|admin/, images/
   application*.properties
 src/main/webapp/WEB-INF/views/
-  user/ product-list.jsp (pagination 20 + infinite scroll -> /products/list/data)
-  administrator/ admin JSP
-  common/ fragments, variables.jsp
-docker/  monitoring.yml, prometheus/, grafana/, mysql-exporter/
-k6/  smoke/, load/, stress/ + run-k6.ps1
+  user/                # User storefront
+  administrator/       # Admin storefront
+  common/              # fragments, variables.jsp
+docker/                # monitoring.yml, prometheus/, grafana/, mysql-exporter/
+k6/                    # smoke/, load/, stress/ 
 ```
 
 ## Contributing
