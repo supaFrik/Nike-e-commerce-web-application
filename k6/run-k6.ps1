@@ -1,5 +1,5 @@
 param (
-    [ValidateSet("smoke", "load", "stress")]
+    [ValidateSet("smoke", "load", "stress", "spike", "soak")]
     [string]$Type = "smoke"
 )
 

@@ -9,6 +9,8 @@ services:
       - ./smoke:/scripts/smoke:ro
       - ./load:/scripts/load:ro
       - ./stress:/scripts/stress:ro
+      - ./spike:/scripts/spike:ro
+      - ./soak:/scripts/soak:ro
     networks:
       - nike-network
 

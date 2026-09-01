@@ -1,23 +1,26 @@
-import http from 'k6/http';
-import {check} from 'k6';
+import http from "k6/http";
+import {check, sleep} from "k6";
 import {Trend} from "k6/metrics";
 
 const productListTrend = new Trend("product_list_duration");
 
 export const options = {
     tags: {
-        test_type: 'smoke',
+        test_type: "spike",
     },
-    vus: 1,
-    duration: '30s',
+    stages: [
+        {duration: '10s', target: 20},
+        {duration: '10s', target: 200},
+        {duration: '30s', target: 200},
+        {duration: '10s', target: 0},
+    ],
     thresholds: {
-        http_req_failed: ['rate<0.01'],
+        http_req_failed: ['rate<0.1'],
         http_req_duration: ['p(95)<500'],
     },
 };
 
-export default function (){
-    // Send GET request to API (docker environment)
+export default function () {
     const response = http.get(
         'http://app:8080/products/list/data?categoryId=3&sort=newest'
     );
@@ -33,6 +36,7 @@ export default function (){
         'Total elements > 0': (r) => {
             const totalElements = JSON.parse(r.body).totalElements;
             return totalElements > 0;
-        },
+        }
     });
+    sleep(1);
 }
