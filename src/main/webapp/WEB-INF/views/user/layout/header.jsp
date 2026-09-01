@@ -75,19 +75,19 @@
                 
                 <div class="nav-center">
                     <ul class="nav-menu">
-                        <li class="nav-item">
+                        <li class="nav-item" data-menu="featured">
                             <a href="${env}/products/list?sort=newest" class="nav-link">Mới & Nổi bật</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" data-menu="men">
                             <a href="${env}/products/list?genders=MEN&amp;sort=newest" class="nav-link">Nam</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" data-menu="women">
                             <a href="${env}/products/list?genders=WOMEN&amp;sort=newest" class="nav-link">Nữ</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" data-menu="kids">
                             <a href="${env}/products/list?segments=KIDS&amp;sort=newest" class="nav-link">Trẻ em</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" data-menu="sale">
                             <a href="${env}/products/list?sale=true&amp;sort=newest" class="nav-link">Giảm giá</a>
                         </li>
                         <li class="nav-item">
@@ -95,7 +95,112 @@
                         </li>
                     </ul>
                 </div>
-                
+
+                <!-- Mega Dropdown Panels -->
+                <div class="mega-dropdown" id="megaDropdown">
+                    <div class="container mega-dropdown-container">
+                        <!-- Featured Section -->
+                        <div class="mega-dropdown-panel" data-menu="featured">
+                            <div class="dropdown-content">
+                                <div class="dropdown-column">
+                                    <h4>Nổi bật</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?sort=newest">Tất cả sản phẩm mới</a></li>
+                                        <li><a href="${env}/products/list?collection=best-seller">Bán chạy nhất</a></li>
+                                        <li><a href="${env}/products/list?collection=member-exclusive">Dành riêng cho thành viên</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown-column">
+                                    <h4>Khám phá</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?sort=trending">Xu hướng</a></li>
+                                        <li><a href="${env}/products/list?collection=limited">Phiên bản giới hạn</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Men Section -->
+                        <div class="mega-dropdown-panel" data-menu="men">
+                            <div class="dropdown-content">
+                                <div class="dropdown-column">
+                                    <h4>Giày</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?genders=MEN&categories=SHOES">Tất cả giày</a></li>
+                                        <li><a href="${env}/products/list?genders=MEN&categories=SHOES&type=lifestyle">Lifestyle</a></li>
+                                        <li><a href="${env}/products/list?genders=MEN&categories=SHOES&type=running">Chạy bộ</a></li>
+                                        <li><a href="${env}/products/list?genders=MEN&categories=SHOES&type=basketball">Bóng rổ</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown-column">
+                                    <h4>Quần áo</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?genders=MEN&categories=CLOTHING">Tất cả quần áo</a></li>
+                                        <li><a href="${env}/products/list?genders=MEN&categories=CLOTHING&type=tops">Áo</a></li>
+                                        <li><a href="${env}/products/list?genders=MEN&categories=CLOTHING&type=pants">Quần</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Women Section -->
+                        <div class="mega-dropdown-panel" data-menu="women">
+                            <div class="dropdown-content">
+                                <div class="dropdown-column">
+                                    <h4>Giày</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?genders=WOMEN&categories=SHOES">Tất cả giày</a></li>
+                                        <li><a href="${env}/products/list?genders=WOMEN&categories=SHOES&type=lifestyle">Lifestyle</a></li>
+                                        <li><a href="${env}/products/list?genders=WOMEN&categories=SHOES&type=running">Chạy bộ</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown-column">
+                                    <h4>Quần áo</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?genders=WOMEN&categories=CLOTHING">Tất cả quần áo</a></li>
+                                        <li><a href="${env}/products/list?genders=WOMEN&categories=CLOTHING&type=tops">Áo</a></li>
+                                        <li><a href="${env}/products/list?genders=WOMEN&categories=CLOTHING&type=pants">Quần</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Kids Section -->
+                        <div class="mega-dropdown-panel" data-menu="kids">
+                            <div class="dropdown-content">
+                                <div class="dropdown-column">
+                                    <h4>Giày</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?segments=KIDS&categories=SHOES">Tất cả giày</a></li>
+                                        <li><a href="${env}/products/list?segments=KIDS&categories=SHOES&type=lifestyle">Lifestyle</a></li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown-column">
+                                    <h4>Quần áo</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?segments=KIDS&categories=CLOTHING">Tất cả quần áo</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sale Section -->
+                        <div class="mega-dropdown-panel" data-menu="sale">
+                            <div class="dropdown-content">
+                                <div class="dropdown-column">
+                                    <h4>Giảm giá nổi bật</h4>
+                                    <ul>
+                                        <li><a href="${env}/products/list?sale=true">Tất cả hàng giảm giá</a></li>
+                                        <li><a href="${env}/products/list?sale=true&genders=MEN">Nam</a></li>
+                                        <li><a href="${env}/products/list?sale=true&genders=WOMEN">Nữ</a></li>
+                                        <li><a href="${env}/products/list?sale=true&segments=KIDS">Trẻ em</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="nav-right">
                     <div class="search-container">
                         <div class="search-wrapper">

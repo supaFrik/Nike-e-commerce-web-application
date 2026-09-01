@@ -212,58 +212,82 @@ justify-content: center;
   color: var(--nike-color-ink);
 }
 
-/* Dropdown Navigation */
-.nav-dropdown {
+/* Mega Dropdown Navigation */
+.mega-dropdown {
   position: absolute;
-  top: 120%;
-  left: -480%;
-  width: 120vw;
-  background: var(--color-white);
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: var(--nike-color-canvas);
   opacity: 0;
   visibility: hidden;
-  transition: all var(--transition-duration-normal) ease;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
   z-index: 999;
+  border-bottom: 1px solid var(--nike-color-hairline-soft);
+  max-height: 0;
+  overflow: hidden;
 }
-.nav-item:hover .nav-dropdown {
+
+.mega-dropdown.active {
   opacity: 1;
   visibility: visible;
+  max-height: 80vh;
+  overflow: visible;
 }
+
+.mega-dropdown-container {
+  padding: 40px 0;
+}
+
+.mega-dropdown-panel {
+  display: none;
+}
+
+.mega-dropdown-panel.active {
+  display: block;
+}
+
 .dropdown-content {
   display: flex;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 40px;
-  gap: var(--size-spacing-xxxl);
+  justify-content: center;
+  gap: 80px;
 }
-.dropdown-section {
-  flex: 1;
+
+.dropdown-column {
+  min-width: 180px;
 }
-.dropdown-section h4 {
-  font-size: var(--font-size-s);
-  font-weight: var(--font-weight-medium);
-  margin-bottom: var(--size-spacing-s);
-  color: var(--color-black);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+
+.dropdown-column h4 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: var(--nike-color-ink);
 }
-.dropdown-section ul {
+
+.dropdown-column ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
-.dropdown-section li {
-  margin-bottom: var(--size-spacing-xs);
+
+.dropdown-column li {
+  margin-bottom: 12px;
 }
-.dropdown-section a {
-  display: block;
-  padding: var(--size-spacing-xs) 0;
+
+.dropdown-column a {
   color: var(--nike-color-mute);
   text-decoration: none;
-  font-size: var(--font-size-xs);
-  transition: color var(--transition-duration-fast) ease;
+  font-size: 14px;
+  transition: color 0.2s ease;
 }
-.nav-dropdown a:hover {
-  color: var(--color-black);
+
+.dropdown-column a:hover {
+  color: var(--nike-color-ink);
+}
+
+/* Nav Item Hover State */
+.nav-item.is-hovered .nav-link::after {
+  transform: scaleX(1);
 }
 
 /* Search */
