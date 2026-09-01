@@ -90,9 +90,6 @@
                         <li class="nav-item" data-menu="sale">
                             <a href="${env}/products/list?sale=true&amp;sort=newest" class="nav-link">Giảm giá</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="${env}/products/list?segments=SNKRS&amp;sort=newest" class="nav-link">SNKRS</a>
-                        </li>
                     </ul>
                 </div>
 
