@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import vn.demo.nike.features.admin.product.exception.InvalidUploadedImageException;
 import vn.demo.nike.features.admin.product.model.ImageMetaData;
 import vn.demo.nike.features.admin.product.service.ProductImageStorageService;
+import vn.demo.nike.shared.util.StringUtil;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -46,7 +47,7 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
 
     @Override
     public void delete(String providerPublicId) {
-        if (isBlank(providerPublicId)) {
+        if (StringUtil.isBlank(providerPublicId)) {
             return;
         }
 
@@ -110,7 +111,7 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
     }
 
     private String sanitize(String value) {
-        if (isBlank(value)) {
+        if (StringUtil.isBlank(value)) {
             throw new InvalidUploadedImageException("Invalid Cloudinary folder segment");
         }
 
@@ -129,14 +130,10 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
     private String requireValue(Object value, String message) {
         String result = (String) value;
 
-        if (isBlank(result)) {
+        if (StringUtil.isBlank(result)) {
             throw new InvalidUploadedImageException(message);
         }
 
         return result;
-    }
-
-    private boolean isBlank(String value) {
-        return value == null || value.isBlank();
     }
 }
