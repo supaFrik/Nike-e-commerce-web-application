@@ -21,7 +21,11 @@
 
     <!-- CSS includes -->
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
-    <jsp:include page="/WEB-INF/views/user/imported/profile.jsp" />
+        <link rel="stylesheet" href="${env}/css/customer/profile/profile.css">
+    <link rel="stylesheet" href="${env}/css/customer/profile/interests.css">
+    <link rel="stylesheet" href="${env}/css/customer/profile/favourites.css">
+    <link rel="stylesheet" href="${env}/css/customer/profile/benefits.css">
+    <link rel="stylesheet" href="${env}/css/customer/profile/apps.css">
 
     <!-- JavaScript includes -->
     <script src="${env}/js/customer/components/carousel.js" defer></script>

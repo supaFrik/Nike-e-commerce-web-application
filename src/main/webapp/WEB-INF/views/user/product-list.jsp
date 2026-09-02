@@ -44,7 +44,7 @@
     </title>
 
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
-    <jsp:include page="/WEB-INF/views/user/imported/product-list.jsp" />
+        <link rel="stylesheet" href="${env}/css/customer/product-list/index.css">
 
 </head>
 

@@ -11,7 +11,7 @@
     <title>Nike - Just Do It</title>
 
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
-    <jsp:include page="/WEB-INF/views/user/imported/landing-page.jsp" />
+        <link rel="stylesheet" href="${env}/css/customer/landing-page/index.css">
 
 </head>
 

@@ -14,7 +14,7 @@
     <title>Giỏ hàng - Nike</title>
 
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
-    <jsp:include page="/WEB-INF/views/user/imported/cart.jsp" />
+        <link rel="stylesheet" href="${env}/css/customer/cart/cart.css">
 </head>
 <body>
 <div id="appRuntime" hidden data-app-ctx="${env}" data-csrf-token="${_csrf.token}" data-csrf-header="${_csrf.headerName}"></div>

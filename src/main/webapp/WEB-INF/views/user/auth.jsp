@@ -10,7 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nike - Đăng nhập</title>
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp" />
-    <jsp:include page="/WEB-INF/views/user/imported/auth.jsp" />
+        <link rel="stylesheet" href="${env}/css/customer/auth/auth.css">
+    <link rel="stylesheet" href="${env}/css/customer/auth/auth-animations.css">
+    <link rel="stylesheet" href="${env}/css/customer/auth/auth-buttons.css">
+    <link rel="stylesheet" href="${env}/css/customer/auth/auth-error.css">
+    <link rel="stylesheet" href="${env}/css/customer/auth/auth-forms.css">
+    <link rel="stylesheet" href="${env}/css/customer/auth/auth-layout.css">
+    <link rel="stylesheet" href="${env}/css/customer/auth/auth-header.css">
 </head>
 <body>
     <c:set var="usernameHasError" value="${not empty org.springframework.validation.BindingResult.signupForm.fieldErrors['username']}" />

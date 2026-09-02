@@ -15,7 +15,7 @@
     <title>Thanh toán - Nike</title>
 
     <jsp:include page="/WEB-INF/views/user/layout/css.jsp"/>
-    <jsp:include page="/WEB-INF/views/user/imported/checkout.jsp"/>
+        <link rel="stylesheet" href="${env}/css/customer/checkout/checkout.css">
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/user/layout/order-process.jsp"/>
