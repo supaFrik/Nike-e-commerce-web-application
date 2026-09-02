@@ -40,7 +40,6 @@ public class CheckoutService {
     private final UserRepository userRepository;
     private final CurrentUserProvider currentUserProvider;
     private final AddressRepository addressRepository;
-    private final List<CheckoutPaymentHandler> checkoutPaymentHandlers;
 
     @Transactional
     public CheckoutInitiationResponse placeOrder(PlaceCheckoutRequest request) {
@@ -90,12 +89,30 @@ public class CheckoutService {
         }
     }
 
+    // ponytail: single if-branch, extract strategy when 3rd gateway lands
     private CheckoutInitiationResponse handleCheckoutCompletion(Order order, List<CheckoutItemSnapshot> snapshots) {
-        return checkoutPaymentHandlers.stream()
-                .filter(handler -> handler.supports(order.getPaymentMethod()))
-                .findFirst()
-                .map(handler -> handler.handle(order, snapshots))
-                .orElseGet(() -> buildPendingExternalPaymentResponse(order, snapshots));
+        if (order.getPaymentMethod() == PaymentMethod.COD) {
+            int itemCount = snapshots.stream()
+                    .map(CheckoutItemSnapshot::getQuantity)
+                    .filter(quantity -> quantity != null)
+                    .mapToInt(Integer::intValue)
+                    .sum();
+            return new CheckoutInitiationResponse(
+                    order.getId(),
+                    itemCount,
+                    order.getSubtotal(),
+                    order.getShippingCost(),
+                    order.getDiscount(),
+                    order.getTotal(),
+                    order.getOrderStatus(),
+                    order.getPaymentMethod(),
+                    false,
+                    null,
+                    null,
+                    snapshots
+            );
+        }
+        return buildPendingExternalPaymentResponse(order, snapshots);
     }
 
     private CheckoutInitiationResponse buildPendingExternalPaymentResponse(Order order, List<CheckoutItemSnapshot> snapshots) {

@@ -455,49 +455,25 @@ public class VNPayPaymentService {
     }
 
     private String buildHashData(Map<String, String> params) {
-        List<String> fieldNames = new ArrayList<>(params.keySet());
-        Collections.sort(fieldNames);
-
-        StringBuilder hashData = new StringBuilder();
-        for (String fieldName : fieldNames) {
-            String fieldValue = params.get(fieldName);
-            if (fieldValue == null || fieldValue.isEmpty()) {
-                continue;
-            }
-
-            if (!hashData.isEmpty()) {
-                hashData.append('&');
-            }
-            hashData.append(fieldName)
-                    .append('=')
-                    .append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
-        }
-        return hashData.toString();
+        // ponytail: hash needs raw keys, query needs encoded keys — shared sort+loop in buildSortedQuery
+        return buildSortedQuery(params, false);
     }
 
     private String buildEncodedQuery(Map<String, String> params) {
-        List<String> fieldNames = new ArrayList<>(params.keySet());
-        Collections.sort(fieldNames);
-
-        StringBuilder query = new StringBuilder();
-        for (String fieldName : fieldNames) {
-            String fieldValue = params.get(fieldName);
-            if (fieldValue == null || fieldValue.isEmpty()) {
-                continue;
-            }
-
-            if (!query.isEmpty()) {
-                query.append('&');
-            }
-            query.append(URLEncoder.encode(fieldName, StandardCharsets.UTF_8))
-                    .append('=')
-                    .append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
-        }
-        return query.toString();
+        return buildSortedQuery(params, true);
     }
 
-    @SuppressWarnings("unused")
-    private BigDecimal readInternalAmount(PaymentTransaction transaction) {
-        return transaction.getAmount();
+    private String buildSortedQuery(Map<String, String> params, boolean encodeKey) {
+        List<String> fieldNames = new ArrayList<>(params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder out = new StringBuilder();
+        for (String fieldName : fieldNames) {
+            String fieldValue = params.get(fieldName);
+            if (fieldValue == null || fieldValue.isEmpty()) continue;
+            if (!out.isEmpty()) out.append('&');
+            String key = encodeKey ? URLEncoder.encode(fieldName, StandardCharsets.UTF_8) : fieldName;
+            out.append(key).append('=').append(URLEncoder.encode(fieldValue, StandardCharsets.UTF_8));
+        }
+        return out.toString();
     }
 }

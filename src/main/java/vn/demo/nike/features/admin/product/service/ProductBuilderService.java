@@ -42,34 +42,13 @@ public class ProductBuilderService {
                             Map<Long, ProductImage> existingImages) {
         for (AdminProductColorRequest colorRequest : request.getColors()) {
             ProductColor color = new ProductColor();
-            color.setColorName(colorRequest.getColorName().trim());
-            color.setHexCode(colorRequest.getHexCode());
-            color.setDisplayOrder(colorRequest.getDisplayOrder());
-            color.setProduct(product);
-
-            for (AdminProductVariantRequest variantRequest : colorRequest.getVariants()) {
-                ProductVariant variant = new ProductVariant();
-                variant.setSku(variantRequest.getSku().trim());
-                variant.setSize(variantRequest.getSize().trim());
-                variant.setStock(variantRequest.getStock());
-                variant.setActive(variantRequest.getActive());
-                variant.setColor(color);
-                color.getVariants().add(variant);
+            applyColorFields(color, colorRequest, product);
+            for (AdminProductVariantRequest vr : colorRequest.getVariants()) {
+                color.getVariants().add(newVariant(color, vr));
             }
-
-            for (AdminProductImageRequest imageRequest : colorRequest.getImages()) {
-                ProductImage image = new ProductImage();
-                ImageMetaData metaData = productImageResolver.resolveImageMetaData(imageRequest, uploadedFiles, existingImages, product.getName(), color.getColorName());
-                image.setUrl(metaData.url());
-                image.setProviderPublicId(metaData.providerPublicId());
-                image.setTitle(imageRequest.getTitle());
-                image.setAltText(imageRequest.getAltText());
-                image.setOrderIndex(imageRequest.getOrderIndex());
-                image.setIsMainForColor(imageRequest.getIsMainForColor());
-                image.setColor(color);
-                color.getImages().add(image);
+            for (AdminProductImageRequest ir : colorRequest.getImages()) {
+                color.getImages().add(newImage(color, ir, uploadedFiles, existingImages, product.getName()));
             }
-
             product.getColors().add(color);
         }
     }
@@ -79,96 +58,99 @@ public class ProductBuilderService {
                                               Map<String, MultipartFile> uploadedFiles,
                                               Map<Long, ProductImage> existingImages) {
         Map<String, ProductColor> existingColors = new HashMap<>();
-        for (ProductColor color : product.getColors()) {
-            existingColors.put(StringUtil.normalize(color.getColorName()), color);
+        for (ProductColor c : product.getColors()) {
+            existingColors.put(StringUtil.normalize(c.getColorName()), c);
         }
-
         Set<ProductColor> keptColors = new HashSet<>();
-        for (AdminProductColorRequest colorRequest : request.getColors()) {
-            ProductColor color = existingColors.getOrDefault(
-                    StringUtil.normalize(colorRequest.getColorName()),
-                    new ProductColor()
-            );
-            color.setColorName(colorRequest.getColorName().trim());
-            color.setHexCode(colorRequest.getHexCode());
-            color.setDisplayOrder(colorRequest.getDisplayOrder());
-            color.setProduct(product);
-
-            rebuildVariantsKeepingExistingIds(color, colorRequest);
-            rebuildImagesKeepingExistingIds(color, colorRequest, uploadedFiles, existingImages, product.getName());
-
+        for (AdminProductColorRequest cr : request.getColors()) {
+            ProductColor color = existingColors.getOrDefault(StringUtil.normalize(cr.getColorName()), new ProductColor());
+            applyColorFields(color, cr, product);
+            syncVariants(color, cr);
+            syncImages(color, cr, uploadedFiles, existingImages, product.getName());
             if (!product.getColors().contains(color)) {
                 product.getColors().add(color);
             }
             keptColors.add(color);
         }
-
-        product.getColors().removeIf(color -> !keptColors.contains(color));
+        product.getColors().removeIf(c -> !keptColors.contains(c));
     }
 
-    private void rebuildVariantsKeepingExistingIds(ProductColor color, AdminProductColorRequest colorRequest) {
-        Map<String, ProductVariant> existingVariants = new HashMap<>();
-        for (ProductVariant variant : color.getVariants()) {
-            existingVariants.put(StringUtil.normalize(variant.getSize()), variant);
-        }
-
-        Set<ProductVariant> keptVariants = new HashSet<>();
-        for (AdminProductVariantRequest variantRequest : colorRequest.getVariants()) {
-            ProductVariant variant = existingVariants.getOrDefault(
-                    StringUtil.normalize(variantRequest.getSize()),
-                    new ProductVariant()
-            );
-            variant.setSku(variantRequest.getSku().trim());
-            variant.setSize(variantRequest.getSize().trim());
-            variant.setStock(variantRequest.getStock());
-            variant.setActive(variantRequest.getActive());
-            variant.setColor(color);
-
-            if (!color.getVariants().contains(variant)) {
-                color.getVariants().add(variant);
-            }
-            keptVariants.add(variant);
-        }
-
-        color.getVariants().removeIf(variant -> !keptVariants.contains(variant));
+    // ponytail: shared helpers — create vs sync reuse same field mapping; add new field here once
+    private void applyColorFields(ProductColor color, AdminProductColorRequest req, Product product) {
+        color.setColorName(req.getColorName().trim());
+        color.setHexCode(req.getHexCode());
+        color.setDisplayOrder(req.getDisplayOrder());
+        color.setProduct(product);
     }
 
-    private void rebuildImagesKeepingExistingIds(ProductColor color,
-                                                 AdminProductColorRequest colorRequest,
-                                                 Map<String, MultipartFile> uploadedFiles,
-                                                 Map<Long, ProductImage> existingImages,
-                                                 String productName) {
-        Set<ProductImage> keptImages = new HashSet<>();
-        for (AdminProductImageRequest imageRequest : colorRequest.getImages()) {
-            ProductImage image = imageRequest.getExistingImageId() == null
-                    ? new ProductImage()
-                    : existingImages.get(imageRequest.getExistingImageId());
+    private ProductVariant newVariant(ProductColor color, AdminProductVariantRequest req) {
+        ProductVariant v = new ProductVariant();
+        fillVariant(v, req, color);
+        return v;
+    }
 
-            if (image == null) {
-                image = new ProductImage();
-            }
+    private ProductImage newImage(ProductColor color, AdminProductImageRequest req,
+                                  Map<String, MultipartFile> uploadedFiles,
+                                  Map<Long, ProductImage> existingImages,
+                                  String productName) {
+        ProductImage img = new ProductImage();
+        fillImage(img, color, req, uploadedFiles, existingImages, productName);
+        return img;
+    }
 
-            ImageMetaData metaData = productImageResolver.resolveImageMetaData(
-                    imageRequest,
-                    uploadedFiles,
-                    existingImages,
-                    productName,
-                    color.getColorName()
-            );
-            image.setUrl(metaData.url());
-            image.setProviderPublicId(metaData.providerPublicId());
-            image.setTitle(imageRequest.getTitle());
-            image.setAltText(imageRequest.getAltText());
-            image.setOrderIndex(imageRequest.getOrderIndex());
-            image.setIsMainForColor(imageRequest.getIsMainForColor());
-            image.setColor(color);
-
-            if (!color.getImages().contains(image)) {
-                color.getImages().add(image);
-            }
-            keptImages.add(image);
+    private void syncVariants(ProductColor color, AdminProductColorRequest req) {
+        Map<String, ProductVariant> existing = new HashMap<>();
+        for (ProductVariant v : color.getVariants()) {
+            existing.put(StringUtil.normalize(v.getSize()), v);
         }
+        Set<ProductVariant> kept = new HashSet<>();
+        for (AdminProductVariantRequest vr : req.getVariants()) {
+            ProductVariant v = existing.getOrDefault(StringUtil.normalize(vr.getSize()), new ProductVariant());
+            fillVariant(v, vr, color);
+            if (!color.getVariants().contains(v)) {
+                color.getVariants().add(v);
+            }
+            kept.add(v);
+        }
+        color.getVariants().removeIf(v -> !kept.contains(v));
+    }
 
-        color.getImages().removeIf(image -> !keptImages.contains(image));
+    private void syncImages(ProductColor color, AdminProductColorRequest req,
+                            Map<String, MultipartFile> uploadedFiles,
+                            Map<Long, ProductImage> existingImages,
+                            String productName) {
+        Set<ProductImage> kept = new HashSet<>();
+        for (AdminProductImageRequest ir : req.getImages()) {
+            ProductImage img = ir.getExistingImageId() == null ? new ProductImage() : existingImages.get(ir.getExistingImageId());
+            if (img == null) img = new ProductImage();
+            fillImage(img, color, ir, uploadedFiles, existingImages, productName);
+            if (!color.getImages().contains(img)) {
+                color.getImages().add(img);
+            }
+            kept.add(img);
+        }
+        color.getImages().removeIf(img -> !kept.contains(img));
+    }
+
+    private void fillVariant(ProductVariant v, AdminProductVariantRequest req, ProductColor color) {
+        v.setSku(req.getSku().trim());
+        v.setSize(req.getSize().trim());
+        v.setStock(req.getStock());
+        v.setActive(req.getActive());
+        v.setColor(color);
+    }
+
+    private void fillImage(ProductImage img, ProductColor color, AdminProductImageRequest req,
+                           Map<String, MultipartFile> uploadedFiles,
+                           Map<Long, ProductImage> existingImages,
+                           String productName) {
+        ImageMetaData meta = productImageResolver.resolveImageMetaData(req, uploadedFiles, existingImages, productName, color.getColorName());
+        img.setUrl(meta.url());
+        img.setProviderPublicId(meta.providerPublicId());
+        img.setTitle(req.getTitle());
+        img.setAltText(req.getAltText());
+        img.setOrderIndex(req.getOrderIndex());
+        img.setIsMainForColor(req.getIsMainForColor());
+        img.setColor(color);
     }
 }
