@@ -10,4 +10,14 @@ public final class StringUtil {
         }
         return value.trim().toLowerCase();
     }
+
+    public static String trimToNull(String value) {
+        if (value == null) return null;
+        String t = value.trim();
+        return t.isEmpty() ? null : t;
+    }
+
+    public static boolean isBlank(String value) {
+        return value == null || value.isBlank();
+    }
 }

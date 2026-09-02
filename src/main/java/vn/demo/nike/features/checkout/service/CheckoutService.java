@@ -25,6 +25,7 @@ import vn.demo.nike.features.checkout.exception.UnauthenticatedCheckoutException
 import vn.demo.nike.features.order.repository.OrderRepository;
 import vn.demo.nike.features.order.enums.OrderStatus;
 import vn.demo.nike.infras.payment.vnpay.enums.PaymentMethod;
+import vn.demo.nike.shared.util.StringUtil;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -43,7 +44,9 @@ public class CheckoutService {
 
     @Transactional
     public CheckoutInitiationResponse placeOrder(PlaceCheckoutRequest request) {
-        validateRequest(request);
+        if (request == null) {
+            throw new InvalidCheckoutRequestException("Request must not be null");
+        }
 
         User user = requireCurrentUser();
         ShippingMethod shippingMethod = resolveShippingMethod(request);
@@ -136,17 +139,6 @@ public class CheckoutService {
                 null,
                 snapshots
         );
-    }
-
-    private void validateRequest(PlaceCheckoutRequest request) {
-        if (request == null) {
-            throw new InvalidCheckoutRequestException("Request must not be null");
-        }
-        requireText(request.getRecipientName(), "Recipient name is required");
-        requireText(request.getPhone(), "Phone is required");
-        requireText(request.getLine1(), "Address line 1 is required");
-        requireText(request.getCity(), "City is required");
-        requireText(request.getCountry(), "Country is required");
     }
 
     private User requireCurrentUser() {
@@ -251,28 +243,14 @@ public class CheckoutService {
     }
 
     private void applyShippingDetails(Address address, PlaceCheckoutRequest request) {
-        address.setRecipientName(trimToNull(request.getRecipientName()));
-        address.setPhone(trimToNull(request.getPhone()));
-        address.setLine1(trimToNull(request.getLine1()));
-        address.setLine2(trimToNull(request.getLine2()));
-        address.setCity(trimToNull(request.getCity()));
-        address.setProvince(trimToNull(request.getProvince()));
-        address.setPostalCode(trimToNull(request.getPostalCode()));
-        address.setCountry(trimToNull(request.getCountry()));
-    }
-
-    private void requireText(String value, String message) {
-        if (trimToNull(value) == null) {
-            throw new InvalidCheckoutRequestException(message);
-        }
-    }
-
-    private String trimToNull(String value) {
-        if (value == null) {
-            return null;
-        }
-        String trimmed = value.trim();
-        return trimmed.isEmpty() ? null : trimmed;
+        address.setRecipientName(StringUtil.trimToNull(request.getRecipientName()));
+        address.setPhone(StringUtil.trimToNull(request.getPhone()));
+        address.setLine1(StringUtil.trimToNull(request.getLine1()));
+        address.setLine2(StringUtil.trimToNull(request.getLine2()));
+        address.setCity(StringUtil.trimToNull(request.getCity()));
+        address.setProvince(StringUtil.trimToNull(request.getProvince()));
+        address.setPostalCode(StringUtil.trimToNull(request.getPostalCode()));
+        address.setCountry(StringUtil.trimToNull(request.getCountry()));
     }
 
     private BigDecimal calculateSubtotal(List<CheckoutItemSnapshot> snapshots) {

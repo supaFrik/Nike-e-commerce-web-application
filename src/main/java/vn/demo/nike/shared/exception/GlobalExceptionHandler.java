@@ -28,203 +28,103 @@ import java.time.Instant;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(JsonProcessingException.class)
     public ResponseEntity<ErrorResponse> handleJsonProcessingException(JsonProcessingException ex) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Request payload invalid: " + ex.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+        return error(HttpStatus.BAD_REQUEST, "Request payload invalid: " + ex.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(
-            IllegalArgumentException ex
-    ) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                ex.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(InvalidCheckoutRequestException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCheckoutRequestException(InvalidCheckoutRequestException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Checkout request error: " + e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+        return error(HttpStatus.BAD_REQUEST, "Checkout request error: " + e.getMessage());
     }
 
     @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(Exception e) {
         log.warn("Data integrity violation", e);
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                "Request violates data integrity rules.",
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+        return error(HttpStatus.BAD_REQUEST, "Request violates data integrity rules.");
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
     public Object productNotFoundException(ProductNotFoundException e, HttpServletRequest request) {
-        if (wantsHtml(request)) {
-            return notFoundView();
-        }
-
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+        if (wantsHtml(request)) return notFoundView();
+        return error(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<ErrorResponse> categoryNotFoundException(CategoryNotFoundException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+        return error(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(InvalidProductStatusException.class)
     public ResponseEntity<ErrorResponse> invalidProductStatusException(InvalidProductStatusException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+        return error(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(InvalidProductColorException.class)
     public ResponseEntity<ErrorResponse> invalidProductColorException(InvalidProductColorException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+        return error(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(InvalidSalePriceException.class)
     public ResponseEntity<ErrorResponse> invalidSalePriceException(InvalidSalePriceException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+        return error(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(InvalidSizeException.class)
     public ResponseEntity<ErrorResponse> invalidSizeException(InvalidSizeException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+        return error(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler({
-            InvalidCartQuantityException.class,
-            InactiveVariantException.class,
-            InsufficientStockException.class
-    })
+    @ExceptionHandler({InvalidCartQuantityException.class, InactiveVariantException.class, InsufficientStockException.class})
     public ResponseEntity<ErrorResponse> cartBadRequest(RuntimeException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorBody);
+        return error(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler({
-            CartItemNotFoundException.class,
-            VariantNotFoundException.class
-    })
+    @ExceptionHandler({CartItemNotFoundException.class, VariantNotFoundException.class})
     public ResponseEntity<ErrorResponse> cartNotFound(RuntimeException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+        return error(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(UnauthenticatedUserException.class)
     public ResponseEntity<ErrorResponse> unauthenticatedUser(UnauthenticatedUserException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.UNAUTHORIZED.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorBody);
+        return error(HttpStatus.UNAUTHORIZED, e.getMessage());
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     public Object noResourceFound(NoResourceFoundException e, HttpServletRequest request) {
-        if (wantsHtml(request)) {
-            return notFoundView();
-        }
-
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+        if (wantsHtml(request)) return notFoundView();
+        return error(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(OrderIdAndUserIdNotFoundException.class)
     public ResponseEntity<ErrorResponse> orderIdAndUserIdNotFound(OrderIdAndUserIdNotFoundException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.NOT_FOUND.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+        return error(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(InvalidOrderStateException.class)
     public ResponseEntity<ErrorResponse> invalidOrderStateException(InvalidOrderStateException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.CONFLICT.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
+        return error(HttpStatus.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler(InvalidPaymentMethodException.class)
     public ResponseEntity<ErrorResponse> invalidPaymentMethodException(InvalidPaymentMethodException e) {
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.CONFLICT.value(),
-                e.getMessage(),
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorBody);
+        return error(HttpStatus.CONFLICT, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> exception(Exception e) {
         log.error("Unhandled application exception", e);
-        ErrorResponse errorBody = new ErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "An unexpected error occurred. Please try again later.",
-                Instant.now().toEpochMilli()
-        );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorBody);
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred. Please try again later.");
+    }
+
+    private ResponseEntity<ErrorResponse> error(HttpStatus status, String message) {
+        return ResponseEntity.status(status).body(new ErrorResponse(status.value(), message, Instant.now().toEpochMilli()));
     }
 
     private boolean wantsHtml(HttpServletRequest request) {

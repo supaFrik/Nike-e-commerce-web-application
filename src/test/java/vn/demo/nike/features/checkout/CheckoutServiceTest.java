@@ -14,7 +14,6 @@ import vn.demo.nike.features.catalog.product.repository.ProductVariantRepository
 import vn.demo.nike.features.checkout.dto.request.PlaceCheckoutRequest;
 import vn.demo.nike.features.checkout.exception.InvalidCheckoutRequestException;
 import vn.demo.nike.features.checkout.exception.UnauthenticatedCheckoutException;
-import vn.demo.nike.features.checkout.service.CheckoutPaymentHandler;
 import vn.demo.nike.features.checkout.service.CheckoutService;
 import vn.demo.nike.features.order.repository.OrderRepository;
 import vn.demo.nike.features.user.entity.Address;
@@ -50,9 +49,6 @@ public class CheckoutServiceTest {
 
     @Mock
     private AddressRepository addressRepository;
-
-    @Mock
-    private CheckoutPaymentHandler checkoutPaymentHandler;
 
     @InjectMocks
     private CheckoutService checkoutService;

@@ -24,6 +24,7 @@ import vn.demo.nike.infras.payment.vnpay.dto.VNPayIpnResponse;
 import vn.demo.nike.infras.payment.vnpay.dto.VNPayReturnResponse;
 import vn.demo.nike.infras.payment.vnpay.exception.InvalidPaymentMethodException;
 import vn.demo.nike.infras.payment.vnpay.repository.PaymentTransactionRepository;
+import vn.demo.nike.shared.util.StringUtil;
 
 import java.math.BigDecimal;
 import java.net.URLEncoder;
@@ -73,7 +74,7 @@ public class VNPayPaymentService {
         String locale = resolveLocale(request.getParameter("language"));
         params.put("vnp_Locale", locale);
 
-        String bankCode = trimToNull(request.getParameter("bankCode"));
+        String bankCode = StringUtil.trimToNull(request.getParameter("bankCode"));
         if (bankCode != null) {
             params.put("vnp_BankCode", bankCode);
         }
@@ -405,35 +406,27 @@ public class VNPayPaymentService {
     }
 
     private String resolveLocale(String language) {
-        String normalized = trimToNull(language);
+        String normalized = StringUtil.trimToNull(language);
         return normalized == null ? "vn" : normalized;
     }
 
-    private String trimToNull(String value) {
-        if (value == null) {
-            return null;
-        }
-        String trimmed = value.trim();
-        return trimmed.isEmpty() ? null : trimmed;
-    }
-
     private void validateGatewayConfiguration() {
-        if (trimToNull(vnPayProperties.getTmnCode()) == null) {
+        if (StringUtil.trimToNull(vnPayProperties.getTmnCode()) == null) {
             throw new IllegalStateException("VNPay tmnCode is missing");
         }
-        if (trimToNull(vnPayProperties.getHashSecret()) == null) {
+        if (StringUtil.trimToNull(vnPayProperties.getHashSecret()) == null) {
             throw new IllegalStateException("VNPay hashSecret is missing");
         }
-        if (trimToNull(vnPayProperties.getPayUrl()) == null) {
+        if (StringUtil.trimToNull(vnPayProperties.getPayUrl()) == null) {
             throw new IllegalStateException("VNPay payUrl is missing");
         }
-        if (trimToNull(vnPayProperties.getReturnUrl()) == null) {
+        if (StringUtil.trimToNull(vnPayProperties.getReturnUrl()) == null) {
             throw new IllegalStateException("VNPay returnUrl is missing");
         }
     }
 
     private String normalizeGatewayIpAddress(String ipAddress) {
-        String normalized = trimToNull(ipAddress);
+        String normalized = StringUtil.trimToNull(ipAddress);
         if (normalized == null) {
             return "127.0.0.1";
         }
@@ -444,7 +437,7 @@ public class VNPayPaymentService {
     }
 
     private String toSafeAuditText(String value) {
-        String normalized = trimToNull(value);
+        String normalized = StringUtil.trimToNull(value);
         if (normalized == null) {
             return null;
         }
