@@ -16,12 +16,6 @@ public class NikeApplication {
 		start.run(args);
 	}
 
-	// Test CI/CD pipeline
-	@GetMapping("/test")
-	public String test() {
-		return "Hello World";
-	}
-
 //	 test grafana firing alert
 //	@GetMapping("/monitor")
 //	public String monitor() {
