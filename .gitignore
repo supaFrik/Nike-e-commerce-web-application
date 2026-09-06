@@ -46,6 +46,7 @@ docker-data/
 
 .DS_Store
 
+./scripts
 .my.cnf
 /postman/product-seed.postman_collection.json
 /postman/product-seed-data.json

@@ -17,34 +17,8 @@ public enum ProductStatus {
         return displayName;
     }
 
-    public static ProductStatus fromDisplayName(String displayName) {
-        if (displayName == null) {
-            return ACTIVE;
-        }
-
-        String normalized = normalize(displayName);
-        for (ProductStatus status : ProductStatus.values()) {
-            if (normalize(status.displayName).equals(normalized) || status.name().equalsIgnoreCase(displayName.trim())) {
-                return status;
-            }
-        }
-
-        return switch (normalized) {
-            case "inorder", "instock", "availablenow", "available" -> ACTIVE;
-            case "unavailable", "draft", "comingsoon" -> DRAFT;
-            case "fewleft", "lowstock" -> FEW_LEFT;
-            case "outofstock", "soldout" -> OUT_OF_STOCK;
-            case "discontinued", "nolongeravailable" -> DISCONTINUED;
-            default -> ACTIVE;
-        };
-    }
-
     @Override
     public String toString() {
         return displayName;
-    }
-
-    private static String normalize(String value) {
-        return value == null ? "" : value.trim().replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
     }
 }

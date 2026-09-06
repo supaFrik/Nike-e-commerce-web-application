@@ -81,7 +81,7 @@ public class CheckoutService {
     }
 
     private PaymentMethod resolvePaymentMethod(PlaceCheckoutRequest request) {
-        if (request.getPaymentMethod() == null) {
+        if (request.getPaymentMethod() == null || StringUtil.isBlank(request.getPaymentMethod())) {
             throw new InvalidCheckoutRequestException("Payment method is required");
         }
 
@@ -92,39 +92,13 @@ public class CheckoutService {
         }
     }
 
-    // ponytail: single if-branch, extract strategy when 3rd gateway lands
     private CheckoutInitiationResponse handleCheckoutCompletion(Order order, List<CheckoutItemSnapshot> snapshots) {
-        if (order.getPaymentMethod() == PaymentMethod.COD) {
-            int itemCount = snapshots.stream()
-                    .map(CheckoutItemSnapshot::getQuantity)
-                    .filter(quantity -> quantity != null)
-                    .mapToInt(Integer::intValue)
-                    .sum();
-            return new CheckoutInitiationResponse(
-                    order.getId(),
-                    itemCount,
-                    order.getSubtotal(),
-                    order.getShippingCost(),
-                    order.getDiscount(),
-                    order.getTotal(),
-                    order.getOrderStatus(),
-                    order.getPaymentMethod(),
-                    false,
-                    null,
-                    null,
-                    snapshots
-            );
-        }
-        return buildPendingExternalPaymentResponse(order, snapshots);
-    }
-
-    private CheckoutInitiationResponse buildPendingExternalPaymentResponse(Order order, List<CheckoutItemSnapshot> snapshots) {
         int itemCount = snapshots.stream()
                 .map(CheckoutItemSnapshot::getQuantity)
                 .filter(quantity -> quantity != null)
                 .mapToInt(Integer::intValue)
                 .sum();
-
+        boolean paymentRequired = order.getPaymentMethod() != PaymentMethod.COD;
         return new CheckoutInitiationResponse(
                 order.getId(),
                 itemCount,
@@ -134,7 +108,7 @@ public class CheckoutService {
                 order.getTotal(),
                 order.getOrderStatus(),
                 order.getPaymentMethod(),
-                true,
+                paymentRequired,
                 null,
                 null,
                 snapshots
@@ -150,12 +124,12 @@ public class CheckoutService {
     }
 
     private ShippingMethod resolveShippingMethod(PlaceCheckoutRequest request) {
-        if (request.getShippingMethod() == null) {
+        if (request.getShippingMethod() == null || StringUtil.isBlank(request.getShippingMethod())) {
             return ShippingMethod.STANDARD;
         }
 
         try {
-            return ShippingMethod.valueOf(request.getShippingMethod().toUpperCase());
+            return ShippingMethod.valueOf(request.getShippingMethod().trim().toUpperCase());
         } catch (IllegalArgumentException ex) {
             throw new InvalidCheckoutRequestException(
                     "Invalid shipping method: " + request.getShippingMethod()
@@ -243,14 +217,25 @@ public class CheckoutService {
     }
 
     private void applyShippingDetails(Address address, PlaceCheckoutRequest request) {
-        address.setRecipientName(StringUtil.trimToNull(request.getRecipientName()));
-        address.setPhone(StringUtil.trimToNull(request.getPhone()));
-        address.setLine1(StringUtil.trimToNull(request.getLine1()));
+        String recipientName = StringUtil.trimToNull(request.getRecipientName());
+        if (recipientName == null) throw new InvalidCheckoutRequestException("Recipient name is required");
+        String phone = StringUtil.trimToNull(request.getPhone());
+        if (phone == null) throw new InvalidCheckoutRequestException("Phone is required");
+        String line1 = StringUtil.trimToNull(request.getLine1());
+        if (line1 == null) throw new InvalidCheckoutRequestException("Address is required");
+        String city = StringUtil.trimToNull(request.getCity());
+        if (city == null) throw new InvalidCheckoutRequestException("City is required");
+        String country = StringUtil.trimToNull(request.getCountry());
+        if (country == null) throw new InvalidCheckoutRequestException("Country is required");
+
+        address.setRecipientName(recipientName);
+        address.setPhone(phone);
+        address.setLine1(line1);
         address.setLine2(StringUtil.trimToNull(request.getLine2()));
-        address.setCity(StringUtil.trimToNull(request.getCity()));
+        address.setCity(city);
         address.setProvince(StringUtil.trimToNull(request.getProvince()));
         address.setPostalCode(StringUtil.trimToNull(request.getPostalCode()));
-        address.setCountry(StringUtil.trimToNull(request.getCountry()));
+        address.setCountry(country);
     }
 
     private BigDecimal calculateSubtotal(List<CheckoutItemSnapshot> snapshots) {

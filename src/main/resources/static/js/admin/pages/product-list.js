@@ -4,9 +4,14 @@
   const searchInput = document.getElementById("searchInventory");
   const totalCount = document.getElementById("inventoryTotal");
   const filterHost = document.getElementById("categoryFilters");
+  const pagination = document.getElementById("pagination");
   let products = [];
   let activeCategory = "Tất cả";
   let selectedId = null;
+  const PAGE_SIZE = 20;
+  let currentPage = 1;
+  const pages = (n) => Math.max(1, Math.ceil(n / PAGE_SIZE));
+  const clampPage = (total) => { if (currentPage > total) currentPage = total; if (currentPage < 1) currentPage = 1; };
 
   function ctx() {
     return (window.APP_CTX || "").replace(/\/$/, "");
@@ -28,11 +33,13 @@
       throw new Error("Không thể tải dữ liệu kho sản phẩm.");
     }
     products = await response.json();
-    const visible = filteredProducts();
+    const all = filteredProducts();
+    const totalPages = pages(all.length);
+    clampPage(totalPages);
     const preferredSelectedId = options.preferredSelectedId ?? selectedId;
-    selectedId = visible.some((product) => product.id === preferredSelectedId)
+    selectedId = all.some((product) => product.id === preferredSelectedId)
       ? preferredSelectedId
-      : (visible[0]?.id || products[0]?.id || null);
+      : (all.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)[0]?.id || all[0]?.id || null);
     renderCategoryFilters();
     renderGrid();
   }
@@ -58,6 +65,7 @@
     filterHost.querySelectorAll("[data-category]").forEach((button) => {
       button.addEventListener("click", () => {
         activeCategory = button.dataset.category;
+        currentPage = 1;
         renderCategoryFilters();
         renderGrid();
       });
@@ -72,9 +80,11 @@
     }
 
     products = products.filter((item) => item.id !== productId);
+    const allAfter = filteredProducts();
+    clampPage(pages(allAfter.length));
     if (selectedId === productId) {
-      const visible = filteredProducts();
-      selectedId = visible[0]?.id || products[0]?.id || null;
+      const pageSlice = allAfter.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+      selectedId = pageSlice[0]?.id || allAfter[0]?.id || null;
     }
     renderCategoryFilters();
     renderGrid();
@@ -168,21 +178,55 @@
     });
   }
 
+  function visiblePages(totalPages) {
+    if (totalPages <= 7) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (currentPage <= 4) return [1, 2, 3, 4, 5, "…", totalPages];
+    if (currentPage >= totalPages - 3) return [1, "…", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    return [1, "…", currentPage - 1, currentPage, currentPage + 1, "…", totalPages];
+  }
+
+  function renderPagination(total, totalPages) {
+    if (!pagination) return;
+    if (total <= PAGE_SIZE) {
+      pagination.innerHTML = "";
+      pagination.hidden = true;
+      return;
+    }
+    pagination.hidden = false;
+    const chevPrev = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 12 6 8l4.5-4"/></svg>';
+    const chevNext = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 4 10 8l-4.5 4"/></svg>';
+    const pageBtns = visiblePages(totalPages).map((p) => {
+      if (p === "…") return '<span class="pg-ellipsis" aria-hidden="true">…</span>';
+      const active = p === currentPage;
+      return `<button class="pg-num${active ? " is-active" : ""}" type="button" data-page="${p}"${active ? ' aria-current="page"' : ""}>${p}</button>`;
+    }).join("");
+    pagination.innerHTML = ''
+      + `<button class="pg-nav" type="button" data-page="prev"${currentPage === 1 ? " disabled" : ""} aria-label="Previous page">${chevPrev}<span>Previous</span></button>`
+      + `<span class="pg-pages">${pageBtns}</span>`
+      + `<button class="pg-nav" type="button" data-page="next"${currentPage === totalPages ? " disabled" : ""} aria-label="Next page"><span>Next</span>${chevNext}</button>`;
+  }
+
   function renderGrid() {
-    const visible = filteredProducts();
+    const all = filteredProducts();
+    const totalPages = pages(all.length);
+    clampPage(totalPages);
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const visible = all.slice(start, start + PAGE_SIZE);
+
     if (totalCount) {
-      totalCount.textContent = `${visible.length} sản phẩm`;
+      totalCount.textContent = `${all.length} sản phẩm`;
     }
     if (!grid) {
       return;
     }
-    if (!visible.length) {
+    if (!all.length) {
       grid.innerHTML = `<div class="empty-state">Không tìm thấy sản phẩm phù hợp.</div>`;
+      if (pagination) { pagination.innerHTML = ""; pagination.hidden = true; }
       renderQuickView(null);
       return;
     }
-    if (!visible.some((product) => product.id === selectedId)) {
-      selectedId = visible[0].id;
+    if (all.length && !all.some((product) => product.id === selectedId)) {
+      selectedId = visible[0]?.id || all[0].id;
     }
 
     grid.innerHTML = visible.map((product) => `
@@ -238,10 +282,26 @@
       });
     });
 
-    renderQuickView(visible.find((product) => product.id === selectedId));
+    renderPagination(all.length, totalPages);
+    const selectedProduct = all.find((product) => product.id === selectedId) || visible[0] || null;
+    renderQuickView(selectedProduct);
   }
 
-  searchInput?.addEventListener("input", renderGrid);
+  searchInput?.addEventListener("input", () => {
+    currentPage = 1;
+    renderGrid();
+  });
+
+  pagination?.addEventListener("click", (event) => {
+    const btn = event.target.closest("[data-page]");
+    if (!btn || btn.disabled) return;
+    const v = btn.dataset.page;
+    if (v === "prev" && currentPage > 1) currentPage--;
+    else if (v === "next") currentPage++;
+    else if (/^\d+$/.test(v)) { const n = Number(v); if (n === currentPage) return; currentPage = n; }
+    else return;
+    renderGrid();
+  });
 
   loadProducts().catch((error) => {
     if (grid) {

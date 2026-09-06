@@ -69,7 +69,7 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
             throw new InvalidUploadedImageException("Image must not exceed 5 MB");
         }
         if (!looksLikeSupportedImage(content)) {
-            throw new InvalidUploadedImageException("Only JPEG, PNG, GIF, and WebP images are supported");
+            throw new InvalidUploadedImageException("Only JPEG, PNG, GIF, AVIF, and WebP images are supported");
         }
     }
 
@@ -77,7 +77,20 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
         return hasPrefix(content, new byte[]{(byte) 0xFF, (byte) 0xD8, (byte) 0xFF})
                 || hasPrefix(content, new byte[]{(byte) 0x89, 0x50, 0x4E, 0x47})
                 || hasPrefix(content, new byte[]{0x47, 0x49, 0x46, 0x38})
+                || isAvif(content)
                 || isWebp(content);
+    }
+
+    private boolean isAvif(byte[] content) {
+        return content.length >= 12
+                && content[4] == 'f'
+                && content[5] == 't'
+                && content[6] == 'y'
+                && content[7] == 'p'
+                && content[8] == 'a'
+                && content[9] == 'v'
+                && content[10] == 'i'
+                && content[11] == 'f';
     }
 
     private boolean isWebp(byte[] content) {
