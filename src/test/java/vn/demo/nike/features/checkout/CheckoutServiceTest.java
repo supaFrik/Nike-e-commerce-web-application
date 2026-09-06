@@ -47,8 +47,6 @@ public class CheckoutServiceTest {
     @Mock private AddressRepository addressRepository;
     @InjectMocks private CheckoutService checkoutService;
 
-    // ---- helpers ----
-
     private PlaceCheckoutRequest createValidRequest() {
         PlaceCheckoutRequest r = new PlaceCheckoutRequest();
         r.setRecipientName("John Doe");

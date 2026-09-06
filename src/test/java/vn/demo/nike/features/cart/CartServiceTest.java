@@ -225,6 +225,7 @@ public class CartServiceTest {
         );
 
         // Verify
-        verifyNoInteractions(cartItemRepository);
+        verify(cartItemRepository).findByIdAndUser_Id(2L, 1L);
+        verify(cartItemRepository, never()).save(any());
     }
 }
