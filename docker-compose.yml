@@ -20,10 +20,7 @@ services:
       - nike-network
 
   app:
-    image: nike-ecommerce-app:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/supafrik/nike-e-commerce-web-application:latest
     restart: always
     depends_on:
       mysql-db:

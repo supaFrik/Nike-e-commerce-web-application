@@ -58,3 +58,28 @@ jobs:
             ghcr.io/supafrik/nike-e-commerce-web-application:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  deploy:
+    needs: [build, docker]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+        - name: Deploy to VPS
+          uses: appleboy/ssh-action@v1
+          with:
+            host: ${{ secrets.VPS_HOST }}
+            username: ${{ secrets.VPS_USERNAME }}
+            key: ${{ secrets.VPS_SSH_KEY }}
+            script: |
+              cd /opt/Nike-e-commerce-web-application/
+              docker-compose pull
+              docker-compose up -d
+              echo "Waiting for the application to be ready..."
+              for i in {1..30}; do
+                if curl -s http://localhost:8080/actuator/health | grep -q '"status":"UP"'; then
+                  echo "Deploy OK!"
+                  exit 0
+                fi
+                echo "Waiting for the application to be ready... ($i/30)"
+                sleep 10
+              done
+              echo "Failed to deploy application." && docker compose logs && exit 1
