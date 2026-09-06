@@ -54,7 +54,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/supafrik/nike-e-commerce-web-application:latest
+            ghcr.io/supafrik/nike-e-commerce-web-application:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
