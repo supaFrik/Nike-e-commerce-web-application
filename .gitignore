@@ -46,7 +46,23 @@ docker-data/
 
 .DS_Store
 
-./scripts
 .my.cnf
 /postman/product-seed.postman_collection.json
 /postman/product-seed-data.json
+
+/lessons/0001-ci-cd-la-gi.html
+/docs/refactor/2026-09-02-06-unify-string-helpers.md
+/docs/refactor/2026-09-02-07-remove-validation-duplication.md
+/docs/refactor/2026-09-02-08-dedup-global-exception-handler.md
+/docs/refactor/2026-09-02-09-remove-dead-shopper-abstraction.md
+/docs/refactor/2026-09-02-10-remove-dead-catalog-code.md
+/reference/ci-cd-cheatsheet.html
+/reference/glossary.html
+/MISSION.md
+/NOTES.md
+/assets/quiz.js
+/RESOURCES.md
+/scripts/seed_10k.sql
+/scripts/seed_50k.sql
+/assets/style.css
+/.idea/
