@@ -58,6 +58,7 @@
                         </div>
                     </div>
                     <div class="product-grid" id="productGrid"></div>
+                    <nav class="pagination" id="pagination" aria-label="Pagination"></nav>
                 </article>
                 <aside class="panel span-4 quick-view" id="quickView"></aside>
             </section>

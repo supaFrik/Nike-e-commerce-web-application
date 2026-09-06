@@ -15,5 +15,24 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="nike_store@127.0.0.1" uuid="2a62feff-65f4-4de1-bf98-b976a8da12f7">
+      <database-info product="MySQL" version="8.0.46" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-9.7.0 (Revision: 0aade1f13bcc98faf7dda5c02e782481eb291f62)" dbms="MYSQL" exact-version="8.0.46" exact-driver-version="9.7">
+        <extra-name-characters>$</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="@" />
+        </introspection-scope>
+      </schema-mapping>
+      <ssh-properties>
+        <enabled>true</enabled>
+        <ssh-config-id>95f48af0-dbc7-41a5-b458-608bb0ba318b</ssh-config-id>
+      </ssh-properties>
+    </data-source>
   </component>
 </project>
