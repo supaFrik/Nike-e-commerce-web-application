@@ -26,8 +26,10 @@ jobs:
         run: mvn -B verify
 
       - name: Run Coverage Report
-        uses: actions/upload-artifact@v4.0.0
+        uses: madrapps/jacoco-report@v1.8.0
         with:
-          name: jacoco-report
-          path: target/site/jacoco
+          paths: ${{ github.workspace }}/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: '10'
+          min-coverage-changed-files: '10'
 
