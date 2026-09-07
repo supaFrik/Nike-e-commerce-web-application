@@ -2,15 +2,16 @@ package vn.demo.nike.infras.payment.vnpay.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
+import vn.demo.nike.infras.payment.vnpay.exception.InvalidTxnRefNumber;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 @Service
 public class VNPaySignatureService {
@@ -20,25 +21,7 @@ public class VNPaySignatureService {
     public static String vnp_TmnCode = "";
     public static String secretKey = "";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-
-    public String hashAllFields(Map<String, String> fields, String secretKey) {
-        List<String> fieldNames = new ArrayList<>(fields.keySet());
-        Collections.sort(fieldNames);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < fieldNames.size(); i++) {
-            String fieldName = fieldNames.get(i);
-            String fieldValue = fields.get(fieldName);
-            if (fieldValue != null && !fieldValue.isEmpty()) {
-                sb.append(fieldName);
-                sb.append("=");
-                sb.append(fieldValue);
-            }
-            if (i < fieldNames.size() - 1) {
-                sb.append("&");
-            }
-        }
-        return hmacSHA512(secretKey, sb.toString());
-    }
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     public String hmacSHA512(final String key, final String data) {
         try {
@@ -75,11 +58,11 @@ public class VNPaySignatureService {
     }
 
     public String getRandomNumber(int len) {
-        Random rnd = new Random();
+        if(len <= 0) throw new InvalidTxnRefNumber(len);
         String chars = "0123456789";
         StringBuilder sb = new StringBuilder(len);
         for (int i = 0; i < len; i++) {
-            sb.append(chars.charAt(rnd.nextInt(chars.length())));
+            sb.append(chars.charAt(SECURE_RANDOM.nextInt(chars.length())));
         }
         return sb.toString();
     }
