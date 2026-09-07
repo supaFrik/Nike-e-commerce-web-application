@@ -21,6 +21,7 @@ import vn.demo.nike.features.checkout.exception.InvalidCheckoutRequestException;
 import vn.demo.nike.features.order.exception.InvalidOrderStateException;
 import vn.demo.nike.features.order.exception.OrderIdAndUserIdNotFoundException;
 import vn.demo.nike.infras.payment.vnpay.exception.InvalidPaymentMethodException;
+import vn.demo.nike.infras.payment.vnpay.exception.InvalidTxnRefNumber;
 import vn.demo.nike.shared.dto.ErrorResponse;
 
 import java.time.Instant;
@@ -115,6 +116,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidPaymentMethodException.class)
     public ResponseEntity<ErrorResponse> invalidPaymentMethodException(InvalidPaymentMethodException e) {
         return error(HttpStatus.CONFLICT, e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidTxnRefNumber.class)
+    public ResponseEntity<ErrorResponse> invalidTxnRefNumberException(InvalidTxnRefNumber e) {
+        return error(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
