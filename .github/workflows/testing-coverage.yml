@@ -1,0 +1,33 @@
+name: Testing & Coverage
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.0.0
+
+      - uses: actions/setup-java@v4.0.0
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Build & Test
+        run: mvn -B verify
+
+      - name: Run Coverage Report
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
+
