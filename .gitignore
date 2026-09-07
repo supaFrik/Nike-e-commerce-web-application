@@ -50,7 +50,6 @@ docker-data/
 /postman/product-seed.postman_collection.json
 /postman/product-seed-data.json
 
-/lessons/0001-ci-cd-la-gi.html
 /docs/refactor/2026-09-02-06-unify-string-helpers.md
 /docs/refactor/2026-09-02-07-remove-validation-duplication.md
 /docs/refactor/2026-09-02-08-dedup-global-exception-handler.md
@@ -66,3 +65,5 @@ docker-data/
 /scripts/seed_50k.sql
 /assets/style.css
 /.idea/
+/lessons/
+/reference/
