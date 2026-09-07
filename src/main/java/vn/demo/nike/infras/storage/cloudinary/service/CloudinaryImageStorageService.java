@@ -131,7 +131,7 @@ public class CloudinaryImageStorageService implements ProductImageStorageService
         String sanitized = value.trim()
                 .toLowerCase(Locale.ROOT)
                 .replaceAll("[^a-z0-9]+", "-")
-                .replaceAll("(^-+|-+$)", "");
+                .replaceAll("^-|-$", "");
 
         if (sanitized.isBlank()) {
             throw new InvalidUploadedImageException("Invalid Cloudinary folder segment");

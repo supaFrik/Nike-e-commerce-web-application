@@ -2,6 +2,7 @@ package vn.demo.nike.shared.config;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
@@ -112,7 +113,11 @@ public class SecurityConfig {
                         if (request.getSession(false) != null) {
                             request.getSession(false).invalidate();
                         }
-                        response.addCookie(new jakarta.servlet.http.Cookie("JSESSIONID", ""));
+                        Cookie cookie = new Cookie("JSESSIONID", "");
+                        cookie.setSecure(request.isSecure());
+                        cookie.setMaxAge(0);
+                        cookie.setHttpOnly(true);
+                        response.addCookie(cookie);
                         response.setStatus(HttpServletResponse.SC_FOUND);
                         response.setHeader("Location", request.getContextPath() + "/login?expired=true");
                         return;
