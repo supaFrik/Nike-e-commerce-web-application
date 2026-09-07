@@ -38,6 +38,21 @@
     `).join("");
   }
 
+  function renderKpis(container, entries) {
+    container.replaceChildren(
+      ...entries.map(([label, value]) => {
+        const card = document.createElement("div");
+        card.className = "kpi";
+        const labelEl = document.createElement("span");
+        labelEl.textContent = label;
+        const valueEl = document.createElement("strong");
+        valueEl.textContent = value;
+        card.append(labelEl, valueEl);
+        return card;
+      })
+    );
+  }
+
   function renderDashboard(data) {
     const cards = [
       ["Sản phẩm", data.productCount],
@@ -47,26 +62,16 @@
     ];
 
     if (heroStats) {
-      heroStats.innerHTML = cards.map(([label, value]) => `
-        <div class="kpi">
-          <span>${label}</span>
-          <strong>${value}</strong>
-        </div>
-      `).join("");
+      renderKpis(heroStats, cards);
     }
 
     if (summary) {
-      summary.innerHTML = [
+      renderKpis(summary, [
         ["Tổng doanh thu", window.AdminSuite.currency(data.totalRevenue || 0)],
         ["Tổng sản phẩm", data.productCount],
         ["Tổng danh mục", data.categoryCount],
         ["Tổng đơn hàng", data.orderCount]
-      ].map(([label, value]) => `
-        <div class="kpi">
-          <span>${label}</span>
-          <strong>${value}</strong>
-        </div>
-      `).join("");
+      ]);
     }
   }
 
@@ -75,7 +80,10 @@
     .then(renderDashboard)
     .catch((error) => {
       if (summary) {
-        summary.innerHTML = `<div class="empty-state">${error.message}</div>`;
+        const msg = document.createElement("div");
+        msg.className = "empty-state";
+        msg.textContent = error.message;
+        summary.replaceChildren(msg);
       }
     });
 })();

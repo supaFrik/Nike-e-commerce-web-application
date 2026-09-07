@@ -70,9 +70,9 @@ jobs:
             username: ${{ secrets.VPS_USER }}
             key: ${{ secrets.VPS_SSH_KEY }}
             script: |
-              cd /opt/Nike-e-commerce-web-application/
-              docker-compose pull
-              docker-compose up -d
+              cd /opt/Nike-e-commerce-web-application/              
+              docker compose pull
+              docker compose up -d --no-deps app
               echo "Waiting for the application to be ready..."
               for i in {1..30}; do
                 if curl -s http://localhost:8080/actuator/health | grep -q '"status":"UP"'; then
