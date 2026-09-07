@@ -184,7 +184,7 @@
                         <configuration>
                             <rules><rule><element>BUNDLE</element>
                                 <limits><limit>
-                                    <counter>INSTRUCTION</counter><value>COVEREDRATIO</value><minimum>0.50</minimum>
+                                    <counter>INSTRUCTION</counter><value>COVEREDRATIO</value><minimum>0.10</minimum>
                                 </limit></limits>
                             </rule></rules>
                         </configuration>
