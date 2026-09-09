@@ -223,11 +223,11 @@
                                 <line x1="3" y1="6" x2="21" y2="6"></line>
                                 <path d="M16 10a4 4 0 0 1-8 0"></path>
                             </svg>
-                            <span class="cart-count" id="cartCount">${cartCount != null ? cartCount : 0}</span>
+                            <span class="cart-count">${cartCount != null ? cartCount : 0}</span>
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Mobile Actions Container -->
                 <div class="mobile-actions">
                     <button class="icon-btn mobile-search-btn" aria-label="Search">
@@ -260,7 +260,7 @@
                             <line x1="3" y1="6" x2="21" y2="6"></line>
                             <path d="M16 10a4 4 0 0 1-8 0"></path>
                         </svg>
-                        <span class="cart-count" id="cartCount">${cartCount != null ? cartCount : 0}</span>
+                        <span class="cart-count">${cartCount != null ? cartCount : 0}</span>
                     </a>
                     <button class="mobile-menu-btn" type="button" data-mobile-menu-toggle aria-label="Menu">
                         <span></span>
