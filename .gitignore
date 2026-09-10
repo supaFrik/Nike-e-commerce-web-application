@@ -67,3 +67,6 @@ docker-data/
 /.idea/
 /lessons/
 /reference/
+.impeccable/hook.cache.json
+/learning-records/
+/assets/lesson.css
