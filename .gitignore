@@ -64,7 +64,6 @@ docker-data/
 /scripts/seed_10k.sql
 /scripts/seed_50k.sql
 /assets/style.css
-/.idea/
 /lessons/
 /reference/
 .impeccable/hook.cache.json
