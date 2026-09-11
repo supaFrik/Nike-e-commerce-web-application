@@ -1,0 +1,38 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "assets/lesson.css"
+        ],
+        "createdAt": "2026-09-09T09:22:07.110Z",
+        "reason": "Left-border callouts are a standard documentation pattern (MDN, Rust docs, Spring docs) — semantic signal for callout type, not decorative card styling"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-09-09T09:22:07.659Z",
+        "reason": "Teaching workspace for one developer — Inter chosen for readability in technical/code-heavy content, not for brand distinctiveness"
+      },
+      {
+        "rule": "overused-font",
+        "value": "fraunces",
+        "createdAt": "2026-09-09T09:22:08.237Z",
+        "reason": "Same as Fraunces — case variant in the Google Fonts import URL"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "lessons/0001-testing-untested-service.html"
+        ],
+        "createdAt": "2026-09-09T09:30:50.585Z",
+        "reason": "Same callout border pattern from assets/lesson.css — standard documentation convention, already suppressed at stylesheet level"
+      }
+    ]
+  }
+}
