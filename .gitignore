@@ -33,7 +33,6 @@ build/
 !**/src/test/**/build/
 
 .vscode/
-
 .env
 .env.*
 !.env.example
@@ -72,3 +71,4 @@ docker-data/
 /learning-records/
 /assets/lesson.css
 /.impeccable/
+/.claude/
