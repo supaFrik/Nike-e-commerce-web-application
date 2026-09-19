@@ -109,7 +109,7 @@
                     <div class="cart-actions">
                         <a href="${env}/" class="back-to-shop">
                             <i class="fas fa-arrow-left"></i>
-                            Tiếp tục mua sắm
+                            Trở lại
                         </a>
                     </div>
                 </div>

@@ -13,6 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PlaceCheckoutRequest {
+    private String couponCode;
+
     @NotNull
     private String paymentMethod;
 

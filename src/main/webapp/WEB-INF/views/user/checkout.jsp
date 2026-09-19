@@ -347,13 +347,6 @@
                         </c:choose>
                     </div>
 
-                    <div class="discount-section">
-                        <div class="discount-input">
-                            <input type="text" placeholder="Mã giảm giá" class="discount-code" disabled>
-                            <button type="button" class="apply-btn" disabled>Áp dụng</button>
-                        </div>
-                    </div>
-
                     <div class="order-totals">
                         <input type="hidden" id="subtotalValue" value="${cart.subtotal}"/>
                         <input type="hidden" id="discountValue" value="${cart.discount}"/>
@@ -585,6 +578,7 @@
                     method: 'POST',
                     headers,
                     body: JSON.stringify({
+                        couponCode: sessionStorage.getItem('appliedCouponCode') || null,
                         paymentMethod,
                         shippingMethod,
                         addressId: addressSelect?.value ? Number(addressSelect.value) : null,

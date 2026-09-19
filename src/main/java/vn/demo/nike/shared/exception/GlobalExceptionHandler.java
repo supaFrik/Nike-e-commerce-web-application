@@ -18,6 +18,9 @@ import vn.demo.nike.features.catalog.category.exception.CategoryNotFoundExceptio
 import vn.demo.nike.features.catalog.product.exception.InvalidProductStatusException;
 import vn.demo.nike.features.catalog.product.exception.ProductNotFoundException;
 import vn.demo.nike.features.checkout.exception.InvalidCheckoutRequestException;
+import vn.demo.nike.features.coupon.exception.CouponExpiredException;
+import vn.demo.nike.features.coupon.exception.CouponNotFoundException;
+import vn.demo.nike.features.coupon.exception.InvalidCouponException;
 import vn.demo.nike.features.order.exception.InvalidOrderStateException;
 import vn.demo.nike.features.order.exception.OrderIdAndUserIdNotFoundException;
 import vn.demo.nike.infras.payment.vnpay.exception.InvalidPaymentMethodException;
@@ -127,6 +130,21 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> exception(Exception e) {
         log.error("Unhandled application exception", e);
         return error(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred. Please try again later.");
+    }
+
+    @ExceptionHandler(CouponNotFoundException.class)
+    public ResponseEntity<ErrorResponse> couponNotFoundException(CouponNotFoundException c) {
+        return error(HttpStatus.NOT_FOUND, c.getMessage());
+    }
+
+    @ExceptionHandler(CouponExpiredException.class)
+    public ResponseEntity<ErrorResponse> couponExpiredException(CouponExpiredException c) {
+        return error(HttpStatus.BAD_REQUEST, c.getMessage());
+    }
+
+    @ExceptionHandler(InvalidCouponException.class)
+    public ResponseEntity<ErrorResponse> invalidCouponException(InvalidCouponException c) {
+        return error(HttpStatus.BAD_REQUEST, c.getMessage());
     }
 
     private ResponseEntity<ErrorResponse> error(HttpStatus status, String message) {

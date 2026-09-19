@@ -1,4 +1,78 @@
 const cartUpdateInFlight = new Set();
+let isApplyingCoupon = false;
+let appliedCouponCode = null;
+
+function showToast(message) {
+  let toast = document.getElementById('toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    toast.innerHTML = `
+      <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+      <p class="toast-text"></p>
+      <button class="toast-close" id="close-toast" aria-label="Dismiss notification">&times;</button>
+    `;
+    document.body.appendChild(toast);
+
+    if (!document.getElementById('toast-style')) {
+      const style = document.createElement('style');
+      style.id = 'toast-style';
+      style.textContent = `
+        .toast {
+          position: fixed;
+          bottom: 1.25rem;
+          right: 1.25rem;
+          background: #111;
+          color: #fff;
+          padding: 1rem 1.25rem;
+          border-radius: 8px;
+          box-shadow: 0 6px 28px rgba(0,0,0,.35);
+          font-size: .95rem;
+          z-index: 1000;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(20px) scale(.995);
+          transition: opacity .38s cubic-bezier(.2,.9,.2,1), transform .38s cubic-bezier(.2,.9,.2,1), visibility 0s linear .38s;
+          pointer-events: none;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .toast.active {
+          opacity: 1;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          visibility: visible;
+          transform: translateY(0) scale(1);
+          transition: opacity .38s cubic-bezier(.2,.9,.2,1), transform .38s cubic-bezier(.2,.9,.2,1), visibility 0s linear 0s;
+          pointer-events: auto;
+        }
+        .toast i:first-child { color: #fff; font-size: 18px; margin-right: 8px; }
+        .toast .toast-text { margin: 0; padding: 0 6px; text-transform: none; color: #fff; line-height: 1.2; }
+        .toast .toast-close { background: transparent; border: none; color: #ccc; cursor: pointer; transition: color .2s; margin-left: 6px; font-size: 18px; }
+        .toast .toast-close:hover, .toast .toast-close:focus { color: #fff; outline: none; }
+      `;
+      document.head.appendChild(style);
+    }
+
+    const closeBtn = toast.querySelector('#close-toast');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
+        toast.classList.remove('active');
+      });
+    }
+  }
+
+  toast.querySelector('.toast-text').textContent = message;
+  toast.classList.add('active');
+  setTimeout(function() {
+    toast.classList.remove('active');
+  }, 4000);
+}
 
 function cartHeaders() {
   const headers = {
@@ -208,7 +282,7 @@ async function updateCartItem(cartItemId, quantity) {
 
     applyCartState(data);
   } catch (error) {
-    alert(error.message || "Failed to update cart");
+    showToast(error.message || "Failed to update cart");
   } finally {
     cartUpdateInFlight.delete(cartItemId);
     toggleRowLoading(cartItemId, false);
@@ -237,7 +311,7 @@ async function removeCartItem(cartItemId) {
 
     applyCartState(data);
   } catch (error) {
-    alert(error.message || "Failed to remove item");
+    showToast(error.message || "Failed to remove item");
   } finally {
     cartUpdateInFlight.delete(cartItemId);
     toggleRowLoading(cartItemId, false);
@@ -288,6 +362,73 @@ function viewProduct(productId) {
   window.location.href = `${cartPageEnv()}/product-detail?id=${productId}`;
 }
 
+async function applyCouponCode() {
+  const promoInput = document.getElementById("promoCode");
+  const code = promoInput ? promoInput.value.trim().toUpperCase() : "";
+
+  if (!code) {
+    showToast("Vui lòng nhập mã giảm giá");
+    return;
+  }
+
+  if (isApplyingCoupon) {
+    showToast("Hệ thống đang xử lý, vui lòng chờ trong giây lát...");
+    return;
+  }
+
+  if (appliedCouponCode === code) {
+    showToast(`Mã ${code} đã được sử dụng`);
+    return;
+  }
+
+  isApplyingCoupon = true;
+  const applyBtn = document.getElementById("applyPromoBtn");
+  if (applyBtn) {
+    applyBtn.disabled = true;
+    applyBtn.textContent = "Đang xử lý...";
+  }
+
+  try {
+    const subtotalText = document.getElementById("subtotalAmount")?.textContent || "0";
+    const orderAmount = parseFloat(subtotalText.replace(/[^0-9]/g, "")) || 0;
+
+    const response = await fetch("/api/coupons/apply", {
+      method: "POST",
+      headers: cartHeaders(),
+      body: JSON.stringify({ code, orderAmount })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Mã giảm giá không hợp lệ");
+    }
+
+    appliedCouponCode = code;
+    sessionStorage.setItem('appliedCouponCode', code);
+
+    const discountEl = document.getElementById("discountAmount");
+    if (discountEl) discountEl.textContent = formatCurrency(data.discountAmount);
+
+    const discountRow = document.getElementById("discountRow");
+    if (discountRow) discountRow.style.display = "flex";
+
+    const totalEl = document.getElementById("totalAmount");
+    if (totalEl) totalEl.textContent = formatCurrency(data.finalAmount);
+
+    showToast("Áp dụng mã giảm giá thành công!");
+
+  } catch (error) {
+    showToast(error.message || "Không thể áp dụng mã giảm giá");
+  } finally {
+    isApplyingCoupon = false;
+    if (applyBtn) {
+      applyBtn.disabled = false;
+      applyBtn.textContent = "Áp dụng";
+    }
+  }
+}
+
 function bindCartActions() {
   document.addEventListener("click", function (event) {
     const productLink = event.target.closest("[data-view-product]");
@@ -309,7 +450,7 @@ function bindCartActions() {
     }
 
     if (event.target.closest("#applyPromoBtn")) {
-      alert("Tính năng mã giảm giá sẽ được triển khai sau.");
+      applyCouponCode();
     }
   });
 }

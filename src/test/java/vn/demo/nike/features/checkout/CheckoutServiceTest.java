@@ -114,8 +114,6 @@ public class CheckoutServiceTest {
         lenient().when(addressRepository.save(any(Address.class))).thenAnswer(inv -> inv.getArgument(0));
     }
 
-    // ---- 1..26 ----
-
     @Test void shouldRejectNullRequest() {
         assertThrows(InvalidCheckoutRequestException.class, () -> checkoutService.placeOrder(null));
     }
