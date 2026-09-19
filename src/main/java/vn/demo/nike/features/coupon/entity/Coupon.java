@@ -59,7 +59,4 @@ public class Coupon extends BaseEntity {
 
     @Column(name = "active")
     private Boolean active = true;
-
-    public Coupon(String code, String description, DiscountType discountType, BigDecimal bigDecimal, BigDecimal bigDecimal1, BigDecimal bigDecimal2, LocalDateTime localDateTime, LocalDateTime localDateTime1, Boolean active) {
-    }
 }
