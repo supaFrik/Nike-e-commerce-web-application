@@ -4,10 +4,12 @@ target/
 !**/src/test/**/target/
 
 ### IntelliJ IDEA ###
+.idea/
 .idea/modules.xml
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/dataSources
 *.iws
 *.iml
 *.ipr
@@ -31,7 +33,6 @@ build/
 !**/src/test/**/build/
 
 .vscode/
-
 .env
 .env.*
 !.env.example
@@ -69,3 +70,6 @@ docker-data/
 .impeccable/hook.cache.json
 /learning-records/
 /assets/lesson.css
+/.impeccable/
+/.claude/
+/.aiassistant/
